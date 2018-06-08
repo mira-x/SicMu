@@ -1,2 +1,2 @@
-![Seek menu](misc/screenshots/screen4.3_seek.png)
+![Seek menu](misc/screenshots/screen4.3_seek_resized.png)
 
