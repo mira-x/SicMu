@@ -9,11 +9,11 @@ Works on old slow small devices (from Android froyo 2.2).
 
 3.5" screen:
 
-![Tree folder list](misc/screenshots/screen3.5_treefolder.png)&nbsp;
-![Artist list](misc/screenshots/screen3.5_artist.png)
-![Menu option](misc/screenshots/screen3.5_menu_options_small.png)
+![Tree folder list](misc/screenshots/screen4.3_tree.png)&nbsp;
+![Artist list](misc/screenshots/screen4.3_artists_coverdetails.png)
+![Cover fullscreen](misc/screenshots/screen4.3_bigcover.png)
 
-[Video](http://youtu.be/LGyjDfwimzA)
+[Video (outdated)](http://youtu.be/LGyjDfwimzA)
 
 [More screenshots](Screenshots.md)
 
@@ -29,6 +29,7 @@ Works on old slow small devices (from Android froyo 2.2).
 - or sorted by folders, artists, albums and track number, flattening folder hierarchy
 - groups can be folded / unfolded
 - repeat mode (all, group, one track)
+- Show cover art if present 
 - shake the phone to go to next song
 - show current playing song in the list
 - notification when playing
