@@ -7,11 +7,11 @@ Songs are sorted and grouped by folders, artists, albums and album's track.
 Works on old slow small devices (from Android froyo 2.2).
 
 
-3.5" screen:
+4.3" screen:
 
-![Tree folder list](misc/screenshots/screen4.3_tree.png)&nbsp;
-![Artist list](misc/screenshots/screen4.3_artists_coverdetails.png)
-![Cover fullscreen](misc/screenshots/screen4.3_bigcover.png)
+![Tree folder list](misc/screenshots/screen4.3_tree_resized.png)&nbsp;
+![Artist list](misc/screenshots/screen4.3_artists_coverdetails_resized.png)
+![Fullscreen cover art](misc/screenshots/screen4.3_bigcover_resized.png)
 
 [Video (outdated)](http://youtu.be/LGyjDfwimzA)
 
