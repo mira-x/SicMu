@@ -24,24 +24,26 @@ Works on old slow small devices (from Android froyo 2.2).
 
 ### Detailed features
 
-- sorted by artists, albums and track number
-- or sorted by folder tree, useful for big music list
-- or sorted by folders, artists, albums and track number, flattening folder hierarchy
-- groups can be folded / unfolded
-- repeat mode (all, group, one track)
-- Show cover art if present 
-- shake the phone to go to next song
-- show current playing song in the list
-- notification when playing
-- seek bar
-- disable / enable lockscreen
-- configurable font size
-- on app startup, scroll to last song played
+- sort mode:
+    - sort by folder tree, useful for big music list (default)
+    - sort by artists, albums and track number
+    - sort by folders, artists, albums and track number, flattening folder hierarchy
+- cover art image
+- songs navigation:
+    - repeat mode (all, group, one track)
+    - shuffle mode
+    - seek bar
+    - auto repeat seek buttons
+    - shake the phone to go to next song
+- User Interface:
+    - disable / enable lockscreen
+    - configurable font size
+- bluetooth & scrobble
+    - bluetooth support (play through bluetooth device)
+    - media buttons support (next, prev, play/pause) from external device (bluetooth headphones...)
+    - support [Simple Last.fm Scrobbler](https://github.com/tgwizard/sls) or [Scrobble Droid](https://code.google.com/p/scrobbledroid) (disabled by default in settings)
 - play mp3, ogg, flac, midi, wav, mp4, 3gp... see android mediaplayer supported media formats (depends on android version).
-- bluetooth support (play through bluetooth device)
-- media buttons support (next, prev, play/pause) from external device (bluetooth headphones...)
 - light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.
-- support [Simple Last.fm Scrobbler](https://github.com/tgwizard/sls) or [Scrobble Droid](https://code.google.com/p/scrobbledroid) (disabled by default in settings)
 
 
 ### Help
@@ -51,15 +53,16 @@ Works on old slow small devices (from Android froyo 2.2).
 
 ### Todo (perhaps :-)
 
+- remove file
+- browse folder
+- block song/folder
+- notification play control
 - group by genre?
-- quick jump with letter in the right (like in contact)?
 - search?
 - pinned section (upper group level stay at top until another one appears)?
-- swipe to go to list of song <-> song details
 - mp3 tag editor ?
 - playlist?
 - audioeffect/equalizer
-- turning disc speed follow musics beat
 
 Detailed todo list available in [TODO.txt](misc/TODO.txt).
 
@@ -78,10 +81,9 @@ RepeatingImageButton.java and MediaButtonIntentReceiver.java file mostly copied 
 ### Developer
 
 Compiled with Android Studio.
-Non regression tests are available in the androidTest folder.
-Tested on Gingerbread (2.3.6), Nexus 4 JellyBean (4.1.2), Samsung S3 (4.3), Nexus 5 Lollipop (5.0).
+Tested on Gingerbread (2.3.6), Samsung S3 (7.0)...
 
-Feel free to add GitHub issues (feature request, bugs...).
+Feel free to add GitLab issues (feature request, bugs...).
 If you need a feature that is in the todolist, open a feature request on gitlab to speed up its development.
 
 A UML class diagram describe a bit the architecture for people that would want to develop the software [UmlClass.png](misc/UmlClass.png).
