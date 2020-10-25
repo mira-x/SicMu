@@ -174,23 +174,24 @@ public class Path {
 
 
     public static String getMusicStoragesStr(Context context) {
-        Collection<File> dirs = getMusicStorages(context);
         String dirsStr = new String();
-        for (File dir: dirs) {
-            dirsStr += dir.getAbsolutePath() + ";";
-        }
+        Collection<File> dirs = getMusicStorages(context);
+        if (dirs != null)
+            for (File dir: dirs) {
+                dirsStr += dir.getAbsolutePath() + ";";
+            }
         if (dirsStr.endsWith(";"))
             dirsStr = dirsStr.substring(0, dirsStr.length() - 1);
         return dirsStr;
     }
 
     public static Collection<File> getMusicStorages(Context context) {
-
-        Collection<File> dirs = getStorages(context);
         ArrayList<File> musicDirs = new ArrayList<>();
-        for (File dir: dirs) {
-            musicDirs.add(new File(dir, "Music/"));
-        }
+        Collection<File> dirs = getStorages(context);
+        if (dirs != null)
+            for (File dir: dirs) {
+                musicDirs.add(new File(dir, "Music/"));
+            }
         return musicDirs;
     }
 
@@ -202,11 +203,13 @@ public class Path {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // hack. Don't know if it work well on other devices!
             String userPathToRemove = "Android/data/souch.smp/files";
-            for (File dir : context.getExternalFilesDirs(null)) {
-                if (dir.getAbsolutePath().endsWith(userPathToRemove)) {
-                    dirsToScan.add(dir.getParentFile().getParentFile().getParentFile().getParentFile());
+            File[] files = context.getExternalFilesDirs(null);
+            if (files != null)
+                for (File dir: files) {
+                    if (dir != null && dir.getAbsolutePath().endsWith(userPathToRemove)) {
+                        dirsToScan.add(dir.getParentFile().getParentFile().getParentFile().getParentFile());
+                    }
                 }
-            }
         }
 
         for (File dir: dirsToScan) {
@@ -294,29 +297,30 @@ public class Path {
                 Toast.LENGTH_SHORT).show();
 
         Collection<File> dirsToScan = Path.getStorages(context); // getBaseContext()
+        if (dirsToScan != null) {
+            for (File dir : dirsToScan) {
+                Toast.makeText(context,
+                        (new Formatter()).format(context.getResources()
+                                .getString(R.string.settings_rescan_storage), dir)
+                                .toString(),
+                        Toast.LENGTH_LONG).show();
+            }
 
-        for (File dir: dirsToScan) {
+            // add Music folder in first to speedup music folder discovery
+            for (File dir : dirsToScan) {
+                File musicDir = new File(dir, "Music");
+                rescanDir(context, musicDir);
+            }
+
+            // add whole storage at the end
+            for (File dir : dirsToScan) {
+                rescanDir(context, dir);
+            }
+
             Toast.makeText(context,
-                    (new Formatter()).format(context.getResources()
-                            .getString(R.string.settings_rescan_storage), dir)
-                            .toString(),
+                    context.getResources().getString(R.string.settings_rescan_finished),
                     Toast.LENGTH_LONG).show();
         }
-
-        // add Music folder in first to speedup music folder discovery
-        for (File dir: dirsToScan) {
-            File musicDir = new File(dir, "Music");
-            rescanDir(context, musicDir);
-        }
-
-        // add whole storage at the end
-        for (File dir: dirsToScan) {
-            rescanDir(context, dir);
-        }
-
-        Toast.makeText(context,
-                context.getResources().getString(R.string.settings_rescan_finished),
-                Toast.LENGTH_LONG).show();
     }
 
 
