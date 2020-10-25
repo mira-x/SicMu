@@ -11,8 +11,8 @@ android {
         applicationId "souch.smp"
         minSdkVersion 8
         targetSdkVersion 11
-        versionCode 16
-        versionName '1.4'
+        versionCode 17
+        versionName '1.4.1'
     }
     buildTypes {
         release {
