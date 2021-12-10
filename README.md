@@ -53,10 +53,11 @@ Works on old slow small devices (from Android froyo 2.2).
 
 ### Todo (perhaps :-)
 
+- notification play control
+- rate songs and filter by rating
 - remove file
 - browse folder
 - block song/folder
-- notification play control
 - group by genre?
 - search?
 - pinned section (upper group level stay at top until another one appears)?
@@ -81,7 +82,7 @@ RepeatingImageButton.java and MediaButtonIntentReceiver.java file mostly copied 
 ### Developer
 
 Compiled with Android Studio.
-Tested on Gingerbread (2.3.6), Samsung S3 (7.0)...
+Tested on Kitkat (4.4.4), Samsung S3 (7.1), Android 11...
 
 Feel free to add GitLab issues (feature request, bugs...).
 If you need a feature that is in the todolist, open a feature request on gitlab to speed up its development.
