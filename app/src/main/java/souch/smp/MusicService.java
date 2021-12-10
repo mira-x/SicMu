@@ -374,6 +374,8 @@ public class MusicService extends Service implements
         if (rowSong == null)
             return;
 
+        rows.save();
+
         startSensor();
 
         getPlayer().reset();
