@@ -133,7 +133,7 @@
     <string name="settings_author_title">Hazırlayan</string>
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Kaynak</string>
-    <string name="settings_source">https://github.com/souch/SMP</string>
+    <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Lisans</string>
     <string name="settings_licence">GPLv3</string>
     <string name="settings_donate_key">bağış yap</string>
