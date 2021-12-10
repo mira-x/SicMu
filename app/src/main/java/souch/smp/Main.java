@@ -104,32 +104,14 @@ public class Main extends Activity {
 
     private LinearLayout detailsLayout;
     private LinearLayout seekButtonsLayout;
+    private LinearLayout warningLayout;
 
     private ImageButton albumImage;
-    private TextView songTitle, songAlbum, songArtist;
+    private TextView songTitle, songAlbum, songArtist, warningText;
     private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
     private final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 3;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        switch (requestCode) {
-            case READ_EXTERNAL_STORAGE_REQUEST_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("RequestPermissionResult","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " granted!");
-                }  else {
-                    Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " still not granted!");
-                    Toast.makeText(getApplicationContext(), getString(R.string.permission_needed),
-                            Toast.LENGTH_SHORT);
-                }
-                return;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,21 +119,7 @@ public class Main extends Activity {
         setContentView(R.layout.activity_main);
         finishing = false;
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted!");
-
-            ActivityCompat.requestPermissions(Main.this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
-        }
-        else {
-            Log.d("RequestPermissionResult", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " granted!");
-        }
-
         songView = (ListView) findViewById(R.id.song_list);
-
-
         playButton = (ImageButton) findViewById(R.id.play_button);
         // useful only for testing
         playButton.setTag(R.drawable.ic_action_play);
@@ -168,6 +136,8 @@ public class Main extends Activity {
         posButton.setImageDrawable(null);
         seekButtonsLayout = (LinearLayout) findViewById(R.id.seek_buttons_layout);
         seekButtonsLayout.setVisibility(View.GONE);
+        warningLayout = (LinearLayout) findViewById(R.id.warning_layout);
+        warningLayout.setVisibility(View.GONE);
         detailsLayout = (LinearLayout) findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
@@ -193,6 +163,24 @@ public class Main extends Activity {
         seekButton = (RepeatingImageButton) findViewById(R.id.p5_button);
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
+
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.d("checkSelfPermission", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted! Show explanation.");
+                //showExplanation("Permission Needed", "Rationale", Manifest.permission.READ_PHONE_STATE, REQUEST_PERMISSION_PHONE_STATE);
+                showWarningLayout();
+            }
+            Log.e("checkSelfPermission", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted! Request it.");
+            ActivityCompat.requestPermissions(Main.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
+        else {
+            Log.d("RequestPermissionResult", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " already granted!");
+        }
 
         playIntent = new Intent(this, MusicService.class);
         startService(playIntent);
@@ -348,6 +336,38 @@ public class Main extends Activity {
             serviceBound = false;
         }
     };
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case READ_EXTERNAL_STORAGE_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("RequestPermissionResult","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " request granted!");
+                    rows.reinit();
+                    songAdt.notifyDataSetChanged();
+                    unfoldAndscrollToCurrSong();
+                    hideWarningLayout();
+                }  else {
+                    Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " still not granted!");
+                    showWarningLayout();
+                }
+                return;
+        }
+    }
+
+    private void showWarningLayout() {
+        warningLayout.setVisibility(View.VISIBLE);
+        warningText = (TextView) findViewById(R.id.warning_text);
+        warningText.setText(R.string.permission_needed);
+    }
+
+    private void hideWarningLayout() {
+        warningLayout.setVisibility(View.GONE);
+    }
 
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener

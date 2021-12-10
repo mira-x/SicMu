@@ -897,9 +897,13 @@ public class Rows {
         if (this.filter != filter) {
             this.filter = filter;
             // todo: handle the current playing song finish during reinitSongs()...
-            updateSavedId();
-            init();
+            reinit();
         }
+    }
+
+    public void reinit() {
+        updateSavedId();
+        init();
     }
 
     public RepeatMode getRepeatMode() {
