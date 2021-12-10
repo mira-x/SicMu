@@ -18,6 +18,7 @@
 
 package souch.smp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -25,13 +26,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +45,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,6 +57,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -102,6 +110,25 @@ public class Main extends Activity {
     private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
+    private final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 3;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case READ_EXTERNAL_STORAGE_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("RequestPermissionResult","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " granted!");
+                }  else {
+                    Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " still not granted!");
+                    Toast.makeText(getApplicationContext(), getString(R.string.permission_needed),
+                            Toast.LENGTH_SHORT);
+                }
+                return;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +136,18 @@ public class Main extends Activity {
         Log.d("Main", "onCreate");
         setContentView(R.layout.activity_main);
         finishing = false;
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted!");
+
+            ActivityCompat.requestPermissions(Main.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
+        else {
+            Log.d("RequestPermissionResult", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " granted!");
+        }
 
         songView = (ListView) findViewById(R.id.song_list);
 
@@ -681,13 +720,27 @@ public class Main extends Activity {
             // err msg ?
             return;
         }
-
+//        boolean found = false;
         Uri selectedUri = Uri.fromFile(new File(song.getPath()).getParentFile());
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(selectedUri, "resource/folder");
 
         if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
             startActivity(intent);
+//        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
+//            found = true;
+//        if (!found) {
+//            intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setDataAndType(selectedUri, "*/*");
+//            List<ResolveInfo> apps =
+//                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+//            if (apps.size() > 0)
+//                found = true;
+//        }
+//
+//        if (found) {
+//            startActivity(Intent.createChooser(intent, "Open folder"));
+//            //startActqivity(intent);
         }
         else {
             Toast.makeText(getApplicationContext(),

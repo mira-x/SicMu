@@ -83,3 +83,5 @@ setprop persist.sys.language fr;setprop persist.sys.country FR;stop;sleep 5;star
 https://github.com/ddf/Minim/blob/master/src/ddf/minim/analysis/BeatDetect.java
 
 
+# developer google app interface
+https://play.google.com/apps/publish/signup/

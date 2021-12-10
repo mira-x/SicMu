@@ -594,24 +594,24 @@ public class MusicService extends Service implements
         if(rowSong == null)
             return;
 
-        Intent notificationIntent = new Intent(this, Main.class);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Notification notification = new Notification(R.drawable.ic_actionbar_launcher_anim,
-                rowSong.getTitle(),
-                System.currentTimeMillis());
-        notification.setLatestEventInfo(this, getResources().getString(R.string.app_playing),
-                rowSong.getTitle() + " - " + rowSong.getArtist(), pendInt);
-
-        startForeground(NOTIFY_ID, notification);
+//        Intent notificationIntent = new Intent(this, Main.class);
+//        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
+//                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Notification notification = new Notification(R.drawable.ic_actionbar_launcher_anim,
+//                rowSong.getTitle(),
+//                System.currentTimeMillis());
+//        notification.setLatestEventInfo(this, getResources().getString(R.string.app_playing),
+//                rowSong.getTitle() + " - " + rowSong.getArtist(), pendInt);
+//
+//        startForeground(NOTIFY_ID, notification);
         foreground = true;
     }
 
     public void stopNotification() {
         if(foreground)
-            stopForeground(true);
+//            stopForeground(true);
         foreground = false;
     }
 

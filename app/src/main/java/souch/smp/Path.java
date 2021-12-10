@@ -234,7 +234,7 @@ public class Path {
 
     public static void rescanWhole(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            purgeFiles(context);
+            //purgeFiles(context);
             scanMediaFiles(context);
         }
         else {

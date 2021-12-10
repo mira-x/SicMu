@@ -18,7 +18,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="souch.smp" >
-    <uses-sdk android:minSdkVersion="9"  android:targetSdkVersion="19" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- useful at least from android 5.0, not useful for 2.3, 4.1, 4.3
     todo: see if it can be adaptable for each android version
@@ -37,14 +37,15 @@
             android:name=".Main"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".MediaButtonIntentReceiver">
+        <receiver android:name=".MediaButtonIntentReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
