@@ -17,11 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-
-    <string name="app_name">SicMu Player</string>
-
-    <string name="settings_version">1.4.1</string>
-
     <string name="action_settings">Confgurações</string>
     <string name="advanced_settings_title">Configurações avançadas</string>
     <string name="action_shake_disabled">Ação de sacudir desligada</string>
