@@ -712,17 +712,17 @@ public class MusicService extends Service implements
             return;
         if (playingLaunched())
             builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause,
-                    getResources().getString(R.string.action_pause),
+                    getString(R.string.action_pause),
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         else
             builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play,
-                    getResources().getString(R.string.action_play),
+                    getString(R.string.action_play),
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_previous,
-                getResources().getString(R.string.action_prev),
+                getString(R.string.action_prev),
                 MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
         builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_next,
-                getResources().getString(R.string.action_next),
+                getString(R.string.action_next),
                 MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
         builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
