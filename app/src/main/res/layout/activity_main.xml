@@ -271,7 +271,7 @@
                 android:baselineAligned="false"
                 android:gravity="bottom"
                 android:orientation="horizontal">
-
+<!--
                 <ImageButton
                     android:id="@+id/delete_button"
                     android:layout_width="fill_parent"
@@ -285,7 +285,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_trash" />
 
-
                 <ImageButton
                     android:id="@+id/folder_button"
                     android:layout_width="fill_parent"
@@ -296,6 +295,7 @@
                     android:onClick="openSongFolder"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_menu_folder" />
+                -->
 
             </LinearLayout>
         </LinearLayout>

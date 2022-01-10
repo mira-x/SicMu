@@ -29,7 +29,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -49,7 +48,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -744,39 +742,47 @@ public class Main extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
-
     public void openSongFolder(View view) {
-        final RowSong song = rows.getCurrSong();
-        if (song == null) {
-            // err msg ?
-            return;
-        }
-//        boolean found = false;
-        Uri selectedUri = Uri.fromFile(new File(song.getPath()).getParentFile());
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(selectedUri, "resource/folder");
-
-        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-            startActivity(intent);
-//        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
-//            found = true;
-//        if (!found) {
-//            intent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intent.setDataAndType(selectedUri, "*/*");
-//            List<ResolveInfo> apps =
-//                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-//            if (apps.size() > 0)
-//                found = true;
-//        }
+//        final RowSong song = rows.getCurrSong();
+//        if (song == null)
+//            return;
 //
-//        if (found) {
-//            startActivity(Intent.createChooser(intent, "Open folder"));
-//            //startActqivity(intent);
-        }
-        else {
-            Toast.makeText(getApplicationContext(),
-                    "no file explorer app installed on your device", Toast.LENGTH_LONG).show();
-        }
+//        Uri uri = Uri.fromFile(new File(song.getPath()));
+//        Toast.makeText(getApplicationContext(),
+//                "Opening file " + uri, Toast.LENGTH_LONG).show();
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setDataAndType(uri, "resource/folder");
+//
+//        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
+//            startActivity(intent);
+//        }
+//        else {
+//            intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.addCategory(Intent.CATEGORY_OPENABLE);
+//            intent.setDataAndType(uri, "*/*");
+//            try {
+//                startActivity(intent);
+//            }
+//            catch (android.content.ActivityNotFoundException ex) {
+//                Toast.makeText(getApplicationContext(),
+//                        "Please install a File Manager.", Toast.LENGTH_LONG).show();
+//            }
+//        }
+////        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
+////            found = true;
+////        if (!found) {
+////            intent = new Intent(Intent.ACTION_GET_CONTENT);
+////            intent.setDataAndType(selectedUri, "*/*");
+////            List<ResolveInfo> apps =
+////                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+////            if (apps.size() > 0)
+////                found = true;
+////        }
+////
+////        if (found) {
+////            startActivity(Intent.createChooser(intent, "Open folder"));
+////            //startActivity(intent);
+////        }
     }
 
 
