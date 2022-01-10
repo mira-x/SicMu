@@ -729,17 +729,17 @@ public class MusicService extends Service implements
         if (builder == null)
             return;
         if (playingLaunched())
-            builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause,
+            builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause,
                     getString(R.string.action_pause),
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         else
-            builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play,
+            builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_arrow,
                     getString(R.string.action_play),
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
-        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_previous,
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_skip_previous,
                 getString(R.string.action_prev),
                 MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
-        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_next,
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_skip_next,
                 getString(R.string.action_next),
                 MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
