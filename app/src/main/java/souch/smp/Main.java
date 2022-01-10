@@ -19,7 +19,6 @@
 package souch.smp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,17 +26,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,23 +40,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Main extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+public class Main extends AppCompatActivity {
     private Rows rows;
     private ListView songView;
     private RowsAdapter songAdt;
@@ -252,6 +249,18 @@ public class Main extends Activity {
         songArtist = (TextView) findViewById(R.id.detail_artist);
         details_right_layout = (LinearLayout) findViewById(R.id.details_right_layout);
         detailsBigCoverArt = false;
+
+        // needed when noactionbar theme is choosed
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // remove title and overflow button
+        getSupportActionBar().hide();
+        //toolbar.hideOverflowMenu();
+        //toolbar.getMenu().clear();
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setHomeButtonEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
+        //getSupportActionBar().setTitle(null);
     }
 
 
@@ -448,10 +457,12 @@ public class Main extends Activity {
         timer.cancel();
         save();
 
-        if (!finishing && serviceBound && musicSrv.playingLaunched())
-            musicSrv.startNotification();
+        if (serviceBound) {
+            if (!finishing && musicSrv.playingLaunched())
+                musicSrv.startNotification();
 
-        musicSrv.setMainIsVisible(false);
+            musicSrv.setMainIsVisible(false);
+        }
     }
 
 
@@ -783,6 +794,7 @@ public class Main extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         if (musicSrv != null) {
             setFilterItem(menu.findItem(R.id.action_sort));
             setShuffleItem(menu.findItem(R.id.action_shuffle));
@@ -942,7 +954,7 @@ public class Main extends Activity {
         if (item == null)
             return;
 
-        String sortBy = getString(R.string.action_sort_by) + " ";
+        String sortBy = getString(R.string.action_sort) + " ";
         switch (rows.getFilter()) {
             case ARTIST:
                 item.setIcon(R.drawable.ic_menu_artist);
@@ -966,15 +978,15 @@ public class Main extends Activity {
         switch (rows.getRepeatMode()) {
             case REPEAT_ALL:
                 item.setIcon(R.drawable.ic_menu_repeat_all);
-                item.setTitle(getString(R.string.state_repeat_all));
+                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_all));
                 break;
             case REPEAT_ONE:
                 item.setIcon(R.drawable.ic_menu_repeat_one);
-                item.setTitle(getString(R.string.state_repeat_one));
+                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_one));
                 break;
             case REPEAT_GROUP:
                 item.setIcon(R.drawable.ic_menu_repeat_group);
-                item.setTitle(getString(R.string.state_repeat_group));
+                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_group));
                 break;
         }
     }
@@ -1058,11 +1070,11 @@ public class Main extends Activity {
 
         if (params.getChoosedTextSize()) {
             item.setIcon(R.drawable.ic_menu_text_big);
-            item.setTitle(getString(R.string.settings_text_size_big));
+            item.setTitle(getString(R.string.settings_text_size) + " " + getString(R.string.settings_text_size_bold));
         }
         else {
             item.setIcon(R.drawable.ic_menu_text_regular);
-            item.setTitle(getString(R.string.settings_text_size_regular));
+            item.setTitle(getString(R.string.settings_text_size) + " " + getString(R.string.settings_text_size_small));
         }
     }
 

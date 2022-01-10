@@ -19,7 +19,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Theme.AppTheme" parent="@android:style/Theme.Black.NoTitleBar">
+    <style name="Theme.AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
 
@@ -60,6 +60,7 @@
         <item name="android:thumbOffset">16dip</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
+        <item name="android:color">#ffff0000</item>
     </style>
 
     <style name="PreferenceTheme" parent="">

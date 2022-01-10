@@ -24,7 +24,7 @@
 
     <string name="permission_needed">The app needs read storage permission in order to show songs and play them ! When asked, allow access to photos and multimedia content on your android device.</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Open settings</string>
     <string name="advanced_settings_title">Advanced settings</string>
     <string name="action_shake_disabled">Shake off</string>
     <string name="action_shake_enabled">Shake on</string>
@@ -35,11 +35,16 @@
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort">Sort songs by:</string>
 
-    <string name="action_shuffle">Shuffle</string>
-    <string name="action_no_shuffle">No shuffle</string>
+    <string name="action_shuffle">Shuffle enabled</string>
+    <string name="action_no_shuffle">Shuffle disabled</string>
 
     <string name="action_music_mode">Music mode</string>
     <string name="action_edit_mode">Edit mode</string>
+
+    <string name="action_play">play</string>
+    <string name="action_pause">pause</string>
+    <string name="action_next">next</string>
+    <string name="action_prev">previous</string>
 
     <string name="app_playing">SicMu playing</string>
 
@@ -70,9 +75,12 @@
     <string name="settings_song_view_font">Song view font</string>
     <string name="settings_text_size_choosed">Choose font size</string>
     <string name="settings_text_size_choosed_default">false</string>
-    <string name="settings_text_size_regular">Small font</string>
+    <string name="settings_text_size">Font size:</string>
+    <string name="settings_text_size_small">small</string>
+    <string name="settings_text_size_bold">bold</string>
+    <string name="settings_text_size_regular">Small font size</string>
     <string name="settings_text_size_regular_default">15</string>
-    <string name="settings_text_size_big">Bold font</string>
+    <string name="settings_text_size_big">Bold font size</string>
     <string name="settings_text_size_big_default">19</string>
     <string name="settings_text_size_ratio">Group/song ratio text size</string>
     <string name="settings_text_size_ratio_default">1.1</string>
@@ -171,17 +179,18 @@
     <string name="settings_thanks_doc_summary">Sue Smith (tutorials on creating a Music Player on Android)</string>
     <string name="settings_thanks_i15n">Translation</string>
     <string name="settings_thanks_i15n_summary">Mladen Pejaković (Serbian), Jerônimo Cordoni Pellegrini (Portuguese), Mehmet Gülmen (Turkish)</string>
-    <string name="settings_locked">Locked</string>
-    <string name="settings_unlocked">Unlocked</string>
+    <string name="settings_locked">Do not prevent lock</string>
+    <string name="settings_unlocked">Prevent lock</string>
 
     <string name="action_repeat_title">Repeat</string>
     <string name="action_repeat_all">All</string>
     <string name="action_repeat_one">Track</string>
     <string name="action_repeat_first_group">First group</string>
     <string name="action_repeat_group">Group</string>
-    <string name="state_repeat_all">Repeat all</string>
-    <string name="state_repeat_one">Repeat track</string>
-    <string name="state_repeat_group">Repeat group</string>
+    <string name="state_repeat">Repeat mode:</string>
+    <string name="state_repeat_all">all</string>
+    <string name="state_repeat_one">track</string>
+    <string name="state_repeat_group">group</string>
 
 
 </resources>

@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/action_goto_play.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/drawable/seekbar_horizontal_holo_light.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/song.xml" value="0.23233695652173914" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/preferences.xml" value="0.19583333333333333" />
       </map>
     </option>
   </component>

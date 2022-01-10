@@ -19,6 +19,7 @@
 package souch.smp;
 
 import android.graphics.Typeface;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.TypedValue;
 import android.widget.TextView;
 
@@ -134,5 +135,11 @@ public class RowGroup extends Row {
 
     public String toString() {
         return "Group pos: " + genuinePos + " level: " + level + " name: " + name;
+    }
+
+    public MediaMetadataCompat getMediaMetadata() {
+        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, name);
+        return builder.build();
     }
 }

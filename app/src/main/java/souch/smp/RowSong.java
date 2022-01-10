@@ -25,6 +25,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -197,5 +198,25 @@ public class RowSong extends Row {
             bmp = null;
         }
         return bmp;
+    }
+
+    public Uri getExternalContentUri() {
+        return ContentUris.withAppendedId(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+    }
+
+
+    public MediaMetadataCompat getMediaMetadata(Context context) {
+        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, String.valueOf(id));
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, getExternalContentUri().toString());
+        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, title);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album);
+        builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration * 1000);
+        builder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, track);
+        builder.putLong(MediaMetadataCompat.METADATA_KEY_YEAR, year);
+        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, getAlbumBmp(context)); // todo: optimize
+        return builder.build();
     }
 }

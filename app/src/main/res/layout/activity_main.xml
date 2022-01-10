@@ -24,10 +24,10 @@
     android:animateLayoutChanges="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/action_bar"
+        android:id="@+id/actions_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="#ff242424"
         android:orientation="horizontal"
@@ -100,7 +100,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/seek_buttons_layout"
-        android:layout_below="@+id/action_bar"
+        android:layout_below="@+id/actions_bar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#ff242424"
@@ -315,6 +315,11 @@
         android:scrollbarThumbVertical="@drawable/fastscroll_thumb_holo"
         android:scrollbars="vertical" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"></androidx.appcompat.widget.Toolbar>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/action_button"

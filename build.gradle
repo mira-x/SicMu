@@ -18,4 +18,8 @@ allprojects {
         mavenCentral()
         google()
     }
+    // increase compilation log level
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
 }

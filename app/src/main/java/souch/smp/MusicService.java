@@ -18,29 +18,35 @@
 
 package souch.smp;
 
-import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.media.session.MediaButtonReceiver;
 
 
 public class MusicService extends Service implements
@@ -66,6 +72,11 @@ public class MusicService extends Service implements
 
     private Parameters params;
     private MediaPlayer player;
+
+    //private MediaNotificationManager mediaNotificationManager;
+    private MediaSessionCompat mediaSession;
+    public static final String MediaSessionTag = "SMP_MediaSessionTag";
+
     private Rows rows;
 
     // seek to last song pos on startup in millisec
@@ -82,7 +93,8 @@ public class MusicService extends Service implements
 
     // a notification has been launched
     private boolean foreground;
-    private static final int NOTIFY_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
+    private boolean notificationStarted = false;
 
     private boolean mainIsVisible;
     public void setMainIsVisible(boolean visible) { mainIsVisible = visible; }
@@ -111,6 +123,85 @@ public class MusicService extends Service implements
 
     private Scrobble scrobble;
 
+    // used for handling playback state when media session actions occur.
+    private MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
+
+        @Override
+        public void onPlay() {
+            super.onPlay();
+            handleCommand(CMDPLAY);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            handleCommand(CMDPAUSE);
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            handleCommand(CMDSTOP);
+        }
+
+        @Override
+        public void onSkipToNext() {
+            super.onSkipToNext();
+            handleCommand(CMDNEXT);
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            super.onSkipToPrevious();
+            handleCommand(CMDPREVIOUS);
+        }
+
+        @Override
+        public void onSeekTo(long pos) {
+            super.onSeekTo(pos);
+            seekTo((int) (pos / 1000));
+        }
+    };
+
+    private void initMediaSession() {
+        ComponentName mediaButtonReceiver = new ComponentName(getApplicationContext(), MediaButtonReceiver.class);
+        mediaSession = new MediaSessionCompat(getApplicationContext(), MediaSessionTag, mediaButtonReceiver, null);
+
+        mediaSession.setCallback(mMediaSessionCallback);
+        mediaSession.setFlags( MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS );
+
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
+        mediaSession.setMediaButtonReceiver(pendingIntent);
+    }
+
+    private static final long MEDIA_SESSION_ACTIONS =
+            PlaybackStateCompat.ACTION_PLAY
+                    | PlaybackStateCompat.ACTION_PAUSE
+                    | PlaybackStateCompat.ACTION_PLAY_PAUSE
+                    | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                    | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                    | PlaybackStateCompat.ACTION_STOP
+                    | PlaybackStateCompat.ACTION_SEEK_TO;
+    private void updateMediaPlaybackState() {
+        boolean isPlaying = playingLaunched();
+        long currPosMs = getCurrentPosition() * 1000;
+        PlaybackStateCompat.Builder stateBuilder =
+                new PlaybackStateCompat.Builder()
+                        .setActions(MEDIA_SESSION_ACTIONS)
+                        .setState(isPlaying ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
+                                currPosMs,
+                                1);
+        mediaSession.setPlaybackState(stateBuilder.build());
+    }
+
+    private void updateMediaSessionMetadata() {
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong != null)
+            mediaSession.setMetadata(rowSong.getMediaMetadata(getApplicationContext()));
+    }
+
     public Rows getRows() { return rows; }
 
     public boolean getChanged() {
@@ -123,12 +214,14 @@ public class MusicService extends Service implements
         changed = true;
     }
 
-
     /*** SERVICE ***/
 
     public void onCreate() {
         Log.d("MusicService", "onCreate()");
         super.onCreate();
+
+        initMediaSession();
+        createNotificationChannel();
 
         state = new PlayerState();
 
@@ -249,11 +342,14 @@ public class MusicService extends Service implements
         stopSensor();
 
         stopNotification();
+        mediaSession.release();
+        mediaSession.setActive(false);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleCommand(intent);
+        MediaButtonReceiver.handleIntent(mediaSession, intent);
 
         // show the notification if MusicService has been started from the MediaButtonIntentReceiver
         if (!mainIsVisible && !foreground && changed && isInState(PlayerState.Started))
@@ -269,13 +365,25 @@ public class MusicService extends Service implements
         String action = intent.getAction();
         String cmd = intent.getStringExtra("command");
         Log.d("MusicService", "intentReceiver.onReceive" + action + " / " + cmd);
-        if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
+        if (NEXT_ACTION.equals(action))
+            cmd = CMDNEXT;
+        else if (PREVIOUS_ACTION.equals(action))
+            cmd = CMDPREVIOUS;
+        else if (TOGGLEPAUSE_ACTION.equals(action))
+            cmd = CMDTOGGLEPAUSE;
+        else if (PAUSE_ACTION.equals(action))
+            cmd = CMDPAUSE;
+        handleCommand(cmd);
+    }
+
+    private void handleCommand(String cmd) {
+        if (CMDNEXT.equals(cmd)) {
             playNext();
             changed = true;
-        } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {
+        } else if (CMDPREVIOUS.equals(cmd)) {
             playPrev();
             changed = true;
-        } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
+        } else if (CMDTOGGLEPAUSE.equals(cmd)) {
             if (isInState(PlayerState.Started)) {
                 pause();
             }
@@ -286,7 +394,7 @@ public class MusicService extends Service implements
                     playSong();
             }
             changed = true;
-        } else if (CMDSTOP.equals(cmd) || CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
+        } else if (CMDSTOP.equals(cmd) || CMDPAUSE.equals(cmd)) {
             if (isInState(PlayerState.Started)) {
                 pause();
                 changed = true;
@@ -299,7 +407,6 @@ public class MusicService extends Service implements
             changed = true;
         }
     }
-
 
     @Override
     public void onAudioFocusChange(int focusChange) {
@@ -366,6 +473,7 @@ public class MusicService extends Service implements
         else {
             seekFinished = true;
         }
+        updateMediaPlaybackState();
         Log.d("MusicService", "onSeekComplete setProgress" + RowSong.secondsToMinutes(getCurrentPosition()));
     }
 
@@ -381,13 +489,8 @@ public class MusicService extends Service implements
         getPlayer().reset();
         state.setState(PlayerState.Idle);
 
-        // get id
-        long currSong = rowSong.getID();
-        // set uri
-        Uri trackUri = ContentUris.withAppendedId(
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong);
         try{
-            getPlayer().setDataSource(getApplicationContext(), trackUri);
+            getPlayer().setDataSource(getApplicationContext(), rowSong.getExternalContentUri());
         }
         catch(Exception e){
             Log.e("MUSIC SERVICE", "Error setting data source", e);
@@ -398,6 +501,11 @@ public class MusicService extends Service implements
         state.setState(PlayerState.Initialized);
         getPlayer().prepareAsync();
         state.setState(PlayerState.Preparing);
+
+        updateMediaPlaybackState();
+        updateMediaSessionMetadata();
+        if(foreground)
+            startNotification();
     }
 
     @Override
@@ -484,6 +592,11 @@ public class MusicService extends Service implements
         state.setState(PlayerState.Started);
         startSensor();
         scrobble.send(Scrobble.SCROBBLE_RESUME);
+
+        updateMediaPlaybackState();
+        updateMediaSessionMetadata();
+        if(foreground)
+            startNotification();
     }
 
     public void pause() {
@@ -495,8 +608,10 @@ public class MusicService extends Service implements
         stopSensor();
         scrobble.send(Scrobble.SCROBBLE_PAUSE);
 
+        updateMediaPlaybackState();
+        updateMediaSessionMetadata();
         if(foreground)
-            stopNotification();
+            startNotification();
     }
 
     public void playPrev() {
@@ -504,9 +619,6 @@ public class MusicService extends Service implements
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevSong();
-
-        if(foreground)
-            startNotification();
 
         playSong();
     }
@@ -517,9 +629,6 @@ public class MusicService extends Service implements
         else
             rows.moveToNextSong();
 
-        if(foreground)
-            startNotification();
-
         playSong();
     }
 
@@ -528,9 +637,6 @@ public class MusicService extends Service implements
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevGroup();
-
-        if(foreground)
-            startNotification();
 
         playSong();
     }
@@ -541,16 +647,10 @@ public class MusicService extends Service implements
         else
             rows.moveToNextGroup();
 
-        if(foreground)
-            startNotification();
-
         playSong();
     }
 
     public void playSame() {
-        if(foreground)
-            startNotification();
-
         playSong();
     }
 
@@ -588,7 +688,6 @@ public class MusicService extends Service implements
     }
 
 
-
     /*** NOTIFICATION ***/
 
     public void startNotification() {
@@ -596,25 +695,64 @@ public class MusicService extends Service implements
         if(rowSong == null)
             return;
 
-//        Intent notificationIntent = new Intent(this, Main.class);
-//        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
-//                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Notification notification = new Notification(R.drawable.ic_actionbar_launcher_anim,
-//                rowSong.getTitle(),
-//                System.currentTimeMillis());
-//        notification.setLatestEventInfo(this, getResources().getString(R.string.app_playing),
-//                rowSong.getTitle() + " - " + rowSong.getArtist(), pendInt);
-//
-//        startForeground(NOTIFY_ID, notification);
+        Intent openApp = new Intent(this, Main.class);
+        openApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id);
+        builder.setContentTitle(rowSong.getTitle())
+                .setContentText(rowSong.getArtist())
+                .setSubText(rowSong.getAlbum())
+                .setSmallIcon(R.drawable.ic_notification)
+                .setLargeIcon(rows.getCurrSong().getAlbumBmp(getApplicationContext()))
+                .setContentIntent(PendingIntent.getActivity(this, 0, openApp,
+                        PendingIntent.FLAG_UPDATE_CURRENT))
+                .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(getApplicationContext(),
+                        PlaybackStateCompat.ACTION_STOP))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        if (builder == null)
+            return;
+        if (playingLaunched())
+            builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause,
+                    getResources().getString(R.string.action_pause),
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        else
+            builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play,
+                    getResources().getString(R.string.action_play),
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_previous,
+                getResources().getString(R.string.action_prev),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
+        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_next,
+                getResources().getString(R.string.action_next),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
+
+        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0, 1, 2).setMediaSession(mediaSession.getSessionToken()));
+        //NotificationManagerCompat.from(MusicService.this).notify(NOTIFICATION_ID, builder.build());
         foreground = true;
+        startForeground(NOTIFICATION_ID, builder.build());
     }
 
+
     public void stopNotification() {
-        if(foreground)
-//            stopForeground(true);
+        if (foreground)
+            stopForeground(true);
+        //NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID);
         foreground = false;
+    }
+
+    public static final String channel_id = "smp_channelid";
+    private void createNotificationChannel()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "SMP Channel";
+            String description = "SicmuPlayer channel";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel mChannel = new NotificationChannel(channel_id, name, importance);
+            mChannel.setDescription(description);
+            mChannel.enableLights(true); // todo: useful ?
+            mChannel.setLightColor(Color.RED); // todo: useful ?
+            NotificationManagerCompat.from(MusicService.this).createNotificationChannel(mChannel);
+        }
     }
 
     /*** PREFERENCES ***/

@@ -25,6 +25,11 @@
     found on iconfinder.com. Color and dimension has been changed.
     -->
 
+    <!-- icon ic_menu_folder done by ionicons (MIT license) found on iconfinder.com -->
+    <item android:title="@string/action_sort" android:id="@+id/action_sort"/>
+
+    <item android:title="@string/action_repeat_all"
+        android:id="@+id/action_repeat"/>
 
     <item android:id="@+id/action_shuffle"
         android:title="@string/action_no_shuffle"
@@ -32,14 +37,10 @@
 
     <item android:id="@+id/action_text_size"/>
 
-    <item android:id="@+id/action_lock_unlock"/>
+    <item android:title="@string/settings_unlocked"
+        android:id="@+id/action_lock_unlock"/>
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_menu_settings" />
-
-    <item android:id="@+id/action_repeat"/>
-
-    <!-- icon ic_menu_folder done by ionicons (MIT license) found on iconfinder.com -->
-    <item android:id="@+id/action_sort"/>
 </menu>

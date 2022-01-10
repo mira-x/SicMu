@@ -156,16 +156,14 @@
     <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre como criar um tocador de música para Android)</string>
     <string name="settings_thanks_i15n">Tradução</string>
     <string name="settings_thanks_i15n_summary">Jerônimo Cordoni Pellegrini (Português), Mehmet Gülmen (Türkçe), Mladen Pejaković (Serbian), </string>
-    <string name="settings_locked">Travado</string>
-    <string name="settings_unlocked">Destravado</string>
 
     <string name="action_repeat_title">Repetir</string>
     <string name="action_repeat_all">Tudo</string>
     <string name="action_repeat_one">Faixa</string>
     <string name="action_repeat_group">Grupo</string>
-    <string name="state_repeat_all">Repetir tudo</string>
-    <string name="state_repeat_one">Repetir faixa</string>
-    <string name="state_repeat_group">Repetir grupo</string>
+    <string name="state_repeat_all">tudo</string>
+    <string name="state_repeat_one">faixa</string>
+    <string name="state_repeat_group">grupo</string>
 
     <string name="action_music_mode">Modo de música</string>
     <string name="action_edit_mode">Modo de edição</string>

@@ -8,7 +8,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "souch.smp"
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 31
         versionCode 18
         versionName '1.4.2'
@@ -30,5 +30,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.2.1'
-    implementation 'com.android.support:support-v4:23.+'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.core:core:1.7.0'
+    implementation 'androidx.media:media:1.4.3'
 }
