@@ -51,7 +51,7 @@
     rightoffset
     -->
 
-    <style name="SeekBarAppTheme" parent="android:Widget.SeekBar">
+    <style name="SeekBarAppTheme" parent="Widget.AppCompat.SeekBar">
         <item name="android:progressDrawable">@drawable/seekbar_horizontal_holo_light</item>
         <item name="android:indeterminateDrawable">@drawable/seekbar_horizontal_holo_light</item>
         <item name="android:minHeight">13dip</item>

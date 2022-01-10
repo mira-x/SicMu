@@ -20,7 +20,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="SeekBarAppTheme" parent="android:Widget.Holo.Light.SeekBar">
+  <style name="SeekBarAppTheme" parent="Widget.AppCompat.SeekBar">
       <item name="android:progressDrawable">@drawable/seekbar_horizontal_holo_light</item>
       <item name="android:indeterminateDrawable">@drawable/seekbar_horizontal_holo_light</item>
       <item name="android:thumb">@drawable/seekbar_control_selector_holo_light</item>
