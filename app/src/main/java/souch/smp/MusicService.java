@@ -22,9 +22,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -202,6 +204,19 @@ public class MusicService extends Service implements
             mediaSession.setMetadata(rowSong.getMediaMetadata(getApplicationContext()));
     }
 
+    private void initNoisyReceiver() {
+        // Handles headphones coming unplugged. cannot be done through a manifest receiver
+        IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(noisyReceiver, filter);
+    }
+
+    private BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            handleCommand(CMDPAUSE);
+        }
+    };
+
     public Rows getRows() { return rows; }
 
     public boolean getChanged() {
@@ -221,6 +236,7 @@ public class MusicService extends Service implements
         super.onCreate();
 
         initMediaSession();
+        initNoisyReceiver();
         createNotificationChannel();
 
         state = new PlayerState();
@@ -344,6 +360,8 @@ public class MusicService extends Service implements
         stopNotification();
         mediaSession.release();
         mediaSession.setActive(false);
+
+        unregisterReceiver(noisyReceiver);
     }
 
     @Override

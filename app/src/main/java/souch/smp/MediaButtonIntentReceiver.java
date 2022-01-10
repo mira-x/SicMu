@@ -63,12 +63,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String intentAction = intent.getAction();
-        if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intentAction)) {
-            Intent i = new Intent(context, MusicService.class);
-            i.setAction(MusicService.SERVICECMD);
-            i.putExtra(MusicService.CMDNAME, MusicService.CMDPAUSE);
-            context.startService(i);
-        } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
+        if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
 
             if (event == null) {
