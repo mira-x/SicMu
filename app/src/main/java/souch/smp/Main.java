@@ -348,6 +348,7 @@ public class Main extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case READ_EXTERNAL_STORAGE_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
@@ -383,7 +384,7 @@ public class Main extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (seekbar.getVisibility() == TextView.VISIBLE) {
-                currDuration.setText(RowSong.secondsToMinutes(seekBar.getProgress()));
+                currDuration.setText(RowSong.msToMinutes(seekBar.getProgress()));
             }
         }
 
@@ -399,7 +400,7 @@ public class Main extends AppCompatActivity {
                     PlayerState.Paused |
                     PlayerState.PlaybackCompleted;
             if (serviceBound && musicSrv.isInState(states)) {
-                Log.d("Main", "onStopTrackingTouch setProgress" + RowSong.secondsToMinutes(seekBar.getProgress()));
+                Log.d("Main", "onStopTrackingTouch setProgress" + RowSong.msToMinutes(seekBar.getProgress()));
                 seekBar.setProgress(seekBar.getProgress());
                 // valid state : {Prepared, Started, Paused, PlaybackCompleted}
                 musicSrv.seekTo(seekBar.getProgress());
@@ -500,9 +501,9 @@ public class Main extends AppCompatActivity {
                 if (musicSrv.playingStopped()) {
                     stopPlayButton();
                 } else if (!touchSeekbar && musicSrv.getSeekFinished()) {
-                    Log.v("Main", "updateInfo setProgress" + RowSong.secondsToMinutes(musicSrv.getCurrentPosition()));
+                    Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(musicSrv.getCurrentPositionMs()));
                     // getCurrentPosition {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}
-                    seekbar.setProgress(musicSrv.getCurrentPosition());
+                    seekbar.setProgress((int) musicSrv.getCurrentPositionMs());
                 }
             }
         }
@@ -534,13 +535,13 @@ public class Main extends AppCompatActivity {
 
             RowSong rowSong = rows.getCurrSong();
             if (rowSong != null) {
-                duration.setText(RowSong.secondsToMinutes(rowSong.getDuration()));
+                duration.setText(RowSong.msToMinutes(rowSong.getDurationMs()));
                 duration.setVisibility(TextView.VISIBLE);
-                seekbar.setMax(rowSong.getDuration());
+                seekbar.setMax((int) rowSong.getDurationMs());
                 if (!touchSeekbar && musicSrv.getSeekFinished())
-                    seekbar.setProgress(musicSrv.getCurrentPosition());
+                    seekbar.setProgress((int) musicSrv.getCurrentPositionMs());
                 seekbar.setVisibility(TextView.VISIBLE);
-                currDuration.setText(RowSong.secondsToMinutes(musicSrv.getCurrentPosition()));
+                currDuration.setText(RowSong.msToMinutes(musicSrv.getCurrentPositionMs()));
             }
         }
         autoOpenCloseDetails();
@@ -1177,30 +1178,30 @@ public class Main extends AppCompatActivity {
     public void seek(View view){
         if(!serviceBound)
             return;
-        int newPos = musicSrv.getCurrentPosition();
+        long newPosMs = musicSrv.getCurrentPositionMs();
         switch (view.getId()) {
             case R.id.m5_button:
-                newPos -= 5;
+                newPosMs -= 5*1000;
                 break;
             case R.id.p5_button:
-                newPos += 5;
+                newPosMs += 5*1000;
                 break;
             case R.id.m20_button:
             case R.id.m20_text:
-                newPos -= 20;
+                newPosMs -= 20*1000;
                 break;
             case R.id.p20_button:
             case R.id.p20_text:
-                newPos += 20;
+                newPosMs += 20*1000;
                 break;
         }
 
-        newPos = newPos < 0 ? 0 : newPos;
+        newPosMs = newPosMs < 0 ? 0 : newPosMs;
 
-        if (newPos >= musicSrv.getDuration())
+        if (newPosMs >= musicSrv.getDurationMs())
             playNext(null);
         else
-            musicSrv.seekTo(newPos);
+            musicSrv.seekTo(newPosMs);
     }
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -1271,14 +1272,14 @@ public class Main extends AppCompatActivity {
                 if (repeatcount <= 0)
                     return;
 
-                int newPos = musicSrv.getCurrentPosition() - getSeekOffsetSec(view, duration);
-                Log.d("Main", "<-- currpos: " + musicSrv.getCurrentPosition() + " seekto: " + newPos);
-                newPos = newPos < 0 ? 0 : newPos;
-                musicSrv.seekTo(newPos);
+                long newPosMs = musicSrv.getCurrentPositionMs() - getSeekOffsetSec(view, duration);
+                Log.d("Main", "<-- currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
+                newPosMs = newPosMs < 0 ? 0 : newPosMs;
+                musicSrv.seekTo(newPosMs);
             }
         };
 
-        private int getSeekOffsetSec(View view, long duration) {
+        private long getSeekOffsetSec(View view, long duration) {
             long offsetMs = 0;
             switch (view.getId()) {
                 case R.id.m5_button:
@@ -1298,7 +1299,7 @@ public class Main extends AppCompatActivity {
                     }
                     break;
             }
-            return (int) offsetMs / 1000;
+            return offsetMs;
         }
 
     private RepeatingImageButton.RepeatListener forwardListener =
@@ -1309,12 +1310,12 @@ public class Main extends AppCompatActivity {
                 if (repeatcount <= 0)
                     return;
 
-                int newPos = musicSrv.getCurrentPosition() + getSeekOffsetSec(view, duration);
-                Log.d("Main", "--> currpos: " + musicSrv.getCurrentPosition() + " seekto: " + newPos);
-                if (newPos >= musicSrv.getDuration())
+                long newPosMs = musicSrv.getCurrentPositionMs() + getSeekOffsetSec(view, duration);
+                Log.d("Main", "--> currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
+                if (newPosMs >= musicSrv.getDurationMs())
                     playNext(null);
                 else
-                    musicSrv.seekTo(newPos);
+                    musicSrv.seekTo(newPosMs);
         }
     };
 

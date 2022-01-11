@@ -91,7 +91,7 @@ public class MusicService extends Service implements
     private boolean changed;
 
     // useful only for buggy android seek
-    private int seekPosBug;
+    private long seekPosMsBug;
 
     // a notification has been launched
     private boolean foreground;
@@ -159,9 +159,9 @@ public class MusicService extends Service implements
         }
 
         @Override
-        public void onSeekTo(long pos) {
-            super.onSeekTo(pos);
-            seekTo((int) (pos / 1000));
+        public void onSeekTo(long posMs) {
+            super.onSeekTo(posMs);
+            seekTo((int) posMs);
         }
     };
 
@@ -188,7 +188,7 @@ public class MusicService extends Service implements
                     | PlaybackStateCompat.ACTION_SEEK_TO;
     private void updateMediaPlaybackState() {
         boolean isPlaying = playingLaunched();
-        long currPosMs = getCurrentPosition() * 1000;
+        long currPosMs = getCurrentPositionMs();
         PlaybackStateCompat.Builder stateBuilder =
                 new PlaybackStateCompat.Builder()
                         .setActions(MEDIA_SESSION_ACTIONS)
@@ -243,7 +243,7 @@ public class MusicService extends Service implements
 
         changed = false;
         seekFinished = true;
-        seekPosBug = -1;
+        seekPosMsBug = -1;
         wasPlaying = false;
 
         player = null;
@@ -295,7 +295,7 @@ public class MusicService extends Service implements
     // create AudioManager and MediaPlayer at the last moment
     // this func assure they are initialized
     private MediaPlayer getPlayer() {
-        seekPosBug = -1;
+        seekPosMsBug = -1;
 
         if (!hasAudioFocus) {
             int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
@@ -472,7 +472,7 @@ public class MusicService extends Service implements
         // on a 4.1 phone no bug : calling getCurrentPosition now gives the new seeked position
         // on My 2.3.6 phone, the phone seems bugged : calling now getCurrentPosition gives
         // last position. So wait the seekpos goes after the asked seekpos.
-        if(seekPosBug != -1) {
+        if(seekPosMsBug != -1) {
             // todo: make it thread safe?
             seekPosNbLoop = seekPosMaxLoop;
 
@@ -480,9 +480,9 @@ public class MusicService extends Service implements
             seekPosTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (seekPosNbLoop-- > 0 || getCurrentPosition() >= seekPosBug) {
+                    if (seekPosNbLoop-- > 0 || getCurrentPositionMs() >= seekPosMsBug) {
                         seekFinished = true;
-                        seekPosBug = -1;
+                        seekPosMsBug = -1;
                         seekPosTimer.cancel();
                     }
                 }
@@ -492,7 +492,7 @@ public class MusicService extends Service implements
             seekFinished = true;
         }
         updateMediaPlaybackState();
-        Log.d("MusicService", "onSeekComplete setProgress" + RowSong.secondsToMinutes(getCurrentPosition()));
+        Log.d("MusicService", "onSeekComplete setProgress" + RowSong.msToMinutes(getCurrentPositionMs()));
     }
 
     public void playSong() {
@@ -573,31 +573,31 @@ public class MusicService extends Service implements
     /*** PLAY ACTION ***/
 
     // get curr position in second
-    public int getCurrentPosition(){
+    public long getCurrentPositionMs(){
         if(player == null)
             return 0;
-        return player.getCurrentPosition() / 1000;
+        return player.getCurrentPosition();
     }
 
     // get song total duration in second
-    public int getDuration(){
+    public int getDurationMs(){
         if(player == null)
             return 0;
-        return player.getDuration() / 1000;
+        return player.getDuration();
     }
 
     // move to this song genuinePos in second
-    public void seekTo(int posn){
+    public void seekTo(long posMs){
         if(player == null)
             return;
 
         seekFinished = false;
-        int gotoPos = posn * 1000;
+        long gotoPosMs = posMs;
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            seekPosBug = gotoPos;
+            seekPosMsBug = gotoPosMs;
 
-        player.seekTo(gotoPos);
+        player.seekTo((int) gotoPosMs);
     }
 
     public boolean getSeekFinished() {

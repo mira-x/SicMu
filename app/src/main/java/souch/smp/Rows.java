@@ -620,7 +620,7 @@ public class Rows {
                 String title = getDefaultStrIfNull(musicCursor.getString(titleCol));
                 String artist = getDefaultStrIfNull(musicCursor.getString(artistCol));
                 String album = getDefaultStrIfNull(musicCursor.getString(albumCol));
-                int duration = musicCursor.getInt(durationCol);
+                long durationMs = musicCursor.getLong(durationCol);
                 int track = musicCursor.getInt(trackCol);
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
@@ -642,7 +642,7 @@ public class Rows {
                 }
 
                 RowSong rowSong = new RowSong(rowsUnfolded.size(), 2, id, title, artist, album,
-                        duration / 1000, track, null, albumId, year);
+                        durationMs, track, null, albumId, year);
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
@@ -676,13 +676,13 @@ public class Rows {
                 String title = getDefaultStrIfNull(musicCursor.getString(titleCol));
                 String artist = getDefaultStrIfNull(musicCursor.getString(artistCol));
                 String album = getDefaultStrIfNull(musicCursor.getString(albumCol));
-                int duration = musicCursor.getInt(durationCol);
+                long durationMs = musicCursor.getLong(durationCol);
                 int track = musicCursor.getInt(trackCol);
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
 
-                RowSong rowSong = new RowSong(-1, 2, id, title, artist, album, duration / 1000, track, path, albumId, year);
+                RowSong rowSong = new RowSong(-1, 2, id, title, artist, album, durationMs, track, path, albumId, year);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
@@ -773,14 +773,14 @@ public class Rows {
                 String title = getDefaultStrIfNull(musicCursor.getString(titleCol));
                 String artist = getDefaultStrIfNull(musicCursor.getString(artistCol));
                 String album = getDefaultStrIfNull(musicCursor.getString(albumCol));
-                int duration = musicCursor.getInt(durationCol);
+                long durationMs = musicCursor.getLong(durationCol);
                 int track = musicCursor.getInt(trackCol);
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
 
                 final int pos = -1, level = 2;
-                RowSong rowSong = new RowSong(pos, level, id, title, artist, album, duration / 1000,
+                RowSong rowSong = new RowSong(pos, level, id, title, artist, album, durationMs,
                         track, path, albumId, year);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());

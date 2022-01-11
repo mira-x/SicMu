@@ -39,7 +39,7 @@ public class RowSong extends Row {
     private String title;
     private String artist;
     private String album;
-    private int duration;
+    private long durationMs;
     private int track;
     private int year;
     // full filename
@@ -54,13 +54,13 @@ public class RowSong extends Row {
     public static int normalSongDurationTextColor;
 
     public RowSong(int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
-                   int dur, int songTrack, String songPath, long albumId, int year) {
+                   long durationMs, int songTrack, String songPath, long albumId, int year) {
         super(pos, level, Typeface.NORMAL);
         id = songID;
         title = songTitle;
         artist = songArtist;
         album = songAlbum;
-        duration = dur;
+        this.durationMs = durationMs;
         track = songTrack;
         path = songPath;
         this.albumId = albumId;
@@ -75,7 +75,7 @@ public class RowSong extends Row {
     public int getYear(){return year;}
     public String getArtist(){return artist;}
     public String getAlbum(){return album;}
-    public int getDuration(){return duration;}
+    public long getDurationMs(){return durationMs;}
     public int getTrack(){return track;}
     public String getPath(){return path;}
     public String getFolder(){return folder;}
@@ -103,7 +103,7 @@ public class RowSong extends Row {
     }
 
     private void setDuration(TextView duration) {
-        duration.setText(secondsToMinutes(getDuration()) + getStringOffset());
+        duration.setText(msToMinutes(getDurationMs()) + getStringOffset());
         duration.setTextColor(normalSongDurationTextColor);
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         duration.setTypeface(null, typeface);
@@ -129,11 +129,11 @@ public class RowSong extends Row {
     public String toString() {
         return "Song  pos: " + genuinePos + " level: " + level + " ID: " + id + " artist: " + artist +
                 " album: " + album + " title: " + title + " " +
-                secondsToMinutes(duration) + " track:" + track + " path: " + path;
+                msToMinutes(durationMs) + " track:" + track + " path: " + path;
     }
 
-    static public String secondsToMinutes(int duration){
-        long seconds = duration;
+    static public String msToMinutes(long durationMs){
+        long seconds = durationMs / 1000;
         long minutes = seconds / 60;
         seconds = seconds % 60;
         return String.valueOf(minutes) + (seconds < 10 ? ":0" : ":") + String.valueOf(seconds);
@@ -213,7 +213,7 @@ public class RowSong extends Row {
         builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, title);
         builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist);
         builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album);
-        builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration * 1000);
+        builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs);
         builder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, track);
         builder.putLong(MediaMetadataCompat.METADATA_KEY_YEAR, year);
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, getAlbumBmp(context)); // todo: optimize

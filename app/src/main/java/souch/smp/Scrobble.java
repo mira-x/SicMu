@@ -37,7 +37,7 @@ public class Scrobble {
     private String artist;
     private String album;
     private String track;
-    private int duration;
+    private long durationMs;
 
 
     public Scrobble(Rows rows, Parameters params, Context ctx) {
@@ -65,7 +65,7 @@ public class Scrobble {
             artist = rowSong.getArtist();
             album = rowSong.getAlbum();
             track = rowSong.getTitle();
-            duration = rowSong.getDuration();
+            durationMs = rowSong.getDurationMs();
         } else if (scrobbleState == SCROBBLE_COMPLETE) {
             // send complete only if SCROBBLE_START was send before
             if (!started)
@@ -96,7 +96,7 @@ public class Scrobble {
         bCast.putExtra("artist", artist);
         bCast.putExtra("album", album);
         bCast.putExtra("track", track);
-        bCast.putExtra("secs", duration);
+        bCast.putExtra("secs", durationMs / 1000);
         bCast.putExtra("source", "P");
         context.sendBroadcast(bCast);
 
