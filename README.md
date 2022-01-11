@@ -36,13 +36,14 @@ Works on old slow small devices (from Android froyo 2.2).
     - auto repeat seek buttons
     - shake the phone to go to next song
 - User Interface:
+    - notification with media controls
     - disable / enable lockscreen
     - configurable font size
 - bluetooth & scrobble
     - bluetooth support (play through bluetooth device)
     - media buttons support (next, prev, play/pause) from external device (bluetooth headphones...)
     - support [Simple Last.fm Scrobbler](https://github.com/tgwizard/sls) or [Scrobble Droid](https://code.google.com/p/scrobbledroid) (disabled by default in settings)
-- play mp3, ogg, flac, midi, wav, mp4, 3gp... see android mediaplayer supported media formats (depends on android version).
+- play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
 - light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.
 
 
@@ -53,7 +54,6 @@ Works on old slow small devices (from Android froyo 2.2).
 
 ### Todo (perhaps :-)
 
-- notification play control
 - rate songs and filter by rating
 - remove file
 - browse folder
