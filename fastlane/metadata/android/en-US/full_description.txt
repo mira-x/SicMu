@@ -1,0 +1,18 @@
+<i>SicMu player</i> is lightweight audio player which features a single over-all playlist with every song on the device.
+Very useful for large music lists organized by folder.
+
+<b>Features</b>
+
+* show songs in a tree view following device's folder hierarchy
+* show songs grouping by artist
+* show songs grouping by folders
+* cover art image
+* repeat mode (all, group, one track, A to B)
+* shuffle mode
+* shake the phone to go to next song
+* notification with media controls
+* disable / enable lockscreen
+* configurable font size
+* bluetooth & scrobble support
+* play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
+* light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.

@@ -1,0 +1,3 @@
+Version 1.5.
+- Add notification with media controls.
+- Fix pause playback after audiojack removal
