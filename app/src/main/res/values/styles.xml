@@ -22,7 +22,6 @@
     <style name="Theme.AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
-
     </style>
 
     <style name="BottomButton" parent="android:Widget">
@@ -45,6 +44,8 @@
     <color name="RowGroupArtistBackground">#88353535</color>
     <color name="RowGroupArtistAlbumBackground">#88000000</color>
     <color name="RowGroupTreeBackground">#88353535</color>
+    <color name="TrackLooperNormal">#ff666666</color>
+    <color name="TrackLooperActivated">@color/apptheme_color</color>
     <!-- todo
     <item "levelOffset"">15</item>
     fonttype: bold, italic, regular...

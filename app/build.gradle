@@ -8,10 +8,11 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "souch.smp"
-        minSdkVersion 14
+        minSdkVersion 14 // 14 -> Android 4.0
         targetSdkVersion 31
         versionCode 19
         versionName '1.5'
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

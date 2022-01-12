@@ -467,6 +467,7 @@ public class MusicService extends Service implements
 
     private int seekPosNbLoop;
     private final int seekPosMaxLoop = 15;
+    private Timer trackLooperTimer = null;
     @Override
     public void onSeekComplete(MediaPlayer mp) {
         // on a 4.1 phone no bug : calling getCurrentPosition now gives the new seeked position
@@ -491,6 +492,9 @@ public class MusicService extends Service implements
         else {
             seekFinished = true;
         }
+
+        startTrackLooperRewinder();
+
         updateMediaPlaybackState();
         Log.d("MusicService", "onSeekComplete setProgress" + RowSong.msToMinutes(getCurrentPositionMs()));
     }
@@ -503,6 +507,7 @@ public class MusicService extends Service implements
         rows.save();
 
         startSensor();
+        disableTrackLooper();
 
         getPlayer().reset();
         state.setState(PlayerState.Idle);
@@ -604,12 +609,54 @@ public class MusicService extends Service implements
         return seekFinished;
     }
 
+    private boolean trackLooperEnabled = false;
+    private long trackLooperAPosMs;
+    private long trackLooperBPosMs;
+    public void enableTrackLooper(long APosMs, long BPosMs)
+    {
+        trackLooperAPosMs = APosMs;
+        trackLooperBPosMs = BPosMs;
+        trackLooperEnabled = true;
+        seekTo(trackLooperAPosMs);
+    }
+
+    public void disableTrackLooper()
+    {
+        trackLooperEnabled = false;
+        cancelTrackLooperRewinder();
+    }
+
+    public void startTrackLooperRewinder() {
+        if (trackLooperEnabled) {
+            long diffMs = trackLooperBPosMs - getCurrentPositionMs();
+            if (diffMs <= 0)
+                seekTo(trackLooperAPosMs);
+            else {
+                if (trackLooperTimer != null)
+                    trackLooperTimer.cancel();
+                trackLooperTimer = new Timer();
+                trackLooperTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        seekTo(trackLooperAPosMs);
+                    }
+                }, diffMs);
+            }
+        }
+    }
+
+    public void cancelTrackLooperRewinder() {
+        if (trackLooperTimer != null)
+            trackLooperTimer.cancel();
+    }
+
     // unpause
     public void start() {
         getPlayer().start();
         state.setState(PlayerState.Started);
         startSensor();
         scrobble.send(Scrobble.SCROBBLE_RESUME);
+        startTrackLooperRewinder();
 
         updateMediaPlaybackState();
         updateMediaSessionMetadata();
@@ -625,6 +672,7 @@ public class MusicService extends Service implements
         state.setState(PlayerState.Paused);
         stopSensor();
         scrobble.send(Scrobble.SCROBBLE_PAUSE);
+        cancelTrackLooperRewinder();
 
         updateMediaPlaybackState();
         updateMediaSessionMetadata();

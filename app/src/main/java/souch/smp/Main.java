@@ -298,6 +298,7 @@ public class Main extends AppCompatActivity {
                         rows.selectNearestSong(position);
                         musicSrv.playSong();
                         updatePlayButton();
+                        disableTrackLooper();
                     }
                     scrollToSong(position);
                 }
@@ -315,6 +316,7 @@ public class Main extends AppCompatActivity {
                     rows.selectNearestSong(position);
                     musicSrv.playSong();
                     updatePlayButton();
+                    disableTrackLooper();
                     unfoldAndscrollToCurrSong();
 
                     return true;
@@ -1160,6 +1162,7 @@ public class Main extends AppCompatActivity {
         coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
+        disableTrackLooper();
         if(followSong)
             unfoldAndscrollToCurrSong();
     }
@@ -1171,6 +1174,7 @@ public class Main extends AppCompatActivity {
         coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
+        disableTrackLooper();
         if(followSong)
             unfoldAndscrollToCurrSong();
     }
@@ -1204,6 +1208,38 @@ public class Main extends AppCompatActivity {
             musicSrv.seekTo(newPosMs);
     }
 
+    private final long trackLooperDisabledVal = -1;
+    private long trackLooperAPosMs = trackLooperDisabledVal;
+    private long trackLooperBPosMs = trackLooperDisabledVal;
+    public void trackLooperClick(View view)
+    {
+        if (!serviceBound)
+            return;
+        ImageButton trackLooperBtn = findViewById(R.id.track_looper_button);
+        if (trackLooperAPosMs == trackLooperDisabledVal) {
+            trackLooperAPosMs = musicSrv.getCurrentPositionMs();
+            trackLooperBtn.setImageResource(R.drawable.ic_track_looper_a);
+        }
+        else if (trackLooperBPosMs == trackLooperDisabledVal) {
+            trackLooperBPosMs = musicSrv.getCurrentPositionMs();
+            musicSrv.enableTrackLooper(trackLooperAPosMs, trackLooperBPosMs);
+            trackLooperBtn.setImageResource(R.drawable.ic_track_looper_ab);
+        }
+        else {
+            disableTrackLooper();
+        }
+    }
+    
+    public void disableTrackLooper()
+    {
+        trackLooperAPosMs = trackLooperDisabledVal;
+        trackLooperBPosMs = trackLooperDisabledVal;
+        if (serviceBound)
+            musicSrv.disableTrackLooper();
+        ImageButton trackLooperBtn = findViewById(R.id.track_looper_button);
+        trackLooperBtn.setImageResource(R.drawable.ic_track_looper);
+    }
+
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -1231,6 +1267,7 @@ public class Main extends AppCompatActivity {
             coverArtNum = 0;
             musicSrv.playNextGroup();
             updatePlayButton();
+            disableTrackLooper();
             if(followSong)
                 unfoldAndscrollToCurrSong();
 
@@ -1247,6 +1284,7 @@ public class Main extends AppCompatActivity {
             coverArtNum = 0;
             musicSrv.playPrevGroup();
             updatePlayButton();
+            disableTrackLooper();
             if(followSong)
                 unfoldAndscrollToCurrSong();
 

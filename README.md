@@ -34,6 +34,7 @@ Works on old slow small devices (from Android froyo 2.2).
     - shuffle mode
     - seek bar
     - auto repeat seek buttons
+    - loop on part of the song (A to B repeat feature)
     - shake the phone to go to next song
 - User Interface:
     - notification with media controls
