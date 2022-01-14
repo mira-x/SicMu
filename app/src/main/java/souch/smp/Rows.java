@@ -19,6 +19,7 @@
 package souch.smp;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -103,6 +104,26 @@ public class Rows {
         if (pos >= 0 && pos < rows.size())
             row = rows.get(pos);
         return row;
+    }
+
+    public Row setRowFromUri(Context context, Uri uri)
+    {
+        String path = Path.getSongPathFromUri(context, uri);
+        if (path != null) {
+            Log.d("MusicService", "getFilePathFromUri -> " + path);
+            // todo: optimize search ?
+            for (int i = 0; i < rowsUnfolded.size(); i++) {
+                Row row = rowsUnfolded.get(i);
+                if (row.getClass() == RowSong.class) {
+                    //Log.d("MusicService", "path " + ((RowSong) row).getPath());
+                    if (path.equals(((RowSong) row).getPath())) {
+                        setCurrPos(row.getGenuinePos());
+                        return row;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // get the song currently selected (playing or paused) from the unfoldable array

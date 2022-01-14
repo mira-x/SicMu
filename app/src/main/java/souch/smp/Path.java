@@ -38,6 +38,8 @@ import java.util.Collection;
 import java.util.Formatter;
 import java.util.HashSet;
 
+import androidx.annotation.Nullable;
+
 public class Path {
     public final static char separatorChar = System.getProperty("file.separator", "/").charAt(0);
     public static String rootFolders = "";
@@ -350,6 +352,45 @@ public class Path {
                 if (file.getName().toLowerCase().endsWith(extension))
                     return true;
         return false;
+    }
+
+    public static String getSongPathFromUri(Context context, Uri uri) {
+        String songPath = null;
+        File songFile = null;
+        if (uri.getAuthority() != null && uri.getAuthority().equals("com.android.externalstorage.documents")) {
+            songFile = new File(Environment.getExternalStorageDirectory(), uri.getPath().split(":", 2)[1]);
+        }
+        if (songFile == null) {
+            String path = getFilePathFromUri(context, uri);
+            if (path != null)
+                songFile = new File(path);
+        }
+        if (songFile == null && uri.getPath() != null) {
+            songFile = new File(uri.getPath());
+        }
+        if (songFile != null) {
+            songPath = songFile.getAbsolutePath();
+        }
+        return songPath;
+    }
+
+    @Nullable
+    private static String getFilePathFromUri(Context context, Uri uri)
+    {
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+        try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null,
+                null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } catch (Exception e) {
+            Log.e("Rows", "getFilePathFromUri :" + e.getMessage());
+        }
+        return null;
     }
 
 }

@@ -29,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -337,6 +338,22 @@ public class Main extends AppCompatActivity {
             }, 100);
 
             setImagesState();
+
+            // Associate app to music files (start music from a file browser)
+            Intent intent = getIntent();
+            Uri uri = intent.getData();
+            String mimeType = intent.getType();
+            if (uri != null && !uri.toString().isEmpty()) {
+                Log.d("Main", "Receiving intent with uri: " + uri.toString() + ", mime: " + mimeType);
+                rows = musicSrv.getRows();
+                Row row = rows.setRowFromUri(getApplicationContext(), uri);
+                if (row != null) {
+                    unfoldAndscrollToCurrSong();
+                    musicSrv.playSong();
+                    updatePlayButton();
+                    disableTrackLooper();
+                }
+            }
         }
 
         @Override
