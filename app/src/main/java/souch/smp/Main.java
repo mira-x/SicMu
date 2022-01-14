@@ -315,10 +315,7 @@ public class Main extends AppCompatActivity {
 
                     coverArtNum = 0;
                     rows.selectNearestSong(position);
-                    musicSrv.playSong();
-                    updatePlayButton();
-                    disableTrackLooper();
-                    unfoldAndscrollToCurrSong();
+                    playAlreadySelectedSong();
 
                     return true;
                 }
@@ -346,12 +343,8 @@ public class Main extends AppCompatActivity {
             if (uri != null && !uri.toString().isEmpty()) {
                 Log.d("Main", "Receiving intent with uri: " + uri.toString() + ", mime: " + mimeType);
                 rows = musicSrv.getRows();
-                Row row = rows.setRowFromUri(getApplicationContext(), uri);
-                if (row != null) {
-                    unfoldAndscrollToCurrSong();
-                    musicSrv.playSong();
-                    updatePlayButton();
-                    disableTrackLooper();
+                if (rows.setCurrPosFromUri(getApplicationContext(), uri)) {
+                     playAlreadySelectedSong();
                 }
             }
         }
@@ -363,6 +356,12 @@ public class Main extends AppCompatActivity {
         }
     };
 
+    private void playAlreadySelectedSong() {
+        musicSrv.playSong();
+        updatePlayButton();
+        disableTrackLooper();
+        unfoldAndscrollToCurrSong();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -510,6 +509,12 @@ public class Main extends AppCompatActivity {
                 return;
 
             //Log.d("Main", "updateInfo");
+            if (musicSrv.getRows().getAndSetFileToOpenFound()) {
+                Log.d("Main", "Launching file to open");
+                songAdt.notifyDataSetChanged();
+                playAlreadySelectedSong();
+            }
+
             if (musicSrv.getChanged()) {
                 Log.d("Main", "updateInfo changed");
                 vibrate();

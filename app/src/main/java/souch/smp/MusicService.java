@@ -253,7 +253,7 @@ public class MusicService extends Service implements
 
         params = new ParametersImpl(this);
 
-        rows = new Rows(getContentResolver(), params, getResources());
+        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources());
 
         restore();
 

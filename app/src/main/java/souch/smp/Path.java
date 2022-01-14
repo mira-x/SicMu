@@ -37,6 +37,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Formatter;
 import java.util.HashSet;
+import java.util.Vector;
 
 import androidx.annotation.Nullable;
 
@@ -258,7 +259,7 @@ public class Path {
         Log.d("Settings", "fileToScan: " + dir.getAbsolutePath());
         ArrayList<File> filesToScan = new ArrayList<>();
         Path.listFiles(dir, filesToScan);
-        scanMediaFiles(context, filesToScan);
+        scanMediaFiles(context, filesToScan, null);
         return true;
     }
 
@@ -326,7 +327,8 @@ public class Path {
     }
 
 
-    private static void scanMediaFiles(Context context, Collection<File> filesToScan) {
+    public static void scanMediaFiles(Context context, Collection<File> filesToScan,
+                                      MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
         String[] filesToScanArray = new String[filesToScan.size()];
         int i = 0;
         for (File file : filesToScan) {
@@ -337,13 +339,30 @@ public class Path {
         }
 
         if (filesToScanArray.length != 0) {
-            MediaScannerConnection.scanFile(context, filesToScanArray, null, null);
+            MediaScannerConnection.scanFile(context, filesToScanArray, null, mediaScannerCallback);
         } else {
             Log.e("Settings", "Media scan requested when nothing to scan");
         }
     }
 
+    public static void scanMediaFolder(Context context, String path,
+                                       MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
+        File file = new File(path);
+        Vector<File> files = new Vector<>();
+        if (file.isDirectory())
+            files.add(file);
+        else
+            files.add(file.getParentFile());
+        scanMediaFiles(context, files, mediaScannerCallback);
+    }
 
+    public static void scanMediaFile(Context context, String path,
+                                     MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
+        File file = new File(path);
+        Vector<File> files = new Vector<>();
+        files.add(file);
+        scanMediaFiles(context, files, mediaScannerCallback);
+    }
 
     static private final String[] imageFileExtensions =  new String[] {"jpg", "png", "gif", "jpeg"};
     static public boolean isImage(File file) {

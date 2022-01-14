@@ -23,9 +23,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,7 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class Rows {
+    Context context;
 
     private Random random;
     private ArrayList<Integer> shuffleSavedPos;
@@ -57,7 +60,10 @@ public class Rows {
     static final public String defaultStr = "<null>";
     private RepeatMode repeatMode;
 
-    public Rows(ContentResolver resolver, Parameters params, Resources resources) {
+    private boolean fileToOpenFound = false;
+
+    public Rows(Context context, ContentResolver resolver, Parameters params, Resources resources) {
+        this.context = context;
         this.resources = resources;
         this.params = params;
         musicResolver = resolver;
@@ -106,24 +112,77 @@ public class Rows {
         return row;
     }
 
-    public Row setRowFromUri(Context context, Uri uri)
+    public boolean getAndSetFileToOpenFound() {
+        boolean isFileToOpenFound = fileToOpenFound;
+        fileToOpenFound = false;
+        return isFileToOpenFound;
+    }
+
+    public static String intentExtraFileScanComplete = "SicMuFileScanned";
+    private MediaScannerConnection.OnScanCompletedListener scanFileCompletedCallback = new MediaScannerConnection.OnScanCompletedListener () {
+        @Override
+        public void onScanCompleted(String path, Uri uri){
+            int pos = -1;
+            if (uri != null) {
+                Log.d("Rows", "onScanCompleted file " + path + " found");
+                reinit();
+                pos = getGenuinePosFromPath(path);
+                if (pos != -1) {
+                    setCurrPos(pos);
+                    Log.d("Rows", "onScanCompleted file " + path + " pos setted");
+                    fileToOpenFound = true;
+                }
+            }
+            if (pos == -1) {
+                String wrn = context.getString(R.string.app_name) + ": playing file " + path + " failed !";
+                Log.i("Rows", wrn);
+                Toast.makeText(context, wrn, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    public boolean setCurrPosFromUri(Context context, Uri uri)
     {
+        boolean found = false;
         String path = Path.getSongPathFromUri(context, uri);
         if (path != null) {
             Log.d("MusicService", "getFilePathFromUri -> " + path);
-            // todo: optimize search ?
-            for (int i = 0; i < rowsUnfolded.size(); i++) {
-                Row row = rowsUnfolded.get(i);
-                if (row.getClass() == RowSong.class) {
-                    //Log.d("MusicService", "path " + ((RowSong) row).getPath());
-                    if (path.equals(((RowSong) row).getPath())) {
-                        setCurrPos(row.getGenuinePos());
-                        return row;
-                    }
+            int pos = getGenuinePosFromPath(path);
+            if (pos != -1) {
+                setCurrPos(pos);
+                found = true;
+                // rescan path so that it can see deleted file at next SicMu restart
+                Path.scanMediaFolder(context, path, null);
+            }
+            else {
+                Log.d("Rows", "Launch scan file for file " + path);
+                // scan folder first so that when the callback fire the folder is already scanned (hopefully)
+                Path.scanMediaFolder(context, path, null);
+                Path.scanMediaFile(context, path, scanFileCompletedCallback);
+            }
+        }
+        else {
+            String wrn = context.getString(R.string.app_name) + ": playing uri " + uri.toString() + " failed !";
+            Log.i("Rows", wrn);
+            Toast.makeText(context, wrn, Toast.LENGTH_LONG).show();
+        }
+        return found;
+    }
+
+    private int getGenuinePosFromPath(String path) {
+        int pos = -1;
+        // todo: optimize search ?
+        for (int i = 0; i < rowsUnfolded.size(); i++) {
+            Row row = rowsUnfolded.get(i);
+            if (row.getClass() == RowSong.class) {
+                //Log.d("MusicService", "path " + ((RowSong) row).getPath());
+                if (path.equals(((RowSong) row).getPath())) {
+                    pos = row.getGenuinePos();
+                    break;
                 }
             }
         }
-        return null;
+        return pos;
     }
 
     // get the song currently selected (playing or paused) from the unfoldable array
