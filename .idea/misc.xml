@@ -3,12 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/action_goto_play.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/drawable/ic_looper.xml" value="0.33" />
+        <entry key="app/src/main/res/drawable/ic_looper_A.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/drawable/ic_looper_ab.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/drawable/ic_looper_b.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/drawable/ic_pause.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/ic_play_arrow.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/ic_skip_next.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_skip_previous.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/ic_track_looper.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/seekbar_horizontal_holo_light.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/song.xml" value="0.23233695652173914" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
-        <entry key="app/src/main/res/xml/preferences.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.10462962962962963" />
+        <entry key="app/src/main/res/xml/menu.xml" value="0.21105072463768115" />
+        <entry key="app/src/main/res/xml/preferences.xml" value="0.25" />
       </map>
     </option>
   </component>
