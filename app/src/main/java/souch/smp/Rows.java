@@ -313,6 +313,9 @@ public class Rows {
     }
 
     public void moveToNextSong() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
             int lastSongPos = getLastSongPosInGroup(currPos);
             if (currPos == lastSongPos)
@@ -339,6 +342,9 @@ public class Rows {
     }
 
     public void moveToPrevSong() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
             int firstSongPos = getFirstSongPosInGroup(currPos);
             if (currPos == firstSongPos)
@@ -364,6 +370,9 @@ public class Rows {
     }
 
     public void moveToPrevGroup() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         setGroupSelectedState(currPos, false);
 
         currPos = getFirstSongPosInGroup(currPos);
@@ -387,6 +396,9 @@ public class Rows {
     }
 
     public void moveToNextGroup() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         setGroupSelectedState(currPos, false);
 
         currPos = getLastSongPosInGroup(currPos);
@@ -411,6 +423,9 @@ public class Rows {
 
     // fold everything
     public void fold() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         // todo: better to recopy first level from unfolded?
         for (int i = 0; i < rows.size(); i++) {
             Row row = rows.get(i);
@@ -421,6 +436,9 @@ public class Rows {
 
     // unfold everything
     public void unfold() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         rows = (ArrayList<Row>) rowsUnfolded.clone();
         for(Row row : rows)
             if (row.getClass() == RowGroup.class)
@@ -428,6 +446,9 @@ public class Rows {
     }
 
     public void invertFold(int pos) {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
         if (pos < 0 || pos >= rows.size()) {
             return;
         }
@@ -461,6 +482,9 @@ public class Rows {
     //
     // @return true if at least one group has been unfold
     public boolean unfoldCurrPos() {
+        if (rowsUnfolded.size() <= 0)
+            return false;
+
         boolean changed = false;
         int pos = getCurrPos();
         if (pos < 0 || pos >= rows.size())
