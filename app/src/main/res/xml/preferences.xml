@@ -153,7 +153,7 @@
         android:key="button_settings"
         android:title="@string/advanced_settings_title"
         android:persistent="false"
-        android:icon="@drawable/ic_menu_settings">
+        ><!--android:icon="@drawable/ic_menu_settings"-->
 
         <PreferenceCategory android:title="@string/settings_song_view_font">
 
