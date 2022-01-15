@@ -767,7 +767,7 @@ public class Main extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
-    public void openSongFolder(View view) {
+//    public void openSongFolder(View view) {
 //        final RowSong song = rows.getCurrSong();
 //        if (song == null)
 //            return;
@@ -808,7 +808,7 @@ public class Main extends AppCompatActivity {
 ////            startActivity(Intent.createChooser(intent, "Open folder"));
 ////            //startActivity(intent);
 ////        }
-    }
+//    }
 
 
     public void settings(View view) {
