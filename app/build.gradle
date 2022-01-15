@@ -10,8 +10,8 @@ android {
         applicationId "souch.smp"
         minSdkVersion 14 // 14 -> Android 4.0
         targetSdkVersion 31
-        versionCode 20
-        versionName '1.6'
+        versionCode 21
+        versionName '1.7'
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -34,4 +34,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.core:core:1.7.0'
     implementation 'androidx.media:media:1.4.3'
+    //implementation 'androidx.preference:preference:1.1.0'
 }
