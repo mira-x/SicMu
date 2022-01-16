@@ -70,7 +70,6 @@ public class Main extends AppCompatActivity {
     private boolean finishing;
 
     private Timer timer;
-    private final long updateInterval = 260;
     private SeekBar seekbar;
     // tell whether the seekbar is currently touch by a user
     private boolean touchSeekbar;
@@ -443,7 +442,7 @@ public class Main extends AppCompatActivity {
                 // updateInfo must be run in activity thread
                 runOnUiThread(updateInfo);
             }
-        }, 10, updateInterval);
+        }, 10, 500);
 
         if (serviceBound) {
             // if service not bound stopNotification and setMainIsVisible is called onServiceConnected
@@ -525,9 +524,10 @@ public class Main extends AppCompatActivity {
                 if (musicSrv.playingStopped()) {
                     stopPlayButton();
                 } else if (!touchSeekbar && musicSrv.getSeekFinished()) {
-                    Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(musicSrv.getCurrentPositionMs()));
+                    long currPosMs = musicSrv.getCurrentPositionMs();
+                    Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(currPosMs));
                     // getCurrentPosition {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}
-                    seekbar.setProgress((int) musicSrv.getCurrentPositionMs());
+                    seekbar.setProgress((int) currPosMs);
                 }
             }
         }
