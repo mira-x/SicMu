@@ -634,7 +634,7 @@ public class Main extends AppCompatActivity {
         if (rowSong != null) {
             albumBmp = rowSong.getAlbumBmp(getApplicationContext(), coverArtNum);
 
-            String title = rowSong.getTitle();
+            String title = rowSong.getTrack() + ". " + rowSong.getTitle();
             songTitle.setText(title);
 
             songArtist.setText(rowSong.getArtist());
