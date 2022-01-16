@@ -20,18 +20,24 @@ package souch.smp;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
+import android.util.Size;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.database.Cursor;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 public class RowSong extends Row {
     private long id;
@@ -151,52 +157,103 @@ public class RowSong extends Row {
         return false;
     }
 
+    private int getScreenWidth() {
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;//displayMetrics.widthPixels;
+        if (width < 512)
+            width = 512;
+        return width;
+    }
+
     public Bitmap getAlbumBmp(Context context) {
         return getAlbumBmp(context, 0);
     }
 
+    // implement simple cache: cache is discard as soon as song changes
+    private static long cachedAlbumBmpID = -1;
+    private static Bitmap cachedAlbumBmp = null;
+
     /** if imageNum > 0: try to get Nth bitmap from same folder
      * @return null if bitmap not found
      */
-    public Bitmap getAlbumBmp(Context context, int imageNum) {
+    public synchronized Bitmap getAlbumBmp(Context context, int imageNum) {
+        if (imageNum == 0 && cachedAlbumBmpID == id)
+            return cachedAlbumBmp;
+
         Bitmap bmp = null;
         try {
-            if (imageNum == 0) {
-                // search using media store
-                Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                        new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                        MediaStore.Audio.Albums._ID + "=?",
-                        new String[]{String.valueOf(albumId)},
-                        null);
-                if (cursor.moveToFirst()) {
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                    bmp = BitmapFactory.decodeFile(path);
-                }
-            }
-
-            // search manually in song's path
+            // try first by searching manually in song's path (as it gives better resolution)
             if (bmp == null && path != null) {
                 File dir = new File(path).getParentFile();
                 if (dir.exists() && dir.isDirectory()) {
-                    File[] files = dir.listFiles();
+                    File[] files = dir.listFiles(new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            return Path.filenameIsImage(name);
+                        }
+                    });
+                    int currImgIdx = imageNum;
                     if (files != null)
                         for (File file : files) {
-                            if (Path.isImage(file)) {
-                                if (imageNum == 0) {
-                                    // found
-                                    bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-                                    break;
-                                }
-                                imageNum--;
+                            if (currImgIdx == 0) {
+                                // found
+                                bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                break;
                             }
-
+                            currImgIdx--;
                         }
+                }
+            }
+
+            if (imageNum == 0) {
+                if (bmp == null) {
+                    final int thumb_size = getScreenWidth();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        // try with loadThumbnail
+                        Size size = new Size(thumb_size, thumb_size);
+                        bmp = context.getContentResolver().loadThumbnail(getExternalContentUri(), size, null);
+
+                        // try with createAudioThumbnail
+                        if (bmp == null) {
+                            bmp = ThumbnailUtils.createAudioThumbnail(
+                                    new File(path),
+                                    new Size(thumb_size, thumb_size),
+                                    null);
+                        }
+                    }
+                }
+
+                // try with MediaMetadataRetriever
+                if (bmp == null) {
+                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                    mmr.setDataSource(path);
+                    byte[] img_byte = mmr.getEmbeddedPicture();
+                    if (img_byte != null)
+                        bmp = BitmapFactory.decodeByteArray(img_byte, 0, img_byte.length,
+                                new BitmapFactory.Options());
+                }
+
+                // try with media store ?
+                if (bmp == null) {
+                    Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                            new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                            MediaStore.Audio.Albums._ID + "=?",
+                            new String[]{String.valueOf(albumId)},
+                            null);
+                    if (cursor.moveToFirst()) {
+                        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                        bmp = BitmapFactory.decodeFile(path);
+                    }
                 }
             }
         }
         catch(Exception e) {
             bmp = null;
         }
+
+        if (imageNum == 0) {
+            cachedAlbumBmpID = id;
+            cachedAlbumBmp = bmp; // cache even if bmp is null so that we do not search again
+        }
+
         return bmp;
     }
 
@@ -204,7 +261,6 @@ public class RowSong extends Row {
         return ContentUris.withAppendedId(
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
     }
-
 
     public MediaMetadataCompat getMediaMetadata(Context context) {
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();

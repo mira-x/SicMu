@@ -365,11 +365,16 @@ public class Path {
     }
 
     static private final String[] imageFileExtensions =  new String[] {"jpg", "png", "gif", "jpeg"};
+    static public boolean filenameIsImage(String filename) {
+            for (String extension : imageFileExtensions)
+                if (filename.toLowerCase().endsWith(extension))
+                    return true;
+        return false;
+    }
     static public boolean isImage(File file) {
         if (file.isFile())
-            for (String extension : imageFileExtensions)
-                if (file.getName().toLowerCase().endsWith(extension))
-                    return true;
+            if (filenameIsImage(file.getName()))
+                return true;
         return false;
     }
 
