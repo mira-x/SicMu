@@ -569,6 +569,8 @@ public class Rows {
 
     private void unfoldTree(RowGroup group, int pos) {
         Row row;
+        int nbRowGroupUnfold = 0;
+        int nbRowSongUnfold = 0;
         // unfold only next level
         for (int i = 1, j = 1;
              group.getGenuinePos() + i < rowsUnfolded.size() &&
@@ -577,11 +579,24 @@ public class Rows {
             if (row.getLevel() == group.getLevel() + 1) {
                 if (row.getClass() == RowGroup.class) {
                     ((RowGroup) row).setFolded(true);
+                    nbRowGroupUnfold++;
+                }
+                else {
+                    nbRowSongUnfold++;
                 }
                 rows.add(pos + j++, row);
             }
         }
         group.setFolded(false);
+
+        // unfold subgroup if group contains only one subgroup
+        if (nbRowGroupUnfold == 1 && nbRowSongUnfold == 0 ) {
+            if (group.getGenuinePos() + 1 < rowsUnfolded.size()) {
+                RowGroup subGroupSingle = (RowGroup) rowsUnfolded.get(group.getGenuinePos() + 1);
+                if (subGroupSingle != null && subGroupSingle.getLevel() == group.getLevel() + 1)
+                    unfoldTree(subGroupSingle,pos + 1);
+            }
+        }
     }
 
 
