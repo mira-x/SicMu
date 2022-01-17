@@ -525,7 +525,7 @@ public class Main extends AppCompatActivity {
                     stopPlayButton();
                 } else if (!touchSeekbar && musicSrv.getSeekFinished()) {
                     long currPosMs = musicSrv.getCurrentPositionMs();
-                    Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(currPosMs));
+                    //Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(currPosMs));
                     // getCurrentPosition {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}
                     seekbar.setProgress((int) currPosMs);
                 }
