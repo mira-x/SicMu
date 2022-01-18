@@ -34,6 +34,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -118,6 +119,7 @@ public class MusicService extends Service implements
     private long lastUpdate;
     private boolean enableShake;
     private float shakeThreshold;
+    private float playbackSpeed = 1.0f;
     private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
     private double accelLast;
     private double accelCurrent;
@@ -565,6 +567,8 @@ public class MusicService extends Service implements
             savedSongPos = 0;
         }
 
+        applyPlaybackSpeed(playbackSpeed);
+
         // start playback
         mp.start();
         state.setState(PlayerState.Started);
@@ -573,7 +577,20 @@ public class MusicService extends Service implements
         scrobble.send(Scrobble.SCROBBLE_START);
     }
 
-
+    private boolean applyPlaybackSpeed(float speed) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                PlaybackParams params = getPlayer().getPlaybackParams();
+                params.setSpeed(speed);
+                getPlayer().setPlaybackParams(params);
+                return true;
+            } catch (Exception e) {
+                Log.e("MusicService", "setPlaySpeed: ", e);
+                return false;
+            }
+        }
+        return false;
+    }
 
     /*** PLAY ACTION ***/
 
@@ -896,6 +913,18 @@ public class MusicService extends Service implements
 
     public void setShakeThreshold(float threshold) {
         shakeThreshold = threshold / 10;
+    }
+
+    public void changePlaybackSpeed(float step) {
+        if (playbackSpeed + step <= 0)
+            return;
+        playbackSpeed = playbackSpeed + step;
+        if (player != null && playingLaunched())
+            applyPlaybackSpeed(playbackSpeed);
+    }
+
+    public float getPlaybackSpeed() {
+        return playbackSpeed;
     }
 
     // can be called twice

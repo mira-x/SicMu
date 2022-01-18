@@ -100,11 +100,11 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/seek_buttons_layout"
         android:layout_below="@+id/actions_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:background="#ff242424"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
@@ -182,7 +182,7 @@
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="53"
+            android:layout_weight="51"
             android:onClick="seek"
             android:paddingBottom="0dp"
             android:paddingLeft="5dp"
@@ -200,10 +200,22 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingLeft="0dp"
-            android:paddingRight="8dp"
+            android:paddingRight="0dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_track_looper"/>
+
+        <TextView
+            android:id="@+id/playBackSpeed"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="51"
+            android:inputType="numberDecimal"
+            android:textColor="@color/apptheme_color"
+            android:gravity="center"
+            android:text="1.0x"/>
+
     </LinearLayout>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/warning_layout"
         android:layout_below="@+id/seek_buttons_layout"
@@ -224,7 +236,7 @@
             android:textColor="@color/apptheme_color"></TextView>
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
         android:layout_height="175dp"
@@ -241,7 +253,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:id="@+id/details_right_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -286,7 +298,7 @@
                 android:baselineAligned="false"
                 android:gravity="bottom"
                 android:orientation="horizontal">
-<!--
+                <!--
                 <ImageButton
                     android:id="@+id/delete_button"
                     android:layout_width="fill_parent"
@@ -317,7 +329,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="48dp"
                     android:onClick="ratingClick"
-                    android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:paddingLeft="0dp"
                     android:paddingRight="8dp"

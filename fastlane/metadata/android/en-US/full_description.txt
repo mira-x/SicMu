@@ -7,11 +7,12 @@ Very useful for large music lists organized by folder.
 * show songs grouping by artist
 * show songs grouping by folders
 * cover art image
-* repeat mode (all, group, one track, A to B)
+* repeat mode (all, group, one track)
 * shuffle mode
 * shake the phone to go to next song
 * notification with media controls
 * disable / enable lockscreen
+* advanced playback control (forward/backward of 5/20 s, adjustable playback speed, A to B repeat loop)
 * configurable font size
 * bluetooth & scrobble support
 * play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).

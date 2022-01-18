@@ -51,6 +51,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -104,6 +105,7 @@ public class Main extends AppCompatActivity {
 
     private LinearLayout detailsLayout;
     private LinearLayout seekButtonsLayout;
+    private TextView playbackSpeedText;
     private LinearLayout warningLayout;
 
     private ImageButton albumImage;
@@ -266,6 +268,24 @@ public class Main extends AppCompatActivity {
         details_right_layout = (LinearLayout) findViewById(R.id.details_right_layout);
         detailsBigCoverArt = false;
 
+        playbackSpeedText = (TextView) findViewById(R.id.playBackSpeed);
+        playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+            public void onSwipeTop() {
+                changePlaybackSpeed(0.1f);
+            }
+            public void onSwipeRight() {
+                changePlaybackSpeed(0.2f);
+            }
+            public void onSwipeLeft() {
+                changePlaybackSpeed(-0.2f);
+            }
+            public void onSwipeBottom() {
+                changePlaybackSpeed(-0.1f);
+            }
+            public void performClick() {
+                Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, Toast.LENGTH_LONG).show();
+            }
+        });
         // needed when noactionbar theme is choosed
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -364,6 +384,7 @@ public class Main extends AppCompatActivity {
                      playAlreadySelectedSong();
                 }
             }
+            setPlaybackSpeedText();
         }
 
         @Override
@@ -1325,6 +1346,20 @@ public class Main extends AppCompatActivity {
             musicSrv.disableTrackLooper();
         ImageButton trackLooperBtn = findViewById(R.id.track_looper_button);
         trackLooperBtn.setImageResource(R.drawable.ic_track_looper);
+    }
+
+    private void changePlaybackSpeed(float step) {
+        if (serviceBound) {
+            musicSrv.changePlaybackSpeed(step);
+            setPlaybackSpeedText();
+        }
+    }
+    private void setPlaybackSpeedText() {
+        if (serviceBound) {
+            DecimalFormat decimalFormat = new DecimalFormat("#0.0x");
+            decimalFormat.setDecimalSeparatorAlwaysShown(true);
+            playbackSpeedText.setText(decimalFormat.format(musicSrv.getPlaybackSpeed()));
+        }
     }
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {

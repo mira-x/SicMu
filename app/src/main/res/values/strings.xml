@@ -48,6 +48,8 @@
 
     <string name="app_playing">SicMu playing</string>
 
+    <string name="explain_playback_speed">Swipe left/right or bottom/top to decrease/increase speed playback!</string>
+
     <string name="focus_error">Could not get audio focus! Restart the app!</string>
 
     <string name="settings_title">Settings</string>

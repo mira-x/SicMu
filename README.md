@@ -35,6 +35,7 @@ Works on rather old devices (from Android 4.0).
     - seek bar
     - auto repeat seek buttons
     - loop on part of the song (A to B repeat feature)
+    - adjustable playback speed
     - shake the phone to go to next song
 - User Interface:
     - notification with media controls
