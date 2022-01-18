@@ -1,0 +1,2 @@
+Version 1.7.
+- Associate app to music files, launch media scan if file not found.

@@ -30,7 +30,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
@@ -52,10 +54,13 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class Main extends AppCompatActivity {
     private Rows rows;
@@ -106,7 +111,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
-    private final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 3;
+    private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,22 +164,35 @@ public class Main extends AppCompatActivity {
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
 
-
-        if (ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Log.d("checkSelfPermission", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted! Show explanation.");
-                //showExplanation("Permission Needed", "Rationale", Manifest.permission.READ_PHONE_STATE, REQUEST_PERMISSION_PHONE_STATE);
-                showWarningLayout();
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+                }
             }
-            Log.e("checkSelfPermission", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " not granted! Request it.");
-            ActivityCompat.requestPermissions(Main.this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
-        }
-        else {
-            Log.d("RequestPermissionResult", "Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " already granted!");
+        } else {
+            // below android 11
+            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
+                    showWarningLayout();
+                }
+                Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        EXTERNAL_STORAGE_REQUEST_CODE);
+            } else {
+                Log.d("RequestPermissionResult", "Permission *_EXTERNAL_STORAGE already granted!");
+            }
         }
 
         playIntent = new Intent(this, MusicService.class);
@@ -367,20 +385,41 @@ public class Main extends AppCompatActivity {
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case READ_EXTERNAL_STORAGE_REQUEST_CODE:
+            case EXTERNAL_STORAGE_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("RequestPermissionResult","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " request granted!");
+                    Log.d("Main","Permission READ_EXTERNAL_STORAGE granted");
                     rows.reinit();
                     songAdt.notifyDataSetChanged();
                     unfoldAndscrollToCurrSong();
                     hideWarningLayout();
                 }  else {
-                    Log.e("checkSelfPermission","Permission " + Manifest.permission.READ_EXTERNAL_STORAGE + " still not granted!");
+                    Log.e("Main","Permission READ_EXTERNAL_STORAGE refused!");
                     showWarningLayout();
                 }
+                if (grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Main","Permission WRITE_EXTERNAL_STORAGE granted");
+                } else {
+                    Log.w("Main","Permission WRITE_EXTERNAL_STORAGE refused!");
+                    Toast.makeText(getApplicationContext(), R.string.permission_needed, Toast.LENGTH_LONG).show();
+                }
                 return;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SET_RATING_REQUEST_CODE) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    Log.i("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION granted");
+                } else {
+                    Log.w("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION refused!");
+                    Toast.makeText(this, R.string.permission_needed, Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
@@ -632,17 +671,16 @@ public class Main extends AppCompatActivity {
         Bitmap albumBmp = null;
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
-            albumBmp = rowSong.getAlbumBmp(getApplicationContext(), coverArtNum);
-
             String title = rowSong.getTrack() + ". " + rowSong.getTitle();
             songTitle.setText(title);
-
             songArtist.setText(rowSong.getArtist());
-
             String album = rowSong.getAlbum();
             if (rowSong.getYear() > 1000)
                 album += " - " + rowSong.getYear();
             songAlbum.setText(album);
+            albumBmp = rowSong.getAlbumBmp(getApplicationContext(), coverArtNum);
+            ImageButton ratingButton = (ImageButton) findViewById(R.id.rating_button);
+            ratingButton.setImageResource(rowSong.getDrawableStarFromRating());
         }
         if (albumBmp != null) {
             albumImage.setImageBitmap(albumBmp);
@@ -767,6 +805,33 @@ public class Main extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
+    private final int SET_RATING_REQUEST_CODE = 1024;
+    public void ratingClick(View view) {
+        rateCurrSong();
+//        int check = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        if (check == PackageManager.PERMISSION_GRANTED) {
+//            rateCurrSong();
+//        } else {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, SET_RATING_REQUEST_CODE);
+//        }
+    }
+
+    private void rateCurrSong() {
+        if (!serviceBound || rows == null)
+            return;
+//        try {
+//            checkFilePermissions(new File("/storage/emulated/0/README.md"), false);
+//        } catch (Exception e) {
+//            Log.i("Main", "Unable to write:");
+//        }
+//        RowSong rowSong = rows.getCurrSong();
+//        if (rowSong != null && rowSong.setRating(5)) {
+//            setDetails();
+//        } else {
+//            Toast.makeText(getApplicationContext(), "rating song " + rowSong.toString() + " failed!", Toast.LENGTH_LONG).show();
+//        }
+    }
 //    public void openSongFolder(View view) {
 //        final RowSong song = rows.getCurrSong();
 //        if (song == null)

@@ -30,11 +30,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
+import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.database.Cursor;
+
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -48,6 +54,9 @@ public class RowSong extends Row {
     private long durationMs;
     private int track;
     private int year;
+    public static final int RATING_NOT_INITIALIZED = -2;
+    public static final int RATING_UNKNOWN = -1;
+    private int rating;
     // full filename
     private String path;
     // folder of the path (i.e. last folder containing the file's song)
@@ -69,6 +78,7 @@ public class RowSong extends Row {
         this.durationMs = durationMs;
         track = songTrack;
         path = songPath;
+        rating = RATING_NOT_INITIALIZED;
         this.albumId = albumId;
         this.year = year;
         if(path != null) {
@@ -87,6 +97,106 @@ public class RowSong extends Row {
     public String getFolder(){return folder;}
     public long getAlbumId(){return albumId;}
 
+    public int getRating() {
+        // get rating is computed on demand cause it is slow
+        if (rating == RATING_NOT_INITIALIZED) {
+            try {
+                AudioFile audioFile = AudioFileIO.read(new File(path));
+                Tag tag = audioFile.getTag();
+                if (tag != null) {
+                    if (tag.hasField(FieldKey.RATING)) {
+                        rating = convertToRating0to5(tag.getFirst(FieldKey.RATING));
+                        Log.d("RowSong", "song rating " + path + " = " + rating);
+                    } else {
+                        Log.d("RowSong", "song rating " + path + " rating not available");
+                    }
+                }
+                else {
+                    Log.d("RowSong", "song rating " + path + " tag not available");
+                }
+            } catch (Exception e) {
+                Log.w("RowSong", "Unable to get rating of song " + path +
+                        ". Exception msg: " + e.getClass() + " - " + e.getMessage());
+            }
+            if (rating < 0)
+                rating = RATING_UNKNOWN;
+        }
+        return rating;
+    }
+
+    // return true if set rating succeed
+    public boolean setRating(int rating) {
+        this.rating = rating;
+        boolean ok = false;
+        try {
+            AudioFile audioFile = AudioFileIO.read(new File(path));
+            Tag tag = audioFile.getTagOrCreateAndSetDefault();
+            if (tag.hasField(FieldKey.RATING))
+                tag.setField(FieldKey.RATING, convertToRating0to255(rating));
+            else
+                tag.addField(FieldKey.RATING, convertToRating0to255(rating));
+            audioFile.commit();
+            ok = true;
+            Log.i("RowSong", "set file rating : " + path + " to " + rating);
+        } catch (Exception e) {
+            String wrn = "Unable to set rating for song:" + path +
+                    ". Exception msg: " + e.getClass() + " - " + e.getMessage();
+            //Toast.makeText(context, wrn, Toast.LENGTH_SHORT).show();
+            Log.w("RowSong", wrn);
+        }
+        return ok;
+    }
+
+    /*
+        224–255 = 5 stars when READ with Windows Explorer, writes 255
+        160–223 = 4 stars when READ with Windows Explorer, writes 196
+        096-159 = 3 stars when READ with Windows Explorer, writes 128
+        032-095 = 2 stars when READ with Windows Explorer, writes 64
+        001-031 = 1 star when READ with Windows Explorer, writes 1
+    */
+    // convert table 0-5 -> 0-255
+    public final int id3ConventionRating[] = {0, 1, 64, 128, 196, 255};
+
+    /* rating can be from 0 to 5
+     * ex: 3 return "128"
+     */
+    public String convertToRating0to255(int rating) {
+        if (rating < 0)
+            rating = 0;
+        if (rating > 5)
+            rating = 5;
+        return String.valueOf(id3ConventionRating[rating]);
+    }
+
+    /* rating can be from 0 to 255
+     * ex: "64" returns 2
+     */
+    public int convertToRating0to5(String rating) {
+        int note;
+        try {
+            note = Integer.parseInt(rating);
+        } catch (Exception e) {
+            note = 0;
+        }
+        for (int i = 0; i < id3ConventionRating.length; i++)
+            if (note <= id3ConventionRating[i])
+                return i;
+        return id3ConventionRating.length - 1;
+    }
+
+    public int getDrawableStarFromRating() {
+        int drawable;
+        switch (getRating()) {
+            case 0: drawable = R.drawable.ic_star_0; break;
+            case 1: drawable = R.drawable.ic_star_1; break;
+            case 2: drawable = R.drawable.ic_star_2; break;
+            case 3: drawable = R.drawable.ic_star_3; break;
+            case 4: drawable = R.drawable.ic_star_4; break;
+            case 5: drawable = R.drawable.ic_star_5; break;
+            default: drawable = R.drawable.ic_star_unknown;
+        }
+        return  drawable;
+    }
 
     public void setView(RowViewHolder holder, Main main, int position) {
         super.setView(holder, main, position);
@@ -239,7 +349,8 @@ public class RowSong extends Row {
                             new String[]{String.valueOf(albumId)},
                             null);
                     if (cursor.moveToFirst()) {
-                        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                        int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
+                        String path = cursor.getString(colIdx < 0 ? 0 : colIdx);
                         bmp = BitmapFactory.decodeFile(path);
                     }
                 }
@@ -273,6 +384,7 @@ public class RowSong extends Row {
         builder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, track);
         builder.putLong(MediaMetadataCompat.METADATA_KEY_YEAR, year);
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, getAlbumBmp(context)); // todo: optimize
+        //builder.putLong(MediaMetadataCompat.METADATA_KEY_RATING, Integer.valueOf(convertToRating0to255(getRating())));
         return builder.build();
     }
 }

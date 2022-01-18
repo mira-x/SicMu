@@ -13,7 +13,15 @@
         <entry key="app/src/main/res/drawable/ic_play_arrow.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/ic_skip_next.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_skip_previous.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/ic_star.xml" value="0.3" />
+        <entry key="app/src/main/res/drawable/ic_star_0.xml" value="0.19114583333333332" />
+        <entry key="app/src/main/res/drawable/ic_star_1.xml" value="0.22916666666666666" />
+        <entry key="app/src/main/res/drawable/ic_star_2.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/ic_star_3.xml" value="0.2" />
+        <entry key="app/src/main/res/drawable/ic_star_4.xml" value="0.22916666666666666" />
+        <entry key="app/src/main/res/drawable/ic_star_unknown.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/drawable/ic_track_looper.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_track_looper_a.xml" value="0.3" />
         <entry key="app/src/main/res/drawable/seekbar_horizontal_holo_light.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/song.xml" value="0.23233695652173914" />

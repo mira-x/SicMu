@@ -16,3 +16,7 @@ Very useful for large music lists organized by folder.
 * bluetooth & scrobble support
 * play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
 * light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.
+
+<b>Donate</b>
+
+One can donate a bit through paypal or flattr <a href="http://rodolphe.souchaud.free.fr/donate">here</a>.

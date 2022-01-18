@@ -20,11 +20,22 @@
     package="souch.smp" >
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- useful at least from android 5.0, not useful for 2.3, 4.1, 4.3
-    todo: see if it can be adaptable for each android version
-    -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!--
+    New Scoped storage enforcement shit :
+    - if targeting >= 30
+      https://stackoverflow.com/questions/62782648/android-11-scoped-storage-permissions
+      bear in mind that if you intend to distribute your app on the Play Store (and perhaps elsewhere),
+      you will need to justify the reason for requesting MANAGE_EXTERNAL_STORAGE permission.
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
+      <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    - if targeting < 30, that works with WRITE_EXTERNAL_STORAGE but :
+      Starting in November 2021, app updates will be required to target API level 30 or above and adjust for behavioral changes in Android 11.
+      https://developer.android.com/google/play/requirements/target-sdk
+    -> screwed by google fuckers
+    -->
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
@@ -33,7 +44,8 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppTheme" >
+        android:theme="@style/Theme.AppTheme"
+        android:requestLegacyExternalStorage="true">
 
         <activity
             android:name=".Main"

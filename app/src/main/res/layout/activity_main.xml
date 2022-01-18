@@ -310,7 +310,19 @@
                     android:onClick="openSongFolder"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_menu_folder" />
-                -->
+-->
+                <ImageButton
+                    android:id="@+id/rating_button"
+                    style="@style/BottomButton"
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:onClick="ratingClick"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="8dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/ic_star_unknown"/>
 
             </LinearLayout>
         </LinearLayout>
