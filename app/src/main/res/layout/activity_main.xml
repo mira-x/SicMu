@@ -110,17 +110,26 @@
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
 
+        <TextView
+            android:id="@+id/playBackSpeed"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="51"
+            android:inputType="numberDecimal"
+            android:textColor="@color/apptheme_color"
+            android:gravity="center"
+            android:text="1.0x"/>
+
         <souch.smp.RepeatingImageButton
             android:id="@+id/m20_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
+            android:scaleType="centerCrop"
+            android:paddingRight="0dp"
+            android:paddingLeft="0dp"
             android:onClick="seek"
-            android:paddingBottom="0dp"
-            android:paddingRight="5dp"
-            android:paddingTop="0dp"
-            android:scaleType="fitEnd"
             android:src="@drawable/action_prev" />
 
         <TextView
@@ -139,11 +148,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
-            android:onClick="seek"
+            android:scaleType="centerCrop"
             android:paddingBottom="0dp"
-            android:paddingRight="13dp"
             android:paddingTop="0dp"
-            android:scaleType="fitEnd"
+            android:onClick="seek"
             android:src="@drawable/action_prev" />
 
         <TextView
@@ -160,11 +168,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
-            android:onClick="seek"
+            android:scaleType="centerCrop"
             android:paddingBottom="0dp"
-            android:paddingLeft="13dp"
             android:paddingTop="0dp"
-            android:scaleType="fitStart"
+            android:onClick="seek"
             android:src="@drawable/action_next" />
 
         <TextView
@@ -183,11 +190,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
+            android:scaleType="centerCrop"
+            android:paddingRight="0dp"
+            android:paddingLeft="0dp"
             android:onClick="seek"
-            android:paddingBottom="0dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="0dp"
-            android:scaleType="fitStart"
             android:src="@drawable/action_next" />
 
         <ImageButton
@@ -204,28 +210,18 @@
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_track_looper"/>
 
-        <TextView
-            android:id="@+id/playBackSpeed"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="51"
-            android:inputType="numberDecimal"
-            android:textColor="@color/apptheme_color"
-            android:gravity="center"
-            android:text="1.0x"/>
-
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/warning_layout"
-        android:layout_below="@+id/seek_buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_below="@+id/seek_buttons_layout"
         android:background="#ff242424"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
->
+        >
 
         <TextView
             android:id="@+id/warning_text"
@@ -389,6 +385,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
+            android:scaleType="fitCenter"
             android:longClickable="true"
             android:onClick="playPrev"
             android:src="@drawable/action_prev" />
@@ -399,6 +396,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
+            android:scaleType="fitCenter"
             android:onClick="playNext"
             android:longClickable="true"
             android:src="@drawable/action_next" />

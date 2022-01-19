@@ -46,6 +46,7 @@
     <color name="RowGroupTreeBackground">#88353535</color>
     <color name="TrackLooperNormal">#ff666666</color>
     <color name="TrackLooperActivated">@color/apptheme_color</color>
+    <color name="PlaybackControlAction">@color/apptheme_color</color>
     <!-- todo
     <item "levelOffset"">15</item>
     fonttype: bold, italic, regular...
