@@ -244,15 +244,15 @@
         <ImageButton
             android:id="@+id/album_image"
             style="@style/BottomButton"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitCenter" />
 
         <LinearLayout
             android:id="@+id/details_right_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -285,53 +285,101 @@
                 android:maxLines="3"
                 android:text="" />
 
+            <!--
             <LinearLayout
-                android:id="@+id/details_buttons_layout"
+           android:id="@+id/details_buttons_layout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="bottom"
+           android:layout_weight="2"
+           android:baselineAligned="false"
+           android:gravity="bottom"
+           android:orientation="vertical">
+
+           <ImageButton
+               android:id="@+id/delete_button"
+               android:layout_width="fill_parent"
+               android:layout_height="40dp"
+               android:paddingBottom="4dp"
+               android:paddingTop="4dp"
+               android:layout_marginBottom="4dp"
+               android:layout_weight="1"
+               android:background="#ff242424"
+               android:onClick="deleteSong"
+               android:scaleType="fitCenter"
+               android:src="@drawable/ic_trash" />
+
+           <ImageButton
+               android:id="@+id/folder_button"
+               android:layout_width="fill_parent"
+               android:layout_height="40dp"
+               android:layout_marginBottom="4dp"
+               android:layout_weight="1"
+               android:background="#ff242424"
+               android:onClick="openSongFolder"
+               android:scaleType="fitCenter"
+               android:src="@drawable/ic_menu_folder" />
+-->
+            <LinearLayout
+                android:id="@+id/details_rating"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="bottom"
-                android:layout_weight="2"
-                android:baselineAligned="false"
+                android:layout_weight="0"
                 android:gravity="bottom"
                 android:orientation="horizontal">
-                <!--
                 <ImageButton
-                    android:id="@+id/delete_button"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_weight="1"
-                    android:background="#ff242424"
-                    android:onClick="deleteSong"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_trash" />
-
-                <ImageButton
-                    android:id="@+id/folder_button"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_weight="1"
-                    android:background="#ff242424"
-                    android:onClick="openSongFolder"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_menu_folder" />
--->
-                <ImageButton
-                    android:id="@+id/rating_button"
+                    android:id="@+id/rating_button_1"
                     style="@style/BottomButton"
-                    android:layout_width="fill_parent"
-                    android:layout_height="48dp"
-                    android:onClick="ratingClick"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="51"
+                    android:padding="4dp"
                     android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_star_unknown"/>
-
+                    android:onClick="ratingClick"
+                    app:srcCompat="@drawable/ic_star_5"/>
+                <ImageButton
+                    android:id="@+id/rating_button_2"
+                    style="@style/BottomButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="51"
+                    android:padding="4dp"
+                    android:scaleType="centerInside"
+                    android:onClick="ratingClick"
+                    app:srcCompat="@drawable/ic_star_5"/>
+                <ImageButton
+                    android:id="@+id/rating_button_3"
+                    style="@style/BottomButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="51"
+                    android:padding="4dp"
+                    android:scaleType="centerInside"
+                    android:onClick="ratingClick"
+                    app:srcCompat="@drawable/ic_star_5"/>
+                <ImageButton
+                    android:id="@+id/rating_button_4"
+                    style="@style/BottomButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="51"
+                    android:padding="4dp"
+                    android:scaleType="centerInside"
+                    android:onClick="ratingClick"
+                    app:srcCompat="@drawable/ic_star_0"/>
+                <ImageButton
+                    android:id="@+id/rating_button_5"
+                    style="@style/BottomButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="51"
+                    android:padding="4dp"
+                    android:scaleType="centerInside"
+                    android:onClick="ratingClick"
+                    app:srcCompat="@drawable/ic_star_0"/>
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

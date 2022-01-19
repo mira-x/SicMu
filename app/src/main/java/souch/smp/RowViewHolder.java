@@ -29,10 +29,12 @@ public class RowViewHolder {
         text = (TextView) view.findViewById(R.id.song_title);
         image = (ImageView) view.findViewById(R.id.curr_play);
         duration = (TextView) view.findViewById(R.id.song_duration);
+        ratingStar = (ImageView) view.findViewById(R.id.rating_star);
     }
 
     public RelativeLayout layout;
     public TextView text;
     public TextView duration;
     public ImageView image;
+    public ImageView ratingStar;
 }

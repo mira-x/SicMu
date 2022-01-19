@@ -52,6 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -110,6 +111,7 @@ public class Main extends AppCompatActivity {
 
     private ImageButton albumImage;
     private TextView songTitle, songAlbum, songArtist, warningText;
+    ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
@@ -267,6 +269,12 @@ public class Main extends AppCompatActivity {
         songArtist = (TextView) findViewById(R.id.detail_artist);
         details_right_layout = (LinearLayout) findViewById(R.id.details_right_layout);
         detailsBigCoverArt = false;
+
+        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_1));
+        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_2));
+        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_3));
+        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_4));
+        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_5));
 
         playbackSpeedText = (TextView) findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
@@ -700,8 +708,7 @@ public class Main extends AppCompatActivity {
                 album += " - " + rowSong.getYear();
             songAlbum.setText(album);
             albumBmp = rowSong.getAlbumBmp(getApplicationContext(), coverArtNum);
-            ImageButton ratingButton = (ImageButton) findViewById(R.id.rating_button);
-            ratingButton.setImageResource(rowSong.getDrawableStarFromRating());
+            setRatingDetails();
         }
         if (albumBmp != null) {
             albumImage.setImageBitmap(albumBmp);
@@ -714,6 +721,23 @@ public class Main extends AppCompatActivity {
         return albumBmp != null;
     }
 
+    private void setRatingDetails() {
+        if (!serviceBound)
+            return;
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong != null) {
+            int rating = rowSong.getRating();
+            setRatingButtonsDrawable(rating, rating > 0);
+        }
+    }
+
+    private void setRatingButtonsDrawable(int rating, boolean highlight) {
+        for (int i = 0; i < ratingButtons.size(); i++) {
+            int star0 = highlight ? R.drawable.ic_star_0_highlight: R.drawable.ic_star_0;
+            int star5 = highlight ? R.drawable.ic_star_5_highlight: R.drawable.ic_star_5;
+            ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
+        }
+    }
 
     public void autoOpenCloseDetails() {
         hasCoverArt = hasCoverArt();
@@ -828,7 +852,12 @@ public class Main extends AppCompatActivity {
 
     private final int SET_RATING_REQUEST_CODE = 1024;
     public void ratingClick(View view) {
-        rateCurrSong();
+        for (int i = 0; i < ratingButtons.size(); i++) {
+            if (view == ratingButtons.get(i)) {
+                // we cannot unclick the first star, so 0 star means not initialized.
+                rateCurrSong(i + 1);
+            }
+        }
 //        int check = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 //        if (check == PackageManager.PERMISSION_GRANTED) {
 //            rateCurrSong();
@@ -838,7 +867,7 @@ public class Main extends AppCompatActivity {
 //        }
     }
 
-    private void rateCurrSong() {
+    private void rateCurrSong(int rating) {
         if (!serviceBound || rows == null)
             return;
 //        try {
@@ -846,13 +875,15 @@ public class Main extends AppCompatActivity {
 //        } catch (Exception e) {
 //            Log.i("Main", "Unable to write:");
 //        }
-//        RowSong rowSong = rows.getCurrSong();
-//        if (rowSong != null && rowSong.setRating(5)) {
-//            setDetails();
-//        } else {
-//            Toast.makeText(getApplicationContext(), "rating song " + rowSong.toString() + " failed!", Toast.LENGTH_LONG).show();
-//        }
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong != null && rowSong.setRating(rating)) {
+            setRatingDetails();
+            songAdt.notifyDataSetChanged();
+        } else {
+            Toast.makeText(getApplicationContext(), "rating song " + rowSong.toString() + " failed!", Toast.LENGTH_LONG).show();
+        }
     }
+
 //    public void openSongFolder(View view) {
 //        final RowSong song = rows.getCurrSong();
 //        if (song == null)

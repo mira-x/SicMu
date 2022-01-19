@@ -33,6 +33,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.database.Cursor;
@@ -54,6 +55,8 @@ public class RowSong extends Row {
     private long durationMs;
     private int track;
     private int year;
+    // actually 0 means not initialized too (we handle reading 0, but it is not very useful, cause
+    // we cannot set a rating of 0 star in the UI)
     public static final int RATING_NOT_INITIALIZED = -2;
     public static final int RATING_UNKNOWN = -1;
     private int rating;
@@ -96,6 +99,96 @@ public class RowSong extends Row {
     public String getPath(){return path;}
     public String getFolder(){return folder;}
     public long getAlbumId(){return albumId;}
+
+    public void setView(RowViewHolder holder, Main main, int position) {
+        super.setView(holder, main, position);
+
+        float factor = 1.5f;
+        if (main.getMusicSrv().getRows().isLastRow(position))
+            factor = 2f;
+        holder.layout.getLayoutParams().height = convertDpToPixels((int) (textSize * factor),
+                holder.layout.getResources());
+
+        setText(holder.text);
+        setDuration(holder.duration);
+        setCurrIcon(holder.image, main);
+        holder.ratingStar.setVisibility(View.VISIBLE);
+        holder.ratingStar.setImageResource(getDrawableStarFromRating());
+    }
+
+    private void setText(TextView text) {
+        text.setText(title);
+        text.setTextColor(normalSongTextColor);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+    }
+
+    private void setDuration(TextView duration) {
+        duration.setText(msToMinutesStripSecondIfLongDuration(getDurationMs()) + getStringOffset());
+        duration.setTextColor(normalSongDurationTextColor);
+        duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+        duration.setTypeface(null, typeface);
+        /*
+        duration.setBackgroundColor(Color.argb(0x00, 0x0, 0x0, 0x0));
+        duration.setOnClickListener(null);
+        */
+    }
+
+    private void setCurrIcon(ImageView img, Main main) {
+        int currIcon = android.R.color.transparent;
+        if (this == main.getMusicSrv().getRows().getCurrSong()) {
+            if (main.getMusicSrv().playingLaunched())
+                currIcon = R.drawable.ic_curr_play;
+            else
+                currIcon = R.drawable.ic_curr_pause;
+        }
+        img.setImageResource(currIcon);
+        // useful only for the tests
+        img.setTag(currIcon);
+    }
+
+    public String toString() {
+        return "Song  pos: " + genuinePos + " level: " + level + " ID: " + id + " artist: " + artist +
+                " album: " + album + " title: " + title + " " +
+                msToMinutes(durationMs) + " track:" + track + " path: " + path;
+    }
+
+    static public String msToMinutes(long durationMs, boolean showSeconds){
+        long seconds = durationMs / 1000;
+        long minutes = seconds / 60;
+        if (showSeconds) {
+            seconds = seconds % 60;
+            return minutes + (seconds < 10 ? ":0" : ":") + seconds;
+        }
+        else {
+            return String.valueOf(minutes);
+        }
+    }
+    static public String msToMinutes(long durationMs) {
+        return msToMinutes(durationMs, true);
+    }
+
+    static public String msToMinutesStripSecondIfLongDuration(long durationMs){
+        return msToMinutes(durationMs, durationMs < 100*60*1000);
+    }
+
+
+    public boolean delete(Context context) {
+        if ((new File(path)).delete()) {
+            // delete it from media store too
+            Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+            context.getContentResolver().delete(uri, null, null);
+
+            return true;
+        }
+        return false;
+    }
+
+    private int getScreenWidth() {
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;//displayMetrics.widthPixels;
+        if (width < 512)
+            width = 512;
+        return width;
+    }
 
     public int getRating() {
         // get rating is computed on demand cause it is slow
@@ -187,91 +280,14 @@ public class RowSong extends Row {
     public int getDrawableStarFromRating() {
         int drawable;
         switch (getRating()) {
-            case 0: drawable = R.drawable.ic_star_0; break;
             case 1: drawable = R.drawable.ic_star_1; break;
             case 2: drawable = R.drawable.ic_star_2; break;
             case 3: drawable = R.drawable.ic_star_3; break;
             case 4: drawable = R.drawable.ic_star_4; break;
             case 5: drawable = R.drawable.ic_star_5; break;
-            default: drawable = R.drawable.ic_star_unknown;
+            default: drawable = R.drawable.ic_star_0;
         }
         return  drawable;
-    }
-
-    public void setView(RowViewHolder holder, Main main, int position) {
-        super.setView(holder, main, position);
-
-        float factor = 1.5f;
-        if (main.getMusicSrv().getRows().isLastRow(position))
-            factor = 3f;
-        holder.layout.getLayoutParams().height = convertDpToPixels((int) (textSize * factor),
-                holder.layout.getResources());
-
-        setText(holder.text);
-        setDuration(holder.duration);
-        setCurrIcon(holder.image, main);
-    }
-
-    private void setText(TextView text) {
-        text.setText(title);
-        text.setTextColor(normalSongTextColor);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
-    }
-
-    private void setDuration(TextView duration) {
-        duration.setText(msToMinutes(getDurationMs()) + getStringOffset());
-        duration.setTextColor(normalSongDurationTextColor);
-        duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
-        duration.setTypeface(null, typeface);
-        /*
-        duration.setBackgroundColor(Color.argb(0x00, 0x0, 0x0, 0x0));
-        duration.setOnClickListener(null);
-        */
-    }
-
-    private void setCurrIcon(ImageView img, Main main) {
-        int currIcon = android.R.color.transparent;
-        if (this == main.getMusicSrv().getRows().getCurrSong()) {
-            if (main.getMusicSrv().playingLaunched())
-                currIcon = R.drawable.ic_curr_play;
-            else
-                currIcon = R.drawable.ic_curr_pause;
-        }
-        img.setImageResource(currIcon);
-        // useful only for the tests
-        img.setTag(currIcon);
-    }
-
-    public String toString() {
-        return "Song  pos: " + genuinePos + " level: " + level + " ID: " + id + " artist: " + artist +
-                " album: " + album + " title: " + title + " " +
-                msToMinutes(durationMs) + " track:" + track + " path: " + path;
-    }
-
-    static public String msToMinutes(long durationMs){
-        long seconds = durationMs / 1000;
-        long minutes = seconds / 60;
-        seconds = seconds % 60;
-        return String.valueOf(minutes) + (seconds < 10 ? ":0" : ":") + String.valueOf(seconds);
-    }
-
-
-    public boolean delete(Context context) {
-        if ((new File(path)).delete()) {
-            // delete it from media store too
-            Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-            context.getContentResolver().delete(uri, null, null);
-
-            return true;
-        }
-        return false;
-    }
-
-    private int getScreenWidth() {
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;//displayMetrics.widthPixels;
-        if (width < 512)
-            width = 512;
-        return width;
     }
 
     public Bitmap getAlbumBmp(Context context) {

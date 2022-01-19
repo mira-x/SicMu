@@ -20,6 +20,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:id="@+id/song_layout">
 
@@ -50,15 +51,26 @@
         android:layout_centerVertical="true"
         />
 
+
     <TextView
         android:id="@+id/song_duration"
         android:layout_height="wrap_content"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="4dp"
         android:singleLine="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/rating_star"
+        />
+
+    <ImageView
+        android:id="@+id/rating_star"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/ic_star_3"
         android:layout_alignParentRight="true"
         android:gravity="right"
-        />
-    <!--
+        android:layout_centerVertical="true"
+        />    <!--
     android:layout_width should permit to have the view large enough to be easily clickable
     -->
 

@@ -47,6 +47,9 @@
     <color name="TrackLooperNormal">#ff666666</color>
     <color name="TrackLooperActivated">@color/apptheme_color</color>
     <color name="PlaybackControlAction">@color/apptheme_color</color>
+    <color name="RatingHighlight">@color/apptheme_color</color>
+    <color name="RatingNormal">#ff666666</color>
+
     <!-- todo
     <item "levelOffset"">15</item>
     fonttype: bold, italic, regular...

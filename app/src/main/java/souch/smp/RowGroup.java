@@ -21,6 +21,7 @@ package souch.smp;
 import android.graphics.Typeface;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TextView;
 
 public class RowGroup extends Row {
@@ -68,6 +69,8 @@ public class RowGroup extends Row {
         setText(holder.text);
         setDuration(holder.duration);
         holder.image.setImageResource(android.R.color.transparent);
+
+        holder.ratingStar.setVisibility(View.INVISIBLE);
 
         holder.layout.setBackgroundColor(color);
     }
