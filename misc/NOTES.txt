@@ -1,0 +1,244 @@
+### tag
+git commit -m "Change version to 1.0."
+
+# tag must be done after commit has been done!
+git tag -a v0.3.1 -m 'Version 0.3.1. Fix crash if the phone has no song.'
+git tag -a v0.4 -m 'Version 0.4. Big thumb release: tunable font size. Tunable subgroup fold state.'
+git tag -a v0.5 -m 'Version 0.4. Big thumb release: tunable font size. Tunable subgroup fold state.'
+git tag -a v0.7 -m 'Version 0.7. Plant a tree release: add tree folder filter, shuffle, optimize startup time.'
+git tag -a v0.8 -m 'Version 0.8. Scrobble Release. Add Last.FM & co scrobble support.'
+git tag -a v1.0 -m 'Version 1.0. Stable release. Add remember last song position and animated icon.'
+git tag -a v1.1 -m 'Version 1.1. Add repeat modes.'
+git tag -a v1.1.1 -m 'Version 1.1.1. Fix getExternalDirs on < KITKAT.'
+git tag -a v1.2 -m 'Version 1.2. Add seek menu.'
+git tag -a v1.3 -m 'Version 1.3. Minor fixes and improvment.'
+git tag -a v1.4 -m 'Version 1.4. Add details menu (Cover art && song details).'
+git tag -a v1.4.2 -m 'Version 1.4.2. Fix save song pos. Compile and target sdk version 31.'
+git tag -a v1.5 -m 'Version 1.5. Add notification with media controls. Fix pause playback after audiojack removal'
+git tag -a v1.6 -m 'Version 1.6. Add loop on part of the song'
+git tag -a v1.7 -m 'Version 1.7. Associate app to music files, launch media scan if file not found.'
+# don't forgot to add changelog description here
+    - readme.md
+    - fastlane/metadata/android/en-US/
+    - GooglePlay
+
+# push it upstream
+git push origin --tags
+
+# remove tag
+git tag -d v1.3 
+git push --delete origin v8.1
+
+# google console
+https://play.google.com/console/signup
+
+# fdroid
+# metadata
+https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/souch.smp.yml
+
+# build log (replace 17 by current versionCode)
+https://monitor.f-droid.org/builds/log/souch.smp/17
+
+# app description is done through fastlane in dir:
+fastlane/metadata/android/en-US
+
+# mem consumption with 18Go of music
+# adb shell dumpsys meminfo souch.smp
+souch.smp_17.apk  1.4.1  (targetSdkVersion 11)
+TOTAL PSS:    10089            TOTAL RSS:    66452
+souch.smp_21.apk  1.7    (targetSdkVersion 31)
+TOTAL PSS:    24807            TOTAL RSS:    84460
+
+# pub todo
+# answer to this
+https://www.reddit.com/r/androidapps/comments/2t45ou/music_app_id3_tag_rating/
+
+
+
+
+##########################################
+# old things :
+
+# get f-droid installations number (outdated)
+wget https://gitlab.com/fdroid/fdroiddata/raw/master/stats/total_downloads_app.txt -O - 2>/dev/null | sed 's/\([^ ]*\) \([^ ]*\)/\2 \1/' | sort -nr | less -N
+wget https://gitlab.com/fdroid/fdroiddata/raw/master/stats/total_downloads_app_version.txt -O - 2>/dev/null | grep souch.smp
+
+
+
+version .2      12/02/2015
+17
+23 +6
+40 +17
+54 +14
+69 +15 18/02/2015
+81 +12
+94 +13
+103 +9 21/02
+110 +7
+115 +5
+123 +8 24/02
+128 +5
+128 +0
+129 +1
+134 +5
+136 +2 01/03
+136 +0
+136 +0
+138 +2
+.
+.
+139
+.
+.
+.
+.
+.
+.
+140 13/03
+.
+.
+144 19/04
+
+
+
+version .3      18/02
+8      21/02
+23 +15     
+38 +15
+50 +12 24/02
+57 +7
+57 +0
+59 +2
+63 +4
+66 +3 01/03
+67 +1
+67 +0
+69 +2
+.
+.
+71
+72
+.
+.
+.
+.
+.
+77 13/03
+.
+.
+83 29/03
+95 19/04
+
+
+
+version .3.1    22/02
+5      24/02
+26 +21
+26 +0
+38 +12
+60 +22
+71 +11 01/03
+82 +11
+82 +0
+100 +18
+.
+.
+115
+117
+.
+.
+.
+.
+.
+127 13/03
+.
+128
+.
+142 29/03
+.
+163 19/04
+
+
+
+
+version .4      04/03
+17      07/03
+29 +12
+.
+.
+.
+.
+.
+76 +47 13/03
+84 +8
+92 +6
+.
+.
+.
+107 +15 19/03
+.
+.
+176 +69 29/03
+.
+212 +36 04/04
+.
+263 +51 17/04
+.
+265 +51 19/04
+.
+270     23/04
+.
+296     14/05 
+
+
+version .5      07/04
+100     17/04
+.
+115     19/04
+.
+136     21/04
+.
+136     23/04
+.
+139     25/04
+.
+149     08/05
+.
+158     14/05 
+164
+
+
+version .6      19/04
+11              21/04
+.
+23              23/04
+.
+60              25/04
+.
+70              29/04
+.
+135             08/05
+.
+173             14/05 
+.
+187             16/05
+190
+.
+194             21/05
+
+
+version .7
+4               16/05
+9
+.
+19              21/05
+.
+37              27/05
+.
+49              05/06
+
+
+version .8
+33              05/06
+
+

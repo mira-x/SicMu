@@ -46,7 +46,7 @@ Works on rather old devices (from Android 4.0).
     - media buttons support (next, prev, play/pause) from external device (bluetooth headphones...)
     - support [Simple Last.fm Scrobbler](https://github.com/tgwizard/sls) or [Scrobble Droid](https://code.google.com/p/scrobbledroid) (disabled by default in settings)
 - play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
-- light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.
+- light and fast: starts in 0.5s and uses 40Mo of RAM with 18Go of music (3000 files, 200 folders) on an old 2*1.7GHz ARM processor.
 
 
 ### Help
