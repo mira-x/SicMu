@@ -112,8 +112,8 @@ public class RowSong extends Row {
         setText(holder.text);
         setDuration(holder.duration);
         setCurrIcon(holder.image, main);
-        holder.ratingStar.setVisibility(View.VISIBLE);
-        holder.ratingStar.setImageResource(getDrawableStarFromRating());
+//        holder.ratingStar.setVisibility(View.VISIBLE);
+//        holder.ratingStar.setImageResource(getDrawableStarFromRating());
     }
 
     private void setText(TextView text) {

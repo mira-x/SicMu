@@ -59,9 +59,10 @@
         android:layout_marginLeft="4dp"
         android:singleLine="true"
         android:gravity="right"
-        android:layout_toLeftOf="@+id/rating_star"
+        android:layout_alignParentRight="true"
         />
-
+<!--
+        android:layout_toLeftOf="@+id/rating_star"
     <ImageView
         android:id="@+id/rating_star"
         android:layout_width="20dp"
@@ -70,8 +71,7 @@
         android:layout_alignParentRight="true"
         android:gravity="right"
         android:layout_centerVertical="true"
-        />    <!--
-    android:layout_width should permit to have the view large enough to be easily clickable
-    -->
+        />
+-->
 
 </RelativeLayout>

@@ -70,7 +70,7 @@ public class RowGroup extends Row {
         setDuration(holder.duration);
         holder.image.setImageResource(android.R.color.transparent);
 
-        holder.ratingStar.setVisibility(View.INVISIBLE);
+//        holder.ratingStar.setVisibility(View.INVISIBLE);
 
         holder.layout.setBackgroundColor(color);
     }
