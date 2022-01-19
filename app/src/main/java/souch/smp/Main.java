@@ -168,36 +168,39 @@ public class Main extends AppCompatActivity {
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
 
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                try {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
-                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
-                } catch (Exception e) {
-                    Intent intent = new Intent();
-                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
-                }
-            }
-        } else {
+//        if (SDK_INT >= Build.VERSION_CODES.R) {
+//            if (!Environment.isExternalStorageManager()) {
+//                try {
+//                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+//                    intent.addCategory("android.intent.category.DEFAULT");
+//                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+//                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+//                } catch (Exception e) {
+//                    Intent intent = new Intent();
+//                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+//                }
+//            }
+//        } else {
             // below android 11
             if (ContextCompat.checkSelfPermission(getApplicationContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                        ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                        || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ) {
                     Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
                     showWarningLayout();
                 }
                 Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE
+//                                , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        },
                         EXTERNAL_STORAGE_REQUEST_CODE);
             } else {
                 Log.d("RequestPermissionResult", "Permission *_EXTERNAL_STORAGE already granted!");
             }
-        }
+//        }
 
         playIntent = new Intent(this, MusicService.class);
         startService(playIntent);
@@ -852,12 +855,13 @@ public class Main extends AppCompatActivity {
 
     private final int SET_RATING_REQUEST_CODE = 1024;
     public void ratingClick(View view) {
-        for (int i = 0; i < ratingButtons.size(); i++) {
-            if (view == ratingButtons.get(i)) {
-                // we cannot unclick the first star, so 0 star means not initialized.
-                rateCurrSong(i + 1);
-            }
-        }
+//        for (int i = 0; i < ratingButtons.size(); i++) {
+//            if (view == ratingButtons.get(i)) {
+//                // we cannot unclick the first star, so 0 star means not initialized.
+//                rateCurrSong(i + 1);
+//            }
+//        }
+
 //        int check = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 //        if (check == PackageManager.PERMISSION_GRANTED) {
 //            rateCurrSong();
