@@ -669,6 +669,7 @@ public class MusicService extends Service implements
 
     // unpause
     public void start() {
+        applyPlaybackSpeed(playbackSpeed);
         getPlayer().start();
         state.setState(PlayerState.Started);
         startSensor();
