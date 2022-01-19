@@ -94,15 +94,14 @@ public class Path {
         ArrayList<String> folders = new ArrayList<>();
         int beg = 0;
         boolean folderFound = false;
-        for(int i = 0; i < path.length(); i++) {
-            if(path.charAt(i) == separatorChar) {
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == separatorChar) {
                 if (folderFound) {
                     folders.add(path.substring(beg, i));
                     folderFound = false;
                 }
                 beg = i + 1;
-            }
-            else {
+            } else {
                 folderFound = true;
             }
         }
@@ -121,7 +120,7 @@ public class Path {
      */
     static public String cutFolder(String up, String down) {
         int i = 0;
-        while(i < down.length() && i < up.length()  &&  up.charAt(i) == down.charAt(i))
+        while (i < down.length() && i < up.length() && up.charAt(i) == down.charAt(i))
             i++;
         return up.substring(i, up.length());
     }
@@ -129,20 +128,20 @@ public class Path {
 
     /**
      * From Android String.java
-     *
+     * <p>
      * modify compareToIgnoreCase in order to put shorter group to the end e.g.
      * normal compareToIgnoreCase order
      * /toto
      * /toto/tata
      * /toto/titi
-     *
+     * <p>
      * modified order (here)
      * /toto/tata
      * /toto/titi
      * /toto
-     *
+     * <p>
      * Compares this string to the given string, ignoring case differences.
-     *
+     * <p>
      * The drawback of this method being outside of String.java is that it is slower as it does not
      * play with internal string data (especially charAt calls). Rows initialization lose 15% of speed.
      */
@@ -162,6 +161,7 @@ public class Path {
         }
         return string2.length() - string1.length(); // modified here
     }
+
     /**
      * useful for compareToIgnoreCaseShorterFolderLast
      */
@@ -180,7 +180,7 @@ public class Path {
         String dirsStr = new String();
         Collection<File> dirs = getMusicStorages(context);
         if (dirs != null)
-            for (File dir: dirs) {
+            for (File dir : dirs) {
                 dirsStr += dir.getAbsolutePath() + ";";
             }
         if (dirsStr.endsWith(";"))
@@ -192,7 +192,7 @@ public class Path {
         ArrayList<File> musicDirs = new ArrayList<>();
         Collection<File> dirs = getStorages(context);
         if (dirs != null)
-            for (File dir: dirs) {
+            for (File dir : dirs) {
                 musicDirs.add(new File(dir, "Music/"));
             }
         return musicDirs;
@@ -203,19 +203,19 @@ public class Path {
 
         dirsToScan.add(Environment.getExternalStorageDirectory());
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // hack. Don't know if it work well on other devices!
             String userPathToRemove = "Android/data/souch.smp/files";
             File[] files = context.getExternalFilesDirs(null);
             if (files != null)
-                for (File dir: files) {
+                for (File dir : files) {
                     if (dir != null && dir.getAbsolutePath().endsWith(userPathToRemove)) {
                         dirsToScan.add(dir.getParentFile().getParentFile().getParentFile().getParentFile());
                     }
                 }
         }
 
-        for (File dir: dirsToScan) {
+        for (File dir : dirsToScan) {
             Log.d("Settings", "userDir: " + dir.getAbsolutePath());
         }
         return dirsToScan;
@@ -239,8 +239,7 @@ public class Path {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //purgeFiles(context);
             scanMediaFiles(context);
-        }
-        else {
+        } else {
             if (android.os.Environment.getExternalStorageState().equals(
                     android.os.Environment.MEDIA_MOUNTED))
                 // Broadcast the Media Scanner Intent to trigger it
@@ -264,13 +263,12 @@ public class Path {
     }
 
 
-    public static void purgeFiles(Context context)
-    {
-        final String [] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA};
+    public static void purgeFiles(Context context) {
+        final String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA};
         Uri playlist_uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = context.getContentResolver().query(playlist_uri, projection, null,null,null);
+        Cursor cursor = context.getContentResolver().query(playlist_uri, projection, null, null, null);
         cursor.moveToFirst();
-        for (int r = 0; r < cursor.getCount(); r++, cursor.moveToNext()){
+        for (int r = 0; r < cursor.getCount(); r++, cursor.moveToNext()) {
             int id = cursor.getInt(0);
             String filePath = cursor.getString(1);
             Boolean delIt = true;
@@ -334,7 +332,7 @@ public class Path {
         for (File file : filesToScan) {
             filesToScanArray[i] = file.getAbsolutePath();
             //if (filesToScanArray[i].contains("emulated/0"))
-                Log.d("Settings", "fileToScan: " + filesToScanArray[i]);
+            Log.d("Settings", "fileToScan: " + filesToScanArray[i]);
             i++;
         }
 
@@ -364,13 +362,15 @@ public class Path {
         scanMediaFiles(context, files, mediaScannerCallback);
     }
 
-    static private final String[] imageFileExtensions =  new String[] {"jpg", "png", "gif", "jpeg"};
+    static private final String[] imageFileExtensions = new String[]{"jpg", "png", "gif", "jpeg"};
+
     static public boolean filenameIsImage(String filename) {
-            for (String extension : imageFileExtensions)
-                if (filename.toLowerCase().endsWith(extension))
-                    return true;
+        for (String extension : imageFileExtensions)
+            if (filename.toLowerCase().endsWith(extension))
+                return true;
         return false;
     }
+
     static public boolean isImage(File file) {
         if (file.isFile())
             if (filenameIsImage(file.getName()))
@@ -416,5 +416,4 @@ public class Path {
         }
         return null;
     }
-
 }
