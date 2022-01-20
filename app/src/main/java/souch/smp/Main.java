@@ -112,6 +112,7 @@ public class Main extends AppCompatActivity {
     private ImageButton albumImage;
     private TextView songTitle, songAlbum, songArtist, warningText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
+    private LinearLayout details_rating_layout;
     private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
@@ -278,6 +279,7 @@ public class Main extends AppCompatActivity {
         ratingButtons.add((ImageButton) findViewById(R.id.rating_button_3));
         ratingButtons.add((ImageButton) findViewById(R.id.rating_button_4));
         ratingButtons.add((ImageButton) findViewById(R.id.rating_button_5));
+        details_rating_layout = (LinearLayout) findViewById(R.id.details_rating);
 
         playbackSpeedText = (TextView) findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
@@ -735,10 +737,15 @@ public class Main extends AppCompatActivity {
     }
 
     private void setRatingButtonsDrawable(int rating, boolean highlight) {
-        for (int i = 0; i < ratingButtons.size(); i++) {
-            int star0 = highlight ? R.drawable.ic_star_0_highlight: R.drawable.ic_star_0;
-            int star5 = highlight ? R.drawable.ic_star_5_highlight: R.drawable.ic_star_5;
-            ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
+        if (rating <= 0) {
+            details_rating_layout.setVisibility(View.INVISIBLE);
+        } else {
+            details_rating_layout.setVisibility(View.VISIBLE);
+            for (int i = 0; i < ratingButtons.size(); i++) {
+                int star0 = highlight ? R.drawable.ic_star_0_highlight : R.drawable.ic_star_0;
+                int star5 = highlight ? R.drawable.ic_star_5_highlight : R.drawable.ic_star_5;
+                ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 Version 1.8.
-- Show song's rating
-- Improve album cover art load
-- Unfold subgroup if group contains only one subgroup
 - Adjustable playback speed
+- Improve album cover art load
+- Show song's rating
+- Unfold subgroup if group contains only one subgroup
