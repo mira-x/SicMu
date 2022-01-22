@@ -221,13 +221,13 @@ public class MusicService extends Service implements
 
     public Rows getRows() { return rows; }
 
-    public boolean getChanged() {
+    public synchronized boolean getChanged() {
         boolean hasChanged = changed;
         changed = false;
         return hasChanged;
     }
 
-    public void setChanged() {
+    public synchronized void setChanged() {
         changed = true;
     }
 
@@ -339,7 +339,7 @@ public class MusicService extends Service implements
 
         state.setState(PlayerState.Nope);
         seekFinished = true;
-        changed = true;
+        setChanged();
         wasPlaying = false;
 
         scrobble.send(Scrobble.SCROBBLE_COMPLETE);
@@ -399,10 +399,10 @@ public class MusicService extends Service implements
     private void handleCommand(String cmd) {
         if (CMDNEXT.equals(cmd)) {
             playNext();
-            changed = true;
+            setChanged();
         } else if (CMDPREVIOUS.equals(cmd)) {
             playPrev();
-            changed = true;
+            setChanged();
         } else if (CMDTOGGLEPAUSE.equals(cmd)) {
             if (isInState(PlayerState.Started)) {
                 pause();
@@ -413,18 +413,18 @@ public class MusicService extends Service implements
                 else
                     playSong();
             }
-            changed = true;
+            setChanged();
         } else if (CMDSTOP.equals(cmd) || CMDPAUSE.equals(cmd)) {
             if (isInState(PlayerState.Started)) {
                 pause();
-                changed = true;
+                setChanged();
             }
         } else if (CMDPLAY.equals(cmd)) {
             if (isInState(PlayerState.Paused))
                 start();
             else
                 playSong();
-            changed = true;
+            setChanged();
         }
     }
 
@@ -435,7 +435,7 @@ public class MusicService extends Service implements
                 // resume playback
                 if (wasPlaying) {
                     start();
-                    changed = true;
+                    setChanged();
                 }
                 //player.setVolume(1.0f, 1.0f);
                 break;
@@ -457,7 +457,7 @@ public class MusicService extends Service implements
                     //player.setVolume(0.1f, 0.1f);
                     pause();
                     wasPlaying = true;
-                    changed = true;
+                    setChanged();
                 }
                 else {
                     wasPlaying = false;
@@ -536,7 +536,7 @@ public class MusicService extends Service implements
     @Override
     public void onCompletion(MediaPlayer mp) {
         state.setState(PlayerState.PlaybackCompleted);
-        changed = true;
+        setChanged();
 
         // loop only to same track if not asked to change track (i.e. loop only on completion)
         if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
@@ -893,7 +893,7 @@ public class MusicService extends Service implements
             // goes to next song
             if(playingLaunched()) {
                 playNext();
-                changed = true;
+                setChanged();
             }
         }
     }

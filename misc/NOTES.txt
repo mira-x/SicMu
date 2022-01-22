@@ -17,6 +17,7 @@ git tag -a v1.4.2 -m 'Version 1.4.2. Fix save song pos. Compile and target sdk v
 git tag -a v1.5 -m 'Version 1.5. Add notification with media controls. Fix pause playback after audiojack removal'
 git tag -a v1.6 -m 'Version 1.6. Add loop on part of the song'
 git tag -a v1.7 -m 'Version 1.7. Associate app to music files, launch media scan if file not found.'
+git tag -a v1.8 -m "Version 1.8. Adjustable playback speed, Improve album cover art load, Show song's rating."
 # don't forgot to add changelog description here
     - readme.md
     - fastlane/metadata/android/en-US/
