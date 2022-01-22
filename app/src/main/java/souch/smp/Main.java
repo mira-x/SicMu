@@ -352,6 +352,7 @@ public class Main extends AppCompatActivity {
                         disableTrackLooper();
                     }
                     scrollToSong(position);
+                    updateRatings();
                 }
             });
             songView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -366,6 +367,7 @@ public class Main extends AppCompatActivity {
                     coverArtNum = 0;
                     rows.selectNearestSong(position);
                     playAlreadySelectedSong();
+                    updateRatings();
 
                     return true;
                 }
@@ -412,6 +414,18 @@ public class Main extends AppCompatActivity {
         updatePlayButton();
         disableTrackLooper();
         unfoldAndscrollToCurrSong();
+    }
+
+    private void updateRatings() {
+        if (!serviceBound)
+            return;
+
+        rows.loadRatings(newRatingLoaded -> {
+            if (newRatingLoaded) {
+                Log.d("Main", "newRatingLoaded");
+                runOnUiThread(() -> songAdt.notifyDataSetChanged());
+            }
+        });
     }
 
     @Override
@@ -606,11 +620,9 @@ public class Main extends AppCompatActivity {
         }
     };
 
-    final Runnable firstScroll = new Runnable() {
-        public void run() {
-            updatePlayButton();
-            unfoldAndscrollToCurrSong();
-        }
+    final Runnable firstScroll = () -> {
+        updatePlayButton();
+        unfoldAndscrollToCurrSong();
     };
 
 
@@ -762,12 +774,7 @@ public class Main extends AppCompatActivity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setDetails();
-                        }
-                    });
+                    runOnUiThread(() -> setDetails());
                 }
             }, 500);
         }
@@ -1529,6 +1536,7 @@ public class Main extends AppCompatActivity {
         if(rows.unfoldCurrPos())
             songAdt.notifyDataSetChanged();
         scrollToSong(rows.getCurrPos());
+        updateRatings();
     }
 
     public void scrollToCurrSong() {

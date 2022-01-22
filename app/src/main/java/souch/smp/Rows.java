@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Timer;
 
 public class Rows {
     Context context;
@@ -56,6 +57,8 @@ public class Rows {
     private int currPos;
 
     private Resources resources;
+
+    private Timer timer;
 
     static final public String defaultStr = "<null>";
     private RepeatMode repeatMode;
@@ -1053,6 +1056,34 @@ public class Rows {
         RowSong rowSong = getCurrSong();
         if(rowSong != null)
             savedID = rowSong.getID();
+    }
+
+    public interface RatingCallbackInterface {
+        // @param someRatingChanged set to true if loadRatings brings new RowSong's rating
+        // i.e. set to false if RowSong's rating did not change
+        void ratingCallback(boolean someRatingChanged) ;
+    }
+
+    // fetch rating of song that are shown
+    public synchronized void loadRatings(RatingCallbackInterface ratingCallbackInterface) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Log.d("Rows", "loadRatings");
+                boolean someRatingChanged = false;
+                for (int i = 0; i < rows.size(); i++) {
+                    Row row = rows.get(i);
+                    if (row.getClass() == RowSong.class) {
+                        RowSong rowSong = (RowSong) row;
+                        if (rowSong.getRating() == RowSong.RATING_NOT_INITIALIZED &&
+                                rowSong.loadRating() > 0)
+                            someRatingChanged = true;
+                    }
+                }
+                ratingCallbackInterface.ratingCallback(someRatingChanged);
+            }
+        };
+        thread.start();
     }
 
 //    public void deleteCurSong(Context context) {

@@ -112,8 +112,8 @@ public class RowSong extends Row {
         setText(holder.text);
         setDuration(holder.duration);
         setCurrIcon(holder.image, main);
-//        holder.ratingStar.setVisibility(View.VISIBLE);
-//        holder.ratingStar.setImageResource(getDrawableStarFromRating());
+        holder.ratingStar.setVisibility(View.VISIBLE);
+        holder.ratingStar.setImageResource(getDrawableStarFromRating());
     }
 
     private void setText(TextView text) {
@@ -191,6 +191,10 @@ public class RowSong extends Row {
     }
 
     public int getRating() {
+        return rating;
+    }
+
+    public int loadRating() {
         // get rating is computed on demand cause it is slow
         if (rating == RATING_NOT_INITIALIZED) {
             try {
