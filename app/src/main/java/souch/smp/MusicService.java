@@ -202,8 +202,13 @@ public class MusicService extends Service implements
 
     private void updateMediaSessionMetadata() {
         RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null)
-            mediaSession.setMetadata(rowSong.getMediaMetadata(getApplicationContext()));
+        if (rowSong != null) {
+            rowSong.getAlbumBmpAsync(getApplicationContext(), 0,
+                    (rowSongId, imageNum, bitmap) -> {
+                        // albumbmp will be in cache, so don't bother to pass bitmap param to getMediaMetadata
+                        mediaSession.setMetadata(rowSong.getMediaMetadata(getApplicationContext()));
+                    });
+        }
     }
 
     private void initNoisyReceiver() {

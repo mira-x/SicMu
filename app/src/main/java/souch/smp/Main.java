@@ -255,10 +255,13 @@ public class Main extends AppCompatActivity {
                 }
             }
             public void onSwipeLeft() {
-                if (hasCoverArt(coverArtNum + 1)) {
-                    coverArtNum++;
-                    setDetails();
-                }
+                RowSong rowSong = rows.getCurrSong();
+                if (rowSong != null)
+                    rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum + 1,
+                            (rowSongId, imageNum, bitmap) -> {
+                                coverArtNum++;
+                                setCoverArt(rowSongId, imageNum, bitmap);
+                            });
             }
             public void onSwipeBottom() {
                 detailsBigCoverArt = true;
@@ -700,21 +703,20 @@ public class Main extends AppCompatActivity {
         detailsToggledFollowAuto = hasCoverArt == detailsOpened;
     }
 
-    public boolean hasCoverArt(int imageNum) {
-        Bitmap albumBmp = null;
-        RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null)
-            albumBmp = rowSong.getAlbumBmp(getApplicationContext(), imageNum);
-
-        return albumBmp != null;
+    private void setCoverArt(long rowSongId, int imageNum, Bitmap bitmap) {
+        runOnUiThread(() -> {
+            Log.d("Main", "setCoverArt rowSongId=" + rowSongId + " imageNum=" + imageNum);
+            // todo: check id and imageNum ?
+            if (bitmap != null) {
+                albumImage.setImageBitmap(bitmap);
+            }
+            else {
+                albumImage.setImageResource(R.drawable.ic_default_coverart);
+            }
+        });
     }
 
-    public boolean hasCoverArt() {
-        return hasCoverArt(0);
-    }
-
-    public boolean setDetails() {
-        Bitmap albumBmp = null;
+    public void setDetails() {
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
             String title = rowSong.getTrack() + ". " + rowSong.getTitle();
@@ -724,18 +726,10 @@ public class Main extends AppCompatActivity {
             if (rowSong.getYear() > 1000)
                 album += " - " + rowSong.getYear();
             songAlbum.setText(album);
-            albumBmp = rowSong.getAlbumBmp(getApplicationContext(), coverArtNum);
+            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
+                    (rowSongId, imageNum, bitmap) -> setCoverArt(rowSongId, imageNum, bitmap));
             setRatingDetails();
         }
-        if (albumBmp != null) {
-            albumImage.setImageBitmap(albumBmp);
-//            albumImage.setVisibility(View.VISIBLE);
-        } else {
-            albumImage.setImageResource(R.drawable.ic_default_coverart);
-//            albumImage.setVisibility(View.GONE);
-        }
-
-        return albumBmp != null;
     }
 
     private void setRatingDetails() {
@@ -762,39 +756,32 @@ public class Main extends AppCompatActivity {
     }
 
     public void autoOpenCloseDetails() {
-        hasCoverArt = hasCoverArt();
-        // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
-        //   - auto mode is enable if details view state (opened or closed) is the same has
-        //     auto mode would have done.
-        if (detailsToggledFollowAuto)
-            openDetails(hasCoverArt);
+        if (!serviceBound)
+            return;
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong != null) {
+            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
+                    (rowSongId, imageNum, bitmap) -> {
+                        hasCoverArt = bitmap != null;
+                        // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
+                        //   - auto mode is enable if details view state (opened or closed) is the same has
+                        //     auto mode would have done.
+                        if (detailsToggledFollowAuto)
+                            runOnUiThread(() -> openDetails(hasCoverArt));
 
-        if (detailsToggledFollowAuto && !hasCoverArt) {
-            // set details later in order to not disturb details layouts close animation
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(() -> setDetails());
-                }
-            }, 500);
+                        if (detailsToggledFollowAuto && !hasCoverArt) {
+                            // set details later in order to not disturb details layouts close animation
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    runOnUiThread(() -> setDetails());
+                                }
+                            }, 500);
+                        } else {
+                            runOnUiThread(() -> setDetails());
+                        }
+                    });
         }
-        else
-            setDetails();
-
-//            // auto hide it
-//            timer = new Timer();
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            detailsLayout.setVisibility(View.GONE);
-//                        }
-//                    });
-//                }
-//            }, 6000);
     }
 
 

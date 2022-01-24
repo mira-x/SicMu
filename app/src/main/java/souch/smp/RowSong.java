@@ -294,20 +294,50 @@ public class RowSong extends Row {
         return  drawable;
     }
 
-    public Bitmap getAlbumBmp(Context context) {
-        return getAlbumBmp(context, 0);
+    public interface AlbumBmpCallbackInterface {
+        void albumBmpCallback(long rowSongId, int imageNum, Bitmap bitmap) ;
+    }
+
+    // async method : can be start from UI thread
+    public void getAlbumBmpAsync(Context context, int imageNum,
+                                 AlbumBmpCallbackInterface albumBmpCallbackInterface)
+    {
+        if (imageNum == 0 && cachedAlbumBmpID == albumId) {
+            Log.d("RowSong", "getAlbumBmpAsync cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
+            albumBmpCallbackInterface.albumBmpCallback(id, imageNum, cachedAlbumBmp);
+        }
+        else {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    Log.d("RowSong", "getAlbumBmpAsync rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
+                    Bitmap bitmap = getAlbumBmp(context, imageNum);
+                    albumBmpCallbackInterface.albumBmpCallback(id, imageNum, bitmap);
+                }
+            };
+            thread.start();
+        }
     }
 
     // implement simple cache: cache is discard as soon as song changes
     private static long cachedAlbumBmpID = -1;
     private static Bitmap cachedAlbumBmp = null;
 
+    // ! sync method: should avoid to call it from UI thread
+    public Bitmap getAlbumBmp(Context context) {
+        return getAlbumBmp(context, 0);
+    }
+
     /** if imageNum > 0: try to get Nth bitmap from same folder
      * @return null if bitmap not found
+     * ! sync method: should avoid to call it from UI thread
      */
     public synchronized Bitmap getAlbumBmp(Context context, int imageNum) {
-        if (imageNum == 0 && cachedAlbumBmpID == id)
+        if (imageNum == 0 && cachedAlbumBmpID == albumId) {
+            Log.d("RowSong", "getAlbumBmp cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
             return cachedAlbumBmp;
+        }
+        Log.d("RowSong", "getAlbumBmp rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
 
         Bitmap bmp = null;
         try {
@@ -381,7 +411,7 @@ public class RowSong extends Row {
         }
 
         if (imageNum == 0) {
-            cachedAlbumBmpID = id;
+            cachedAlbumBmpID = albumId;
             cachedAlbumBmp = bmp; // cache even if bmp is null so that we do not search again
         }
 
