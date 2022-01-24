@@ -423,7 +423,7 @@ public class Main extends AppCompatActivity {
         if (!serviceBound)
             return;
 
-        rows.loadRatings(newRatingLoaded -> {
+        rows.loadRatingsAsync(newRatingLoaded -> {
             if (newRatingLoaded) {
                 Log.d("Main", "newRatingLoaded");
                 runOnUiThread(() -> songAdt.notifyDataSetChanged());
@@ -728,6 +728,7 @@ public class Main extends AppCompatActivity {
             songAlbum.setText(album);
             rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
                     (rowSongId, imageNum, bitmap) -> setCoverArt(rowSongId, imageNum, bitmap));
+
             setRatingDetails();
         }
     }
@@ -737,8 +738,8 @@ public class Main extends AppCompatActivity {
             return;
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
-            int rating = rowSong.getRating();
-            setRatingButtonsDrawable(rating, rating > 0);
+            rowSong.loadRatingAsync((rating, ratingChanged) ->
+                    setRatingButtonsDrawable(rating, rating > 0));
         }
     }
 

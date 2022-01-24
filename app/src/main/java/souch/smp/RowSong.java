@@ -194,7 +194,32 @@ public class RowSong extends Row {
         return rating;
     }
 
-    public int loadRating() {
+    public interface RatingCallbackInterface {
+        // @param someRatingChanged set to true if loadRating brings new RowSong's rating
+        // i.e. set to false if RowSong's rating did not change
+        void ratingCallback(int rating, boolean ratingChanged);
+    }
+
+    public synchronized void loadRatingAsync(RatingCallbackInterface ratingCallbackInterface) {
+        if (rating != RowSong.RATING_NOT_INITIALIZED) {
+            ratingCallbackInterface.ratingCallback(rating, false);
+        }
+        else {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    Log.d("RowSong", "loadRating");
+                    boolean someRatingChanged = false;
+                    if (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0)
+                        someRatingChanged = true;
+                    ratingCallbackInterface.ratingCallback(rating, someRatingChanged);
+                }
+            };
+            thread.start();
+        }
+    }
+
+    public synchronized int loadRating() {
         // get rating is computed on demand cause it is slow
         if (rating == RATING_NOT_INITIALIZED) {
             try {
@@ -222,7 +247,7 @@ public class RowSong extends Row {
     }
 
     // return true if set rating succeed
-    public boolean setRating(int rating) {
+    public synchronized boolean setRating(int rating) {
         this.rating = rating;
         boolean ok = false;
         try {

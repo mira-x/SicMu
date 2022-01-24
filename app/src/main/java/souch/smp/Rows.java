@@ -1065,7 +1065,7 @@ public class Rows {
     }
 
     // fetch rating of song that are shown
-    public synchronized void loadRatings(RatingCallbackInterface ratingCallbackInterface) {
+    public synchronized void loadRatingsAsync(RatingCallbackInterface ratingCallbackInterface) {
         Thread thread = new Thread() {
             @Override
             public void run() {
