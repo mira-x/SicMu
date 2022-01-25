@@ -43,6 +43,9 @@ https://monitor.f-droid.org/builds/log/souch.smp/17
 # app description is done through fastlane in dir:
 fastlane/metadata/android/en-US
 
+# create icon for android
+http://romannurik.github.io/AndroidAssetStudio/index.html
+
 # mem consumption with 18Go of music
 # adb shell dumpsys meminfo souch.smp
 souch.smp_17.apk  1.4.1  (targetSdkVersion 11)

@@ -791,7 +791,7 @@ public class MusicService extends Service implements
         builder.setContentTitle(rowSong.getTitle())
                 .setContentText(rowSong.getArtist())
                 .setSubText(rowSong.getAlbum())
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_stat_music_note) // R.drawable.ic_notification
                 .setLargeIcon(rows.getCurrSong().getAlbumBmp(getApplicationContext()))
                 .setContentIntent(PendingIntent.getActivity(this, 0, openApp,
                         PendingIntent.FLAG_UPDATE_CURRENT))
