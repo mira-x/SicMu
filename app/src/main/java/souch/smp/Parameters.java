@@ -54,6 +54,9 @@ public interface Parameters {
     boolean getEnableShake();
     void setEnableShake(boolean shakeEnabled);
 
+    boolean getEnableRating();
+    void setEnableRating(boolean ratingEnabled);
+
     float getShakeThreshold();
 
     boolean getMediaButtonStartAppShake();

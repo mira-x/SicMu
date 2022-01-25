@@ -26,6 +26,13 @@
         android:icon="@drawable/ic_menu_shake_checked"
         android:defaultValue="false"/>
 
+    <CheckBoxPreference
+        android:key="ENABLE_RATING"
+        android:title="@string/settings_rating"
+        android:summary="@string/settings_rating_summary"
+        android:icon="@drawable/ic_star_0_highlight"
+        android:defaultValue="true"/>
+
     <PreferenceScreen
         android:key="button_help"
         android:title="@string/settings_help"

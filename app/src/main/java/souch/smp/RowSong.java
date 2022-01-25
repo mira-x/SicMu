@@ -18,6 +18,7 @@
 
 package souch.smp;
 
+import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
@@ -35,6 +36,7 @@ import android.util.Size;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.database.Cursor;
 
@@ -112,8 +114,26 @@ public class RowSong extends Row {
         setText(holder.text);
         setDuration(holder.duration);
         setCurrIcon(holder.image, main);
-        holder.ratingStar.setVisibility(View.VISIBLE);
-        holder.ratingStar.setImageResource(getDrawableStarFromRating());
+        if (MusicService.getEnableRating()) {
+            holder.ratingStar.setVisibility(View.VISIBLE);
+            holder.ratingStar.setImageResource(getDrawableStarFromRating());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+                // removeRule is not in sdk < 17
+                params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                holder.duration.setLayoutParams(params);
+            }
+        }
+        else {
+            holder.ratingStar.setVisibility(View.INVISIBLE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                holder.duration.setLayoutParams(params);
+            }
+        }
     }
 
     private void setText(TextView text) {

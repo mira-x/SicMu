@@ -126,6 +126,14 @@ public class ParametersImpl implements Parameters {
         getEditor().putBoolean(PrefKeys.ENABLE_SHAKE.name(), shakeEnabled).commit();
     }
 
+    public boolean getEnableRating() {
+        return getPref().getBoolean(PrefKeys.ENABLE_RATING.name(), true);
+    }
+
+    public void setEnableRating(boolean ratingEnabled) {
+        getEditor().putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).commit();
+    }
+
     public float getShakeThreshold() {
         return Float.valueOf(getPref().getString(PrefKeys.SHAKE_THRESHOLD.name(),
                 context.getString(R.string.settings_default_shake_threshold)));

@@ -123,6 +123,8 @@
     <string name="settings_default_shake_threshold">100</string>
     <string name="settings_no_accelerometer">Your device has no accelerometer. Shake functionality is disabled.</string>
 
+    <string name="settings_rating">Enable rating</string>
+    <string name="settings_rating_summary">Lower a bit CPU consumption if disabled</string>
 
     <string name="settings_help">Help</string>
     <string name="settings_help_summary">If you are a bit lost.</string>

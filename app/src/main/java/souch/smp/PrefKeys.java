@@ -39,5 +39,6 @@ public enum PrefKeys {
     SCROBBLE,
     SONG_POS,
     SAVE_SONG_POS,
-    REPEAT_MODE
+    REPEAT_MODE,
+    ENABLE_RATING
 }

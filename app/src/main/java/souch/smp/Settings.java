@@ -75,6 +75,8 @@ public class Settings extends PreferenceActivity
                     getResources().getString(R.string.settings_no_accelerometer),
                     Toast.LENGTH_LONG).show();
         }
+        CheckBoxPreference prefEnableRating = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_RATING.name());
+        prefEnableRating.setChecked(params.getEnableRating());
 
         findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(params.getNormalTextSize()));
         findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(params.getBigTextSize()));
@@ -128,6 +130,9 @@ public class Settings extends PreferenceActivity
         }
         else if(key.equals(PrefKeys.ENABLE_SHAKE.name())) {
             musicSrv.setEnableShake(params.getEnableShake());
+        }
+        else if(key.equals(PrefKeys.ENABLE_RATING.name())) {
+            musicSrv.setEnableRating(params.getEnableRating());
         }
         else if(key.equals(PrefKeys.SHAKE_THRESHOLD.name())) {
             final float threshold = params.getShakeThreshold();

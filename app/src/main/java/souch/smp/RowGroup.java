@@ -19,9 +19,11 @@
 package souch.smp;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class RowGroup extends Row {
@@ -71,6 +73,11 @@ public class RowGroup extends Row {
         holder.image.setImageResource(android.R.color.transparent);
 
         holder.ratingStar.setVisibility(View.INVISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.duration.setLayoutParams(params);
+        }
 
         holder.layout.setBackgroundColor(color);
     }

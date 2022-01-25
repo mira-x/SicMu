@@ -118,6 +118,7 @@ public class MusicService extends Service implements
     private Sensor accelerometer;
     private long lastUpdate;
     private boolean enableShake;
+    private static boolean enableRating;
     private float shakeThreshold;
     private float playbackSpeed = 1.0f;
     private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
@@ -853,6 +854,7 @@ public class MusicService extends Service implements
             savedSongPos = params.getSongPos();
         else
             savedSongPos = -1;
+        enableRating = params.getEnableRating();
     }
 
     private void save() {
@@ -916,6 +918,16 @@ public class MusicService extends Service implements
     }
 
     public boolean getEnableShake() { return enableShake; }
+
+    public static boolean getEnableRating() {
+        return enableRating;
+    }
+
+    public void setEnableRating(boolean rating) {
+        enableRating = rating;
+        setChanged();
+        params.setEnableRating(enableRating);
+    }
 
     public void setShakeThreshold(float threshold) {
         shakeThreshold = threshold / 10;

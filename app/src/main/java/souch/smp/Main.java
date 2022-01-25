@@ -420,15 +420,14 @@ public class Main extends AppCompatActivity {
     }
 
     private void updateRatings() {
-        if (!serviceBound)
-            return;
-
-        rows.loadRatingsAsync(newRatingLoaded -> {
-            if (newRatingLoaded) {
-                Log.d("Main", "newRatingLoaded");
-                runOnUiThread(() -> songAdt.notifyDataSetChanged());
-            }
-        });
+        if (serviceBound && MusicService.getEnableRating()) {
+            rows.loadRatingsAsync(newRatingLoaded -> {
+                if (newRatingLoaded) {
+                    Log.d("Main", "newRatingLoaded");
+                    runOnUiThread(() -> songAdt.notifyDataSetChanged());
+                }
+            });
+        }
     }
 
     @Override
@@ -736,10 +735,15 @@ public class Main extends AppCompatActivity {
     private void setRatingDetails() {
         if (!serviceBound)
             return;
-        RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null) {
-            rowSong.loadRatingAsync((rating, ratingChanged) ->
-                    setRatingButtonsDrawable(rating, rating > 0));
+        if (MusicService.getEnableRating()) {
+            RowSong rowSong = rows.getCurrSong();
+            if (rowSong != null) {
+                rowSong.loadRatingAsync((rating, ratingChanged) ->
+                        runOnUiThread(() ->setRatingButtonsDrawable(rating, rating > 0)));
+            }
+        }
+        else {
+            setRatingButtonsDrawable(0, false);
         }
     }
 
