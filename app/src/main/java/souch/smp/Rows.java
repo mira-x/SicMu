@@ -32,6 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 
@@ -242,14 +243,34 @@ public class Rows {
             int lastSongPos = getLastSongPosInGroup(currPos);
             if (lastSongPos <= firstSongPos)
                 return;
-            // save the random song chosen
-            shuffleSavedPos.add(currPos);
+            int nbSongInCurGroup = (lastSongPos - firstSongPos) + 1;
 
-            // pick a new pos
-            int oldPos = currPos;
-            while (oldPos == currPos) {
-                // +1 -> next int n is exclusive
-                currPos = firstSongPos + random.nextInt((lastSongPos - firstSongPos) + 1);
+            // remove pos not in specified limit
+            for (Iterator<Integer> iterator = shuffleSavedPos.iterator(); iterator.hasNext(); ) {
+                int pos = iterator.next();
+                if (pos < firstSongPos || pos > lastSongPos)
+                    iterator.remove();
+            }
+
+            // save the previously song chosen
+            shuffleSavedPos.add(currPos);
+            Collections.sort(shuffleSavedPos);
+
+            // reset shuffleSavedPos if we filled it entirely, add only curr pos
+            if (shuffleSavedPos.size() >= nbSongInCurGroup ) {
+                shuffleSavedPos.clear();
+                shuffleSavedPos.add(currPos);
+                Log.d("Rows", "shuffleSavedPos.clear");
+            }
+
+            // random on remaining part
+            int randNum = random.nextInt(nbSongInCurGroup - shuffleSavedPos.size());
+            currPos = randNum + firstSongPos;
+            // shift song already done
+            for (Iterator<Integer> iterator = shuffleSavedPos.iterator(); iterator.hasNext(); ) {
+                int pos = iterator.next();
+                if (pos <= currPos)
+                    currPos++;
             }
         }
         else {
