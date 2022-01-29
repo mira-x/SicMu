@@ -198,7 +198,7 @@ public class MusicService extends Service implements
                         .setActions(MEDIA_SESSION_ACTIONS)
                         .setState(isPlaying ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
                                 currPosMs,
-                                1);
+                                playbackSpeed);
         mediaSession.setPlaybackState(stateBuilder.build());
     }
 
@@ -938,6 +938,7 @@ public class MusicService extends Service implements
         if (playbackSpeed + step <= 0)
             return;
         playbackSpeed = playbackSpeed + step;
+        updateMediaPlaybackState();
         if (player != null && playingLaunched())
             applyPlaybackSpeed(playbackSpeed);
     }
