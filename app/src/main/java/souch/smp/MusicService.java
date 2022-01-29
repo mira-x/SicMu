@@ -177,7 +177,8 @@ public class MusicService extends Service implements
 
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                mediaButtonIntent, PendingIntent.FLAG_IMMUTABLE);
         mediaSession.setMediaButtonReceiver(pendingIntent);
     }
 
@@ -794,7 +795,7 @@ public class MusicService extends Service implements
                 .setSmallIcon(R.drawable.ic_stat_music_note) // R.drawable.ic_notification
                 .setLargeIcon(rows.getCurrSong().getAlbumBmp(getApplicationContext()))
                 .setContentIntent(PendingIntent.getActivity(this, 0, openApp,
-                        PendingIntent.FLAG_UPDATE_CURRENT))
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                 .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(getApplicationContext(),
                         PlaybackStateCompat.ACTION_STOP))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
