@@ -315,6 +315,12 @@ public class Rows {
         return songPos + 1;
     }
 
+    boolean currPosIsLastSongInGroup() {
+        RowSong song = getCurrSong();
+        return song != null &&
+                getLastSongPosInGroup(song.getGenuinePos()) == song.getGenuinePos();
+    }
+
     // go back to previous random song done
     public void moveToRandomSongBack() {
         if (rowsUnfolded.size() <= 0)
@@ -1041,6 +1047,7 @@ public class Rows {
             this.filter = filter;
             // todo: handle the current playing song finish during reinitSongs()...
             reinit();
+            params.setFilter(filter);
         }
     }
 
@@ -1055,6 +1062,7 @@ public class Rows {
 
     public void setRepeatMode(RepeatMode repeatMode) {
         this.repeatMode = repeatMode;
+        params.setRepeatMode(repeatMode);
     }
 
     public boolean setRootFolders(String rootFolders) {

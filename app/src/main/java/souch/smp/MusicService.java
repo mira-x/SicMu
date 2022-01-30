@@ -549,8 +549,15 @@ public class MusicService extends Service implements
         // loop only to same track if not asked to change track (i.e. loop only on completion)
         if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
             playSame();
-        else
-            playNext();
+        else {
+            if (rows.getRepeatMode() == RepeatMode.REPEAT_NOT && rows.currPosIsLastSongInGroup()) {
+                state.setState(PlayerState.Stopped);
+                setChanged();
+            }
+            else {
+                playNext();
+            }
+        }
     }
 
     @Override
@@ -767,6 +774,7 @@ public class MusicService extends Service implements
     public boolean playingStopped() {
         final int states = PlayerState.Nope |
               PlayerState.Error |
+              PlayerState.Stopped |
               PlayerState.End;
         return state.compare(states);
     }

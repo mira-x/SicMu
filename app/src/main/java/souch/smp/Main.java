@@ -662,6 +662,9 @@ public class Main extends AppCompatActivity {
         currDuration.setText(R.string.app_name);
         playButton.setImageResource(R.drawable.ic_action_play);
         playButton.setTag(R.drawable.ic_action_play);
+        if (!seekButtonsOpened)
+            posButton.setImageDrawable(null);
+        appAnimation.stop();
     }
 
 
@@ -678,8 +681,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void toggleSeekButtons(View view) {
-        if (seekbar.getVisibility() == TextView.VISIBLE) // prevent seek buttons to be opened at app start
-            openSeekButtons(!seekButtonsOpened);
+        openSeekButtons(!seekButtonsOpened);
     }
 
 
@@ -987,7 +989,8 @@ public class Main extends AppCompatActivity {
         final CharSequence[] items = {
                 getString(R.string.action_repeat_all),
                 getString(R.string.action_repeat_group),
-                getString(R.string.action_repeat_one)
+                getString(R.string.action_repeat_one),
+                getString(R.string.action_repeat_not),
         };
 
         int checkedItem;
@@ -995,8 +998,10 @@ public class Main extends AppCompatActivity {
             checkedItem = 0;
         else if (rows.getRepeatMode() == RepeatMode.REPEAT_GROUP)
             checkedItem = 1;
-        else
+        else if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
             checkedItem = 2;
+        else
+            checkedItem = 3;
 
         altBld.setSingleChoiceItems(items, checkedItem, (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
@@ -1009,6 +1014,9 @@ public class Main extends AppCompatActivity {
                         break;
                     case 2:
                         rows.setRepeatMode(RepeatMode.REPEAT_ONE);
+                        break;
+                    case 3:
+                        rows.setRepeatMode(RepeatMode.REPEAT_NOT);
                         break;
                 }
                 dialog.dismiss(); // dismiss the alertbox after chose option
@@ -1075,7 +1083,8 @@ public class Main extends AppCompatActivity {
         switch (rows.getRepeatMode()) {
             case REPEAT_ONE: res = R.drawable.ic_menu_repeat_one; break;
             case REPEAT_GROUP: res = R.drawable.ic_menu_repeat_group; break;
-            default: res = R.drawable.ic_menu_repeat_all;
+            case REPEAT_ALL: res = R.drawable.ic_menu_repeat_all; break;
+            default: res = R.drawable.ic_menu_repeat_not;
         }
         return res;
     }
