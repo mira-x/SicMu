@@ -22,7 +22,7 @@
 
     <string name="settings_version">1.9.1</string>
 
-    <string name="permission_needed">The app needs read and write storage permission in order to show songs and play them ! When asked, allow access to photos and multimedia content on your android device.</string>
+    <string name="permission_needed">The app needs read and write storage permissions in order to show songs and play them ! When asked, please allow access to photos and multimedia content on your android device.</string>
 
     <string name="action_settings">Open settings</string>
     <string name="advanced_settings_title">Advanced settings</string>
@@ -67,7 +67,7 @@
         <item>1</item>
     </string-array>
     <string name="settings_unfold_subgroup">Unfold subgroups</string>
-    <string name="settings_unfold_subgroup_summary">If checked: tap on group unfold every subgroups and songs.</string>
+    <string name="settings_unfold_subgroup_summary">If checked: tap on group unfold every subgroup and songs.</string>
     <string name="settings_unfold_subgroup_threshold">Unfold subgroups if group</string>
     <string name="settings_unfold_subgroup_threshold_default">18</string>
     <string name="settings_unfold_subgroup_threshold_summary">has less than %d songs</string>
@@ -90,34 +90,34 @@
     <string name="settings_rescan">Rescan media files.</string>
     <string name="settings_rescan_key">RESCAN</string>
     <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
-    <string name="settings_rescan_triggered">Media Scanner Triggered...</string>
+    <string name="settings_rescan_triggered">Media scanner triggered...</string>
     <string name="settings_rescan_storage">Scan storage %s</string>
-    <string name="settings_rescan_finished">Media Scanner finished. It can takes a while before the new files appears (SicmuPlayer needs to be restarted).</string>
-    <string name="settings_rescan_purge">Media Scanner founds a file (%s) that does not exists on file system: delete it from MediaStore ?</string>
+    <string name="settings_rescan_finished">Media scanner has finished. It can take a while before the new files will become visible (possibly SicmuPlayer needs to be restarted).</string>
+    <string name="settings_rescan_purge">Media scanner found a file (%s) that does is not present in the file system: remove its entry from MediaStore ?</string>
 
     <string name="settings_media_button_start_app_title">Media buttons auto start</string>
     <string name="settings_media_button_start_app">Media buttons launch the app if not already started.</string>
 
     <string name="settings_autoscroll">Scroll to new song played</string>
-    <string name="settings_autoscroll_summary">When song start playing, scroll to it</string>
+    <string name="settings_autoscroll_summary">When a song starts playing, scroll to it</string>
 
     <string name="settings_songpos_title">Save song position</string>
-    <string name="settings_songpos">At startup song will start from its last playing position.</string>
+    <string name="settings_songpos">At starting up song will start from its last playing position.</string>
 
     <string name="settings_shuffle_title">Shuffle</string>
     <string name="settings_shuffle">Next song is chosen randomly</string>
 
     <string name="settings_scrobble_title">Scrobble</string>
-    <string name="settings_scrobble">Send details of played tracks to Last.FM or Libre.FM (requires that Scrobble Droid or Simple Last.fm Scrobbler be installed)</string>
+    <string name="settings_scrobble">Send details of played tracks to Last.FM or Libre.FM (requires that Scrobble Droid or Simple Last.fm Scrobbler installed on the device)</string>
 
     <string name="settings_vibrate_title">Vibrate on touch</string>
     <string name="settings_vibrate">Make a small vibration when touching buttons or song list.</string>
 
     <string name="settings_root_folder">Root folders</string>
-    <string name="settings_root_folder_summary">The path %s does not exists on the phone !</string>
+    <string name="settings_root_folder_summary">The path %s does not exists on the device!</string>
 
     <string name="settings_accelerometer">Accelerometer shake</string>
-    <string name="settings_accelerometer_summary">Go to next song when shaked.</string>
+    <string name="settings_accelerometer_summary">Go to next song when shaken.</string>
     <string name="settings_accelerometer_threshold">Shake force threshold</string>
     <string name="settings_default_shake_threshold">100</string>
     <string name="settings_no_accelerometer">Your device has no accelerometer. Shake functionality is disabled.</string>
@@ -135,13 +135,13 @@
     <string name="help_start_group">Start playing from a group</string>
     <string name="help_start_group_summary">Long tap on a group to start the first song it contains.</string>
     <string name="help_next_group">Long tap on next</string>
-    <string name="help_next_group_summary">Long click on next will start playing next group (same for previous group)</string>
+    <string name="help_next_group_summary">Long top on \'next\' button will start playing next group (same for previous group)</string>
     <string name="help_unfold_group">Fold / unfold group</string>
     <string name="help_unfold_group_summary">Tap on a group to fold / unfold it.</string>
     <string name="help_scroll">Scroll to current song</string>
-    <string name="help_scroll_summary">Press the button to the right of \'next button\' to scroll the list to current playing song. Long tap fold everything except current song.</string>
+    <string name="help_scroll_summary">Press the button to the right of \'next\' button to scroll the list to currently playing song. Long tap folds everything except current song.</string>
     <string name="help_lock">Disable lock screen</string>
-    <string name="help_lock_summary">Open the padlock button to disable the lock screen (it prevents locking only when the app is on foreground; do not work on some device).</string>
+    <string name="help_lock_summary">Open the padlock button to disable the lock screen (it prevents locking only when the app is on foreground; does not work on some devices).</string>
     <string name="help_root_folders">Root folders</string>
     <string name="help_root_folders_summary">Root folders can be customized from advanced settings: it is used only for hiding the first portion of folders path when songs are sorted by folder. To put several root folders, separate path using a semi-colon.</string>
     <string name="help_background">Background</string>
@@ -153,9 +153,9 @@
     <string name="help_mediabutton">Media buttons</string>
     <string name="help_mediabutton_summary">Media buttons (like in bluetooth headphones) can control the app (next, prev, pause/play).</string>
     <string name="help_mediabutton_autostart">Media buttons auto start</string>
-    <string name="help_mediabutton_autostart_summary">If the app is closed media button will start it. To disable media button ability to start the app automatically uncheck settings->media buttons auto start.</string>
+    <string name="help_mediabutton_autostart_summary">If the app is closed pressing a media button will start it. To disable media button ability to start the app automatically uncheck settings->media buttons auto start.</string>
     <string name="help_details_menu">Song details (covert art, ...)</string>
-    <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show current song details (album\'s cover art, ...)</string>
+    <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show details of current song (album\'s cover art, ...)</string>
     <string name="help_seek_menu">Seek menu</string>
     <string name="help_seek_menu_summary">Click at the top right to open seek menu. Long tap on next/prev will seek forward or backward continuously.</string>
 

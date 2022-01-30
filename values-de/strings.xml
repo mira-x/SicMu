@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SicMu Player - Lightweight music player for Android
+  Copyright (C) 2015  Mathieu Souchaud
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+
+    <string name="app_name">SicMu Player</string>
+
+    <string name="settings_version">1.9</string>
+
+    <string name="permission_needed">Diese App benötigt Lese- und Schreib-Berechtigung auf den Gerätespeicher, um Lieder zu finden, anzuzeigen und abspielen! Bitte Zugriff auf Fotos und Medien erlauben, wenn das Betriebssystem darum bittet.</string>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="advanced_settings_title">Erweiterte Einstellungen</string>
+    <string name="action_shake_disabled">Schütteln zum Anhalten</string>
+    <string name="action_shake_enabled">Schütteln zum Abspielen</string>
+
+    <string name="action_sort_folder">Ordner</string>
+    <string name="action_sort_artist">Künstler</string>
+    <string name="action_sort_tree">Verzeichnisbaum</string>
+    <string name="action_sort_by">Sortieren nach:</string>
+    <string name="action_sort">Lieder sortieren nach:</string>
+
+    <string name="action_shuffle">Zufälliges Abspielen</string>
+    <string name="action_no_shuffle">Nacheinander Abspielen</string>
+
+    <string name="action_music_mode">Musik-Modus</string>
+    <string name="action_edit_mode">Eingabe-Modus</string>
+
+    <string name="app_playing">SicMu spielt</string>
+
+    <string name="explain_playback_speed">Nach oben/unten bzw. links/rechts wischen, um die Abspielgeschwindigkeit zu erhöhen/verringern.</string>
+
+    <string name="focus_error">Zugriff auf Audio nicht möglich! Bitte App neustarten.</string>
+
+    <string name="settings_title">Einstellungen</string>
+
+    <string name="action_fold">Einklappen</string>
+    <string name="action_unfold">Ausklappen</string>
+
+    <string name="settings_song_view">Liedansicht</string>
+    <string name="settings_fold_title">Ein/Ausklappen Ausgangszustand</string>
+    <string-array name="settings_fold_entries">
+        <item>Eingeklappt</item>
+        <item>Ausgeklappt</item>
+    </string-array>
+    <string-array name="settings_fold_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="settings_unfold_subgroup">Untergruppen ausklappen</string>
+    <string name="settings_unfold_subgroup_summary">Wenn ausgewählt, ist es notwendig alle Untergruppen und Lieder einzeln auszuklappen.</string>
+    <string name="settings_unfold_subgroup_threshold">Untergruppe ausklappen,</string>
+    <string name="settings_unfold_subgroup_threshold_default">18</string>
+    <string name="settings_unfold_subgroup_threshold_summary">wenn sie weniger als %d Lieder enthält.</string>
+
+
+    <string name="settings_song_view_font">Schrift für Liedansicht</string>
+    <string name="settings_text_size_choosed">Wähle Schriftgröße</string>
+    <string name="settings_text_size_choosed_default">false</string>
+    <string name="settings_text_size">Schriftgröße:</string>
+    <string name="settings_text_size_small">klein</string>
+    <string name="settings_text_size_bold">fett</string>
+    <string name="settings_text_size_big">Größe für fette Schrift</string>
+    <string name="settings_text_size_big_default">19</string>
+    <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
+    <string name="settings_text_size_ratio_default">1.1</string>
+    <string name="settings_text_size_regular">Größe für kleine Schrift</string>
+    <string name="settings_text_size_regular_default">15</string>
+
+    <string name="settings_rescan_title">Neu einlesen</string>
+    <string name="settings_rescan">Mediendateien neu einlesen.</string>
+    <string name="settings_rescan_key">RESCAN</string>
+    <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
+    <string name="settings_rescan_triggered">Mediendateien einlesen gestartet...</string>
+    <string name="settings_rescan_storage">Lese Speicherverzeichnis %s</string>
+    <string name="settings_rescan_finished">Mediendateien Einlesen beendet. Es kann ein bisschen dauern, bis die neu eingelesenen Daten erscheinen (evtl. SicmuPlayer neu starten).</string>
+    <string name="settings_rescan_purge">Mediendateien Einlesen hat (%s) frühere Einträge nicht mehr gefunden. Einträge wurden aus der Liste gelöscht.</string>
+
+    <string name="settings_media_button_start_app_title">Starten durch Media-Buttons</string>
+    <string name="settings_media_button_start_app">Media-Buttons starten die App, wenn sie noch nicht läuft.</string>
+
+    <string name="settings_autoscroll">Abgespielter Titel</string>
+    <string name="settings_autoscroll_summary">In Ansicht zu Lied gehen, wenn abgespielt</string>
+
+    <string name="settings_songpos_title">Speichern der Abspielposition</string>
+    <string name="settings_songpos">Lied beim nächsten Mal von gespeicherter Position abspielen.</string>
+
+    <string name="settings_shuffle_title">Zufälliges Abspielen</string>
+    <string name="settings_shuffle">Nächstes abgespieltes Lied zufällig auswählen</string>
+
+    <string name="settings_scrobble_title">Scrobble</string>
+    <string name="settings_scrobble">Informationen zum abgespielten Lied an Last.FM oder Libre.FM schicken (Scrobble Droid oder Simple Last.fm Scrobbler müssen installiert sein)</string>
+
+    <string name="settings_vibrate_title">Vibrieren bei Berührung</string>
+    <string name="settings_vibrate">Kurz vibrieren, wenn Buttons oder die Liederliste berührt werden.</string>
+
+    <string name="settings_root_folder">Wurzelverzeichnisse</string>
+    <string name="settings_root_folder_summary">Der Dateipfad %s ist auf dem Gerät nicht vorhanden !</string>
+
+    <string name="settings_accelerometer">Schütteln</string>
+    <string name="settings_accelerometer_summary">Bei Schütteln des Geräts zum nächsten Lied springen.</string>
+    <string name="settings_accelerometer_threshold">Stärke des Schüttelns</string>
+    <string name="settings_default_shake_threshold">100</string>
+    <string name="settings_no_accelerometer">Dein Gerät hat keinen Beschleunigungsmesser! Schüttelfunktion nicht verfügbar.</string>
+
+    <string name="settings_rating">Leistungspriorität</string>
+    <string name="settings_rating_summary">CPU immer mit voller Leistung nutzen.</string>
+
+    <string name="settings_help">Hilfe</string>
+    <string name="settings_help_summary">... wenn Du nicht mehr weiterweißt...</string>
+
+    <string name="help_start_song">Lied abspielen</string>
+    <string name="help_start_song_summary">Tippe auf ein Lied, um es abzuspielen.</string>
+    <string name="help_start_group">Aus einer Gruppe abspielen</string>
+    <string name="help_start_group_summary">Langes Tippen auf eine Gruppe, um das erste Lied der Gruppe abzuspielen.</string>
+    <string name="help_next_group">Langes Tippen auf "Nächstes"</string>
+    <string name="help_next_group_summary">Langes Tippen auf "Nächstes" spielt das erste Lied der nächsten Gruppe ab (desgleichen bei "Vorheriges" für die vorherige Gruppe)</string>
+    <string name="help_unfold_group">Gruppe ein/ausklappen</string>
+    <string name="help_unfold_group_summary">Auf eine Gruppe tippen, um sie ein- bzw. auszuklappen.</string>
+    <string name="help_scroll">Aktuelles Lied in Liste zeigen</string>
+    <string name="help_scroll_summary">Den Button rechts von "Nächstes" drücken, um in der Liederliste zum gerade abgespielten Lied zu springen. Langes Tippen klappt alle Gruppen bis auf das gerade abgespielte Lied zu.</string>
+    <string name="help_lock">Bildschirmsperre ausschalten</string>
+    <string name="help_lock_summary">Padlock-Button, um die Bildschirmsperre auszuschalten (Sperre wird nur verhindern, wenn die App im Vordergrund läuft; nicht auf allen Geräten).</string>
+    <string name="help_root_folders">Wurzelverzeichnisse</string>
+    <string name="help_root_folders_summary">Die Festlegung der Wurzelverzeichnisse erfolgt in den Erweiterten Einstellungen: sie werden nur verwendet, um den vorderen Teil des Verzeichnispfades zu verbergen, wenn die Lieder nach Verzeichnis geordnet angezeigt werden. Mehrere Wurzelverzeichniseinträge werden durch Semikolon getrennt angegeben.</string>
+    <string name="help_background">Hintergrund</string>
+    <string name="help_background_summary">Wenn ein Lied abgespielt wird, lässt das Drücken der HOME oder Zurück-Buttons die App im Hintergrund weiterlaufen.</string>
+    <string name="help_quit">Beenden</string>
+    <string name="help_quit_summary">App wird sofort beenden, wenn kein Lied mehr spielt oder der Zurück-Button gedrückt wird. Android kann die App beenden, wenn es die Systemresource benötigt.</string>
+    <string name="help_stop">Beibehalten</string>
+    <string name="help_stop_summary">Die App bleibt weiter im Speicher, auch wenn gerade kein Lied abgespielt is und der HOME-Button gedrückt wird. Wenn Android kann die App beenden, wenn es die Systemresourcen benötigt.</string>
+    <string name="help_mediabutton">Media-Buttons</string>
+    <string name="help_mediabutton_summary">Media-Buttons (z.B. in Bluetooth-Kopfhörern) können die App steuern (Nächstes, Vorheriges, Pause/Abspielen).</string>
+    <string name="help_mediabutton_autostart">Starten durch Media-Buttons</string>
+    <string name="help_mediabutton_autostart_summary">Wenn die App nicht läuft, wird sie durch drücken der Media-Buttons gestarted. Um das Starten der App durch Media-Buttons auszuschalten, in den Einstellungen "Starten durch Media-Buttons" abwählen.</string>
+    <string name="help_details_menu">Liedinformationen (Albumbild, ...)</string>
+    <string name="help_details_menu_summary">Auf das Sicmu\'s Icon tippen, um Informationen zum abgespielten Lied anzuzeigen (Albumbild, ...)</string>
+    <string name="help_seek_menu">Sprungmenü</string>
+    <string name="help_seek_menu_summary">Rechts oben in der Menüleiste tippen, um das Sprungmenü ein-/auszuklappen. Langes Tippen auf "Nächstes"/"Vorheriges" spult anhaltend vor/zurück.</string>
+
+
+    <string name="settings_misc">Verschiedenes</string>
+
+    <string name="settings_about">Über</string>
+    <string name="settings_about_summary">Informationen über die App und ihren Autor.</string>
+
+    <string name="settings_version_title">Version</string>
+    <string name="settings_author_title">Autor</string>
+    <string name="settings_author">Mathieu Souchaud</string>
+    <string name="settings_source_title">Quellen</string>
+    <string name="settings_source">https://github.com/souch/SMP</string>
+    <string name="settings_licence_title">Lizenz</string>
+    <string name="settings_licence">GPLv3</string>
+    <string name="settings_donate_key">donate</string>
+    <string name="settings_donate_title">Spenden</string>
+    <string name="settings_donate_summary">Klicke hier, wenn Du nicht mehr ohne die App leben kannst...</string>
+    <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>
+
+    <string name="settings_thanks">Danksagungen</string>
+    <string name="settings_thanks_icons">Icons</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (Icons von iconfinder.com)</string>
+    <string name="settings_thanks_doc">Tutorial</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (Tutorial zum Erstellen eines Music Players auf Android)</string>
+    <string name="settings_thanks_i15n">Übersetzung</string>
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (Serbisch), Jerônimo Cordoni Pellegrini (Portugisisch), Mehmet Gülmen (Türkisch), Martin Scherbaum (Deutsch)</string>
+    <string name="settings_locked">Gesperrt</string>
+    <string name="settings_unlocked">Entsperrt</string>
+
+    <string name="action_repeat_title">Wiederholen</string>
+    <string name="action_repeat_all">Alle</string>
+    <string name="action_repeat_one">Lied</string>
+    <string name="action_repeat_first_group">Erste Gruppe</string>
+    <string name="action_repeat_group">Gruppe</string>
+    <string name="state_repeat">Wiederholungseinstellung:</string>
+    <string name="state_repeat_all">Alle wiederholen</string>
+    <string name="state_repeat_one">Lied wiederholen</string>
+    <string name="state_repeat_group">Gruppe wiederholen</string>
+</resources>
