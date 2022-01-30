@@ -161,13 +161,9 @@
     <string name="action_repeat_all">Tudo</string>
     <string name="action_repeat_one">Faixa</string>
     <string name="action_repeat_group">Grupo</string>
-    <string name="state_repeat_all">tudo</string>
-    <string name="state_repeat_one">faixa</string>
-    <string name="state_repeat_group">grupo</string>
 
     <string name="action_music_mode">Modo de música</string>
     <string name="action_edit_mode">Modo de edição</string>
-    <string name="action_shuffle">Embaralhar</string>
 
 
 </resources>

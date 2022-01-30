@@ -17,11 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-
-    <string name="app_name">SicMu Player</string>
-
-    <string name="settings_version">1.9</string>
-
     <string name="permission_needed">Diese App benötigt Lese- und Schreib-Berechtigung auf den Gerätespeicher, um Lieder zu finden, anzuzeigen und abspielen! Bitte Zugriff auf Fotos und Medien erlauben, wenn das Betriebssystem darum bittet.</string>
 
     <string name="action_settings">Einstellungen</string>
@@ -34,9 +29,6 @@
     <string name="action_sort_tree">Verzeichnisbaum</string>
     <string name="action_sort_by">Sortieren nach:</string>
     <string name="action_sort">Lieder sortieren nach:</string>
-
-    <string name="action_shuffle">Zufälliges Abspielen</string>
-    <string name="action_no_shuffle">Nacheinander Abspielen</string>
 
     <string name="action_music_mode">Musik-Modus</string>
     <string name="action_edit_mode">Eingabe-Modus</string>
@@ -184,10 +176,5 @@
     <string name="action_repeat_title">Wiederholen</string>
     <string name="action_repeat_all">Alle</string>
     <string name="action_repeat_one">Lied</string>
-    <string name="action_repeat_first_group">Erste Gruppe</string>
     <string name="action_repeat_group">Gruppe</string>
-    <string name="state_repeat">Wiederholungseinstellung:</string>
-    <string name="state_repeat_all">Alle wiederholen</string>
-    <string name="state_repeat_one">Lied wiederholen</string>
-    <string name="state_repeat_group">Gruppe wiederholen</string>
 </resources>

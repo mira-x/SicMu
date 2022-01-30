@@ -187,15 +187,11 @@
     <string name="settings_locked">Do not prevent lock</string>
     <string name="settings_unlocked">Prevent lock</string>
 
-    <string name="action_repeat_title">Repeat</string>
-    <string name="action_repeat_all">All</string>
-    <string name="action_repeat_one">Track</string>
-    <string name="action_repeat_first_group">First group</string>
-    <string name="action_repeat_group">Group</string>
-    <string name="state_repeat">Repeat mode:</string>
-    <string name="state_repeat_all">all</string>
-    <string name="state_repeat_one">track</string>
-    <string name="state_repeat_group">group</string>
+    <string name="action_repeat_title">Repeat mode</string>
+    <string name="action_repeat_all">Repeat all songs</string>
+    <string name="action_repeat_one">Repeat same track</string>
+    <string name="action_repeat_group">Repeat same folder</string>
+    <string name="action_repeat_not">Stop at the end of folder</string>
 
     <string name="enabled">enabled</string>
     <string name="disabled">disabled</string>
