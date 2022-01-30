@@ -678,7 +678,8 @@ public class Main extends AppCompatActivity {
     }
 
     public void toggleSeekButtons(View view) {
-        openSeekButtons(!seekButtonsOpened);
+        if (seekbar.getVisibility() == TextView.VISIBLE) // prevent seek buttons to be opened at app start
+            openSeekButtons(!seekButtonsOpened);
     }
 
 
