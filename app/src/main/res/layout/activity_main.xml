@@ -389,7 +389,7 @@
         android:id="@+id/song_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/action_button"
+        android:layout_above="@+id/more_buttons"
         android:layout_below="@+id/details_layout"
         android:layout_alignParentLeft="true"
         android:choiceMode="singleChoice"
@@ -398,11 +398,98 @@
         android:scrollbarThumbVertical="@drawable/fastscroll_thumb_holo"
         android:scrollbars="vertical" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/more_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"></androidx.appcompat.widget.Toolbar>
+        android:layout_above="@+id/action_button"
+        android:orientation="horizontal"
+        android:weightSum="301">
+
+        <!--
+        icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
+        done by Daniele De Santis (Creative Commons (Attribution 3.0 Unported)),
+        found on iconfinder.com. Color and dimension has been changed.
+        -->
+        <ImageButton
+            android:id="@+id/settings_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:onClick="openSettings"
+            android:src="@drawable/ic_menu_settings" />
+
+        <!--
+        <ImageButton
+            android:id="@+id/help_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:onClick="openSettings"
+            android:src="@drawable/ic_menu_help" />
+            -->
+
+        <ImageButton
+            android:id="@+id/text_size_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_weight="50"
+            android:onClick="openTextSize"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_text_big" />
+
+        <ImageButton
+            android:id="@+id/repeat_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:scaleType="fitCenter"
+            android:longClickable="true"
+            android:onClick="openRepeat"
+            android:src="@drawable/ic_menu_repeat_all" />
+
+        <ImageButton
+            android:id="@+id/shuffle_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:longClickable="true"
+            android:onClick="openShuffle"
+            android:src="@drawable/ic_menu_no_shuffle" />
+
+        <ImageButton
+            android:id="@+id/rating_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:longClickable="true"
+            android:padding="14dp"
+            android:scaleType="centerInside"
+            android:onClick="openMinRating"
+            app:srcCompat="@drawable/ic_star_5_highlight" />
+
+        <ImageButton
+            android:id="@+id/sort_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:scaleType="center"
+            android:onClick="openSort"
+            android:longClickable="true"
+            android:src="@drawable/ic_menu_tree" />
+
+    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/action_button"
@@ -459,62 +546,15 @@
             android:onClick="gotoCurrSong"
             android:src="@drawable/action_goto_play" />
 
-        <!--
-        icon ic_action_locked and ic_action_unlocked
-        done by WPZOOM (Creative Commons (Attribution-Share Alike 3.0 Unported))
-        found on iconfinder.com. Color and dimension has been changed.
-        -->
-        <LinearLayout
+        <ImageButton
+            android:id="@+id/more_button"
+            style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="51"
-            android:onClick="settings"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp">
-
-            <LinearLayout
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/view_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_text_big" />
-
-                <ImageView
-                    android:id="@+id/view_repeat"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_repeat_all" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/view_lock"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_action_locked" />
-
-                <ImageView
-                    android:id="@+id/view_sort"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_tree" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_weight="50"
+            android:longClickable="true"
+            android:onClick="toggleMoreButtons"
+            app:srcCompat="@drawable/ic_action_note" />
 
     </LinearLayout>
 

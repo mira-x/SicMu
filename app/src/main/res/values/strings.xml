@@ -35,11 +35,10 @@
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort">Sort songs by:</string>
 
-    <string name="action_shuffle">Shuffle enabled</string>
-    <string name="action_no_shuffle">Shuffle disabled</string>
-
     <string name="action_music_mode">Music mode</string>
     <string name="action_edit_mode">Edit mode</string>
+
+    <string name="action_rating">Play songs with rating >=</string>
 
     <string name="action_play">play</string>
     <string name="action_pause">pause</string>
@@ -126,6 +125,8 @@
     <string name="settings_rating">Enable rating</string>
     <string name="settings_rating_summary">Lower a bit CPU consumption if disabled</string>
 
+    <string name="settings_min_rating">Minimum rating</string>
+
     <string name="settings_help">Help</string>
     <string name="settings_help_summary">If you are a bit lost.</string>
 
@@ -196,5 +197,7 @@
     <string name="state_repeat_one">track</string>
     <string name="state_repeat_group">group</string>
 
+    <string name="enabled">enabled</string>
+    <string name="disabled">disabled</string>
 
 </resources>

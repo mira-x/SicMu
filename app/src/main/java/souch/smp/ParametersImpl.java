@@ -134,6 +134,14 @@ public class ParametersImpl implements Parameters {
         getEditor().putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).commit();
     }
 
+    public int getMinRating() {
+        return getPref().getInt(PrefKeys.MIN_RATING.name(),1);
+    }
+
+    public void setMinRating(int rating) {
+        getEditor().putInt(PrefKeys.MIN_RATING.name(), rating).commit();
+    }
+
     public float getShakeThreshold() {
         return Float.valueOf(getPref().getString(PrefKeys.SHAKE_THRESHOLD.name(),
                 context.getString(R.string.settings_default_shake_threshold)));

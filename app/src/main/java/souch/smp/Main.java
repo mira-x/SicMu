@@ -36,8 +36,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +56,6 @@ import java.util.TimerTask;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -108,6 +105,8 @@ public class Main extends AppCompatActivity {
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
     private LinearLayout warningLayout;
+
+    private LinearLayout moreButtonsLayout;
 
     private ImageButton albumImage;
     private TextView songTitle, songAlbum, songArtist, warningText;
@@ -284,6 +283,11 @@ public class Main extends AppCompatActivity {
         ratingButtons.add((ImageButton) findViewById(R.id.rating_button_5));
         details_rating_layout = (LinearLayout) findViewById(R.id.details_rating);
 
+        moreButtonsLayout = findViewById(R.id.more_buttons);
+        moreButtonsLayout.setVisibility(View.GONE);
+        setShuffleButton();
+        setTextSizeButton();
+
         playbackSpeedText = (TextView) findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeTop() {
@@ -302,17 +306,6 @@ public class Main extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, Toast.LENGTH_LONG).show();
             }
         });
-        // needed when noactionbar theme is choosed
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // remove title and overflow button
-        getSupportActionBar().hide();
-        //toolbar.hideOverflowMenu();
-        //toolbar.getMenu().clear();
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setHomeButtonEnabled(false);
-        //getSupportActionBar().setDisplayShowHomeEnabled(false);
-        //getSupportActionBar().setTitle(null);
     }
 
 
@@ -389,7 +382,9 @@ public class Main extends AppCompatActivity {
                 }
             }, 100);
 
-            setImagesState();
+            setRepeatButton();
+            setSortButton();
+            setMinRatingButton();
 
             // Associate app to music files (start music from a file browser)
             Intent intent = getIntent();
@@ -937,38 +932,9 @@ public class Main extends AppCompatActivity {
 ////        }
 //    }
 
-
-    public void settings(View view) {
-        openOptionsMenu();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        if (musicSrv != null) {
-            setFilterItem(menu.findItem(R.id.action_sort));
-            setShuffleItem(menu.findItem(R.id.action_shuffle));
-//            setShakeItem(menu.findItem(R.id.action_shake));
-            setChoosedTextSizeItem(menu.findItem(R.id.action_text_size));
-            setLockItem(menu.findItem(R.id.action_lock_unlock));
-            setRepeatItem(menu.findItem(R.id.action_repeat));
-        }
-
-        return true;
-    }
-
-
     private void openSortMenu() {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
-        //altBld.setIcon(R.drawable.ic_menu_tree);
+        altBld.setIcon(getSortResId());
         altBld.setTitle(getString(R.string.action_sort));
         final CharSequence[] items = {
                 getString(R.string.action_sort_tree),
@@ -984,31 +950,28 @@ public class Main extends AppCompatActivity {
         else
             checkedItem = 2;
 
-        altBld.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int item) {
-                Toast.makeText(getApplicationContext(),
-                        getString(R.string.action_sort) + " " + items[item], Toast.LENGTH_SHORT).show();
-                if (musicSrv != null) {
-                    Filter oldFilter = rows.getFilter();
-                    switch (item) {
-                        case 0:
-                            rows.setFilter(Filter.TREE);
-                            break;
-                        case 1:
-                            rows.setFilter(Filter.FOLDER);
-                            break;
-                        case 2:
-                            rows.setFilter(Filter.ARTIST);
-                            break;
-                    }
-                    if (oldFilter != rows.getFilter()) {
-                        songAdt.notifyDataSetChanged();
-                        unfoldAndscrollToCurrSong();
-                        setImagesState();
-                    }
-                    dialog.dismiss(); // dismiss the alertbox after chose option
+        altBld.setSingleChoiceItems(items, checkedItem, (DialogInterface dialog, int item) -> {
+            if (musicSrv != null) {
+                Filter oldFilter = rows.getFilter();
+                switch (item) {
+                    case 0:
+                        rows.setFilter(Filter.TREE);
+                        break;
+                    case 1:
+                        rows.setFilter(Filter.FOLDER);
+                        break;
+                    case 2:
+                        rows.setFilter(Filter.ARTIST);
+                        break;
                 }
+                if (oldFilter != rows.getFilter()) {
+                    songAdt.notifyDataSetChanged();
+                    unfoldAndscrollToCurrSong();
+                    setSortButton();
+                }
+                dialog.dismiss(); // dismiss the alertbox after chose option
+//              Toast.makeText(getApplicationContext(),
+//                  getString(R.string.action_sort) + " " + items[item], Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alert = altBld.create();
@@ -1018,7 +981,7 @@ public class Main extends AppCompatActivity {
 
     private void openRepeatMenu() {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
-        //altBld.setIcon(R.drawable.ic_menu_tree);
+        altBld.setIcon(getRepeatResId());
         altBld.setTitle(getString(R.string.action_repeat_title));
         final CharSequence[] items = {
                 getString(R.string.action_repeat_all),
@@ -1034,225 +997,148 @@ public class Main extends AppCompatActivity {
         else
             checkedItem = 2;
 
-        altBld.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int item) {
-                Toast.makeText(getApplicationContext(),
-                        getString(R.string.action_repeat_title) + " " + items[item], Toast.LENGTH_SHORT).show();
-                if (musicSrv != null) {
-                    switch (item) {
-                        case 0:
-                            rows.setRepeatMode(RepeatMode.REPEAT_ALL);
-                            break;
-                        case 1:
-                            rows.setRepeatMode(RepeatMode.REPEAT_GROUP);
-                            break;
-                        case 2:
-                            rows.setRepeatMode(RepeatMode.REPEAT_ONE);
-                            break;
-                    }
-                    dialog.dismiss(); // dismiss the alertbox after chose option
-                    setImagesState();
+        altBld.setSingleChoiceItems(items, checkedItem, (DialogInterface dialog, int item) -> {
+            if (musicSrv != null) {
+                switch (item) {
+                    case 0:
+                        rows.setRepeatMode(RepeatMode.REPEAT_ALL);
+                        break;
+                    case 1:
+                        rows.setRepeatMode(RepeatMode.REPEAT_GROUP);
+                        break;
+                    case 2:
+                        rows.setRepeatMode(RepeatMode.REPEAT_ONE);
+                        break;
                 }
+                dialog.dismiss(); // dismiss the alertbox after chose option
+                setRepeatButton();
+//              Toast.makeText(getApplicationContext(),
+//                  getString(R.string.action_repeat_title) + " " + items[item], Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alert = altBld.create();
         alert.show();
     }
 
-    // main menu selected
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(this, Settings.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.action_shuffle:
-                params.setShuffle(!params.getShuffle());
-                setShuffleItem(item);
-                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_LONG).show();
-                return true;
-
-            case R.id.action_repeat:
-                openRepeatMenu();
-                return true;
-
-            case R.id.action_sort:
-                openSortMenu();
-                return true;
-
-            case R.id.action_text_size:
-                if(musicSrv != null) {
-                    params.setChooseTextSize(!params.getChoosedTextSize());
-                    setChoosedTextSizeItem(item);
-                    applyTextSize(params);
-                    Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_LONG).show();
-                    songAdt.notifyDataSetChanged();
-                    setImagesState();
-                }
-                return true;
-
-            case R.id.action_lock_unlock:
-                noLock = !noLock;
-                applyLock();
-                setLockItem(item);
-                setImagesState();
-                return true;
-        }
-
-
-        openOptionsMenu();
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setFilterItem(MenuItem item) {
-        if (item == null)
+    private void openShuffleMenu() {
+        if (musicSrv == null)
             return;
 
-        String sortBy = getString(R.string.action_sort) + " ";
-        switch (rows.getFilter()) {
-            case ARTIST:
-                item.setIcon(R.drawable.ic_menu_artist);
-                item.setTitle(sortBy + getString(R.string.action_sort_artist));
-                break;
-            case FOLDER:
-                item.setIcon(R.drawable.ic_menu_folder);
-                item.setTitle(sortBy + getString(R.string.action_sort_folder));
-                break;
-            case TREE:
-                item.setIcon(R.drawable.ic_menu_tree);
-                item.setTitle(sortBy + getString(R.string.action_sort_tree));
-                break;
-        }
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(getShuffleResId());
+        altBld.setTitle(getString(R.string.settings_shuffle_title));
+        final CharSequence[] items = {
+                getString(R.string.disabled), getString(R.string.enabled)
+        };
+        altBld.setSingleChoiceItems(items, params.getShuffle() ? 1 : 0, (DialogInterface dialog, int item) -> {
+                params.setShuffle(item == 1);
+                dialog.dismiss(); // dismiss the alertbox after chose option
+                setShuffleButton();
+//              Toast.makeText(getApplicationContext(),
+//                   getString(R.string.settings_shuffle_title) + " " + items[item],
+//                   Toast.LENGTH_SHORT).show();
+            }
+        );
+        AlertDialog alert = altBld.create();
+        alert.show();
     }
 
-    private void setRepeatItem(MenuItem item) {
-        if (item == null)
+    private void openRatingMenu() {
+        if (musicSrv == null)
             return;
 
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(getMinRatingResId());
+        altBld.setTitle(getString(R.string.action_rating));
+        final CharSequence[] items = {
+                "1", "2", "3", "4", "5"
+        };
+
+        altBld.setSingleChoiceItems(items, musicSrv.getMinRating() - 1,
+                (DialogInterface dialog, int item) -> {
+            if (musicSrv != null) {
+                musicSrv.setMinRating(item + 1);
+                setMinRatingButton();
+                dialog.dismiss(); // dismiss the alertbox after chose option
+//              Toast.makeText(getApplicationContext(),
+//                  getString(R.string.action_rating) + " " + items[item],
+//                  Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog alert = altBld.create();
+        alert.show();
+    }
+
+    private int getRepeatResId() {
+        int res;
         switch (rows.getRepeatMode()) {
-            case REPEAT_ALL:
-                item.setIcon(R.drawable.ic_menu_repeat_all);
-                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_all));
-                break;
-            case REPEAT_ONE:
-                item.setIcon(R.drawable.ic_menu_repeat_one);
-                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_one));
-                break;
-            case REPEAT_GROUP:
-                item.setIcon(R.drawable.ic_menu_repeat_group);
-                item.setTitle(getString(R.string.state_repeat) + " " + getString(R.string.state_repeat_group));
-                break;
+            case REPEAT_ONE: res = R.drawable.ic_menu_repeat_one; break;
+            case REPEAT_GROUP: res = R.drawable.ic_menu_repeat_group; break;
+            default: res = R.drawable.ic_menu_repeat_all;
         }
+        return res;
     }
 
-    private void setImagesState() {
-        ImageView img;
+    private int getTextSizeResId() {
+        if (params.getChoosedTextSize())
+            return R.drawable.ic_menu_text_big;
+        else
+            return R.drawable.ic_menu_text_regular;
+    }
 
-        img = (ImageView) findViewById(R.id.view_repeat);
-        switch (rows.getRepeatMode()) {
-            case REPEAT_ALL:
-                img.setImageResource(R.drawable.ic_menu_repeat_all);
-                break;
-            case REPEAT_ONE:
-                img.setImageResource(R.drawable.ic_menu_repeat_one);
-                break;
-            case REPEAT_GROUP:
-                img.setImageResource(R.drawable.ic_menu_repeat_group);
-                break;
-        }
-
-        img = (ImageView) findViewById(R.id.view_text);
-        if (params.getChoosedTextSize()) {
-            img.setImageResource(R.drawable.ic_menu_text_big);
-        }
-        else {
-            img.setImageResource(R.drawable.ic_menu_text_regular);
-        }
-
-        img = (ImageView) findViewById(R.id.view_lock);
-        if(noLock) {
-            img.setImageResource(R.drawable.ic_action_unlocked);
-        }
-        else {
-            img.setImageResource(R.drawable.ic_action_locked);
-        }
-
-        img = (ImageView) findViewById(R.id.view_sort);
+    private int getSortResId() {
+        int res;
         switch (rows.getFilter()) {
-            case ARTIST:
-                img.setImageResource(R.drawable.ic_menu_artist);
-                break;
-            case FOLDER:
-                img.setImageResource(R.drawable.ic_menu_folder);
-                break;
-            case TREE:
-                img.setImageResource(R.drawable.ic_menu_tree);
-                break;
+            case ARTIST: res = R.drawable.ic_menu_artist; break;
+            case FOLDER: res = R.drawable.ic_menu_folder; break;
+            default: res = R.drawable.ic_menu_tree;
         }
+        return res;
     }
 
-    private void setShuffleItem(MenuItem item) {
-        if (item == null)
-            return;
-
-        if (params.getShuffle()) {
-            item.setIcon(R.drawable.ic_menu_shuffle);
-            item.setTitle(getString(R.string.action_shuffle));
+    private int getMinRatingResId() {
+        int res;
+        switch (musicSrv.getMinRating()) {
+            case 5: res = R.drawable.ic_star_5_highlight; break;
+            case 4: res = R.drawable.ic_star_4_highlight; break;
+            case 3: res = R.drawable.ic_star_3_highlight; break;
+            case 2: res = R.drawable.ic_star_2_highlight; break;
+            default: res = R.drawable.ic_star_1_highlight;
         }
-        else {
-            item.setIcon(R.drawable.ic_menu_no_shuffle);
-            item.setTitle(getString(R.string.action_no_shuffle));
-        }
+        return res;
     }
 
-    private void setShakeItem(MenuItem item) {
-        if (item == null)
-            return;
-
-        if (musicSrv.getEnableShake()) {
-            item.setIcon(R.drawable.ic_menu_shake_checked);
-            item.setTitle(R.string.action_shake_enabled);
-        } else {
-            item.setIcon(R.drawable.ic_menu_shake);
-            item.setTitle(R.string.action_shake_disabled);
-        }
+    private int getShuffleResId() {
+        if (params.getShuffle())
+            return R.drawable.ic_menu_shuffle;
+        else
+            return R.drawable.ic_menu_no_shuffle;
     }
 
-    private void setChoosedTextSizeItem(MenuItem item) {
-        if (item == null)
-            return;
-
-        if (params.getChoosedTextSize()) {
-            item.setIcon(R.drawable.ic_menu_text_big);
-            item.setTitle(getString(R.string.settings_text_size) + " " + getString(R.string.settings_text_size_bold));
-        }
-        else {
-            item.setIcon(R.drawable.ic_menu_text_regular);
-            item.setTitle(getString(R.string.settings_text_size) + " " + getString(R.string.settings_text_size_small));
-        }
+    private void setRepeatButton() {
+        ImageView img = findViewById(R.id.repeat_button);
+        img.setImageResource(getRepeatResId());
     }
 
-
-    private void setLockItem(MenuItem item) {
-        if (item == null)
-            return;
-
-        if(noLock) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            item.setIcon(R.drawable.ic_action_unlocked);
-            item.setTitle(getString(R.string.settings_unlocked));
-        }
-        else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            item.setIcon(R.drawable.ic_action_locked);
-            item.setTitle(getString(R.string.settings_locked));
-        }
+    private void setTextSizeButton() {
+        ImageView img = findViewById(R.id.text_size_button);
+        img.setImageResource(getTextSizeResId());
     }
 
+    private void setSortButton() {
+        ImageView img = findViewById(R.id.sort_button);
+        img.setImageResource(getSortResId());
+    }
+
+    private void setShuffleButton() {
+        ImageButton shuffleButton = findViewById(R.id.shuffle_button);
+        shuffleButton.setImageResource(getShuffleResId());
+    }
+
+    private void setMinRatingButton() {
+        ImageView img = findViewById(R.id.rating_button);
+        img.setImageResource(getMinRatingResId());
+    }
 
     public void applyLock() {
 //        ImageButton lockButton = (ImageButton) findViewById(R.id.lock_button);
@@ -1522,6 +1408,58 @@ public class Main extends AppCompatActivity {
 
     public void gotoCurrSong(View view) {
         unfoldAndscrollToCurrSong();
+    }
+
+    public void toggleMoreButtons(View view) {
+        ImageButton more_button = findViewById(R.id.more_button);
+        if (moreButtonsLayout.getVisibility() == View.VISIBLE) {
+            moreButtonsLayout.setVisibility(View.GONE);
+            more_button.setImageResource(R.drawable.ic_action_note);
+        } else {
+            moreButtonsLayout.setVisibility(View.VISIBLE);
+            more_button.setImageResource(R.drawable.ic_action_edit);
+        }
+    }
+
+    public void openSettings(View view) {
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+
+    public void openSort(View view) {
+        openSortMenu();
+    }
+
+    public void openRepeat(View view) {
+        openRepeatMenu();
+    }
+
+    public void openShuffle(View view) {
+        openShuffleMenu();
+    }
+
+    public void openTextSize(View view) {
+        params.setChooseTextSize(!params.getChoosedTextSize());
+        ImageButton img = findViewById(R.id.text_size_button);
+        int txtChoosed;
+        if (params.getChoosedTextSize()) {
+            img.setImageResource(R.drawable.ic_menu_text_big);
+            txtChoosed = R.string.settings_text_size_bold;
+        }
+        else {
+            img.setImageResource(R.drawable.ic_menu_text_regular);
+            txtChoosed = R.string.settings_text_size_small;
+        }
+        applyTextSize(params);
+//        Toast.makeText(getApplicationContext(),
+//                getString(R.string.settings_text_size) + getString(txtChoosed),
+//                Toast.LENGTH_LONG).show();
+        songAdt.notifyDataSetChanged();
+        setTextSizeButton();
+    }
+
+    public void openMinRating(View view) {
+        openRatingMenu();
     }
 
     public void unfoldAndscrollToCurrSong() {
