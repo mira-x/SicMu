@@ -707,6 +707,10 @@ public class MusicService extends Service implements
         scrobble.send(Scrobble.SCROBBLE_PAUSE);
         cancelTrackLooperRewinder();
 
+        if (params.getSaveSongPos()) {
+            params.setSongPos(player.getCurrentPosition());
+        }
+
         updateMediaPlaybackState();
         updateMediaSessionMetadata();
         if(foreground)
