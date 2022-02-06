@@ -18,7 +18,6 @@
 
 package souch.smp;
 
-import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
@@ -67,15 +66,18 @@ public class RowSong extends Row {
     // folder of the path (i.e. last folder containing the file's song)
     private String folder;
 
+    private SongDAO songDAO;
+
     protected static int textSize = 15;
 
     // must be set outside before calling setText
     public static int normalSongTextColor;
     public static int normalSongDurationTextColor;
 
-    public RowSong(int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
+    public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
                    long durationMs, int songTrack, String songPath, long albumId, int year) {
         super(pos, level, Typeface.NORMAL);
+        this.songDAO = songDAO;
         id = songID;
         title = songTitle;
         artist = songArtist;
@@ -239,29 +241,60 @@ public class RowSong extends Row {
         }
     }
 
+    // ! must not be called from main thread !
     public synchronized int loadRating() {
         // get rating is computed on demand cause it is slow
         if (rating == RATING_NOT_INITIALIZED) {
-            try {
-                AudioFile audioFile = AudioFileIO.read(new File(path));
-                Tag tag = audioFile.getTag();
-                if (tag != null) {
-                    if (tag.hasField(FieldKey.RATING)) {
-                        rating = convertToRating0to5(tag.getFirst(FieldKey.RATING));
-                        Log.d("RowSong", "song rating " + path + " = " + rating);
-                    } else {
-                        Log.d("RowSong", "song rating " + path + " rating not available");
-                    }
+            // try to load rating from cache
+            long fileLastModifiedMs = 0;
+            SongORM songORM = songDAO.findByPath(path);
+            if (songORM != null) {
+                fileLastModifiedMs = (new File(songORM.path)).lastModified();
+                if (fileLastModifiedMs <= songORM.lastModifiedMs) {
+                    Log.d("RowSong", "Found songORM for path=" + path);
+                    rating = songORM.rating;
                 }
-                else {
-                    Log.d("RowSong", "song rating " + path + " tag not available");
-                }
-            } catch (Exception e) {
-                Log.w("RowSong", "Unable to get rating of song " + path +
-                        ". Exception msg: " + e.getClass() + " - " + e.getMessage());
             }
-            if (rating < 0)
-                rating = RATING_UNKNOWN;
+
+            // cache miss, read the ID3
+            if (rating == RATING_NOT_INITIALIZED) {
+                try {
+                    AudioFile audioFile = AudioFileIO.read(new File(path));
+                    Tag tag = audioFile.getTag();
+                    if (tag != null) {
+                        if (tag.hasField(FieldKey.RATING)) {
+                            rating = convertToRating0to5(tag.getFirst(FieldKey.RATING));
+                            Log.d("RowSong", "song rating " + path + " = " + rating);
+                        } else {
+                            Log.d("RowSong", "song rating " + path + " rating not available");
+                        }
+                    } else {
+                        Log.d("RowSong", "song rating " + path + " tag not available");
+                    }
+                } catch (Exception e) {
+                    Log.w("RowSong", "Unable to get rating of song " + path +
+                            ". Exception msg: " + e.getClass() + " - " + e.getMessage());
+                }
+                if (rating < 0)
+                    rating = RATING_UNKNOWN;
+
+                // update db songs
+                try {
+                    if (songORM != null) {
+                        Log.d("RowSong", "Update songORM for path=" + path);
+                        songORM.rating = rating;
+                        songORM.lastModifiedMs = fileLastModifiedMs;
+                        songDAO.update(songORM);
+                    }
+                    else {
+                        Log.d("RowSong", "New songORM for path=" + path);
+                        songDAO.insert(new SongORM(path, rating));
+                    }
+                } catch (Exception e) {
+                    Log.w("RowSong", "Unable to update/insert songORM for path=" + path
+                            + " e=" + e.toString());
+                }
+            }
         }
         return rating;
     }
