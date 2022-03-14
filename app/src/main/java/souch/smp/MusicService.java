@@ -119,7 +119,7 @@ public class MusicService extends Service implements
     private long lastUpdate;
     private boolean enableShake;
     private static boolean enableRating;
-    private int minRating = 1;
+    static private int minRating = 1;
     private float shakeThreshold;
     private float playbackSpeed = 1.0f;
     private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
@@ -717,6 +717,20 @@ public class MusicService extends Service implements
             startNotification();
     }
 
+//    public void stop() {
+//        if(player == null)
+//            return;
+//
+//        player.stop();
+//        state.setState(PlayerState.Stopped);
+//        stopSensor();
+//        scrobble.send(Scrobble.SCROBBLE_COMPLETE);
+//        cancelTrackLooperRewinder();
+//
+//        if(foreground)
+//            stopNotification();
+//    }
+
     public void playPrev() {
         if (params.getShuffle())
             rows.moveToRandomSongBack();
@@ -944,7 +958,7 @@ public class MusicService extends Service implements
         params.setEnableRating(enableRating);
     }
 
-    public int getMinRating() {
+    static public int getMinRating() {
         return minRating;
     }
     public void setMinRating(int rating) {

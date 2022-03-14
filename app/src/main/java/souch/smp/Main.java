@@ -107,6 +107,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout warningLayout;
 
     private LinearLayout moreButtonsLayout;
+    private boolean editModeEnabled = false;
 
     private ImageButton albumImage;
     private TextView songTitle, songAlbum, songArtist, warningText;
@@ -127,10 +128,11 @@ public class Main extends AppCompatActivity {
         playButton = (ImageButton) findViewById(R.id.play_button);
         // useful only for testing
         playButton.setTag(R.drawable.ic_action_play);
-        playButton.setOnTouchListener(touchListener);
+        playButton.setOnTouchListener(playSongTouchListener);
+        //playButton.setOnLongClickListener(playSongLongListener);
 
         ImageButton gotoButton = (ImageButton) findViewById(R.id.goto_button);
-        gotoButton.setOnTouchListener(touchListener);
+        gotoButton.setOnTouchListener(playSongTouchListener);
         gotoButton.setOnLongClickListener(gotoSongLongListener);
 //        ImageButton lockButton = (ImageButton) findViewById(R.id.lock_button);
 //        lockButton.setOnTouchListener(touchListener);
@@ -149,44 +151,44 @@ public class Main extends AppCompatActivity {
         final int repeatDelta = 260;
         ImageButton prevButton = (ImageButton) findViewById(R.id.prev_button);
         prevButton.setOnLongClickListener(prevGroupLongListener);
-        prevButton.setOnTouchListener(touchListener);
+        prevButton.setOnTouchListener(playSongTouchListener);
         ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
         nextButton.setOnLongClickListener(nextGroupLongListener);
-        nextButton.setOnTouchListener(touchListener);
+        nextButton.setOnTouchListener(playSongTouchListener);
 
         RepeatingImageButton seekButton;
         seekButton = (RepeatingImageButton) findViewById(R.id.m20_button);
         seekButton.setRepeatListener(rewindListener, repeatDelta);
-        seekButton.setOnTouchListener(touchListener);
+        seekButton.setOnTouchListener(playSongTouchListener);
         seekButton = (RepeatingImageButton) findViewById(R.id.p20_button);
         seekButton.setRepeatListener(forwardListener, repeatDelta);
-        seekButton.setOnTouchListener(touchListener);
+        seekButton.setOnTouchListener(playSongTouchListener);
         seekButton = (RepeatingImageButton) findViewById(R.id.m5_button);
         seekButton.setRepeatListener(rewindListener, repeatDelta);
-        seekButton.setOnTouchListener(touchListener);
+        seekButton.setOnTouchListener(playSongTouchListener);
         seekButton = (RepeatingImageButton) findViewById(R.id.p5_button);
         seekButton.setRepeatListener(forwardListener, repeatDelta);
-        seekButton.setOnTouchListener(touchListener);
+        seekButton.setOnTouchListener(playSongTouchListener);
 
-//        if (SDK_INT >= Build.VERSION_CODES.R) {
-//            if (!Environment.isExternalStorageManager()) {
-//                try {
-//                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-//                    intent.addCategory("android.intent.category.DEFAULT");
-//                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
-//                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
-//                } catch (Exception e) {
-//                    Intent intent = new Intent();
-//                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-//                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
-//                }
-//            }
-//        } else {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE);
+                }
+            }
+        } else {
             // below android 11
             if (ContextCompat.checkSelfPermission(getApplicationContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//                        || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 ) {
                     Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
                     showWarningLayout();
@@ -194,13 +196,13 @@ public class Main extends AppCompatActivity {
                 Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE
-//                                , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                , Manifest.permission.WRITE_EXTERNAL_STORAGE
                         },
                         EXTERNAL_STORAGE_REQUEST_CODE);
             } else {
                 Log.d("RequestPermissionResult", "Permission *_EXTERNAL_STORAGE already granted!");
             }
-//        }
+        }
 
         playIntent = new Intent(this, MusicService.class);
         startService(playIntent);
@@ -228,6 +230,7 @@ public class Main extends AppCompatActivity {
 
         RowSong.normalSongTextColor = getResources().getColor(R.color.RowSongTextNormal);
         RowSong.normalSongDurationTextColor = getResources().getColor(R.color.RowSongTextDuration);
+        RowSong.normalSongHiddenTextColor = getResources().getColor(R.color.RowSongTextHidden);
 
         RowGroup.normalTextColor = getResources().getColor(R.color.RowGroupTextNormal);
         RowGroup.playingTextColor = getResources().getColor(R.color.RowGroupTextPlaying);
@@ -342,10 +345,16 @@ public class Main extends AppCompatActivity {
                     } else {
                         vibrate();
 
-                        rows.selectNearestSong(position);
-                        musicSrv.playSong();
-                        updatePlayButton();
-                        disableTrackLooper();
+//                        if (editModeEnabled) {
+//                            rows.selectNearestSong(position);
+//                            setDetails();
+//                        }
+//                        else {
+                            rows.selectNearestSong(position);
+                            musicSrv.playSong();
+                            updatePlayButton();
+                            disableTrackLooper();
+//                        }
                     }
                     scrollToSong(position);
                     updateRatings();
@@ -425,6 +434,13 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    private void reinitSongs() {
+        rows.reinit();
+        songAdt.notifyDataSetChanged();
+        unfoldAndscrollToCurrSong();
+        hideWarningLayout();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
@@ -434,17 +450,14 @@ public class Main extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Main","Permission READ_EXTERNAL_STORAGE granted");
-                    rows.reinit();
-                    songAdt.notifyDataSetChanged();
-                    unfoldAndscrollToCurrSong();
-                    hideWarningLayout();
+                    Log.i("Main","Permission READ_EXTERNAL_STORAGE granted");
+                    reinitSongs();
                 }  else {
                     Log.e("Main","Permission READ_EXTERNAL_STORAGE refused!");
                     showWarningLayout();
                 }
                 if (grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Main","Permission WRITE_EXTERNAL_STORAGE granted");
+                    Log.i("Main","Permission WRITE_EXTERNAL_STORAGE granted");
                 } else {
                     Log.w("Main","Permission WRITE_EXTERNAL_STORAGE refused!");
                     Toast.makeText(getApplicationContext(), R.string.permission_needed, Toast.LENGTH_LONG).show();
@@ -456,12 +469,15 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SET_RATING_REQUEST_CODE) {
+        Log.i("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION granted");
+        if (requestCode == EXTERNAL_STORAGE_REQUEST_CODE) {
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
                     Log.i("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION granted");
+                    reinitSongs();
                 } else {
                     Log.w("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION refused!");
+                    showWarningLayout();
                     Toast.makeText(this, R.string.permission_needed, Toast.LENGTH_LONG).show();
                 }
             }
@@ -741,20 +757,16 @@ public class Main extends AppCompatActivity {
             }
         }
         else {
-            setRatingButtonsDrawable(0, false);
+            details_rating_layout.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setRatingButtonsDrawable(int rating, boolean highlight) {
-        if (rating <= 0) {
-            details_rating_layout.setVisibility(View.INVISIBLE);
-        } else {
-            details_rating_layout.setVisibility(View.VISIBLE);
-            for (int i = 0; i < ratingButtons.size(); i++) {
-                int star0 = highlight ? R.drawable.ic_star_0_highlight : R.drawable.ic_star_0;
-                int star5 = highlight ? R.drawable.ic_star_5_highlight : R.drawable.ic_star_5;
-                ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
-            }
+        details_rating_layout.setVisibility(View.VISIBLE);
+        for (int i = 0; i < ratingButtons.size(); i++) {
+            int star0 = highlight ? R.drawable.ic_star_0_highlight : R.drawable.ic_star_0;
+            int star5 = highlight ? R.drawable.ic_star_5_highlight : R.drawable.ic_star_5;
+            ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
         }
     }
 
@@ -859,16 +871,15 @@ public class Main extends AppCompatActivity {
 
     private final int SET_RATING_REQUEST_CODE = 1024;
     public void ratingClick(View view) {
-//        for (int i = 0; i < ratingButtons.size(); i++) {
-//            if (view == ratingButtons.get(i)) {
-//                // we cannot unclick the first star, so 0 star means not initialized.
-//                rateCurrSong(i + 1);
-//            }
-//        }
-
 //        int check = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 //        if (check == PackageManager.PERMISSION_GRANTED) {
-//            rateCurrSong();
+            for (int i = 0; i < ratingButtons.size(); i++) {
+                if (view == ratingButtons.get(i)) {
+                    // we cannot unclick the first star, so 0 star means not initialized.
+                    rateCurrSong(i + 1);
+                    songAdt.notifyDataSetChanged();
+                }
+            }
 //        } else {
 //            ActivityCompat.requestPermissions(this,
 //                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, SET_RATING_REQUEST_CODE);
@@ -884,9 +895,22 @@ public class Main extends AppCompatActivity {
 //            Log.i("Main", "Unable to write:");
 //        }
         RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null && rowSong.setRating(rating)) {
-            setRatingDetails();
-            songAdt.notifyDataSetChanged();
+        if (rowSong != null) {
+            rowSong.setRatingAsync(rating, (boolean succeed) -> {
+                runOnUiThread(() -> {
+                    if (!succeed) {
+                        Log.d("Main", "setRatingAsync failed, trying from UiThread! (" + ((RowSong) rowSong).getPath() + ")");
+                        // on samsung s3 Android 7, writing id3 succeed only from UiThread !?
+                        if (rowSong.setRating(rating))
+                            Log.d("Main", "setRating succeed (" + ((RowSong) rowSong).getPath() + ")");
+                        else
+                            Log.w("Main", "setRating failed (" + ((RowSong) rowSong).getPath() + ")");
+                    }
+                    setRatingDetails();
+                    songAdt.notifyDataSetChanged();
+                });
+                // todo : set db song rating too
+            });
         } else {
             Toast.makeText(getApplicationContext(), "rating song " + rowSong.toString() + " failed!", Toast.LENGTH_LONG).show();
         }
@@ -1052,7 +1076,7 @@ public class Main extends AppCompatActivity {
         alert.show();
     }
 
-    private void openRatingMenu() {
+    private void openMinRatingMenu() {
         if (musicSrv == null)
             return;
 
@@ -1066,8 +1090,12 @@ public class Main extends AppCompatActivity {
         altBld.setSingleChoiceItems(items, musicSrv.getMinRating() - 1,
                 (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
-                musicSrv.setMinRating(item + 1);
-                setMinRatingButton();
+                final int chosenRating = item + 1;
+                if (chosenRating != musicSrv.getMinRating()) {
+                    musicSrv.setMinRating(chosenRating);
+                    setMinRatingButton();
+                    songAdt.notifyDataSetChanged();
+                }
                 dialog.dismiss(); // dismiss the alertbox after chose option
 //              Toast.makeText(getApplicationContext(),
 //                  getString(R.string.action_rating) + " " + items[item],
@@ -1299,7 +1327,15 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+//    private View.OnLongClickListener playSongLongListener = (View v) -> {
+//        if (serviceBound) {
+//            musicSrv.stop();
+//            stopPlayButton();
+//        }
+//        return true;
+//    };
+
+    private View.OnTouchListener playSongTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1429,6 +1465,7 @@ public class Main extends AppCompatActivity {
             moreButtonsLayout.setVisibility(View.VISIBLE);
             more_button.setImageResource(R.drawable.ic_action_edit);
         }
+        editModeEnabled = moreButtonsLayout.getVisibility() == View.VISIBLE;
     }
 
     public void openSettings(View view) {
@@ -1469,7 +1506,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void openMinRating(View view) {
-        openRatingMenu();
+        openMinRatingMenu();
     }
 
     public void unfoldAndscrollToCurrSong() {

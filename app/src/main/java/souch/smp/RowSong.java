@@ -73,6 +73,7 @@ public class RowSong extends Row {
     // must be set outside before calling setText
     public static int normalSongTextColor;
     public static int normalSongDurationTextColor;
+    public static int normalSongHiddenTextColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
                    long durationMs, int songTrack, String songPath, long albumId, int year) {
@@ -138,15 +139,20 @@ public class RowSong extends Row {
         }
     }
 
+    public boolean isRatingHighEnough() {
+        return rating == RATING_UNKNOWN || rating == RATING_NOT_INITIALIZED ||
+                rating >= MusicService.getMinRating();
+    }
+
     private void setText(TextView text) {
         text.setText(title);
-        text.setTextColor(normalSongTextColor);
+        text.setTextColor(isRatingHighEnough() ? normalSongTextColor : normalSongHiddenTextColor);
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
     }
 
     private void setDuration(TextView duration) {
         duration.setText(msToMinutesStripSecondIfLongDuration(getDurationMs()) + getStringOffset());
-        duration.setTextColor(normalSongDurationTextColor);
+        duration.setTextColor(isRatingHighEnough() ? normalSongDurationTextColor : normalSongHiddenTextColor);
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         duration.setTypeface(null, typeface);
         /*
@@ -279,24 +285,44 @@ public class RowSong extends Row {
                     rating = RATING_UNKNOWN;
 
                 // update db songs
-                try {
-                    if (songORM != null) {
-                        Log.d("RowSong", "Update songORM for path=" + path);
-                        songORM.rating = rating;
-                        songORM.lastModifiedMs = fileLastModifiedMs;
-                        songDAO.update(songORM);
-                    }
-                    else {
-                        Log.d("RowSong", "New songORM for path=" + path);
-                        songDAO.insert(new SongORM(path, rating));
-                    }
-                } catch (Exception e) {
-                    Log.w("RowSong", "Unable to update/insert songORM for path=" + path
-                            + " e=" + e.toString());
-                }
+                setDBSongRating(songORM, fileLastModifiedMs, rating);
             }
         }
         return rating;
+    }
+
+    private void setDBSongRating(SongORM songORM, long fileLastModifiedMs, int rating) {
+        try {
+            if (songORM != null) {
+                Log.d("RowSong", "Update songORM for path=" + path);
+                songORM.rating = rating;
+                songORM.lastModifiedMs = fileLastModifiedMs;
+                songDAO.update(songORM);
+            }
+            else {
+                Log.d("RowSong", "New songORM for path=" + path);
+                songDAO.insert(new SongORM(path, rating));
+            }
+        } catch (Exception e) {
+            Log.w("RowSong", "Unable to update/insert songORM for path=" + path
+                    + " e=" + e.toString());
+        }
+    }
+
+    public interface SetRatingCallbackInterface {
+        void ratingCallback(boolean succeed);
+    }
+
+    public void setRatingAsync(int rating, SetRatingCallbackInterface callback) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                boolean succeed = setRating(rating);
+                callback.ratingCallback(succeed);
+            }
+        };
+        thread.start();
+
     }
 
     // return true if set rating succeed
@@ -313,12 +339,18 @@ public class RowSong extends Row {
             audioFile.commit();
             ok = true;
             Log.i("RowSong", "set file rating : " + path + " to " + rating);
-        } catch (Exception e) {
-            String wrn = "Unable to set rating for song:" + path +
-                    ". Exception msg: " + e.getClass() + " - " + e.getMessage();
+        }
+        catch (Exception e) {
+            String wrn = "Unable to set rating for song: " + path +
+                    " . Exception msg: " + e.getClass() + " - " + e.getMessage();
             //Toast.makeText(context, wrn, Toast.LENGTH_SHORT).show();
             Log.w("RowSong", wrn);
         }
+
+//        long fileLastModifiedMs = (new File(path)).lastModified();
+//        SongORM songORM = songDAO.findByPath(path);
+//        setDBSongRating(songORM, fileLastModifiedMs, rating);
+
         return ok;
     }
 
