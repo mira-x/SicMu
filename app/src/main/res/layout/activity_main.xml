@@ -52,10 +52,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
-            android:onClick="toggleDetails"
             android:text="@string/app_name"
-            android:textAllCaps="false"
             android:textSize="18sp"
+            android:onClick="toggleDetails"
             android:visibility="visible" />
 
         <SeekBar
@@ -512,7 +511,6 @@
             android:layout_height="60dp"
             android:layout_weight="48"
             android:onClick="playOrPause"
-            android:longClickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/action_play" />
 
