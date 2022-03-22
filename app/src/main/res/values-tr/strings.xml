@@ -17,9 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-
-    <string name="app_name">SicMu Player</string>
-
     <string name="action_settings">Ayarlar</string>
     <string name="action_shake_disabled">Titreşim etkin</string>
     <string name="action_shake_enabled">Titreşim yok</string>
@@ -148,6 +145,5 @@
     <string name="settings_thanks_doc_summary">Sue Smith (Android için müzikçalar hazırlama üzerine dersler)</string>
     <string name="settings_thanks_i15n">Çeviri</string>
     <string name="settings_thanks_i15n_summary">Mehmet Gülmen (Türkçe), Mladen Pejaković (Sırpça), Jerônimo Cordoni Pellegrini (Português)</string>
-    <string name="action_shuffle">Rasgele</string>
 
 </resources>
