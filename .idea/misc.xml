@@ -5,6 +5,12 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/action_goto_play.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/drawable/action_next.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/action_play.xml" value="0.161" />
+        <entry key="app/src/main/res/drawable/ic_action_edit_off.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_action_pause.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/ic_action_play.xml" value="0.161" />
+        <entry key="app/src/main/res/drawable/ic_action_play_press.xml" value="0.1795" />
         <entry key="app/src/main/res/drawable/ic_looper.xml" value="0.33" />
         <entry key="app/src/main/res/drawable/ic_looper_A.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/drawable/ic_looper_ab.xml" value="0.24427083333333333" />

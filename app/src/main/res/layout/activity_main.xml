@@ -511,7 +511,9 @@
             android:layout_height="60dp"
             android:layout_weight="48"
             android:onClick="playOrPause"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:src="@drawable/action_play" />
 
         <ImageButton
