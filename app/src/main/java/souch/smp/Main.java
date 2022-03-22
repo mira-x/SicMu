@@ -575,9 +575,11 @@ public class Main extends AppCompatActivity {
             // stop the service if not playing music
             if (!musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
-                Toast.makeText(getApplicationContext(),
-                        getResources().getString(R.string.app_name) + " destroyed.",
-                        Toast.LENGTH_SHORT).show();
+                if (!BuildConfig.FLAVOR.equals("pro")) {
+                    Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.app_name) + " destroyed.",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
             unbindService(musicConnection);
             serviceBound = false;
