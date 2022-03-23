@@ -992,4 +992,37 @@ public class MusicService extends Service implements
         }
     }
 
+    private Timer sleepTimer = null;
+    private long sleepTimerScheduleMs = 0;
+
+    // return > 0 if sleep timer has been started
+    public long getSleepTimerScheduleMs() {
+        return sleepTimerScheduleMs;
+    }
+
+    public void startSleepTimer(int delayMinutes) {
+        if (delayMinutes <= 0)
+            return;
+
+        stopSleepTimer();
+        final long delayMillis = delayMinutes * 60 * 1000;
+        sleepTimerScheduleMs = System.currentTimeMillis() + delayMillis;
+        sleepTimer = new Timer();
+        sleepTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    pause();
+                    setChanged();
+                    stopSleepTimer();
+                }
+            }, delayMillis);
+    }
+
+    public void stopSleepTimer() {
+        if (sleepTimer != null) {
+            sleepTimer.cancel();
+            sleepTimer = null;
+        }
+        sleepTimerScheduleMs = 0;
+    }
 }

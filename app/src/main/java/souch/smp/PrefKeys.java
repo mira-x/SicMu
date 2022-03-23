@@ -41,5 +41,6 @@ public enum PrefKeys {
     SAVE_SONG_POS,
     REPEAT_MODE,
     ENABLE_RATING,
-    MIN_RATING
+    MIN_RATING,
+    SLEEP_DELAY_M
 }

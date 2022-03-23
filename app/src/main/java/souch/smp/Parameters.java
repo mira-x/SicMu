@@ -70,4 +70,6 @@ public interface Parameters {
     boolean getShuffle();
 
     boolean getScrobble();
+
+    int getSleepDelayM();
 }

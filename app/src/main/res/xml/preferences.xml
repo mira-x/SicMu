@@ -162,6 +162,20 @@
         android:persistent="false"
         ><!--android:icon="@drawable/ic_menu_settings"-->
 
+        <PreferenceCategory android:title="@string/settings_sleep_timer">
+            <EditTextPreference
+                android:key="SLEEP_DELAY_M"
+                android:title="@string/settings_sleep_timer_delay"
+                android:inputType="number"
+                android:summary="60"
+                android:defaultValue="60"
+                />
+            <Preference
+                android:key="START_SLEEP_TIMER"
+                android:title="@string/settings_sleep_timer_start"
+                />
+        </PreferenceCategory>
+
         <PreferenceCategory android:title="@string/settings_song_view_font">
 
             <EditTextPreference

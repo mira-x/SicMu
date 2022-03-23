@@ -36,6 +36,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Formatter;
 
 public class Settings extends PreferenceActivity
@@ -46,7 +48,7 @@ public class Settings extends PreferenceActivity
     private MusicService musicSrv;
     private Intent playIntent;
     private boolean serviceBound = false;
-
+    private final String START_SLEEP_TIMER = "START_SLEEP_TIMER";
     // todo: improve preference default value
 
     @Override
@@ -88,6 +90,9 @@ public class Settings extends PreferenceActivity
         Preference donate = findPreference(getResources().getString(R.string.settings_donate_key));
         donate.setOnPreferenceClickListener(this);
 
+        Preference sleepTimer = findPreference(START_SLEEP_TIMER);
+        sleepTimer.setOnPreferenceClickListener(this);
+
         setUnfoldSubgroup();
         setUnfoldThresholdSummary();
 
@@ -96,6 +101,8 @@ public class Settings extends PreferenceActivity
         prefRootFolders.setSummary(params.getRootFolders());
         if(!sharedPreferences.contains(rootFoldersKey))
             prefRootFolders.setText(Path.getMusicStoragesStr(getBaseContext()));
+
+        findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(params.getSleepDelayM()));
 
         setFoldSummary();
 
@@ -160,6 +167,17 @@ public class Settings extends PreferenceActivity
             if(reinited)
                 musicSrv.setChanged();
         }
+        else if(key.equals(PrefKeys.SLEEP_DELAY_M.name())) {
+            final int sleepDelayMinutes = params.getSleepDelayM();
+            if (sleepDelayMinutes > 0) {
+                findPreference(key).setSummary(String.valueOf(sleepDelayMinutes));
+            }
+            else {
+                Toast.makeText(getApplicationContext(),
+                        getResources().getString(R.string.settings_sleep_timer_delay_wrong),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void setUnfoldSubgroup() {
@@ -196,6 +214,7 @@ public class Settings extends PreferenceActivity
             Log.d("Settings", "onServiceConnected");
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicSrv = binder.getService();
+            setSleepTimerTitle();
             serviceBound = true;
         }
 
@@ -236,6 +255,14 @@ public class Settings extends PreferenceActivity
             rescan();
         } else if (preference.getKey().equals(getResources().getString(R.string.settings_donate_key))) {
             showDonateWebsite();
+        } else if (preference.getKey().equals(START_SLEEP_TIMER)) {
+            if (musicSrv.getSleepTimerScheduleMs() > 0) {
+                musicSrv.stopSleepTimer();
+            }
+            else {
+                musicSrv.startSleepTimer(params.getSleepDelayM());
+            }
+            setSleepTimerTitle();
         }
         return false;
     }
@@ -244,4 +271,19 @@ public class Settings extends PreferenceActivity
         Path.rescanWhole(getBaseContext());
     }
 
+    private void setSleepTimerTitle() {
+        long stopTimerScheduleMs = musicSrv.getSleepTimerScheduleMs();
+        if (stopTimerScheduleMs > 0) {
+            findPreference(START_SLEEP_TIMER).setTitle(
+                    getResources().getString(R.string.settings_sleep_timer_stop));
+            Date schedule = new Date(stopTimerScheduleMs);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            findPreference(START_SLEEP_TIMER).setSummary(
+                    getResources().getString(R.string.settings_sleep_timer_remaining, formatter.format(schedule)));
+        } else {
+            findPreference(START_SLEEP_TIMER).setTitle(
+                    getResources().getString(R.string.settings_sleep_timer_start));
+            findPreference(START_SLEEP_TIMER).setSummary("");
+        }
+    }
 }

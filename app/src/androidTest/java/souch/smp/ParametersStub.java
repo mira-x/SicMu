@@ -102,4 +102,11 @@ public class ParametersStub implements Parameters {
     public boolean getShuffle() { return false; }
 
     public boolean getScrobble() { return false; }
+
+    public boolean getEnableRating() { return false; }
+    public void setEnableRating(boolean ratingEnabled) {}
+    public int getMinRating() { return 0; }
+    public void setMinRating(int rating) {}
+
+    public int getSleepDelayM() { return 60; }
 }

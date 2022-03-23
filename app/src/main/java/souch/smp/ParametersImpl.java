@@ -166,4 +166,8 @@ public class ParametersImpl implements Parameters {
     public boolean getScrobble() {
         return getPref().getBoolean(PrefKeys.SCROBBLE.name(), false);
     }
+
+    public int getSleepDelayM() {
+        return Integer.valueOf(getPref().getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
+    }
 }

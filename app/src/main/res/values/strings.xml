@@ -71,6 +71,13 @@
     <string name="settings_unfold_subgroup_threshold_summary">has less than %d songs</string>
 
 
+    <string name="settings_sleep_timer">Sleep timer</string>
+    <string name="settings_sleep_timer_start">Start sleep timer</string>
+    <string name="settings_sleep_timer_stop">Stop sleep timer</string>
+    <string name="settings_sleep_timer_delay">Sleep timer delay in minutes</string>
+    <string name="settings_sleep_timer_remaining">Playback will pause at: %s</string>
+    <string name="settings_sleep_timer_delay_wrong">Sleep timer delay must be a positive number</string>
+
     <string name="settings_song_view_font">Song view font</string>
     <string name="settings_text_size_choosed">Choose font size</string>
     <string name="settings_text_size_choosed_default">false</string>
