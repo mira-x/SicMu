@@ -115,7 +115,7 @@
                 android:summary="@string/settings_licence"/>
 
             <Preference
-                android:key="@string/settings_donate_key"
+                android:key="DONATE"
                 android:title="@string/settings_donate_title"
                 android:summary="@string/settings_donate_summary"/>
 
@@ -276,7 +276,7 @@
             android:defaultValue="false"/>
 
         <Preference
-            android:key="@string/settings_rescan_key"
+            android:key="RESCAN"
             android:title="@string/settings_rescan_title"
             android:summary="@string/settings_rescan"/>
 

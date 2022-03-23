@@ -76,7 +76,6 @@
 
     <string name="settings_rescan_title">Neu einlesen</string>
     <string name="settings_rescan">Mediendateien neu einlesen.</string>
-    <string name="settings_rescan_key">RESCAN</string>
     <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
     <string name="settings_rescan_triggered">Mediendateien einlesen gestartet...</string>
     <string name="settings_rescan_storage">Lese Speicherverzeichnis %s</string>
@@ -158,7 +157,6 @@
     <string name="settings_source">https://github.com/souch/SMP</string>
     <string name="settings_licence_title">Lizenz</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_key">donate</string>
     <string name="settings_donate_title">Spenden</string>
     <string name="settings_donate_summary">Klicke hier, wenn Du nicht mehr ohne die App leben kannst...</string>
     <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>

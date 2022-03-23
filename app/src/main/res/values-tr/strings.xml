@@ -63,7 +63,6 @@
 
     <string name="settings_rescan_title">Tara</string>
     <string name="settings_rescan">Ortam dosyalarını tekrar tara.</string>
-    <string name="settings_rescan_key">TARA</string>
     <string name="settings_rescan_disabled">Android KitKat\'ta devre dışı bırakılan yayınları tara.</string>
     <string name="settings_rescan_triggered">Ortam Tarayıcısı Başlatıldı...</string>
 
@@ -133,7 +132,6 @@
     <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Lisans</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_key">bağış yap</string>
     <string name="settings_donate_title">Bağış Yap</string>
     <string name="settings_donate_summary">Eğer bu uygulama olmadan hayat size zorsa tıklayın.</string>
     <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>

@@ -93,7 +93,6 @@
 
     <string name="settings_rescan_title">Rescan</string>
     <string name="settings_rescan">Rescan media files.</string>
-    <string name="settings_rescan_key">RESCAN</string>
     <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
     <string name="settings_rescan_triggered">Media scanner triggered...</string>
     <string name="settings_rescan_storage">Scan storage %s</string>
@@ -177,7 +176,6 @@
     <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">License</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_key">donate</string>
     <string name="settings_donate_title">Donate</string>
     <string name="settings_donate_summary">Click here if life will be hard for you without this app.</string>
     <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>

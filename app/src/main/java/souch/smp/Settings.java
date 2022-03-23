@@ -48,7 +48,9 @@ public class Settings extends PreferenceActivity
     private MusicService musicSrv;
     private Intent playIntent;
     private boolean serviceBound = false;
-    private final String START_SLEEP_TIMER = "START_SLEEP_TIMER";
+    private final String RESCAN_KEY = "RESCAN";
+    private final String DONATE_KEY = "DONATE";
+    private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     // todo: improve preference default value
 
     @Override
@@ -84,13 +86,13 @@ public class Settings extends PreferenceActivity
         findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(params.getBigTextSize()));
         findPreference(PrefKeys.TEXT_SIZE_RATIO.name()).setSummary(String.valueOf(params.getTextSizeRatio()));
 
-        Preference rescan = findPreference(getResources().getString(R.string.settings_rescan_key));
+        Preference rescan = findPreference(RESCAN_KEY);
         rescan.setOnPreferenceClickListener(this);
 
-        Preference donate = findPreference(getResources().getString(R.string.settings_donate_key));
+        Preference donate = findPreference(DONATE_KEY);
         donate.setOnPreferenceClickListener(this);
 
-        Preference sleepTimer = findPreference(START_SLEEP_TIMER);
+        Preference sleepTimer = findPreference(START_SLEEP_TIMER_KEY);
         sleepTimer.setOnPreferenceClickListener(this);
 
         setUnfoldSubgroup();
@@ -251,11 +253,11 @@ public class Settings extends PreferenceActivity
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if(preference.getKey().equals(getResources().getString(R.string.settings_rescan_key))) {
+        if(preference.getKey().equals(RESCAN_KEY)) {
             rescan();
-        } else if (preference.getKey().equals(getResources().getString(R.string.settings_donate_key))) {
+        } else if (preference.getKey().equals(DONATE_KEY)) {
             showDonateWebsite();
-        } else if (preference.getKey().equals(START_SLEEP_TIMER)) {
+        } else if (preference.getKey().equals(START_SLEEP_TIMER_KEY)) {
             if (musicSrv.getSleepTimerScheduleMs() > 0) {
                 musicSrv.stopSleepTimer();
             }
@@ -274,16 +276,16 @@ public class Settings extends PreferenceActivity
     private void setSleepTimerTitle() {
         long stopTimerScheduleMs = musicSrv.getSleepTimerScheduleMs();
         if (stopTimerScheduleMs > 0) {
-            findPreference(START_SLEEP_TIMER).setTitle(
+            findPreference(START_SLEEP_TIMER_KEY).setTitle(
                     getResources().getString(R.string.settings_sleep_timer_stop));
             Date schedule = new Date(stopTimerScheduleMs);
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            findPreference(START_SLEEP_TIMER).setSummary(
+            findPreference(START_SLEEP_TIMER_KEY).setSummary(
                     getResources().getString(R.string.settings_sleep_timer_remaining, formatter.format(schedule)));
         } else {
-            findPreference(START_SLEEP_TIMER).setTitle(
+            findPreference(START_SLEEP_TIMER_KEY).setTitle(
                     getResources().getString(R.string.settings_sleep_timer_start));
-            findPreference(START_SLEEP_TIMER).setSummary("");
+            findPreference(START_SLEEP_TIMER_KEY).setSummary("");
         }
     }
 }
