@@ -111,4 +111,5 @@ public class ParametersStub implements Parameters {
     public int getSleepDelayM() { return 60; }
 
     public boolean getShowFilename() { return false; }
+    public boolean getShowRemainingTime() { return false; }
 }

@@ -207,6 +207,12 @@
         android:summary="@string/settings_show_filename_summary"
         android:defaultValue="false"/>
 
+    <CheckBoxPreference
+        android:key="SHOW_REMAINING_TIME"
+        android:title="@string/settings_show_remaining_time"
+        android:summary="@string/settings_show_remaining_time_summary"
+        android:defaultValue="false"/>
+
     <PreferenceCategory android:title="@string/settings_accelerometer">
 
 

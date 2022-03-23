@@ -609,21 +609,19 @@ public class MusicService extends Service implements
 
     /*** PLAY ACTION ***/
 
-    // get curr position in second
     public long getCurrentPositionMs(){
         if(player == null)
             return 0;
         return player.getCurrentPosition();
     }
 
-    // get song total duration in second
+    // get current song total duration
     public int getDurationMs(){
         if(player == null)
             return 0;
         return player.getDuration();
     }
 
-    // move to this song genuinePos in second
     public void seekTo(long posMs){
         if(player == null)
             return;

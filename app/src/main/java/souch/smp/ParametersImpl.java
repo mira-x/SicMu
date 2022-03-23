@@ -174,4 +174,8 @@ public class ParametersImpl implements Parameters {
     public boolean getShowFilename() {
         return getPref().getBoolean(PrefKeys.SHOW_FILENAME.name(), false);
     }
+
+    public boolean getShowRemainingTime() {
+        return getPref().getBoolean(PrefKeys.SHOW_REMAINING_TIME.name(), false);
+    }
 }

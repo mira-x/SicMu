@@ -485,7 +485,7 @@ public class Main extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (seekbar.getVisibility() == TextView.VISIBLE) {
-                currDuration.setText(RowSong.msToMinutes(seekBar.getProgress()));
+                setCurrDuration(seekBar.getProgress());
             }
         }
 
@@ -649,7 +649,7 @@ public class Main extends AppCompatActivity {
                 if (!touchSeekbar && musicSrv.getSeekFinished())
                     seekbar.setProgress((int) musicSrv.getCurrentPositionMs());
                 seekbar.setVisibility(TextView.VISIBLE);
-                currDuration.setText(RowSong.msToMinutes(musicSrv.getCurrentPositionMs()));
+                setCurrDuration(musicSrv.getCurrentPositionMs());
             }
         }
         autoOpenCloseDetails();
@@ -657,6 +657,18 @@ public class Main extends AppCompatActivity {
         songAdt.notifyDataSetChanged();
     }
 
+    private void setCurrDuration(long currDurationMs) {
+        if (params.getShowRemainingTime()) {
+            RowSong rowSong = rows.getCurrSong();
+            if (rowSong != null) {
+                currDuration.setText("- " +
+                        RowSong.msToMinutes(rowSong.getDurationMs() - currDurationMs));
+            }
+        }
+        else {
+            currDuration.setText(RowSong.msToMinutes(currDurationMs));
+        }
+    }
 
     private void stopPlayButton() {
         duration.setVisibility(TextView.INVISIBLE);

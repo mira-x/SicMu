@@ -74,4 +74,5 @@ public interface Parameters {
     int getSleepDelayM();
 
     boolean getShowFilename();
+    boolean getShowRemainingTime();
 }

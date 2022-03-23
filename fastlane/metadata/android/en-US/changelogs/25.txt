@@ -4,3 +4,4 @@ Version 2.0.
 - Play only songs above specified rating option
 - Add show filename option
 - Replace option menu by edit menu
+- Show songs remaining time option
