@@ -63,10 +63,13 @@ public class RowSong extends Row {
     private int rating;
     // full filename
     private String path;
+    private String filename;
     // folder of the path (i.e. last folder containing the file's song)
     private String folder;
 
     private SongDAO songDAO;
+
+    private Parameters params;
 
     protected static int textSize = 15;
 
@@ -75,7 +78,7 @@ public class RowSong extends Row {
     public static int normalSongDurationTextColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
-                   long durationMs, int songTrack, String songPath, long albumId, int year) {
+                   long durationMs, int songTrack, String songPath, long albumId, int year, Parameters params) {
         super(pos, level, Typeface.NORMAL);
         this.songDAO = songDAO;
         id = songID;
@@ -85,12 +88,15 @@ public class RowSong extends Row {
         this.durationMs = durationMs;
         track = songTrack;
         path = songPath;
+        File f = new File(path);
+        filename = f.getName();
         rating = RATING_NOT_INITIALIZED;
         this.albumId = albumId;
         this.year = year;
         if(path != null) {
             folder = Path.getFolder(path);
         }
+        this.params = params;
     }
 
     public long getID(){return id;}
@@ -139,7 +145,10 @@ public class RowSong extends Row {
     }
 
     private void setText(TextView text) {
-        text.setText(title);
+        if (params.getShowFilename())
+            text.setText(filename);
+        else
+            text.setText(title);
         text.setTextColor(normalSongTextColor);
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
     }

@@ -912,7 +912,7 @@ public class Rows {
                 }
 
                 RowSong rowSong = new RowSong(songDAO, rowsUnfolded.size(), 2, id, title, artist, album,
-                        durationMs, track, null, albumId, year);
+                        durationMs, track, null, albumId, year, params);
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
@@ -952,7 +952,8 @@ public class Rows {
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
 
-                RowSong rowSong = new RowSong(songDAO, -1, 2, id, title, artist, album, durationMs, track, path, albumId, year);
+                RowSong rowSong = new RowSong(songDAO, -1, 2, id, title, artist, album,
+                        durationMs, track, path, albumId, year, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
@@ -1051,7 +1052,7 @@ public class Rows {
 
                 final int pos = -1, level = 2;
                 RowSong rowSong = new RowSong(songDAO, pos, level, id, title, artist, album, durationMs,
-                        track, path, albumId, year);
+                        track, path, albumId, year, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }

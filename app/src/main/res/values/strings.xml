@@ -190,6 +190,9 @@
     <string name="settings_locked">Do not prevent lock</string>
     <string name="settings_unlocked">Prevent lock</string>
 
+    <string name="settings_show_filename">Show filename</string>
+    <string name="settings_show_filename_summary">Show songs filename (e.g. james_brown_01.mp3) rather than songs title</string>
+
     <string name="action_repeat_title">Repeat mode</string>
     <string name="action_repeat_all">Repeat all songs</string>
     <string name="action_repeat_one">Repeat same track</string>

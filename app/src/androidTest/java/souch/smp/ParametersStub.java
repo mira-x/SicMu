@@ -109,4 +109,6 @@ public class ParametersStub implements Parameters {
     public void setMinRating(int rating) {}
 
     public int getSleepDelayM() { return 60; }
+
+    public boolean getShowFilename() { return false; }
 }

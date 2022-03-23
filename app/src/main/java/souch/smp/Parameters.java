@@ -72,4 +72,6 @@ public interface Parameters {
     boolean getScrobble();
 
     int getSleepDelayM();
+
+    boolean getShowFilename();
 }

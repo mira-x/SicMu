@@ -201,6 +201,11 @@
 
     </PreferenceCategory>
 
+    <CheckBoxPreference
+        android:key="SHOW_FILENAME"
+        android:title="@string/settings_show_filename"
+        android:summary="@string/settings_show_filename_summary"
+        android:defaultValue="false"/>
 
     <PreferenceCategory android:title="@string/settings_accelerometer">
 

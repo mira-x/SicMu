@@ -170,4 +170,8 @@ public class ParametersImpl implements Parameters {
     public int getSleepDelayM() {
         return Integer.valueOf(getPref().getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
     }
+
+    public boolean getShowFilename() {
+        return getPref().getBoolean(PrefKeys.SHOW_FILENAME.name(), false);
+    }
 }

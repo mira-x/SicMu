@@ -42,5 +42,6 @@ public enum PrefKeys {
     REPEAT_MODE,
     ENABLE_RATING,
     MIN_RATING,
-    SLEEP_DELAY_M
+    SLEEP_DELAY_M,
+    SHOW_FILENAME
 }

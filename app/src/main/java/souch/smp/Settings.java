@@ -180,6 +180,9 @@ public class Settings extends PreferenceActivity
                         Toast.LENGTH_LONG).show();
             }
         }
+        else if(key.equals(PrefKeys.SHOW_FILENAME.name())) {
+            musicSrv.setChanged();
+        }
     }
 
     private void setUnfoldSubgroup() {
