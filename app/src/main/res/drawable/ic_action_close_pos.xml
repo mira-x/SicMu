@@ -1,0 +1,9 @@
+<vector xmlns:ns0="http://schemas.android.com/apk/res/android" ns0:width="242dp" ns0:height="95dp" ns0:viewportWidth="1000.0" ns0:viewportHeight="390">
+  <group ns0:name="layer1">
+    <path ns0:name="path1406" ns0:pathData="M995.956328125 386.44890625C995.956328125 386.44890625 2.047799375 386.44890625 2.047799375 386.44890625C2.047799375 386.44890625 496.914 2.24890625 496.914 2.24890625C496.914 2.24890625 995.956328125 386.44890625 995.956328125 386.44890625"
+        ns0:fillColor="@color/PlaybackControlAction" ns0:fillAlpha="1.0"
+        ns0:strokeColor="@color/PlaybackControlAction"
+        ns0:strokeWidth="0.1" ns0:strokeAlpha="1.0"
+        ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
+  </group>
+</vector>

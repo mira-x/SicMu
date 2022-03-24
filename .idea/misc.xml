@@ -7,10 +7,18 @@
         <entry key="app/src/main/res/drawable/action_goto_play.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/action_next.xml" value="0.191" />
         <entry key="app/src/main/res/drawable/action_play.xml" value="0.161" />
+        <entry key="app/src/main/res/drawable/ic_action_close_pos.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_action_edit.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_action_edit_off.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_action_goto_play.xml" value="0.1105" />
+        <entry key="app/src/main/res/drawable/ic_action_goto_play_press.xml" value="0.144" />
+        <entry key="app/src/main/res/drawable/ic_action_open_pos.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_action_pause.xml" value="0.191" />
         <entry key="app/src/main/res/drawable/ic_action_play.xml" value="0.161" />
         <entry key="app/src/main/res/drawable/ic_action_play_press.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_actionbar_launcher_anim.xml" value="0.1195" />
+        <entry key="app/src/main/res/drawable/ic_curr_pause.xml" value="0.144" />
+        <entry key="app/src/main/res/drawable/ic_curr_play.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_looper.xml" value="0.33" />
         <entry key="app/src/main/res/drawable/ic_looper_A.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/drawable/ic_looper_ab.xml" value="0.24427083333333333" />
@@ -33,6 +41,7 @@
         <entry key="app/src/main/res/layout/song.xml" value="0.23233695652173914" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.10462962962962963" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.122" />
         <entry key="app/src/main/res/xml/menu.xml" value="0.1" />
         <entry key="app/src/main/res/xml/preferences.xml" value="0.25" />
       </map>
