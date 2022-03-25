@@ -872,6 +872,7 @@ public class Rows {
             int artistCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int albumCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
             int durationCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
+            int pathCol = musicCursor.getColumnIndex(MediaStore.MediaColumns.DATA);
             int trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
             int albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
@@ -894,6 +895,7 @@ public class Rows {
                 int track = musicCursor.getInt(trackCol);
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
+                String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
 
                 if (prevArtistGroup == null || artist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
                     RowGroup artistGroup = new RowGroup(rowsUnfolded.size(), 0, artist,
@@ -912,7 +914,7 @@ public class Rows {
                 }
 
                 RowSong rowSong = new RowSong(songDAO, rowsUnfolded.size(), 2, id, title, artist, album,
-                        durationMs, track, null, albumId, year, params);
+                        durationMs, track, path, albumId, year, params);
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
