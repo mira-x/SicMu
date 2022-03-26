@@ -19,6 +19,11 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Preference
+        android:key="DONATE"
+        android:title="@string/settings_donate_title"
+        android:summary="@string/settings_donate_summary"/>
+
     <PreferenceScreen
         android:key="button_help"
         android:title="@string/settings_help"
@@ -114,11 +119,6 @@
                 android:title="@string/settings_licence_title"
                 android:summary="@string/settings_licence"/>
 
-            <Preference
-                android:key="DONATE"
-                android:title="@string/settings_donate_title"
-                android:summary="@string/settings_donate_summary"/>
-
         </PreferenceCategory>
 
         <PreferenceCategory android:title="@string/settings_thanks">
@@ -141,7 +141,6 @@
         </PreferenceCategory>
 
     </PreferenceScreen>
-
 
     <CheckBoxPreference
         android:key="ENABLE_SHAKE"
