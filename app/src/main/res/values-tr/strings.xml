@@ -133,8 +133,6 @@
     <string name="settings_licence_title">Lisans</string>
     <string name="settings_licence">GPLv3</string>
     <string name="settings_donate_title">Bağış Yap</string>
-    <string name="settings_donate_summary">Eğer bu uygulama olmadan hayat size zorsa tıklayın.</string>
-    <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>
 
     <string name="settings_thanks">Teşekkürler</string>
     <string name="settings_thanks_icons">İkonlar</string>

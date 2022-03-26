@@ -158,8 +158,6 @@
     <string name="settings_licence_title">Lizenz</string>
     <string name="settings_licence">GPLv3</string>
     <string name="settings_donate_title">Spenden</string>
-    <string name="settings_donate_summary">Klicke hier, wenn Du nicht mehr ohne die App leben kannst...</string>
-    <string name="settings_donate_www">http://rodolphe.souchaud.free.fr/donate</string>
 
     <string name="settings_thanks">Danksagungen</string>
     <string name="settings_thanks_icons">Icons</string>

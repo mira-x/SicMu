@@ -96,8 +96,8 @@ SicMu player pronounced zicmu. S is for Super Simple Sorted Souch player.
 
 ### Donation
 
-If you don't know what to do with your money or want to make me smile the whole day:
-[donate](http://rodolphe.souchaud.free.fr/donate)
+If you like the app, donate to reward me for the hard work ! :
+[donate](https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE)
 
 
 ### License

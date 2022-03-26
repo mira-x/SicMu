@@ -208,7 +208,7 @@ public class Settings extends PreferenceActivity
 
     private void showDonateWebsite() {
         Intent webIntent = new Intent(Intent.ACTION_VIEW);
-        webIntent.setData(Uri.parse(getString(R.string.settings_donate_www)));
+        webIntent.setData(Uri.parse("https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE"));
         this.startActivity(webIntent);
     }
 
