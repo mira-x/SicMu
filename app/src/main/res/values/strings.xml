@@ -177,7 +177,7 @@
     <string name="settings_licence_title">License</string>
     <string name="settings_licence">GPLv3</string>
     <string name="settings_donate_title">Donate</string>
-    <string name="settings_donate_summary">If you like the app, donate to reward me for the hard work ! :</string>
+    <string name="settings_donate_summary">If you like the app, donate to reward me for the hard work !</string>
 
     <string name="settings_thanks">Special thanks</string>
     <string name="settings_thanks_icons">Icons</string>
