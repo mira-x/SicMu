@@ -22,6 +22,7 @@
     <Preference
         android:key="DONATE"
         android:title="@string/settings_donate_title"
+        android:icon="@drawable/coins"
         android:summary="@string/settings_donate_summary"/>
 
     <PreferenceScreen
@@ -143,13 +144,6 @@
     </PreferenceScreen>
 
     <CheckBoxPreference
-        android:key="ENABLE_SHAKE"
-        android:title="@string/settings_accelerometer"
-        android:summary="@string/settings_accelerometer_summary"
-        android:icon="@drawable/ic_menu_shake_checked"
-        android:defaultValue="false"/>
-
-    <CheckBoxPreference
         android:key="ENABLE_RATING"
         android:title="@string/settings_rating"
         android:summary="@string/settings_rating_summary"
@@ -200,20 +194,14 @@
 
     </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:key="SHOW_FILENAME"
-        android:title="@string/settings_show_filename"
-        android:summary="@string/settings_show_filename_summary"
-        android:defaultValue="false"/>
-
-    <CheckBoxPreference
-        android:key="SHOW_REMAINING_TIME"
-        android:title="@string/settings_show_remaining_time"
-        android:summary="@string/settings_show_remaining_time_summary"
-        android:defaultValue="false"/>
-
     <PreferenceCategory android:title="@string/settings_accelerometer">
 
+        <CheckBoxPreference
+            android:key="ENABLE_SHAKE"
+            android:title="@string/settings_accelerometer"
+            android:summary="@string/settings_accelerometer_summary"
+            android:icon="@drawable/ic_menu_shake_checked"
+            android:defaultValue="false"/>
 
         <!-- todo: improve this with a number picker or slider or shake force counter... -->
         <EditTextPreference
@@ -227,6 +215,18 @@
 
 
     <PreferenceCategory android:title="@string/settings_song_view">
+
+        <CheckBoxPreference
+            android:key="SHOW_FILENAME"
+            android:title="@string/settings_show_filename"
+            android:summary="@string/settings_show_filename_summary"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="SHOW_REMAINING_TIME"
+            android:title="@string/settings_show_remaining_time"
+            android:summary="@string/settings_show_remaining_time_summary"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:key="DEFAULT_FOLD"
