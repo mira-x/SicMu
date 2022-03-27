@@ -323,7 +323,7 @@
             <LinearLayout
                 android:id="@+id/details_rating"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="55dp"
                 android:layout_gravity="bottom"
                 android:layout_weight="0"
                 android:gravity="bottom"
@@ -390,8 +390,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/more_buttons"
-        android:layout_below="@+id/details_layout"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/details_layout"
         android:choiceMode="singleChoice"
         android:fastScrollEnabled="true"
         android:hapticFeedbackEnabled="false"
@@ -484,7 +484,8 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:scaleType="center"
+            android:scaleType="centerInside"
+            android:padding="12dp"
             android:onClick="openSort"
             android:longClickable="true"
             android:src="@drawable/ic_menu_tree" />

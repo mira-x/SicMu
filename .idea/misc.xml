@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-hdpi/ic_menu_tree.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/action_goto_play.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/action_next.xml" value="0.191" />
         <entry key="app/src/main/res/drawable/action_play.xml" value="0.161" />
+        <entry key="app/src/main/res/drawable/coins.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/ic_action_close_pos.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_action_edit.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_action_edit_off.xml" value="0.1795" />
