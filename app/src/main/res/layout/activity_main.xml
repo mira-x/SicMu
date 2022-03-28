@@ -460,7 +460,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:padding="12dp"
+            android:padding="14dp"
             android:scaleType="fitCenter"
             android:longClickable="true"
             android:onClick="openShuffle"
