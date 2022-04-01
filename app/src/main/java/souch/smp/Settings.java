@@ -51,6 +51,8 @@ public class Settings extends PreferenceActivity
     private final String RESCAN_KEY = "RESCAN";
     private final String DONATE_KEY = "DONATE";
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
+    static public final int CHANGE_TEXT_SIZE = 1;
+    static public final int CHANGE_THEME = 2;
     // todo: improve preference default value
 
     @Override
@@ -124,21 +126,21 @@ public class Settings extends PreferenceActivity
         }
         else if(key.equals(PrefKeys.TEXT_SIZE_NORMAL.name())) {
             findPreference(key).setSummary(String.valueOf(params.getNormalTextSize()));
-            Main.applyTextSize(params);
-            musicSrv.setChanged();
+            setResult(CHANGE_TEXT_SIZE);
         }
         else if(key.equals(PrefKeys.TEXT_SIZE_BIG.name())) {
             findPreference(key).setSummary(String.valueOf(params.getBigTextSize()));
-            Main.applyTextSize(params);
-            musicSrv.setChanged();
+            setResult(CHANGE_TEXT_SIZE);
         }
         else if(key.equals(PrefKeys.TEXT_SIZE_RATIO.name())) {
-            findPreference(key).setSummary(String.valueOf(String.valueOf(params.getTextSizeRatio())));
-            Main.applyTextSize(params);
-            musicSrv.setChanged();
+            findPreference(key).setSummary(String.valueOf(params.getTextSizeRatio()));
+            setResult(CHANGE_TEXT_SIZE);
         }
         else if(key.equals(PrefKeys.ENABLE_SHAKE.name())) {
             musicSrv.setEnableShake(params.getEnableShake());
+        }
+        else if(key.equals("TOGGLE_THEME")) {
+            setResult(CHANGE_THEME);
         }
         else if(key.equals(PrefKeys.ENABLE_RATING.name())) {
             musicSrv.setEnableRating(params.getEnableRating());

@@ -120,6 +120,9 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Main", "onCreate");
+
+        params = new ParametersImpl(this);
+
         setContentView(R.layout.activity_main);
         finishing = false;
 
@@ -213,8 +216,6 @@ public class Main extends AppCompatActivity {
         seekbar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         followSong = false;
-
-        params = new ParametersImpl(this);
 
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
@@ -465,6 +466,12 @@ public class Main extends AppCompatActivity {
                     Toast.makeText(this, R.string.permission_needed, Toast.LENGTH_LONG).show();
                 }
             }
+        }
+        else if (requestCode == SETTINGS_ACTION) {
+            if (resultCode == Settings.CHANGE_TEXT_SIZE)
+                applyTextSize();
+            else if (resultCode == Settings.CHANGE_THEME)
+                reloadTheme();
         }
     }
 
@@ -1445,9 +1452,10 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    private final int SETTINGS_ACTION = 1;
     public void openSettings(View view) {
         Intent intent = new Intent(this, Settings.class);
-        startActivity(intent);
+        startActivityForResult(intent, SETTINGS_ACTION);
     }
 
     public void openSort(View view) {
@@ -1474,7 +1482,7 @@ public class Main extends AppCompatActivity {
             img.setImageResource(R.drawable.ic_menu_text_regular);
             txtChoosed = R.string.settings_text_size_small;
         }
-        applyTextSize(params);
+        applyTextSize();
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.settings_text_size) + getString(txtChoosed),
 //                Toast.LENGTH_LONG).show();
@@ -1577,7 +1585,7 @@ public class Main extends AppCompatActivity {
     }
 */
 
-    static public void applyTextSize(Parameters params) {
+    public void applyTextSize() {
         int textSize;
         if (!params.getChoosedTextSize())
             textSize = params.getNormalTextSize();
@@ -1586,12 +1594,14 @@ public class Main extends AppCompatActivity {
 
         RowSong.textSize = textSize;
         RowGroup.textSize = (int) (textSize * params.getTextSizeRatio());
+        if (songAdt != null)
+            songAdt.notifyDataSetChanged();
     }
 
     private void restore() {
         noLock = params.getNoLock();
         followSong = params.getFollowSong();
-        applyTextSize(params);
+        applyTextSize();
     }
 
     private void save() {
@@ -1601,6 +1611,10 @@ public class Main extends AppCompatActivity {
     private void vibrate() {
         if (params.getVibrate())
             vibrator.vibrate(20);
+    }
+
+    public void reloadTheme() {
+
     }
 }
 
