@@ -50,14 +50,9 @@
         <item>Eingeklappt</item>
         <item>Ausgeklappt</item>
     </string-array>
-    <string-array name="settings_fold_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="settings_unfold_subgroup">Untergruppen ausklappen</string>
     <string name="settings_unfold_subgroup_summary">Wenn ausgewählt, ist es notwendig alle Untergruppen und Lieder einzeln auszuklappen.</string>
     <string name="settings_unfold_subgroup_threshold">Untergruppe ausklappen,</string>
-    <string name="settings_unfold_subgroup_threshold_default">18</string>
     <string name="settings_unfold_subgroup_threshold_summary">wenn sie weniger als %d Lieder enthält.</string>
 
 
@@ -68,11 +63,8 @@
     <string name="settings_text_size_small">klein</string>
     <string name="settings_text_size_bold">fett</string>
     <string name="settings_text_size_big">Größe für fette Schrift</string>
-    <string name="settings_text_size_big_default">19</string>
     <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
-    <string name="settings_text_size_ratio_default">1.1</string>
     <string name="settings_text_size_regular">Größe für kleine Schrift</string>
-    <string name="settings_text_size_regular_default">15</string>
 
     <string name="settings_rescan_title">Neu einlesen</string>
     <string name="settings_rescan">Mediendateien neu einlesen.</string>
@@ -106,7 +98,6 @@
     <string name="settings_accelerometer">Schütteln</string>
     <string name="settings_accelerometer_summary">Bei Schütteln des Geräts zum nächsten Lied springen.</string>
     <string name="settings_accelerometer_threshold">Stärke des Schüttelns</string>
-    <string name="settings_default_shake_threshold">100</string>
     <string name="settings_no_accelerometer">Dein Gerät hat keinen Beschleunigungsmesser! Schüttelfunktion nicht verfügbar.</string>
 
     <string name="settings_rating">Leistungspriorität</string>

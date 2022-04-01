@@ -43,14 +43,9 @@
         <item>Fechadas</item>
         <item>Abertas</item>
     </string-array>
-    <string-array name="settings_fold_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="settings_unfold_subgroup">Abrir subgrupos</string>
     <string name="settings_unfold_subgroup_summary">Se marcado: clicar no grupo abrirá todos os subgrupos.</string>
     <string name="settings_unfold_subgroup_threshold">Abrir subgrupos se grupo</string>
-    <string name="settings_unfold_subgroup_threshold_default">18</string>
     <string name="settings_unfold_subgroup_threshold_summary">tem menos que %d músicas</string>
 
 
@@ -58,11 +53,8 @@
     <string name="settings_text_size_choosed">Escolha o tamanho da fonte</string>
     <string name="settings_text_size_choosed_default">false</string>
     <string name="settings_text_size_regular">Fonte pequena</string>
-    <string name="settings_text_size_regular_default">15</string>
     <string name="settings_text_size_big">Fonte grande</string>
-    <string name="settings_text_size_big_default">19</string>
     <string name="settings_text_size_ratio">Proporção entre tamnho de texto grupo/música</string>
-    <string name="settings_text_size_ratio_default">1.1</string>
 
     <string name="settings_rescan_title">Procurar músicas</string>
     <string name="settings_rescan">Iniciar busca por arquivos de mídia no dispositivo.</string>
@@ -96,7 +88,6 @@
     <string name="settings_accelerometer">Ação de sacudir</string>
     <string name="settings_accelerometer_summary">Sacudir faz ir para a próxima música.</string>
     <string name="settings_accelerometer_threshold">Limiar de força para sacudir</string>
-    <string name="settings_default_shake_threshold">100</string>
     <string name="settings_no_accelerometer">Seu dispositivo não tem acelerômetro. A funcionalidade de sacudir ficará desabilitada.</string>
 
 
