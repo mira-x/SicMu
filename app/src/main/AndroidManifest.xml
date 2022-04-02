@@ -98,7 +98,7 @@
         </receiver>
 
         <activity
-            android:name=".Settings"
+            android:name=".SettingsActivity"
             android:label="@string/settings_title"
             android:theme="@style/Theme.AppTheme"
             android:parentActivityName=".Main" >

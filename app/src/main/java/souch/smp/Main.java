@@ -493,9 +493,9 @@ public class Main extends AppCompatActivity {
             }
         }
         else if (requestCode == SETTINGS_ACTION) {
-            if (resultCode == Settings.CHANGE_TEXT_SIZE)
+            if (resultCode == SettingsPreferenceFragment.CHANGE_TEXT_SIZE)
                 applyTextSize();
-            else if (resultCode == Settings.CHANGE_THEME) {
+            else if (resultCode == SettingsPreferenceFragment.CHANGE_THEME) {
                 // restart main activity
                 finish();
                 startActivity(getIntent());
@@ -1482,7 +1482,7 @@ public class Main extends AppCompatActivity {
 
     private final int SETTINGS_ACTION = 1;
     public void openSettings(View view) {
-        Intent intent = new Intent(this, Settings.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_ACTION);
     }
 

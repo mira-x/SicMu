@@ -1,6 +1,6 @@
 /*
  * SicMu Player - Lightweight music player for Android
- * Copyright (C) 2015  Mathieu Souchaud
+ * Copyright (C) 2022  Mathieu Souchaud
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,10 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
 
-public class Settings extends PreferenceActivity
+public class SettingsPreferenceFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Preference.OnPreferenceClickListener
-{
+        Preference.OnPreferenceClickListener {
     private Parameters params;
     private MusicService musicSrv;
     private Intent playIntent;
@@ -53,43 +52,41 @@ public class Settings extends PreferenceActivity
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
-    // todo: improve preference default value
 
+    // todo: improve preference default value
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d("Settings", "onCreate");
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        params = new ParametersImpl(this);
+        addPreferencesFromResource(R.xml.preferences);
+
+        params = new ParametersImpl(getActivity().getApplicationContext());
         switch (params.getTheme()) {
             case 0:
-                setTheme(R.style.AppTheme);
+                getActivity().setTheme(R.style.AppTheme);
                 break;
             case 1:
-                setTheme(R.style.AppThemeDark);
+                getActivity().setTheme(R.style.AppThemeDark);
                 break;
             case 2:
-                setTheme(R.style.AppThemeWhite);
+                getActivity().setTheme(R.style.AppThemeWhite);
                 break;
         }
 
-        // fixme: everything should be put in onResume?
-        addPreferencesFromResource(R.xml.preferences);
-        playIntent = new Intent(this, MusicService.class);
-        bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+        playIntent = new Intent(getActivity(), MusicService.class);
+        getActivity().bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
 
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         String thresholdKeys = PrefKeys.SHAKE_THRESHOLD.name();
         EditTextPreference prefShakeThreshold = (EditTextPreference) findPreference(thresholdKeys);
         CheckBoxPreference prefEnableShake = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_SHAKE.name());
-        if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)) {
+        if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)) {
             prefShakeThreshold.setSummary(String.valueOf(params.getShakeThreshold()));
             prefEnableShake.setChecked(params.getEnableShake());
-        }
-        else {
+        } else {
             prefShakeThreshold.setEnabled(false);
             prefEnableShake.setEnabled(false);
-            Toast.makeText(getApplicationContext(),
+            Toast.makeText(getActivity().getApplicationContext(),
                     getResources().getString(R.string.settings_no_accelerometer),
                     Toast.LENGTH_LONG).show();
         }
@@ -115,91 +112,77 @@ public class Settings extends PreferenceActivity
         String rootFoldersKey = PrefKeys.ROOT_FOLDERS.name();
         EditTextPreference prefRootFolders = (EditTextPreference) findPreference(rootFoldersKey);
         prefRootFolders.setSummary(params.getRootFolders());
-        if(!sharedPreferences.contains(rootFoldersKey))
-            prefRootFolders.setText(Path.getMusicStoragesStr(getBaseContext()));
+        if (!sharedPreferences.contains(rootFoldersKey))
+            prefRootFolders.setText(Path.getMusicStoragesStr(getActivity().getBaseContext()));
 
         findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(params.getSleepDelayM()));
 
         setFoldSummary();
         setThemeSummary();
 
-        this.onContentChanged();
+        getActivity().onContentChanged();
     }
-
 
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(!serviceBound)
+        if (!serviceBound)
             return;
         Log.d("MusicService", "onSharedPreferenceChanged: " + key);
 
-        if(key.equals(PrefKeys.DEFAULT_FOLD.name())) {
+        if (key.equals(PrefKeys.DEFAULT_FOLD.name())) {
             setFoldSummary();
-        }
-        else if(key.equals(PrefKeys.TEXT_SIZE_NORMAL.name())) {
+        } else if (key.equals(PrefKeys.TEXT_SIZE_NORMAL.name())) {
             findPreference(key).setSummary(String.valueOf(params.getNormalTextSize()));
-            setResult(CHANGE_TEXT_SIZE);
-        }
-        else if(key.equals(PrefKeys.TEXT_SIZE_BIG.name())) {
+            getActivity().setResult(CHANGE_TEXT_SIZE);
+        } else if (key.equals(PrefKeys.TEXT_SIZE_BIG.name())) {
             findPreference(key).setSummary(String.valueOf(params.getBigTextSize()));
-            setResult(CHANGE_TEXT_SIZE);
-        }
-        else if(key.equals(PrefKeys.TEXT_SIZE_RATIO.name())) {
+            getActivity().setResult(CHANGE_TEXT_SIZE);
+        } else if (key.equals(PrefKeys.TEXT_SIZE_RATIO.name())) {
             findPreference(key).setSummary(String.valueOf(params.getTextSizeRatio()));
-            setResult(CHANGE_TEXT_SIZE);
-        }
-        else if(key.equals(PrefKeys.ENABLE_SHAKE.name())) {
+            getActivity().setResult(CHANGE_TEXT_SIZE);
+        } else if (key.equals(PrefKeys.ENABLE_SHAKE.name())) {
             musicSrv.setEnableShake(params.getEnableShake());
-        }
-        else if(key.equals(PrefKeys.THEME.name())) {
+        } else if (key.equals(PrefKeys.THEME.name())) {
             setThemeSummary();
-            setResult(CHANGE_THEME);
+            getActivity().setResult(CHANGE_THEME);
             // restart activity to reload theme
-            finish();
-            startActivity(getIntent());
-        }
-        else if(key.equals(PrefKeys.ENABLE_RATING.name())) {
+            getActivity().finish();
+            startActivity(getActivity().getIntent());
+        } else if (key.equals(PrefKeys.ENABLE_RATING.name())) {
             musicSrv.setEnableRating(params.getEnableRating());
-        }
-        else if(key.equals(PrefKeys.SHAKE_THRESHOLD.name())) {
+        } else if (key.equals(PrefKeys.SHAKE_THRESHOLD.name())) {
             final float threshold = params.getShakeThreshold();
             musicSrv.setShakeThreshold(threshold);
             findPreference(key).setSummary(String.valueOf(threshold));
-        }
-        else if(key.equals(PrefKeys.UNFOLD_SUBGROUP.name())) {
+        } else if (key.equals(PrefKeys.UNFOLD_SUBGROUP.name())) {
             setUnfoldSubgroup();
-        }
-        else if(key.equals(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name())) {
+        } else if (key.equals(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name())) {
             setUnfoldThresholdSummary();
-        }
-        else if(key.equals(PrefKeys.ROOT_FOLDERS.name())) {
+        } else if (key.equals(PrefKeys.ROOT_FOLDERS.name())) {
             final String rootFolder = params.getRootFolders();
             findPreference(key).setSummary(rootFolder);
-            if(!(new File(rootFolder)).exists()) {
+            if (!(new File(rootFolder)).exists()) {
                 Formatter formatter = new Formatter();
                 formatter.format(getResources().getString(R.string.settings_root_folder_summary),
                         rootFolder);
-                Toast.makeText(getApplicationContext(),
-                                formatter.toString(),
-                                Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(),
+                        formatter.toString(),
+                        Toast.LENGTH_LONG).show();
             }
             boolean reinited = musicSrv.getRows().setRootFolders(rootFolder);
-            if(reinited)
+            if (reinited)
                 musicSrv.setChanged();
-        }
-        else if(key.equals(PrefKeys.SLEEP_DELAY_M.name())) {
+        } else if (key.equals(PrefKeys.SLEEP_DELAY_M.name())) {
             final int sleepDelayMinutes = params.getSleepDelayM();
             if (sleepDelayMinutes > 0) {
                 findPreference(key).setSummary(String.valueOf(sleepDelayMinutes));
-            }
-            else {
-                Toast.makeText(getApplicationContext(),
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(),
                         getResources().getString(R.string.settings_sleep_timer_delay_wrong),
                         Toast.LENGTH_LONG).show();
             }
-        }
-        else if(key.equals(PrefKeys.SHOW_FILENAME.name())) {
+        } else if (key.equals(PrefKeys.SHOW_FILENAME.name())) {
             musicSrv.setChanged();
         }
     }
@@ -260,15 +243,15 @@ public class Settings extends PreferenceActivity
     };
 
     @Override
-    protected void onDestroy() {
-        unbindService(musicConnection);
+    public void onDestroy() {
+        getActivity().unbindService(musicConnection);
         serviceBound = false;
         musicSrv = null;
         super.onDestroy();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
@@ -276,7 +259,7 @@ public class Settings extends PreferenceActivity
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         // Unregister the listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
@@ -285,15 +268,14 @@ public class Settings extends PreferenceActivity
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if(preference.getKey().equals(RESCAN_KEY)) {
+        if (preference.getKey().equals(RESCAN_KEY)) {
             rescan();
         } else if (preference.getKey().equals(DONATE_KEY)) {
             showDonateWebsite();
         } else if (preference.getKey().equals(START_SLEEP_TIMER_KEY)) {
             if (musicSrv.getSleepTimerScheduleMs() > 0) {
                 musicSrv.stopSleepTimer();
-            }
-            else {
+            } else {
                 musicSrv.startSleepTimer(params.getSleepDelayM());
             }
             setSleepTimerTitle();
@@ -302,7 +284,7 @@ public class Settings extends PreferenceActivity
     }
 
     public void rescan() {
-        Path.rescanWhole(getBaseContext());
+        Path.rescanWhole(getActivity().getBaseContext());
     }
 
     private void setSleepTimerTitle() {

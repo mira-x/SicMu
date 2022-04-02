@@ -41,20 +41,6 @@
         <item name="colorRowSong">?attr/colorPrimary</item>
     </style>
 
-    <!--
-    debug
-    <item name="android:background">?attr/colorPrimary</item>
-    <item name="android:preferenceStyle">?attr/colorPrimary</item>
-    <item name="android:preferenceScreenStyle">?attr/colorPrimary</item>
-    <item name="android:preferenceInformationStyle">?attr/colorPrimary</item>
-    <item name="android:preferenceLayoutChild">?attr/colorPrimary</item>
-    <item name="android:listViewStyle">@style/listViewPrefs</item>
-    <style name="listViewPrefs" parent="@android:style/Widget.ListView">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:cacheColorHint">?attr/colorPrimary</item>
-    </style>
-    -->
-
     <style name="Theme.AppTheme" parent="Theme.AppThemeDark">
         <item name="colorOnPrimary">@color/Blood</item>
     </style>
