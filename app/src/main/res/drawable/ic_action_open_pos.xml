@@ -2,6 +2,6 @@
   <group ns0:name="layer1">
     <path ns0:name="path1406"
         ns0:pathData="M995.956328125 1.703125C995.956328125 1.703125 2.047799375 1.703125 2.047799375 1.703125C2.047799375 1.703125 496.914 385.903125 496.914 385.903125C496.914 385.903125 995.956328125 1.703125 995.956328125 1.703125"
-        ns0:fillColor="?attr/ActionBtn" ns0:fillAlpha="1.0" ns0:strokeColor="#000000" ns0:strokeWidth="0.0700043367486" ns0:strokeAlpha="1.0" ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
+        ns0:fillColor="?attr/colorActionBtn" ns0:fillAlpha="1.0" ns0:strokeColor="#000000" ns0:strokeWidth="0.0700043367486" ns0:strokeAlpha="1.0" ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
   </group>
 </vector>

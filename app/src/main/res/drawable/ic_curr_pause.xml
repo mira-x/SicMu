@@ -1,10 +1,10 @@
 <vector xmlns:ns0="http://schemas.android.com/apk/res/android" ns0:width="24.0dp" ns0:height="24.0dp" ns0:viewportWidth="1000.0" ns0:viewportHeight="1000.0">
   <path ns0:name="path988" ns0:pathData="M187.873251503 185.072913981C187.873251503 185.072913981 187.873251503 812.811089836 187.873251503 812.811089836C187.873251503 812.811089836 279.952973073 812.811089836 279.952973073 812.811089836C279.952973073 812.811089836 279.952973073 185.072913981 279.952973073 185.072913981C279.952973073 185.072913981 187.873251503 185.072913981 187.873251503 185.072913981"
-      ns0:fillColor="?attr/ActionBtn" ns0:fillAlpha="1.0"
-      ns0:strokeColor="?attr/ActionBtn" ns0:strokeWidth="1"
+      ns0:fillColor="?attr/colorActionBtn" ns0:fillAlpha="1.0"
+      ns0:strokeColor="?attr/colorActionBtn" ns0:strokeWidth="1"
       ns0:strokeAlpha="1.0" ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
   <path ns0:name="path990" ns0:pathData="M523.556170855 185.674655652C523.556170855 185.674655652 523.556170855 817.540089874 523.556170855 817.540089874C523.556170855 817.540089874 614.073921579 817.540089874 614.073921579 817.540089874C614.073921579 817.540089874 611.650754893 185.880055654 611.650754893 185.880055654C611.650754893 185.880055654 523.556170855 185.674655652 523.556170855 185.674655652"
-      ns0:fillColor="?attr/ActionBtn" ns0:fillAlpha="1.0"
-      ns0:strokeColor="?attr/ActionBtn" ns0:strokeWidth="1"
+      ns0:fillColor="?attr/colorActionBtn" ns0:fillAlpha="1.0"
+      ns0:strokeColor="?attr/colorActionBtn" ns0:strokeWidth="1"
       ns0:strokeAlpha="1.0" ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
 </vector>

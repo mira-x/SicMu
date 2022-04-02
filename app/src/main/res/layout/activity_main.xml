@@ -116,7 +116,7 @@
             android:layout_height="match_parent"
             android:layout_weight="51"
             android:inputType="numberDecimal"
-            android:textColor="?attr/ActionBtn"
+            android:textColor="?attr/colorActionBtn"
             android:gravity="center"
             android:text="1.0x"/>
 
@@ -140,7 +140,7 @@
             android:clickable="true"
             android:onClick="seek"
             android:text="20s"
-            android:textColor="?attr/ActionBtn"></TextView>
+            android:textColor="?attr/colorActionBtn"></TextView>
 
         <souch.smp.RepeatingImageButton
             android:id="@+id/m5_button"
@@ -160,7 +160,7 @@
             android:layout_gravity="center"
             android:clickable="false"
             android:text="5s"
-            android:textColor="?attr/ActionBtn"></TextView>
+            android:textColor="?attr/colorActionBtn"></TextView>
 
         <souch.smp.RepeatingImageButton
             android:id="@+id/p5_button"
@@ -182,7 +182,7 @@
             android:clickable="true"
             android:onClick="seek"
             android:text="20s"
-            android:textColor="?attr/ActionBtn"></TextView>
+            android:textColor="?attr/colorActionBtn"></TextView>
 
         <souch.smp.RepeatingImageButton
             android:id="@+id/p20_button"
@@ -229,7 +229,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text=""
-            android:textColor="?attr/ActionBtn"></TextView>
+            android:textColor="?attr/colorActionBtn"></TextView>
     </LinearLayout>
 
     <LinearLayout

@@ -238,11 +238,11 @@ public class Main extends AppCompatActivity {
         Row.backgroundColor = getColorFromAttr(R.attr.colorPrimary);
         Row.levelOffset = 14; // todo what?
 
-        RowSong.normalSongTextColor = getColorFromAttr(R.attr.TextNotPlaying);
-        RowSong.normalSongDurationTextColor = getColorFromAttr(R.attr.TextNotPlaying);
+        RowSong.normalSongTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
+        RowSong.normalSongDurationTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
 
-        RowGroup.normalTextColor = getColorFromAttr(R.attr.TextNotPlaying);
-        RowGroup.playingTextColor = getColorFromAttr(R.attr.TextPlaying);
+        RowGroup.normalTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
+        RowGroup.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying);
 
         ImageView appButton = (ImageView) findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);

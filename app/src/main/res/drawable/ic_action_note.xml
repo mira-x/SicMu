@@ -1,5 +1,5 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="32dp" android:height="32dp"
-    android:viewportWidth="24" android:viewportHeight="24" android:tint="?attr/ActionBtn">
-  <path android:fillColor="?attr/ActionBtn"
+    android:viewportWidth="24" android:viewportHeight="24" android:tint="?attr/colorActionBtn">
+  <path android:fillColor="?attr/colorActionBtn"
       android:pathData="M9,3l0.01,10.55c-0.6,-0.34 -1.28,-0.55 -2,-0.55C4.79,13 3,14.79 3,17s1.79,4 4.01,4S11,19.21 11,17V7h4V3H9z"/>
 </vector>
