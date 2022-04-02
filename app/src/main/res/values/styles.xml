@@ -23,16 +23,17 @@
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorOnPrimary">@color/blood</item>
-        <item name="RatingHighlight">@color/blood</item>
-        <item name="RatingNormal">@color/LightGrey</item>
+        <item name="ActionBtn">?attr/colorOnPrimary</item>
+        <item name="RatingOn">?attr/colorOnPrimary</item>
+        <item name="RatingOff">@color/LightGrey</item>
+        <item name="TrackLooperOn">?attr/colorOnPrimary</item>
+        <item name="TrackLooperOff">@color/LightGrey</item>
     </style>
 
-    <style name="Theme.AppThemeWhite" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.AppThemeWhite" parent="Theme.AppTheme">
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="RatingHighlight">@color/white</item>
-        <item name="RatingNormal">@color/LightGrey</item>
     </style>
 
     <style name="BottomButton" parent="android:Widget">
@@ -62,7 +63,7 @@
     </style>
 
     <style name="PreferenceTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/apptheme_color</item>
+        <item name="colorAccent">?attr/colorOnPrimary</item>
     </style>
 
 </resources>

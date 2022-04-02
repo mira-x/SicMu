@@ -4,8 +4,6 @@
     <color name="white">#ffffffff</color>
     <color name="LightGrey">#ff666666</color>
 
-    <color name="apptheme_color">#f30000</color>
-
 
     <color name="RowGroupTextNormal">#fff0f0f0</color>
     <color name="RowGroupTextPlaying">#ffff0000</color>
@@ -17,7 +15,4 @@
     <color name="RowGroupArtistBackground">#88353535</color>
     <color name="RowGroupArtistAlbumBackground">#88000000</color>
     <color name="RowGroupTreeBackground">#88353535</color>
-    <color name="TrackLooperNormal">@color/LightGrey</color>
-    <color name="TrackLooperActivated">@color/apptheme_color</color>
-    <color name="PlaybackControlAction">@color/apptheme_color</color>
 </resources>
