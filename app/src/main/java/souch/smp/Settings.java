@@ -60,6 +60,18 @@ public class Settings extends PreferenceActivity
         Log.d("Settings", "onCreate");
         super.onCreate(savedInstanceState);
         params = new ParametersImpl(this);
+        switch (params.getTheme()) {
+            case 0:
+                setTheme(R.style.AppTheme);
+                break;
+            case 1:
+                setTheme(R.style.AppThemeDark);
+                break;
+            case 2:
+                setTheme(R.style.AppThemeWhite);
+                break;
+        }
+
         // fixme: everything should be put in onResume?
         addPreferencesFromResource(R.xml.preferences);
         playIntent = new Intent(this, MusicService.class);
@@ -143,6 +155,9 @@ public class Settings extends PreferenceActivity
         else if(key.equals(PrefKeys.THEME.name())) {
             setThemeSummary();
             setResult(CHANGE_THEME);
+            // restart activity to reload theme
+            finish();
+            startActivity(getIntent());
         }
         else if(key.equals(PrefKeys.ENABLE_RATING.name())) {
             musicSrv.setEnableRating(params.getEnableRating());

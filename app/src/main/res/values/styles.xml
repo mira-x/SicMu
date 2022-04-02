@@ -24,6 +24,10 @@
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorPrimary">@color/Black</item>
         <item name="colorOnPrimary">@color/White</item>
+
+        <!-- useful especially for preference -->
+        <item name="colorAccent">?attr/colorOnPrimary</item>
+
         <item name="colorActionBtn">?attr/colorOnPrimary</item>
         <item name="colorRatingOn">?attr/colorOnPrimary</item>
         <item name="colorRatingOff">@color/LightGrey</item>
@@ -37,6 +41,20 @@
         <item name="colorRowSong">?attr/colorPrimary</item>
     </style>
 
+    <!--
+    debug
+    <item name="android:background">?attr/colorPrimary</item>
+    <item name="android:preferenceStyle">?attr/colorPrimary</item>
+    <item name="android:preferenceScreenStyle">?attr/colorPrimary</item>
+    <item name="android:preferenceInformationStyle">?attr/colorPrimary</item>
+    <item name="android:preferenceLayoutChild">?attr/colorPrimary</item>
+    <item name="android:listViewStyle">@style/listViewPrefs</item>
+    <style name="listViewPrefs" parent="@android:style/Widget.ListView">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:cacheColorHint">?attr/colorPrimary</item>
+    </style>
+    -->
+
     <style name="Theme.AppTheme" parent="Theme.AppThemeDark">
         <item name="colorOnPrimary">@color/Blood</item>
     </style>
@@ -46,6 +64,11 @@
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorPrimary">@color/White</item>
         <item name="colorOnPrimary">@color/Black</item>
+
+        <!-- useful especially for preference -->
+        <item name="colorAccent">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+
         <item name="colorActionBtn">?attr/colorOnPrimary</item>
         <item name="colorRatingOn">?attr/colorOnPrimary</item>
         <item name="colorRatingOff">@color/LightGrey</item>
@@ -80,10 +103,6 @@
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
         <item name="android:color">?attr/colorPrimary</item>
-    </style>
-
-    <style name="PreferenceTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/Blood</item>
     </style>
 
 </resources>
