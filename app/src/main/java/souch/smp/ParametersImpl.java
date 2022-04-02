@@ -178,4 +178,8 @@ public class ParametersImpl implements Parameters {
     public boolean getShowRemainingTime() {
         return getPref().getBoolean(PrefKeys.SHOW_REMAINING_TIME.name(), false);
     }
+
+    public Integer getTheme() {
+        return Integer.valueOf(getPref().getString(PrefKeys.THEME.name(), "0"));
+    }
 }

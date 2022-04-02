@@ -75,4 +75,6 @@ public interface Parameters {
 
     boolean getShowFilename();
     boolean getShowRemainingTime();
+
+    Integer getTheme();
 }

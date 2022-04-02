@@ -143,6 +143,15 @@
 
     </PreferenceScreen>
 
+    <ListPreference
+        android:key="THEME"
+        android:title="@string/settings_theme_title"
+        android:icon="@drawable/ic_palette"
+        android:entryValues="@array/settings_theme_values"
+        android:entries="@array/settings_theme_entries"
+        android:defaultValue="0"
+        />
+
     <CheckBoxPreference
         android:key="ENABLE_RATING"
         android:title="@string/settings_rating"

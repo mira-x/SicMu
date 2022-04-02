@@ -109,6 +109,7 @@ public class Settings extends PreferenceActivity
         findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(params.getSleepDelayM()));
 
         setFoldSummary();
+        setThemeSummary();
 
         this.onContentChanged();
     }
@@ -139,7 +140,8 @@ public class Settings extends PreferenceActivity
         else if(key.equals(PrefKeys.ENABLE_SHAKE.name())) {
             musicSrv.setEnableShake(params.getEnableShake());
         }
-        else if(key.equals("TOGGLE_THEME")) {
+        else if(key.equals(PrefKeys.THEME.name())) {
+            setThemeSummary();
             setResult(CHANGE_THEME);
         }
         else if(key.equals(PrefKeys.ENABLE_RATING.name())) {
@@ -206,6 +208,16 @@ public class Settings extends PreferenceActivity
             idx = foldEntries.length - 1;
         if (idx >= 0)
             prefFold.setSummary(foldEntries[idx]);
+    }
+
+    private void setThemeSummary() {
+        int idx = params.getTheme();
+        ListPreference pref = (ListPreference) findPreference(PrefKeys.THEME.name());
+        String[] entries = getResources().getStringArray(R.array.settings_theme_entries);
+        if (idx >= entries.length)
+            idx = entries.length - 1;
+        if (idx >= 0)
+            pref.setSummary(entries[idx]);
     }
 
     private void showDonateWebsite() {

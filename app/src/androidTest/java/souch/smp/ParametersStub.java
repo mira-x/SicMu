@@ -112,4 +112,6 @@ public class ParametersStub implements Parameters {
 
     public boolean getShowFilename() { return false; }
     public boolean getShowRemainingTime() { return false; }
+
+    public Integer getTheme() { return 0; }
 }

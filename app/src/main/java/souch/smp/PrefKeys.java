@@ -44,5 +44,6 @@ public enum PrefKeys {
     MIN_RATING,
     SLEEP_DELAY_M,
     SHOW_FILENAME,
-    SHOW_REMAINING_TIME
+    SHOW_REMAINING_TIME,
+    THEME
 }

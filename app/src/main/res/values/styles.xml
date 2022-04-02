@@ -22,6 +22,13 @@
     <style name="Theme.AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
+        <item name="colorOnPrimary">@color/blood</item>
+    </style>
+
+    <style name="Theme.AppThemeWhite" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
+        <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="BottomButton" parent="android:Widget">
@@ -31,26 +38,6 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
     </style>
-
-    <color name="apptheme_color">#f30000</color>
-
-    <color name="LightGrey">#ff666666</color>
-
-    <color name="RowGroupTextNormal">#fff0f0f0</color>
-    <color name="RowGroupTextPlaying">#ffff0000</color>
-    <color name="RowSongTextNormal">#ffffffff</color>
-    <color name="RowSongTextDuration">#ffffffff</color>
-    <color name="RowBackground">#88000000</color>
-    <color name="RowGroupFolderBackground">#88353535</color>
-    <color name="RowGroupFolderArtistBackground">#88000000</color>
-    <color name="RowGroupArtistBackground">#88353535</color>
-    <color name="RowGroupArtistAlbumBackground">#88000000</color>
-    <color name="RowGroupTreeBackground">#88353535</color>
-    <color name="TrackLooperNormal">@color/LightGrey</color>
-    <color name="TrackLooperActivated">@color/apptheme_color</color>
-    <color name="PlaybackControlAction">@color/apptheme_color</color>
-    <color name="RatingHighlight">@color/apptheme_color</color>
-    <color name="RatingNormal">@color/LightGrey</color>
 
     <!-- todo
     <item "levelOffset"">15</item>

@@ -20,10 +20,13 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="SeekBarAppTheme" parent="Widget.AppCompat.SeekBar">
-      <item name="android:progressDrawable">@drawable/seekbar_horizontal_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/seekbar_horizontal_holo_light</item>
-      <item name="android:thumb">@drawable/seekbar_control_selector_holo_light</item>
+  <style name="AppThemeWhite" parent="@style/Theme.AppThemeWhite">
+
+  </style>
+
+  <style name="AppTheme" parent="Theme.AppTheme">
+      <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
+      <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
   </style>
 
 </resources>

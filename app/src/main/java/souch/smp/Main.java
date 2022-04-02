@@ -123,6 +123,12 @@ public class Main extends AppCompatActivity {
 
         params = new ParametersImpl(this);
 
+        switch (params.getTheme()) {
+            case 1 :
+                setTheme(R.style.AppThemeWhite);
+                break;
+        }
+
         setContentView(R.layout.activity_main);
         finishing = false;
 
@@ -470,8 +476,11 @@ public class Main extends AppCompatActivity {
         else if (requestCode == SETTINGS_ACTION) {
             if (resultCode == Settings.CHANGE_TEXT_SIZE)
                 applyTextSize();
-            else if (resultCode == Settings.CHANGE_THEME)
-                reloadTheme();
+            else if (resultCode == Settings.CHANGE_THEME) {
+                // restart main activity
+                finish();
+                startActivity(getIntent());
+            }
         }
     }
 
@@ -1611,10 +1620,6 @@ public class Main extends AppCompatActivity {
     private void vibrate() {
         if (params.getVibrate())
             vibrator.vibrate(20);
-    }
-
-    public void reloadTheme() {
-
     }
 }
 

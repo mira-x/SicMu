@@ -54,6 +54,16 @@
     <string name="action_fold">Fold</string>
     <string name="action_unfold">Unfold</string>
 
+    <string name="settings_theme_title">Theme</string>
+    <string-array name="settings_theme_entries">
+        <item>Red blood</item>
+        <item>White light</item>
+    </string-array>
+    <string-array name="settings_theme_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string name="settings_song_view">Song view</string>
     <string name="settings_fold_title">Fold state on startup</string>
     <string-array name="settings_fold_entries">
