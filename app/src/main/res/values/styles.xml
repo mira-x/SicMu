@@ -32,8 +32,9 @@
         <item name="colorTextPlaying">?attr/colorOnPrimary</item>
         <item name="colorTextNotPlaying">@color/White</item>
 
-        <item name="colorRowGroup">@color/White</item>
-        <item name="colorRowGroup2nd">@color/White</item>
+        <item name="colorRowGroup">@color/LightBlack</item>
+        <item name="colorRowGroup2nd">@color/Black</item>
+        <item name="colorRowSong">@color/Black</item>
     </style>
 
     <style name="Theme.AppThemeDark" parent="Theme.AppTheme">

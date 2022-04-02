@@ -59,7 +59,6 @@ public class Row {
     }
 
     public void setView(RowViewHolder holder, Main main, int position) {
-        holder.layout.setBackgroundColor(backgroundColor);
         holder.text.setTypeface(null, typeface);
         holder.text.setPadding(convertDpToPixels(level * levelOffset, holder.layout.getResources()), 0, 0, 0);
     }

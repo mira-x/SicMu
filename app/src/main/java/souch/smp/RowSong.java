@@ -76,6 +76,7 @@ public class RowSong extends Row {
     // must be set outside before calling setText
     public static int normalSongTextColor;
     public static int normalSongDurationTextColor;
+    public static int backgroundSongColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
                    long durationMs, int songTrack, String songPath, long albumId, int year, Parameters params) {
@@ -142,6 +143,7 @@ public class RowSong extends Row {
                 holder.duration.setLayoutParams(params);
             }
         }
+        holder.layout.setBackgroundColor(backgroundSongColor);
     }
 
     private void setText(TextView text) {

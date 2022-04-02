@@ -235,14 +235,16 @@ public class Main extends AppCompatActivity {
 
 
         // set the color statically for speed (don't know another prettier method)
-        Row.backgroundColor = getColorFromAttr(R.attr.colorPrimary);
         Row.levelOffset = 14; // todo what?
+        Row.backgroundColor = getColorFromAttr(R.attr.colorRowGroup);
 
+        RowSong.backgroundSongColor = getColorFromAttr(R.attr.colorRowSong);
         RowSong.normalSongTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
         RowSong.normalSongDurationTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
 
         RowGroup.normalTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
         RowGroup.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying);
+        RowGroup.backgroundOverridedColor = getColorFromAttr(R.attr.colorRowGroup2nd);
 
         ImageView appButton = (ImageView) findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);

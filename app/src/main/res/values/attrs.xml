@@ -11,4 +11,5 @@
     <attr name="colorTextNotPlaying" format="color" />
     <attr name="colorRowGroup" format="color" />
     <attr name="colorRowGroup2nd" format="color" />
+    <attr name="colorRowSong" format="color" />
 </resources>

@@ -30,7 +30,7 @@ public class RowGroup extends Row {
     protected String name;
     protected boolean folded;
     protected boolean selected;
-    private int color;
+    private boolean overrideBackgroundColor;
     private int nbRowSong;
     public static Filter rowType;
     protected static int textSize = 18;
@@ -38,13 +38,14 @@ public class RowGroup extends Row {
     // must be set outside before calling setText
     public static int normalTextColor;
     public static int playingTextColor;
+    public static int backgroundOverridedColor;
 
-    public RowGroup(int pos, int level, String name, int typeface, int color) {
+    public RowGroup(int pos, int level, String name, int typeface, boolean overrideBackgroundColor) {
         super(pos, level, typeface);
         this.name = name;
         folded = false;
         selected = false;
-        this.color = color;
+        this.overrideBackgroundColor = overrideBackgroundColor;
     }
 
     public String getName() { return name; }
@@ -79,7 +80,10 @@ public class RowGroup extends Row {
             holder.duration.setLayoutParams(params);
         }
 
-        holder.layout.setBackgroundColor(color);
+        if (overrideBackgroundColor && backgroundOverridedColor != 0)
+            holder.layout.setBackgroundColor(backgroundOverridedColor);
+        else
+            holder.layout.setBackgroundColor(backgroundColor);
     }
 
     private void setText(TextView text) {
