@@ -20,13 +20,12 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppThemeWhite" parent="@style/Theme.AppThemeWhite">
-
-  </style>
-
-  <style name="AppTheme" parent="Theme.AppTheme">
-      <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
-      <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
-  </style>
+    <style name="AppTheme" parent="Theme.AppTheme">
+        <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
+    </style>
+    <style name="AppThemeDark" parent="@style/Theme.AppThemeDark">
+    </style>
+    <style name="AppThemeWhite" parent="@style/Theme.AppThemeWhite">
+    </style>
 
 </resources>

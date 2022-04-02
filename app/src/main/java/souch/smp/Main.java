@@ -36,6 +36,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +117,7 @@ public class Main extends AppCompatActivity {
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
     private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +126,10 @@ public class Main extends AppCompatActivity {
         params = new ParametersImpl(this);
 
         switch (params.getTheme()) {
-            case 1 :
+            case 1:
+                setTheme(R.style.AppThemeDark);
+                break;
+            case 2:
                 setTheme(R.style.AppThemeWhite);
                 break;
         }
@@ -191,24 +196,24 @@ public class Main extends AppCompatActivity {
 //                }
 //            }
 //        } else {
-            // below android 11
-            if (ContextCompat.checkSelfPermission(getApplicationContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        // below android 11
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
 //                        || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                ) {
-                    Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
-                    showWarningLayout();
-                }
-                Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE
-//                                , Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        },
-                        EXTERNAL_STORAGE_REQUEST_CODE);
-            } else {
-                Log.d("RequestPermissionResult", "Permission *_EXTERNAL_STORAGE already granted!");
+            ) {
+                Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
+                showWarningLayout();
             }
+            Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE
+//                                , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    EXTERNAL_STORAGE_REQUEST_CODE);
+        } else {
+            Log.d("RequestPermissionResult", "Permission *_EXTERNAL_STORAGE already granted!");
+        }
 //        }
 
         playIntent = new Intent(this, MusicService.class);
@@ -230,14 +235,14 @@ public class Main extends AppCompatActivity {
 
 
         // set the color statically for speed (don't know another prettier method)
-        Row.backgroundColor = getResources().getColor(R.color.RowBackground);
+        Row.backgroundColor = getColorFromAttr(R.attr.colorPrimary);
         Row.levelOffset = 14; // todo what?
 
-        RowSong.normalSongTextColor = getResources().getColor(R.color.RowSongTextNormal);
-        RowSong.normalSongDurationTextColor = getResources().getColor(R.color.RowSongTextDuration);
+        RowSong.normalSongTextColor = getColorFromAttr(R.attr.TextNotPlaying);
+        RowSong.normalSongDurationTextColor = getColorFromAttr(R.attr.TextNotPlaying);
 
-        RowGroup.normalTextColor = getResources().getColor(R.color.RowGroupTextNormal);
-        RowGroup.playingTextColor = getResources().getColor(R.color.RowGroupTextPlaying);
+        RowGroup.normalTextColor = getColorFromAttr(R.attr.TextNotPlaying);
+        RowGroup.playingTextColor = getColorFromAttr(R.attr.TextPlaying);
 
         ImageView appButton = (ImageView) findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);
@@ -250,16 +255,17 @@ public class Main extends AppCompatActivity {
                 if (detailsBigCoverArt == true) {
                     detailsBigCoverArt = false;
                     applyBiggerCoverArt();
-                }
-                else
+                } else
                     toggleDetails(null);
             }
+
             public void onSwipeRight() {
                 if (coverArtNum > 0) {
                     coverArtNum--;
                     setDetails();
                 }
             }
+
             public void onSwipeLeft() {
                 RowSong rowSong = rows.getCurrSong();
                 if (rowSong != null)
@@ -269,10 +275,12 @@ public class Main extends AppCompatActivity {
                                 setCoverArt(rowSongId, imageNum, bitmap);
                             });
             }
+
             public void onSwipeBottom() {
                 detailsBigCoverArt = true;
                 applyBiggerCoverArt();
             }
+
             public void performClick() {
                 toggleBiggerCoverArt(null);
             }
@@ -300,21 +308,30 @@ public class Main extends AppCompatActivity {
             public void onSwipeTop() {
                 changePlaybackSpeed(0.1f);
             }
+
             public void onSwipeRight() {
                 changePlaybackSpeed(0.2f);
             }
+
             public void onSwipeLeft() {
                 changePlaybackSpeed(-0.2f);
             }
+
             public void onSwipeBottom() {
                 changePlaybackSpeed(-0.1f);
             }
+
             public void performClick() {
                 Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    public int getColorFromAttr(int attr) {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(attr, typedValue, true);
+        return ContextCompat.getColor(this, typedValue.resourceId);
+    }
 
     // connect to the service
     private ServiceConnection musicConnection = new ServiceConnection() {

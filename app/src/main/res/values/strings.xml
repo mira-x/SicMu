@@ -57,11 +57,13 @@
     <string name="settings_theme_title">Theme</string>
     <string-array name="settings_theme_entries">
         <item>Red blood</item>
+        <item>Dark night</item>
         <item>White light</item>
     </string-array>
     <string-array name="settings_theme_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string name="settings_song_view">Song view</string>

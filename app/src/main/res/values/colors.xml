@@ -2,14 +2,10 @@
 <resources>
     <color name="blood">#f30000</color>
     <color name="white">#ffffffff</color>
+    <color name="black">#88000000</color>
+    <color name="lightBlack">#88353535</color>
     <color name="LightGrey">#ff666666</color>
 
-
-    <color name="RowGroupTextNormal">#fff0f0f0</color>
-    <color name="RowGroupTextPlaying">#ffff0000</color>
-    <color name="RowSongTextNormal">#ffffffff</color>
-    <color name="RowSongTextDuration">#ffffffff</color>
-    <color name="RowBackground">#88000000</color>
     <color name="RowGroupFolderBackground">#88353535</color>
     <color name="RowGroupFolderArtistBackground">#88000000</color>
     <color name="RowGroupArtistBackground">#88353535</color>

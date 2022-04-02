@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="colorPrimary" format="color" />
     <attr name="colorOnPrimary" format="color" />
     <attr name="ActionBtn" format="color" />
     <attr name="RatingOn" format="color" />
     <attr name="RatingOff" format="color" />
     <attr name="TrackLooperOff" format="color" />
     <attr name="TrackLooperOn" format="color" />
+    <attr name="TextPlaying" format="color" />
+    <attr name="TextNotPlaying" format="color" />
+    <attr name="RowGroupLevel1" format="color" />
+    <attr name="RowGroupLevel2" format="color" />
 </resources>
