@@ -54,11 +54,11 @@
     <string name="action_fold">Fold</string>
     <string name="action_unfold">Unfold</string>
 
-    <string name="settings_theme_title">Theme</string>
+    <string name="settings_theme_title">Theme (dark themes saves battery)</string>
     <string-array name="settings_theme_entries">
-        <item>Red blood</item>
+        <item>Dark blood</item>
         <item>Dark night</item>
-        <item>White light</item>
+        <item>Light white</item>
     </string-array>
     <string-array name="settings_theme_values">
         <item>0</item>

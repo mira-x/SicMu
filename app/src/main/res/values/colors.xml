@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="Blood">#f30000</color>
+    <color name="Blue">#0022dd</color>
     <color name="White">#ffffffff</color>
-    <color name="Black">#88000000</color>
-    <color name="LightBlack">#88353535</color>
+    <color name="Black">#ff000000</color>
+    <color name="LightBlack">#ff353535</color>
     <color name="LightGrey">#ff666666</color>
+    <color name="LightWhite">#ffeeeeee</color>
 
     <color name="RowGroupFolderBackground">#88353535</color>
     <color name="RowGroupFolderArtistBackground">#88000000</color>

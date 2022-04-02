@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="#ff242424"
         android:orientation="horizontal"
         android:paddingBottom="3dp"
         android:paddingTop="3dp">
@@ -105,7 +104,6 @@
         android:layout_below="@+id/actions_bar"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="#ff242424"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
@@ -217,7 +215,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/seek_buttons_layout"
-        android:background="#ff242424"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
@@ -237,7 +234,6 @@
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:layout_below="@id/warning_layout"
-        android:background="#ff242424"
         android:gravity="left"
         android:orientation="horizontal">
 
@@ -304,7 +300,6 @@
                android:paddingTop="4dp"
                android:layout_marginBottom="4dp"
                android:layout_weight="1"
-               android:background="#ff242424"
                android:onClick="deleteSong"
                android:scaleType="fitCenter"
                android:src="@drawable/ic_trash" />
@@ -315,7 +310,6 @@
                android:layout_height="40dp"
                android:layout_marginBottom="4dp"
                android:layout_weight="1"
-               android:background="#ff242424"
                android:onClick="openSongFolder"
                android:scaleType="fitCenter"
                android:src="@drawable/ic_menu_folder" />
