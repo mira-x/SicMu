@@ -877,13 +877,6 @@ public class Rows {
             int albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
 
-            int RowGroupArtistBackground = 0;
-            int RowGroupArtistAlbumBackground = 0;
-            if (resources != null) {
-                RowGroupArtistBackground = resources.getColor(R.color.RowGroupArtistBackground);
-                RowGroupArtistAlbumBackground = resources.getColor(R.color.RowGroupArtistAlbumBackground);
-            }
-
             RowGroup prevArtistGroup = null;
             RowGroup prevAlbumGroup = null;
             do {
@@ -982,13 +975,6 @@ public class Rows {
             }
         });
 
-        int RowGroupFolderBackground = 0;
-        int RowGroupArtistBackground = 0;
-        if (resources != null) {
-            RowGroupFolderBackground = resources.getColor(R.color.RowGroupFolderBackground);
-            RowGroupArtistBackground = resources.getColor(R.color.RowGroupFolderArtistBackground);
-        }
-
         // add group
         RowGroup prevFolderGroup = null;
         RowGroup prevArtistGroup = null;
@@ -1081,10 +1067,6 @@ public class Rows {
                 return cmp;
             }
         });
-
-        int RowGroupFolderBackground = 0;
-        if (resources != null)
-            RowGroupFolderBackground = resources.getColor(R.color.RowGroupTreeBackground);
 
         // add groups
         ArrayList<RowGroup> prevGroups = new ArrayList<>();

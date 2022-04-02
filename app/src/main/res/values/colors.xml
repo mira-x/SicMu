@@ -7,10 +7,4 @@
     <color name="LightBlack">#ff353535</color>
     <color name="LightGrey">#ff666666</color>
     <color name="LightWhite">#ffeeeeee</color>
-
-    <color name="RowGroupFolderBackground">#88353535</color>
-    <color name="RowGroupFolderArtistBackground">#88000000</color>
-    <color name="RowGroupArtistBackground">#88353535</color>
-    <color name="RowGroupArtistAlbumBackground">#88000000</color>
-    <color name="RowGroupTreeBackground">#88353535</color>
 </resources>
