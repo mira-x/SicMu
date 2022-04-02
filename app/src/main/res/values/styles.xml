@@ -23,12 +23,16 @@
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorOnPrimary">@color/blood</item>
+        <item name="RatingHighlight">@color/blood</item>
+        <item name="RatingNormal">@color/LightGrey</item>
     </style>
 
     <style name="Theme.AppThemeWhite" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. @android:style/Theme.Black.NoTitleBar -->
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="RatingHighlight">@color/white</item>
+        <item name="RatingNormal">@color/LightGrey</item>
     </style>
 
     <style name="BottomButton" parent="android:Widget">

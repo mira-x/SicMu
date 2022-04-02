@@ -2,10 +2,10 @@
 <resources>
     <color name="blood">#f30000</color>
     <color name="white">#ffffffff</color>
+    <color name="LightGrey">#ff666666</color>
 
     <color name="apptheme_color">#f30000</color>
 
-    <color name="LightGrey">#ff666666</color>
 
     <color name="RowGroupTextNormal">#fff0f0f0</color>
     <color name="RowGroupTextPlaying">#ffff0000</color>
@@ -20,6 +20,4 @@
     <color name="TrackLooperNormal">@color/LightGrey</color>
     <color name="TrackLooperActivated">@color/apptheme_color</color>
     <color name="PlaybackControlAction">@color/apptheme_color</color>
-    <color name="RatingHighlight">@color/apptheme_color</color>
-    <color name="RatingNormal">@color/LightGrey</color>
 </resources>

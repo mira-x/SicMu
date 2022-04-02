@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorOnPrimary" format="color" />
+
+    <attr name="RatingHighlight" format="color" />
+    <attr name="RatingNormal" format="color" />
 </resources>
