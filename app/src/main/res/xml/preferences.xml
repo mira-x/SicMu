@@ -156,7 +156,7 @@
         android:key="ENABLE_RATING"
         android:title="@string/settings_rating"
         android:summary="@string/settings_rating_summary"
-        android:icon="@drawable/ic_star_0_highlight"
+        android:icon="@drawable/ic_star_3_highlight"
         android:defaultValue="true"/>
 
     <PreferenceCategory android:title="@string/settings_sleep_timer">
@@ -170,6 +170,7 @@
         <Preference
             android:key="START_SLEEP_TIMER"
             android:title="@string/settings_sleep_timer_start"
+            android:icon="@drawable/ic_menu_timer"
             />
     </PreferenceCategory>
 
@@ -209,7 +210,7 @@
             android:key="ENABLE_SHAKE"
             android:title="@string/settings_accelerometer"
             android:summary="@string/settings_accelerometer_summary"
-            android:icon="@drawable/ic_menu_shake_checked"
+            android:icon="@drawable/ic_menu_vibration"
             android:defaultValue="false"/>
 
         <!-- todo: improve this with a number picker or slider or shake force counter... -->
@@ -285,7 +286,7 @@
             android:key="VIBRATE"
             android:title="@string/settings_vibrate_title"
             android:summary="@string/settings_vibrate"
-            android:icon="@drawable/ic_menu_shake_checked"
+            android:icon="@drawable/ic_menu_vibration"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
