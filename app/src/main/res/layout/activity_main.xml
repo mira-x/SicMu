@@ -398,21 +398,25 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_button"
         android:orientation="horizontal"
-        android:weightSum="301">
+        android:weightSum="299">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
         done by Daniele De Santis (Creative Commons (Attribution 3.0 Unported)),
         found on iconfinder.com. Color and dimension has been changed.
         -->
+
         <ImageButton
-            android:id="@+id/settings_button"
+            android:id="@+id/sort_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:onClick="openSettings"
-            android:src="@drawable/ic_menu_settings" />
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:onClick="openSort"
+            android:longClickable="true"
+            android:src="@drawable/ic_menu_tree" />
 
         <!--
         <ImageButton
@@ -473,16 +477,13 @@
             app:srcCompat="@drawable/ic_star_5_highlight" />
 
         <ImageButton
-            android:id="@+id/sort_button"
+            android:id="@+id/settings_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:scaleType="centerInside"
-            android:padding="12dp"
-            android:onClick="openSort"
-            android:longClickable="true"
-            android:src="@drawable/ic_menu_tree" />
+            android:layout_weight="49"
+            android:onClick="openSettings"
+            android:src="@drawable/ic_menu_settings" />
 
     </LinearLayout>
 

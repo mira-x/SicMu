@@ -65,11 +65,6 @@
             android:icon="@drawable/ic_action_open_pos"/>
 
         <Preference
-            android:title="@string/help_lock"
-            android:summary="@string/help_lock_summary"
-            android:icon="@drawable/ic_action_unlocked"/>
-
-        <Preference
             android:title="@string/help_root_folders"
             android:summary="@string/help_root_folders_summary"/>
 
@@ -92,54 +87,6 @@
         <Preference
             android:title="@string/help_stop"
             android:summary="@string/help_stop_summary"/>
-
-    </PreferenceScreen>
-
-    <PreferenceScreen
-        android:key="button_about"
-        android:title="@string/settings_about"
-        android:summary="@string/settings_about_summary"
-        android:icon="@drawable/ic_menu_skull"
-        android:persistent="false">
-
-        <PreferenceCategory android:title="@string/settings_about">
-
-            <Preference
-                android:title="@string/settings_author_title"
-                android:summary="@string/settings_author"/>
-
-            <Preference
-                android:title="@string/settings_version_title"
-                android:summary="@string/settings_version"/>
-
-            <Preference
-                android:title="@string/settings_source_title"
-                android:summary="@string/settings_source"/>
-
-            <Preference
-                android:title="@string/settings_licence_title"
-                android:summary="@string/settings_licence"/>
-
-        </PreferenceCategory>
-
-        <PreferenceCategory android:title="@string/settings_thanks">
-
-            <Preference
-                android:title="@string/settings_thanks_icons"
-                android:summary="@string/settings_thanks_icons_summary">
-            </Preference>
-
-            <Preference
-                android:title="@string/settings_thanks_doc"
-                android:summary="@string/settings_thanks_doc_summary">
-            </Preference>
-
-            <Preference
-                android:title="@string/settings_thanks_i15n"
-                android:summary="@string/settings_thanks_i15n_summary">
-            </Preference>
-
-        </PreferenceCategory>
 
     </PreferenceScreen>
 
@@ -307,6 +254,54 @@
             android:defaultValue="true"/>
 
     </PreferenceCategory>
+
+    <PreferenceScreen
+        android:key="button_about"
+        android:title="@string/settings_about"
+        android:summary="@string/settings_about_summary"
+        android:icon="@drawable/ic_menu_skull"
+        android:persistent="false">
+
+        <PreferenceCategory android:title="@string/settings_about">
+
+            <Preference
+                android:title="@string/settings_author_title"
+                android:summary="@string/settings_author"/>
+
+            <Preference
+                android:title="@string/settings_version_title"
+                android:summary="@string/settings_version"/>
+
+            <Preference
+                android:title="@string/settings_source_title"
+                android:summary="@string/settings_source"/>
+
+            <Preference
+                android:title="@string/settings_licence_title"
+                android:summary="@string/settings_licence"/>
+
+        </PreferenceCategory>
+
+        <PreferenceCategory android:title="@string/settings_thanks">
+
+            <Preference
+                android:title="@string/settings_thanks_icons"
+                android:summary="@string/settings_thanks_icons_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_doc"
+                android:summary="@string/settings_thanks_doc_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_i15n"
+                android:summary="@string/settings_thanks_i15n_summary">
+            </Preference>
+
+        </PreferenceCategory>
+
+    </PreferenceScreen>
 
 </PreferenceScreen>
 
