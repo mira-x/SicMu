@@ -22,6 +22,7 @@
     android:layout_height="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
+    android:paddingRight="8dp"
     android:id="@+id/song_layout">
 
     <TextView

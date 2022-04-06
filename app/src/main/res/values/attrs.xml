@@ -12,4 +12,5 @@
     <attr name="colorRowGroup" format="color" />
     <attr name="colorRowGroup2nd" format="color" />
     <attr name="colorRowSong" format="color" />
+    <attr name="scrollbarThumb" format="color" />
 </resources>

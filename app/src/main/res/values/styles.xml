@@ -39,6 +39,8 @@
         <item name="colorRowGroup">@color/LightBlack</item>
         <item name="colorRowGroup2nd">?attr/colorPrimary</item>
         <item name="colorRowSong">?attr/colorPrimary</item>
+
+        <item name="scrollbarThumb">@color/Blood</item>
     </style>
 
     <style name="Theme.AppTheme" parent="Theme.AppThemeDark">
@@ -66,6 +68,8 @@
         <item name="colorRowGroup">@color/LightWhite</item>
         <item name="colorRowGroup2nd">?attr/colorPrimary</item>
         <item name="colorRowSong">?attr/colorPrimary</item>
+
+        <item name="scrollbarThumb">@color/DarkBlood</item>
     </style>
 
     <style name="Theme.AppThemeWhite" parent="Theme.AppThemeLight">
