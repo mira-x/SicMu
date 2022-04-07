@@ -71,7 +71,7 @@ public class RowGroup extends Row {
 
         setText(holder.text);
         setDuration(holder.duration);
-        holder.image.setImageResource(android.R.color.transparent);
+        holder.image.setImageDrawable(null);
 
         holder.ratingStar.setVisibility(View.INVISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
