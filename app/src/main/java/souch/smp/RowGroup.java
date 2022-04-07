@@ -38,7 +38,7 @@ public class RowGroup extends Row {
     // must be set outside before calling setText
     public static int normalTextColor;
     public static int playingTextColor;
-    public static int backgroundOverridedColor;
+    public static int backgroundOverrideColor;
 
     public RowGroup(int pos, int level, String name, int typeface, boolean overrideBackgroundColor) {
         super(pos, level, typeface);
@@ -80,10 +80,12 @@ public class RowGroup extends Row {
             holder.duration.setLayoutParams(params);
         }
 
-        if (overrideBackgroundColor && backgroundOverridedColor != 0)
-            holder.layout.setBackgroundColor(backgroundOverridedColor);
-        else
-            holder.layout.setBackgroundColor(backgroundColor);
+        if (overrideBackgroundColor && backgroundOverrideColor != 0) {
+            setBackgroundColor(holder, backgroundOverrideColor);
+        }
+        else {
+            setBackgroundColor(holder, backgroundColor);
+        }
     }
 
     private void setText(TextView text) {

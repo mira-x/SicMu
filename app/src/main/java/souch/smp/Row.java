@@ -63,6 +63,14 @@ public class Row {
         holder.text.setPadding(convertDpToPixels(level * levelOffset, holder.layout.getResources()), 0, 0, 0);
     }
 
+    public void setBackgroundColor(RowViewHolder holder, int backgroundColor) {
+        holder.layout.setBackgroundColor(backgroundColor);
+        holder.text.setBackgroundColor(backgroundColor);
+        holder.image.setBackgroundColor(backgroundColor);
+        holder.duration.setBackgroundColor(backgroundColor);
+        holder.ratingStar.setBackgroundColor(backgroundColor);
+    }
+
     protected String getStringOffset() {
         String offset = "", s = " ";
         for(int i = level ; i > 0 ; i--) {

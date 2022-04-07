@@ -22,6 +22,7 @@
     android:layout_height="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
+    android:paddingLeft="2dp"
     android:paddingRight="8dp"
     android:id="@+id/song_layout">
 
@@ -29,7 +30,6 @@
         android:id="@+id/song_title"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textColor="#FFFFFFFF"
         android:ellipsize="end"
         android:singleLine="true"
         android:layout_alignParentLeft="true"

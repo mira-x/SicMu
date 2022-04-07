@@ -244,7 +244,7 @@ public class Main extends AppCompatActivity {
 
         RowGroup.normalTextColor = getColorFromAttr(R.attr.colorTextNotPlaying);
         RowGroup.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying);
-        RowGroup.backgroundOverridedColor = getColorFromAttr(R.attr.colorRowGroup2nd);
+        RowGroup.backgroundOverrideColor = getColorFromAttr(R.attr.colorRowGroup2nd);
 
         ImageView appButton = (ImageView) findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);

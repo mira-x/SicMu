@@ -143,7 +143,7 @@ public class RowSong extends Row {
                 holder.duration.setLayoutParams(params);
             }
         }
-        holder.layout.setBackgroundColor(backgroundSongColor);
+        setBackgroundColor(holder, backgroundSongColor);
     }
 
     private void setText(TextView text) {
