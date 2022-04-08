@@ -111,6 +111,8 @@ public class MusicService extends Service implements
     // current state of the MediaPlayer
     private PlayerState state;
 
+    private Database database;
+
     // set to false if seekTo() has been called but the seek is still not done
     private boolean seekFinished;
 
@@ -262,8 +264,10 @@ public class MusicService extends Service implements
         hasAudioFocus = false;
 
         params = new ParametersImpl(this);
-
-        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources());
+        database = new Database(getApplicationContext());
+        database.cleanupSongsDB();
+        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
+                database);
 
         restore();
 

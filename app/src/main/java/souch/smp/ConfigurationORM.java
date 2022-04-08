@@ -30,4 +30,7 @@ public class ConfigurationORM {
 
     @NonNull
     public long lastSongsCleanupMs;
+
+    @NonNull
+    public long lastShowDonateMs;
 }

@@ -62,8 +62,7 @@ public class Rows {
     // never assign this directly, instead use setCurrPos
     private int currPos;
 
-    private SongDAO songDAO;
-    private ConfigurationDAO configurationDAO;
+    private Database database;
 
     private Resources resources;
 
@@ -74,10 +73,12 @@ public class Rows {
 
     private boolean fileToOpenFound = false;
 
-    public Rows(Context context, ContentResolver resolver, Parameters params, Resources resources) {
+    public Rows(Context context, ContentResolver resolver, Parameters params, Resources resources,
+                Database database) {
         this.context = context;
         this.resources = resources;
         this.params = params;
+        this.database = database;
         musicResolver = resolver;
         currPos = -1;
 
@@ -87,17 +88,8 @@ public class Rows {
         rowsUnfolded = new ArrayList<>();
         rows = new ArrayList<>();
 
-        SongDatabase db = Room.databaseBuilder(context,
-                                SongDatabase.class, "database-SMP")
-                                //.allowMainThreadQueries()
-                                .build();
-        songDAO = db.getSongDAO();
-        configurationDAO = db.getConfigurationDAO();
-
         restore();
         init();
-
-        cleanupDBSongs();
     }
 
     // size of the foldable array
@@ -753,56 +745,6 @@ public class Rows {
         //preloadDBSongsAsync();
     }
 
-    private ConfigurationORM getConfiguration() {
-        ConfigurationORM config = configurationDAO.getConfiguration();
-        if (config == null) {
-            config = new ConfigurationORM();
-            config.lastSongsCleanupMs = (new Date()).getTime();
-            configurationDAO.insert(config);
-        }
-        return config;
-    }
-
-    // tell whether wy should start a DB cleanup (if return true : set last cleanup date to today)
-    private boolean DBSongsNeedCleanup() {
-        ConfigurationORM config = getConfiguration();
-        long nowMs = (new Date()).getTime();
-        final long cleanupPeriodInDay = 31;
-        if ((nowMs - config.lastSongsCleanupMs) > cleanupPeriodInDay*24*3600*1000) {
-            config.lastSongsCleanupMs = nowMs;
-            configurationDAO.update(config);
-            return true;
-        }
-        else {
-            Log.d("Rows", "Cleanup DB not useful, already done the " + new Date(config.lastSongsCleanupMs));
-        }
-        return false;
-    }
-
-    private void cleanupDBSongs() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                if (DBSongsNeedCleanup()) {
-                    Date beg = new Date();
-                    List<SongORM> songORMs = songDAO.getAll();
-                    int nbDelete = 0;
-                    for (SongORM songORM : songORMs) {
-                        if (!(new File(songORM.path).exists())) {
-                            Log.d("Rows", "Delete songORM for path=" + songORM.path);
-                            songDAO.delete(songORM);
-                            nbDelete++;
-                        }
-                    }
-                    Date end = new Date();
-                    Log.i("Rows", "Cleanup DB: " + nbDelete + "/" + songORMs.size() + " songORM deleted in " +
-                            (end.getTime() - beg.getTime()) + "ms");
-                }
-            }
-        };
-        thread.start();
-    }
-
     private void preloadDBSongsAsync() {
         Thread thread = new Thread() {
             @Override
@@ -816,15 +758,16 @@ public class Rows {
     private void preloadDBSongs() {
         Date beg = new Date();
         int nbLoaded = 0;
+        // preload in db songs that can be seen by users (i.e. songs from rowsUnfolded)
         for (Row row : rowsUnfolded) {
             if (row.getClass() == RowSong.class) {
                 RowSong rowSong = (RowSong) row;
-                SongORM songORM = songDAO.findByPath(rowSong.getPath());
+                SongORM songORM = database.getSongDAO().findByPath(rowSong.getPath());
                 nbLoaded++;
                 if (songORM == null) {
                     Log.d("Rows", "New songORM for path=" + rowSong.getPath());
                     try {
-                        songDAO.insert(new SongORM(rowSong.getPath(), rowSong.loadRating()));
+                        database.getSongDAO().insert(new SongORM(rowSong.getPath(), rowSong.loadRating()));
                     } catch (Exception e) {
                         Log.w("Rows", "Unable to add songORM for path=" + rowSong.getPath()
                                 + " e=" + e);
@@ -838,7 +781,7 @@ public class Rows {
                         songORM.rating = rowSong.loadRating();
                         songORM.lastModifiedMs = lastModified;
                         try {
-                            songDAO.update(songORM);
+                            database.getSongDAO().update(songORM);
                         } catch (Exception e) {
                             Log.w("Rows", "Unable to update songORM for path=" + rowSong.getPath()
                                     + " e=" + e);
@@ -906,7 +849,7 @@ public class Rows {
                     prevAlbumGroup = albumGroup;
                 }
 
-                RowSong rowSong = new RowSong(songDAO, rowsUnfolded.size(), 2, id, title, artist, album,
+                RowSong rowSong = new RowSong(database.getSongDAO(), rowsUnfolded.size(), 2, id, title, artist, album,
                         durationMs, track, path, albumId, year, params);
                 rowSong.setParent(prevAlbumGroup);
 
@@ -947,7 +890,7 @@ public class Rows {
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
 
-                RowSong rowSong = new RowSong(songDAO, -1, 2, id, title, artist, album,
+                RowSong rowSong = new RowSong(database.getSongDAO(), -1, 2, id, title, artist, album,
                         durationMs, track, path, albumId, year, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
@@ -1039,7 +982,7 @@ public class Rows {
                 int year = musicCursor.getInt(yearCol);
 
                 final int pos = -1, level = 2;
-                RowSong rowSong = new RowSong(songDAO, pos, level, id, title, artist, album, durationMs,
+                RowSong rowSong = new RowSong(database.getSongDAO(), pos, level, id, title, artist, album, durationMs,
                         track, path, albumId, year, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
