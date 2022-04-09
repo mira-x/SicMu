@@ -1,6 +1,6 @@
-<vector xmlns:ns0="http://schemas.android.com/apk/res/android" ns0:width="24.0dp" ns0:height="24.0dp" ns0:viewportWidth="1000.0" ns0:viewportHeight="1000.0">
-  <path ns0:name="path988" ns0:pathData="M182.303343125 117.740859275C182.303343125 117.740859275 182.303343125 887.667673768 182.303343125 887.667673768C182.303343125 887.667673768 577.103921283 500.000004 577.103921283 500.000004C577.103921283 500.000004 182.303343125 117.740859275 182.303343125 117.740859275"
-      ns0:fillColor="?attr/colorActionBtn" ns0:fillAlpha="1.0"
-      ns0:strokeColor="?attr/colorActionBtn" ns0:strokeWidth="1"
-      ns0:strokeAlpha="1.0" ns0:strokeLineCap="butt" ns0:strokeLineJoin="miter"/>
+<vector xmlns:ns0="http://schemas.android.com/apk/res/android"
+    ns0:width="12dp" ns0:height="14dp"
+    ns0:viewportWidth="24" ns0:viewportHeight="24">
+  <path ns0:pathData="M 4,0 V 24 L 20.48107,12.024486 Z"
+      ns0:fillColor="?attr/colorActionBtn"/>
 </vector>
