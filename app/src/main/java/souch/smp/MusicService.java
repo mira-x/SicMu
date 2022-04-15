@@ -280,6 +280,9 @@ public class MusicService extends Service implements
         scrobble = new Scrobble(rows, params, getApplicationContext());
     }
 
+    public Database getDatabase() {
+        return database;
+    }
 
     public class MusicBinder extends Binder {
         MusicService getService() {

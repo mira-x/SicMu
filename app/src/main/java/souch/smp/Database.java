@@ -49,10 +49,35 @@ public class Database {
         if (config == null) {
             config = new ConfigurationORM();
             config.lastSongsCleanupMs = (new Date()).getTime();
-            config.lastShowDonateMs = (new Date()).getTime();
+            config.lastShowDonateMs = config.lastSongsCleanupMs;
+            config.nbTimeAppStartedSinceShowDonate = 0;
             configurationDAO.insert(config);
         }
         return config;
+    }
+
+    public interface DoesDonateMustBeShownInterface {
+        void donateMustBeShown(boolean mustBeShown) ;
+    }
+    public void doesDonateMustBeShownAsync(DoesDonateMustBeShownInterface ddmbsi) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ddmbsi.donateMustBeShown(doesDonateMustBeShown());
+            }
+        };
+        thread.start();
+    }
+
+    public void disableShowDonate() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ConfigurationORM config = getConfigurationORM();
+                config.lastShowDonateMs = -1;
+            }
+        };
+        thread.start();
     }
 
     /*
@@ -61,29 +86,36 @@ public class Database {
      * @return if return true, lastShowDonateMs is reset to now
      *   if lastShowDonateMs is set to -1 in DB, doesDonateMustBeShown will always return false
      */
-    public boolean doesDonateMustBeShown() {
+    private boolean doesDonateMustBeShown() {
+        boolean mustBeShown = false;
         ConfigurationORM config = getConfigurationORM();
-        long nowMs = (new Date()).getTime();
-        final boolean showDonateDisabled = config.lastShowDonateMs < 0;
+        config.nbTimeAppStartedSinceShowDonate++;
+        boolean showDonateDisabled = config.lastShowDonateMs < 0;
         if (showDonateDisabled) {
             Log.d("Database", "Show donate disabled");
         }
         else {
             final long donatePeriodInDay = 31*3;
-            if ((nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000) {
+            final long appOpenedOften = 20;
+            long nowMs = (new Date()).getTime();
+            if ((config.nbTimeAppStartedSinceShowDonate > appOpenedOften) &&
+                (nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000)
+            {
                 config.lastShowDonateMs = nowMs;
-                configurationDAO.update(config);
-                return true;
+                config.nbTimeAppStartedSinceShowDonate = 0;
+                mustBeShown = true;
             }
             else {
-                Log.d("Database", "Show donate not useful, already shown the " +
+                Log.d("Database", "Show donate not useful : app used " +
+                        config.nbTimeAppStartedSinceShowDonate + " times or already shown the " +
                         new Date(config.lastShowDonateMs));
             }
         }
-        return false;
+        configurationDAO.update(config);
+        return mustBeShown;
     }
 
-    
+
     // tell whether wy should start a DB cleanup (if return true : set last cleanup date to today)
     private boolean songsDBNeedCleanup() {
         ConfigurationORM config = getConfigurationORM();

@@ -20,7 +20,11 @@
 
     <string name="settings_version">1.9.1</string>
 
-    <string name="permission_needed">The app needs read and write storage permissions in order to show songs and play them ! When asked, please allow access to photos and multimedia content on your android device.</string>
+    <string name="permission_needed">The app needs read storage permission in order to show songs
+        and play them !
+        When asked, please allow access to photos and multimedia content on your android device.
+    </string>
+    <!-- and write storage permissions -->
 
     <string name="action_settings">Open settings</string>
     <string name="advanced_settings_title">Advanced settings</string>
@@ -190,6 +194,7 @@
     <string name="settings_licence">GPLv3</string>
     <string name="settings_donate_title">Donate</string>
     <string name="settings_donate_summary">If you like the app, donate to reward me for the hard work !</string>
+    <string name="show_donate_disabled">Show donate disabled</string>
 
     <string name="settings_thanks">Special thanks</string>
     <string name="settings_thanks_icons">Icons</string>

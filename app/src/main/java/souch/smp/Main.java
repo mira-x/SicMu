@@ -105,12 +105,12 @@ public class Main extends AppCompatActivity {
     private LinearLayout detailsLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
-    private LinearLayout warningLayout;
+    private LinearLayout warningLayout, donateLayout;
 
     private LinearLayout moreButtonsLayout;
 
     private ImageButton albumImage;
-    private TextView songTitle, songAlbum, songArtist, warningText;
+    private TextView songTitle, songAlbum, songArtist, warningText, donateText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private LinearLayout details_right_layout;
@@ -154,8 +154,13 @@ public class Main extends AppCompatActivity {
         posButton.setImageDrawable(null);
         seekButtonsLayout = (LinearLayout) findViewById(R.id.seek_buttons_layout);
         seekButtonsLayout.setVisibility(View.GONE);
-        warningLayout = (LinearLayout) findViewById(R.id.warning_layout);
+        warningLayout = findViewById(R.id.warning_layout);
         warningLayout.setVisibility(View.GONE);
+        warningLayout.setOnClickListener(view -> {
+            hideWarning();
+        });
+        donateLayout = findViewById(R.id.donate_layout);
+        donateLayout.setVisibility(View.GONE);
         detailsLayout = (LinearLayout) findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
@@ -182,6 +187,15 @@ public class Main extends AppCompatActivity {
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
 
+        songTitle = findViewById(R.id.detail_title);
+        songAlbum = findViewById(R.id.detail_album);
+        songArtist = findViewById(R.id.detail_artist);
+        warningText = findViewById(R.id.warning_text);
+        donateText = findViewById(R.id.donate_text);
+        donateText.setOnClickListener((View v) -> {
+            openDonate(null);
+        });
+
 //        if (SDK_INT >= Build.VERSION_CODES.R) {
 //            if (!Environment.isExternalStorageManager()) {
 //                try {
@@ -203,7 +217,7 @@ public class Main extends AppCompatActivity {
 //                        || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             ) {
                 Log.d("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Show explanation.");
-                showWarningLayout();
+                showWarning();
             }
             Log.i("checkSelfPermission", "Permission *_EXTERNAL_STORAGE not granted! Request it.");
             ActivityCompat.requestPermissions(this,
@@ -287,9 +301,7 @@ public class Main extends AppCompatActivity {
                 toggleBiggerCoverArt(null);
             }
         });
-        songTitle = (TextView) findViewById(R.id.detail_title);
-        songAlbum = (TextView) findViewById(R.id.detail_album);
-        songArtist = (TextView) findViewById(R.id.detail_artist);
+
         details_right_layout = (LinearLayout) findViewById(R.id.details_right_layout);
         detailsBigCoverArt = false;
 
@@ -345,6 +357,12 @@ public class Main extends AppCompatActivity {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             // get service
             musicSrv = binder.getService();
+
+            Database database = musicSrv.getDatabase();
+            database.doesDonateMustBeShownAsync((mustBeShown) -> {
+                if (mustBeShown)
+                    runOnUiThread(() -> showDonate());
+            });
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
@@ -464,16 +482,18 @@ public class Main extends AppCompatActivity {
                     rows.reinit();
                     songAdt.notifyDataSetChanged();
                     unfoldAndscrollToCurrSong();
-                    hideWarningLayout();
+                    hideWarning();
                 }  else {
                     Log.e("Main","Permission READ_EXTERNAL_STORAGE refused!");
-                    showWarningLayout();
+                    showWarning();
                 }
-                if (grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Main","Permission WRITE_EXTERNAL_STORAGE granted");
-                } else {
-                    Log.w("Main","Permission WRITE_EXTERNAL_STORAGE refused!");
-                    Toast.makeText(getApplicationContext(), R.string.permission_needed, Toast.LENGTH_LONG).show();
+                if (grantResults.length > 1) {
+                    if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                        Log.d("Main", "Permission WRITE_EXTERNAL_STORAGE granted");
+                    } else {
+                        Log.w("Main", "Permission WRITE_EXTERNAL_STORAGE refused!");
+                        showWarning();
+                    }
                 }
                 return;
         }
@@ -488,7 +508,7 @@ public class Main extends AppCompatActivity {
                     Log.i("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION granted");
                 } else {
                     Log.w("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION refused!");
-                    Toast.makeText(this, R.string.permission_needed, Toast.LENGTH_LONG).show();
+                    showWarning();
                 }
             }
         }
@@ -503,16 +523,20 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private void showWarningLayout() {
-        warningLayout.setVisibility(View.VISIBLE);
-        warningText = (TextView) findViewById(R.id.warning_text);
+    private void showWarning() {
         warningText.setText(R.string.permission_needed);
+        warningLayout.setVisibility(View.VISIBLE);
     }
-
-    private void hideWarningLayout() {
+    private void hideWarning() {
         warningLayout.setVisibility(View.GONE);
     }
 
+    private void showDonate() {
+        donateLayout.setVisibility(View.VISIBLE);
+    }
+    private void hideDonate() {
+        donateLayout.setVisibility(View.GONE);
+    }
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener
             = new SeekBar.OnSeekBarChangeListener() {
@@ -1484,6 +1508,11 @@ public class Main extends AppCompatActivity {
     public void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_ACTION);
+    }
+
+    public void openDonate(View view) {
+        startActivity(SettingsPreferenceFragment.GetDonateWebsiteIntent());
+        hideDonate();
     }
 
     public void openSort(View view) {

@@ -25,6 +25,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.CheckBoxPreference;
@@ -102,6 +103,16 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         Preference donate = findPreference(DONATE_KEY);
         donate.setOnPreferenceClickListener(this);
+        if (BuildConfig.FLAVOR == "pro") {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // fix me: This is also available for below API 26 with the androidx support library.
+                donate.getParent().removePreference(donate);
+            }
+            else {
+                donate.setShouldDisableView(true);
+                donate.setEnabled(false);
+            }
+        }
 
         Preference sleepTimer = findPreference(START_SLEEP_TIMER_KEY);
         sleepTimer.setOnPreferenceClickListener(this);
@@ -217,11 +228,14 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         if (idx >= 0)
             pref.setSummary(entries[idx]);
     }
-
-    private void showDonateWebsite() {
+    static public Intent GetDonateWebsiteIntent() {
         Intent webIntent = new Intent(Intent.ACTION_VIEW);
         webIntent.setData(Uri.parse("https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE"));
-        this.startActivity(webIntent);
+        return webIntent;
+    }
+
+    private void showDonateWebsite() {
+        this.startActivity(GetDonateWebsiteIntent());
     }
 
     private ServiceConnection musicConnection = new ServiceConnection() {
@@ -266,12 +280,19 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    private int nbDonateClick = 0;
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(RESCAN_KEY)) {
             rescan();
         } else if (preference.getKey().equals(DONATE_KEY)) {
             showDonateWebsite();
+            nbDonateClick++;
+            if (nbDonateClick >= 3) {
+                musicSrv.getDatabase().disableShowDonate();
+                Toast.makeText(getActivity().getBaseContext(),
+                        getResources().getString(R.string.show_donate_disabled), Toast.LENGTH_SHORT).show();
+            }
         } else if (preference.getKey().equals(START_SLEEP_TIMER_KEY)) {
             if (musicSrv.getSleepTimerScheduleMs() > 0) {
                 musicSrv.stopSleepTimer();
