@@ -151,7 +151,7 @@
     <string name="settings_source">https://github.com/souch/SMP</string>
     <string name="settings_licence_title">Lizenz</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_title">Spenden</string>
+    <string name="donate_title">Spenden</string>
 
     <string name="settings_thanks">Danksagungen</string>
     <string name="settings_thanks_icons">Icons</string>

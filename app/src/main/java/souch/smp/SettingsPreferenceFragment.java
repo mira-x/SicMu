@@ -233,6 +233,11 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         webIntent.setData(Uri.parse("https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE"));
         return webIntent;
     }
+    static public Intent GetProWebsiteIntent() {
+        Intent webIntent = new Intent(Intent.ACTION_VIEW);
+        webIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=souch.smp")); // todo change sicmuplayer to pro
+        return webIntent;
+    }
 
     private void showDonateWebsite() {
         this.startActivity(GetDonateWebsiteIntent());

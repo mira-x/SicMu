@@ -21,9 +21,9 @@
 
     <Preference
         android:key="DONATE"
-        android:title="@string/settings_donate_title"
+        android:title="@string/donate_title"
         android:icon="@drawable/coins"
-        android:summary="@string/settings_donate_summary"/>
+        android:summary="@string/donate_summary"/>
 
     <PreferenceScreen
         android:key="button_help"

@@ -123,7 +123,7 @@
     <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Lisans</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_title">Bağış Yap</string>
+    <string name="donate_title">Bağış Yap</string>
 
     <string name="settings_thanks">Teşekkürler</string>
     <string name="settings_thanks_icons">İkonlar</string>

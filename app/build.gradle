@@ -28,6 +28,9 @@ android {
         free {
             resValue "string", "app_name", "SicMu Player"
         }
+        fdroid {
+            resValue "string", "app_name", "SicMu Player"
+        }
         pro {
             resValue "string", "app_name", "SicMu Player Pro"
             applicationIdSuffix ".pro"

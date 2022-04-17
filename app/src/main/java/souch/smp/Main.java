@@ -105,12 +105,12 @@ public class Main extends AppCompatActivity {
     private LinearLayout detailsLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
-    private LinearLayout warningLayout, donateLayout;
+    private LinearLayout warningLayout;
 
     private LinearLayout moreButtonsLayout;
 
     private ImageButton albumImage;
-    private TextView songTitle, songAlbum, songArtist, warningText, donateText;
+    private TextView songTitle, songAlbum, songArtist, warningText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private LinearLayout details_right_layout;
@@ -159,8 +159,6 @@ public class Main extends AppCompatActivity {
         warningLayout.setOnClickListener(view -> {
             hideWarning();
         });
-        donateLayout = findViewById(R.id.donate_layout);
-        donateLayout.setVisibility(View.GONE);
         detailsLayout = (LinearLayout) findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
@@ -191,10 +189,6 @@ public class Main extends AppCompatActivity {
         songAlbum = findViewById(R.id.detail_album);
         songArtist = findViewById(R.id.detail_artist);
         warningText = findViewById(R.id.warning_text);
-        donateText = findViewById(R.id.donate_text);
-        donateText.setOnClickListener((View v) -> {
-            openDonate(null);
-        });
 
 //        if (SDK_INT >= Build.VERSION_CODES.R) {
 //            if (!Environment.isExternalStorageManager()) {
@@ -532,10 +526,8 @@ public class Main extends AppCompatActivity {
     }
 
     private void showDonate() {
-        donateLayout.setVisibility(View.VISIBLE);
-    }
-    private void hideDonate() {
-        donateLayout.setVisibility(View.GONE);
+        Intent intent = new Intent(this, DonateActivity.class);
+        startActivity(intent);
     }
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener
@@ -1510,10 +1502,6 @@ public class Main extends AppCompatActivity {
         startActivityForResult(intent, SETTINGS_ACTION);
     }
 
-    public void openDonate(View view) {
-        startActivity(SettingsPreferenceFragment.GetDonateWebsiteIntent());
-        hideDonate();
-    }
 
     public void openSort(View view) {
         openSortMenu();

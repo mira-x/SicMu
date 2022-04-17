@@ -88,15 +88,20 @@ public class Database {
      */
     private boolean doesDonateMustBeShown() {
         boolean mustBeShown = false;
+
+        if (BuildConfig.FLAVOR.equals("pro")) {
+            return false;
+        }
+
         ConfigurationORM config = getConfigurationORM();
-        config.nbTimeAppStartedSinceShowDonate++;
         boolean showDonateDisabled = config.lastShowDonateMs < 0;
         if (showDonateDisabled) {
             Log.d("Database", "Show donate disabled");
         }
         else {
-            final long donatePeriodInDay = 31*3;
             final long appOpenedOften = 20;
+            config.nbTimeAppStartedSinceShowDonate++;
+            final long donatePeriodInDay = 31*3;
             long nowMs = (new Date()).getTime();
             if ((config.nbTimeAppStartedSinceShowDonate > appOpenedOften) &&
                 (nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000)
@@ -110,8 +115,8 @@ public class Database {
                         config.nbTimeAppStartedSinceShowDonate + " times or already shown the " +
                         new Date(config.lastShowDonateMs));
             }
+            configurationDAO.update(config);
         }
-        configurationDAO.update(config);
         return mustBeShown;
     }
 

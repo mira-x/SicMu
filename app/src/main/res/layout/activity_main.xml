@@ -210,10 +210,10 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/warning_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="128dp"
         android:layout_below="@+id/seek_buttons_layout"
         android:orientation="horizontal"
         android:padding="4dp">
@@ -224,41 +224,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text=""
-            android:textColor="?attr/colorActionBtn"></TextView>
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/donate_layout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/warning_layout"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="4dp">
-        <ImageButton
-            android:id="@+id/donate_button"
-            style="@style/BottomButton"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:scaleType="centerInside"
-            android:onClick="openDonate"
-            android:longClickable="true"
-            android:src="@drawable/coins" />
-        <TextView
-            android:id="@+id/donate_text"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/settings_donate_summary"></TextView>
+            android:textColor="?attr/colorActionBtn"
+            android:textSize="16sp"></TextView>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
         android:layout_height="175dp"
-        android:layout_below="@id/donate_layout"
+        android:layout_below="@id/warning_layout"
         android:gravity="left"
         android:orientation="horizontal">
 

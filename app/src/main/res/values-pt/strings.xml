@@ -134,7 +134,7 @@
     <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Licença</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_donate_title">Doar</string>
+    <string name="donate_title">Doar</string>
 
     <string name="settings_thanks">Agradecimentos espciais</string>
     <string name="settings_thanks_icons">Ícones</string>

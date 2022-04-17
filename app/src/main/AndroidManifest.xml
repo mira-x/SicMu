@@ -88,6 +88,7 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </service>
+
         <receiver
             android:name="androidx.media.session.MediaButtonReceiver"
             android:exported="true">
@@ -100,6 +101,16 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_title"
+            android:theme="@style/Theme.AppTheme"
+            android:parentActivityName=".Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="souch.smp.Main" />
+        </activity>
+
+        <activity
+            android:name=".DonateActivity"
+            android:label="@string/donate_title"
             android:theme="@style/Theme.AppTheme"
             android:parentActivityName=".Main" >
             <meta-data
