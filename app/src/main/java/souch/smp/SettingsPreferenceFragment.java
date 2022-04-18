@@ -109,9 +109,14 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 donate.getParent().removePreference(donate);
             }
             else {
-                donate.setShouldDisableView(true);
                 donate.setEnabled(false);
             }
+        }
+
+        ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
+        if (BuildConfig.FLAVOR.equals("free")) {
+            theme.setEnabled(false);
+            theme.setTitle(R.string.settings_theme_title_free);
         }
 
         Preference sleepTimer = findPreference(START_SLEEP_TIMER_KEY);

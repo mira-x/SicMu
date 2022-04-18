@@ -21,7 +21,7 @@
     <string name="settings_version">1.9.1</string>
 
     <string name="permission_needed">The app needs read storage permission in order to show songs
-        and play them !\n\nWhen asked, please allow access to photos and multimedia content on your android device.
+        and play them !\n\nWhen aske, please allow access to photos and multimedia content on your android device.
     </string>
     <!-- and write storage permissions -->
 
@@ -57,7 +57,8 @@
     <string name="action_fold">Fold</string>
     <string name="action_unfold">Unfold</string>
 
-    <string name="settings_theme_title">Theme (dark themes saves battery)</string>
+    <string name="settings_theme_title_free">Theme (only available on pro version)</string>
+    <string name="settings_theme_title">Theme (dark themes save battery)</string>
     <string-array name="settings_theme_entries">
         <item>Dark blood</item>
         <item>Dark night</item>
