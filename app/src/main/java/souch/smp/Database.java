@@ -30,8 +30,10 @@ import androidx.room.Room;
 public class Database {
     private SongDAO songDAO;
     private ConfigurationDAO configurationDAO;
+    private Context context;
 
     public Database(Context context) {
+        this.context = context;
         SongDatabase db = Room.databaseBuilder(context,
                 SongDatabase.class, "database-SMP")
                 //.allowMainThreadQueries()
@@ -89,7 +91,7 @@ public class Database {
     private boolean doesDonateMustBeShown() {
         boolean mustBeShown = false;
 
-        if (BuildConfig.FLAVOR.equals("pro")) {
+        if (Flavor.getCurrentFlavor(context) == Flavor.SMP_FLAVOR.PRO) {
             return false;
         }
 

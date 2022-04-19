@@ -44,13 +44,14 @@ public class DonateActivity extends AppCompatActivity {
         });
 
         TextView donateText = findViewById(R.id.donate_text);
-        if (BuildConfig.FLAVOR.equals("fdroid")) {
+        Flavor.SMP_FLAVOR flavor = Flavor.getCurrentFlavor(getApplicationContext());
+        if (flavor == Flavor.SMP_FLAVOR.FDROID) {
             donateText.setOnClickListener(view -> {
                 openDonate(null);
             });
             findViewById(R.id.pro_button).setVisibility(View.GONE);
         }
-        if (BuildConfig.FLAVOR.equals("free")) {
+        if (flavor == Flavor.SMP_FLAVOR.FREEWARE) {
             donateText.setText(R.string.buy_pro_summary);
             donateText.setOnClickListener(view -> {
                 openPro(null);

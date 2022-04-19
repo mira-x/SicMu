@@ -25,12 +25,11 @@ android {
     }
     flavorDimensions "version"
     productFlavors {
+        // for freeware and fdroid version
         free {
             resValue "string", "app_name", "SicMu Player"
         }
-        fdroid {
-            resValue "string", "app_name", "SicMu Player"
-        }
+        // for pro version
         pro {
             resValue "string", "app_name", "SicMu Player Pro"
             applicationIdSuffix ".pro"

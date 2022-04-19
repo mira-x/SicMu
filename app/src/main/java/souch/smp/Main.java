@@ -626,7 +626,7 @@ public class Main extends AppCompatActivity {
             // stop the service if not playing music
             if (!musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
-                if (!BuildConfig.FLAVOR.equals("pro")) {
+                if (Flavor.isFlavorFDroid(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(),
                             getResources().getString(R.string.app_name) + " destroyed.",
                             Toast.LENGTH_SHORT).show();

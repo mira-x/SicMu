@@ -103,7 +103,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         Preference donate = findPreference(DONATE_KEY);
         donate.setOnPreferenceClickListener(this);
-        if (BuildConfig.FLAVOR == "pro") {
+        if (Flavor.isFlavorPro(getActivity().getBaseContext())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // fix me: This is also available for below API 26 with the androidx support library.
                 donate.getParent().removePreference(donate);
@@ -114,7 +114,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         }
 
         ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
-        if (BuildConfig.FLAVOR.equals("free")) {
+        if (Flavor.isFlavorFreeware(getActivity().getBaseContext())) {
             theme.setEnabled(false);
             theme.setTitle(R.string.settings_theme_title_free);
         }

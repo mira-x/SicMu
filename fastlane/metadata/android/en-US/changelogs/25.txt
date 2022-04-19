@@ -1,7 +1,9 @@
 Version 2.0.
+- Theme
 - Add sleep timer
 - Stop playing at the and of folder option
 - Play only songs above specified rating option
 - Add show filename option
 - Replace option menu by edit menu
 - Show songs remaining time option
+- Pro version on GooglePlay
