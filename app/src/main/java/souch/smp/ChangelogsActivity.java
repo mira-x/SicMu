@@ -35,14 +35,14 @@ import java.util.Collections;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ChangelogActivity extends AppCompatActivity {
+public class ChangelogsActivity extends AppCompatActivity {
     private Button closeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.changelog);
+        setContentView(R.layout.changelogs);
 
         ImageView appButton = (ImageView) findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);
@@ -55,25 +55,25 @@ public class ChangelogActivity extends AppCompatActivity {
             finish();
         });
 
-        TextView ChangelogTextview = findViewById(R.id.changelog_text);
-        ChangelogTextview.setMovementMethod(new ScrollingMovementMethod());
-        ChangelogTextview.setText(Html.fromHtml(getChangelogHTMLText()));
+        TextView changelogsTextview = findViewById(R.id.changelogs_text);
+        changelogsTextview.setMovementMethod(new ScrollingMovementMethod());
+        changelogsTextview.setText(Html.fromHtml(getChangelogsHTMLText()));
     }
 
-    public String getChangelogHTMLText() {
+    public String getChangelogsHTMLText() {
         String logText = new String();
 
-        Log.d("Changelog", "loading logs");
+        Log.d("Changelogs", "loading logs");
         AssetManager assetManager = getAssets();
         BufferedReader reader = null;
-        final String changelogAssetDir = "changelog";
+        final String changelogsAssetDir = "changelogs";
         try {
-            String[] logs = assetManager.list(changelogAssetDir);
+            String[] logs = assetManager.list(changelogsAssetDir);
             Collections.reverse(Arrays.asList(logs));
 
             for (String log: logs) {
-                Log.d("Changelog", "loading log from file " + log);
-                final String logFilepath = changelogAssetDir + "/" + log;
+                Log.d("Changelogs", "loading log from file " + log);
+                final String logFilepath = changelogsAssetDir + "/" + log;
                 reader = new BufferedReader(new InputStreamReader(
                         assetManager.open(logFilepath)));
 
@@ -92,7 +92,7 @@ public class ChangelogActivity extends AppCompatActivity {
             }
         }
         catch (IOException ioe) {
-            Log.w("Changelog", "error listing log: " + ioe.toString());
+            Log.w("Changelogs", "error listing log: " + ioe.toString());
         }
         finally {
             if (reader != null) {

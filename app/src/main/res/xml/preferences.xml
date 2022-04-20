@@ -273,7 +273,7 @@
                 android:summary="@string/settings_version"/>
 
             <Preference
-                android:key="CHANGELOG"
+                android:key="CHANGELOGS"
                 android:title="@string/changelogs_title"/>
 
             <Preference

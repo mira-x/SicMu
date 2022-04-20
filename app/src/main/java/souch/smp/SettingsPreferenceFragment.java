@@ -51,7 +51,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private final String RESCAN_KEY = "RESCAN";
     private final String DONATE_KEY = "DONATE";
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
-    private final String CHANGELOG_KEY = "CHANGELOG";
+    private final String CHANGELOGS_KEY = "CHANGELOGS";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
 
@@ -114,8 +114,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             }
         }
 
-        Preference changelog = findPreference(CHANGELOG_KEY);
-        changelog.setOnPreferenceClickListener(this);
+        Preference changelogs = findPreference(CHANGELOGS_KEY);
+        changelogs.setOnPreferenceClickListener(this);
 
         ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
         if (Flavor.isFlavorFreeware(getActivity().getBaseContext())) {
@@ -253,7 +253,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
 
     private void showChangelogs() {
-        Intent intent = new Intent(getActivity(), ChangelogActivity.class);
+        Intent intent = new Intent(getActivity(), ChangelogsActivity.class);
         startActivity(intent);
     }
 
@@ -319,7 +319,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 musicSrv.startSleepTimer(params.getSleepDelayM());
             }
             setSleepTimerTitle();
-        } else if (preference.getKey().equals(CHANGELOG_KEY)) {
+        } else if (preference.getKey().equals(CHANGELOGS_KEY)) {
             showChangelogs();
         }
         return false;

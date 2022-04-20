@@ -123,20 +123,20 @@ public class Database {
         return mustBeShown;
     }
 
-    public interface DoesChangelogMustBeShownInterface {
-        void changelogMustBeShown(boolean mustBeShown) ;
+    public interface DoesChangelogsMustBeShownInterface {
+        void changelogsMustBeShown(boolean mustBeShown) ;
     }
-    public void doesChangelogMustBeShownAsync(DoesChangelogMustBeShownInterface intf) {
+    public void doesChangelogsMustBeShownAsync(DoesChangelogsMustBeShownInterface intf) {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                intf.changelogMustBeShown(doesChangelogMustBeShown());
+                intf.changelogsMustBeShown(doesChangelogsMustBeShown());
             }
         };
         thread.start();
     }
 
-    private boolean doesChangelogMustBeShown() {
+    private boolean doesChangelogsMustBeShown() {
         boolean mustBeShown = false;
         ConfigurationORM config = getConfigurationORM();
         if (BuildConfig.VERSION_CODE != config.lastVersionCodeStarted) {

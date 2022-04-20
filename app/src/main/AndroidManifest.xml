@@ -119,7 +119,7 @@
         </activity>
 
         <activity
-            android:name=".ChangelogActivity"
+            android:name=".ChangelogsActivity"
             android:label="@string/changelogs_title"
             android:theme="@style/Theme.AppTheme"
             android:parentActivityName=".Main" >

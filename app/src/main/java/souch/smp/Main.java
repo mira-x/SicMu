@@ -355,9 +355,9 @@ public class Main extends AppCompatActivity {
             Database database = musicSrv.getDatabase();
 
             AtomicBoolean changelogsShown = new AtomicBoolean(false);
-            database.doesChangelogMustBeShownAsync((mustBeShown) -> {
+            database.doesChangelogsMustBeShownAsync((mustBeShown) -> {
                 if (mustBeShown) {
-                    runOnUiThread(() -> showChangelog());
+                    runOnUiThread(() -> showChangelogs());
                     changelogsShown.set(true);
                 }
             });
@@ -541,8 +541,8 @@ public class Main extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void showChangelog() {
-        Intent intent = new Intent(this, ChangelogActivity.class);
+    private void showChangelogs() {
+        Intent intent = new Intent(this, ChangelogsActivity.class);
         startActivity(intent);
     }
 
