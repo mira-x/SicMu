@@ -54,6 +54,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -349,14 +350,24 @@ public class Main extends AppCompatActivity {
             Log.d("Main", "onServiceConnected");
 
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
-            // get service
             musicSrv = binder.getService();
 
             Database database = musicSrv.getDatabase();
-            database.doesDonateMustBeShownAsync((mustBeShown) -> {
-                if (mustBeShown)
-                    runOnUiThread(() -> showDonate());
+
+            AtomicBoolean changelogsShown = new AtomicBoolean(false);
+            database.doesChangelogMustBeShownAsync((mustBeShown) -> {
+                if (mustBeShown) {
+                    runOnUiThread(() -> showChangelog());
+                    changelogsShown.set(true);
+                }
             });
+            // show donate if changelogs activity has not be launched
+            if (!changelogsShown.get()) {
+                database.doesDonateMustBeShownAsync((mustBeShown) -> {
+                    if (mustBeShown)
+                        runOnUiThread(() -> showDonate());
+                });
+            }
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);

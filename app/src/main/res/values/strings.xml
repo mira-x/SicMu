@@ -192,14 +192,14 @@
     <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">License</string>
     <string name="settings_licence">GPLv3</string>
-    <string name="settings_changelog_title">Changelog</string>
     <string name="donate_title">Donate</string>
     <string name="donate_summary">If you like the app, donate to reward me for the hard work !</string>
     <string name="buy_pro_summary">If you like the app, donate or buy the pro version to reward me for the hard work !</string>
     <string name="show_donate_disabled">Show donate popup disabled</string>
     <string name="close">Close</string>
 
-    <string name="changelogs_title">Changelog</string>
+    <string name="changelogs_title">Changelogs</string>
+    <string name="changelogs_header">What\'s new:</string>
 
     <string name="settings_thanks">Special thanks</string>
     <string name="settings_thanks_icons">Icons</string>

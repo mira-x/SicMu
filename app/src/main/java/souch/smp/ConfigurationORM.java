@@ -36,4 +36,7 @@ public class ConfigurationORM {
 
     @NonNull
     public long nbTimeAppStartedSinceShowDonate;
+
+    @NonNull
+    public long lastVersionCodeStarted;
 }

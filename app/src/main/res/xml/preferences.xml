@@ -274,7 +274,7 @@
 
             <Preference
                 android:key="CHANGELOG"
-                android:title="@string/settings_changelog_title"/>
+                android:title="@string/changelogs_title"/>
 
             <Preference
                 android:title="@string/settings_source_title"

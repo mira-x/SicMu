@@ -53,6 +53,7 @@ public class Database {
             config.lastSongsCleanupMs = (new Date()).getTime();
             config.lastShowDonateMs = config.lastSongsCleanupMs;
             config.nbTimeAppStartedSinceShowDonate = 0;
+            config.lastVersionCodeStarted = 0;
             configurationDAO.insert(config);
         }
         return config;
@@ -61,11 +62,11 @@ public class Database {
     public interface DoesDonateMustBeShownInterface {
         void donateMustBeShown(boolean mustBeShown) ;
     }
-    public void doesDonateMustBeShownAsync(DoesDonateMustBeShownInterface ddmbsi) {
+    public void doesDonateMustBeShownAsync(DoesDonateMustBeShownInterface intf) {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                ddmbsi.donateMustBeShown(doesDonateMustBeShown());
+                intf.donateMustBeShown(doesDonateMustBeShown());
             }
         };
         thread.start();
@@ -122,6 +123,29 @@ public class Database {
         return mustBeShown;
     }
 
+    public interface DoesChangelogMustBeShownInterface {
+        void changelogMustBeShown(boolean mustBeShown) ;
+    }
+    public void doesChangelogMustBeShownAsync(DoesChangelogMustBeShownInterface intf) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                intf.changelogMustBeShown(doesChangelogMustBeShown());
+            }
+        };
+        thread.start();
+    }
+
+    private boolean doesChangelogMustBeShown() {
+        boolean mustBeShown = false;
+        ConfigurationORM config = getConfigurationORM();
+        if (BuildConfig.VERSION_CODE != config.lastVersionCodeStarted) {
+            config.lastVersionCodeStarted = BuildConfig.VERSION_CODE;
+            configurationDAO.update(config);
+            mustBeShown = true;
+        }
+        return mustBeShown;
+    }
 
     // tell whether wy should start a DB cleanup (if return true : set last cleanup date to today)
     private boolean songsDBNeedCleanup() {
