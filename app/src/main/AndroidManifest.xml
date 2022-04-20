@@ -118,6 +118,16 @@
                 android:value="souch.smp.Main" />
         </activity>
 
+        <activity
+            android:name=".ChangelogActivity"
+            android:label="@string/changelogs_title"
+            android:theme="@style/Theme.AppTheme"
+            android:parentActivityName=".Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="souch.smp.Main" />
+        </activity>
+
     </application>
 
 </manifest>

@@ -22,7 +22,11 @@ git tag -a v1.9 -m "Version 1.9. Show rating in the songs list. Album image and 
 git tag -a v1.9.1 -m "Version 1.9.1. Fix instant crash on android 12."
 # don't forgot to add changelog description here
     - readme.md
-    - fastlane/metadata/android/en-US/
+    - describe changes in that dir (for fdroid changelogs)
+      fastlane/metadata/android/en-US/
+    - describe changes in that dir (for SMP changelogs)
+      cd app/src/main/assets/changelogs
+      ln -s ../../../../../fastlane/metadata/android/en-US/changelogs/25.txt
     - GooglePlay
 
 # push it upstream
@@ -61,9 +65,9 @@ cp ../mipmap-hdpi/ic_launcher.png ../mipmap-hdpi/ic_launcher_round.png
 convert ic_launcher.png -resize 48x48 ../mipmap-mdpi/ic_launcher.png
 cp ../mipmap-mdpi/ic_launcher.png ../mipmap-mdpi/ic_launcher_round.png
 # 432x432 ic_launcher_foreground.png
-convert ic_launcher_foreground.png -resize 324x324 ../mipmap-xxhdpi/ic_launcher_foreground.png
-convert ic_launcher_foreground.png -resize 216x216 ../mipmap-xhdpi/ic_launcher_foreground.png
-convert ic_launcher_foreground.png -resize 162x162 ../mipmap-hdpi/ic_launcher_foreground.png
+convert ic_launcher_foreground.png -resize 324x324 ../mipmap-xxhdpi/ic_launcher_foreground.png; \
+convert ic_launcher_foreground.png -resize 216x216 ../mipmap-xhdpi/ic_launcher_foreground.png; \
+convert ic_launcher_foreground.png -resize 162x162 ../mipmap-hdpi/ic_launcher_foreground.png; \
 convert ic_launcher_foreground.png -resize 108x108 ../mipmap-mdpi/ic_launcher_foreground.png
 
 

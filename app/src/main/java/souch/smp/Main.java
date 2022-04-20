@@ -530,6 +530,11 @@ public class Main extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void showChangelog() {
+        Intent intent = new Intent(this, ChangelogActivity.class);
+        startActivity(intent);
+    }
+
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener
             = new SeekBar.OnSeekBarChangeListener() {
 
