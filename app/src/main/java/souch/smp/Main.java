@@ -353,21 +353,18 @@ public class Main extends AppCompatActivity {
             musicSrv = binder.getService();
 
             Database database = musicSrv.getDatabase();
-
-            AtomicBoolean changelogsShown = new AtomicBoolean(false);
             database.doesChangelogsMustBeShownAsync((mustBeShown) -> {
                 if (mustBeShown) {
                     runOnUiThread(() -> showChangelogs());
-                    changelogsShown.set(true);
+                }
+                else {
+                    // show donate if changelogs activity has not be launched
+                    database.doesDonateMustBeShownAsync((donateMustBeShown) -> {
+                        if (donateMustBeShown)
+                            runOnUiThread(() -> showDonate());
+                    });
                 }
             });
-            // show donate if changelogs activity has not be launched
-            if (!changelogsShown.get()) {
-                database.doesDonateMustBeShownAsync((mustBeShown) -> {
-                    if (mustBeShown)
-                        runOnUiThread(() -> showDonate());
-                });
-            }
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
