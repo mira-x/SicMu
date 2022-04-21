@@ -140,9 +140,10 @@ public class Database {
         boolean mustBeShown = false;
         ConfigurationORM config = getConfigurationORM();
         if (BuildConfig.VERSION_CODE != config.lastVersionCodeStarted) {
+            if (config.lastVersionCodeStarted != 0)
+                mustBeShown = true;
             config.lastVersionCodeStarted = BuildConfig.VERSION_CODE;
             configurationDAO.update(config);
-            mustBeShown = true;
         }
         return mustBeShown;
     }
