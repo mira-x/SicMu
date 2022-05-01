@@ -227,6 +227,12 @@ public class RowSong extends Row {
         return rating;
     }
 
+    public boolean isRatingEnough() {
+        return rating == RATING_NOT_INITIALIZED ||
+                rating == RATING_UNKNOWN ||
+                rating >= params.getMinRating();
+    }
+
     public interface RatingCallbackInterface {
         // @param someRatingChanged set to true if loadRating brings new RowSong's rating
         // i.e. set to false if RowSong's rating did not change

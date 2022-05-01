@@ -352,6 +352,72 @@ public class Rows {
     }
 
     public void moveToNextSong() {
+        moveToNextSongNoRating();
+    }
+
+/*
+        if (!params.getEnableRating() || params.getMinRating() <= 1)
+            moveToNextSongNoRating();
+        else {
+            moveToNextSongRatingEnabled();
+        }
+    }
+    private void moveToNextSongRatingEnabled() {
+        if (rowsUnfolded.size() <= 0)
+            return;
+
+        if (repeatMode == RepeatMode.REPEAT_GROUP) {
+            int lastSongPos = getLastSongPosInGroup(currPos);
+            int firstSongPos = getFirstSongPosInGroup(currPos);
+            if (lastSongPos == firstSongPos)
+                return;
+
+            int lastCurrPos = currPos;
+            RowSong rowSong;
+            // rowSong must have load the rating because we are in repeat group and the group
+            // should have been loaded
+            do {
+                if (currPos == lastSongPos)
+                    currPos = firstSongPos;
+                else
+                    currPos++;
+                // next song with adequat rating not found => return next song regardless of rating
+                if (currPos == lastCurrPos) {
+                    if (currPos == lastSongPos)
+                        currPos = firstSongPos;
+                    else
+                        currPos++;
+                    break;
+                }
+                rowSong = (RowSong) rowsUnfolded.get(currPos);
+            } while (!rowSong.isRatingEnough());
+        }
+        else {
+            int lastCurrPos = currPos;
+
+            RowSong rowSong;
+            do {
+                currPos++;
+                if (currPos >= rowsUnfolded.size())
+                    currPos = 0;
+                // skip RowGroup
+                while (currPos < rowsUnfolded.size() &&
+                        rowsUnfolded.get(currPos).getClass() != RowSong.class)
+                    currPos++;
+                // next song with adequat rating not found
+                if (currPos == lastCurrPos) {
+                    moveToNextSongNoRating();
+                    return;
+                }
+                rowSong = (RowSong) rowsUnfolded.get(currPos);
+            } while (!rowSong.isRatingEnough());
+
+            setGroupSelectedState(lastCurrPos, false);
+            setGroupSelectedState(currPos, true);
+        }
+    }
+*/
+    private void moveToNextSongNoRating() {
         if (rowsUnfolded.size() <= 0)
             return;
 

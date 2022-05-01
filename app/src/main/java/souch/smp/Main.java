@@ -1224,8 +1224,8 @@ public class Main extends AppCompatActivity {
     }
 
     private void setMinRatingButton() {
-        ImageView img = findViewById(R.id.rating_button);
-        img.setImageResource(getMinRatingResId());
+//        ImageView img = findViewById(R.id.rating_button);
+//        img.setImageResource(getMinRatingResId());
     }
 
     public void applyLock() {
