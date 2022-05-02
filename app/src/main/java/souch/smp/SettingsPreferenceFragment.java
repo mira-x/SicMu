@@ -244,7 +244,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
     static public Intent GetProWebsiteIntent() {
         Intent webIntent = new Intent(Intent.ACTION_VIEW);
-        webIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=souch.smp")); // todo change sicmuplayer to pro
+        webIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=souch.smp.pro")); // todo change sicmuplayer to pro
         return webIntent;
     }
 
