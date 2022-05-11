@@ -194,6 +194,9 @@ public class MusicService extends Service implements
                     | PlaybackStateCompat.ACTION_STOP
                     | PlaybackStateCompat.ACTION_SEEK_TO;
     private void updateMediaPlaybackState() {
+        if (mediaSession == null)
+            return;
+
         boolean isPlaying = playingLaunched();
         long currPosMs = getCurrentPositionMs();
         PlaybackStateCompat.Builder stateBuilder =
@@ -206,6 +209,9 @@ public class MusicService extends Service implements
     }
 
     private void updateMediaSessionMetadata() {
+        if (mediaSession == null)
+            return;
+
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
             rowSong.getAlbumBmpAsync(getApplicationContext(), 0,
@@ -246,9 +252,6 @@ public class MusicService extends Service implements
     public void onCreate() {
         Log.d("MusicService", "onCreate()");
         super.onCreate();
-
-        initMediaSession();
-        initNoisyReceiver();
         createNotificationChannel();
 
         state = new PlayerState();
@@ -329,6 +332,9 @@ public class MusicService extends Service implements
         }
 
         if (player == null) {
+            initMediaSession();
+            initNoisyReceiver();
+
             player = new MediaPlayer();
             //set player properties
             player.setWakeMode(getApplicationContext(),
@@ -375,8 +381,10 @@ public class MusicService extends Service implements
         stopSensor();
 
         stopNotification();
-        mediaSession.release();
-        mediaSession.setActive(false);
+        if (mediaSession != null) {
+            mediaSession.release();
+            mediaSession.setActive(false); // should be put in stop() ?
+        }
 
         unregisterReceiver(noisyReceiver);
     }
@@ -384,7 +392,8 @@ public class MusicService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleCommand(intent);
-        MediaButtonReceiver.handleIntent(mediaSession, intent);
+        if (mediaSession != null)
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
 
         // show the notification if MusicService has been started from the MediaButtonIntentReceiver
         if (!mainIsVisible && !foreground && changed && isInState(PlayerState.Started))
@@ -834,8 +843,9 @@ public class MusicService extends Service implements
                 getString(R.string.action_next),
                 MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
-        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0, 1, 2).setMediaSession(mediaSession.getSessionToken()));
+        if (mediaSession != null)
+            builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                   .setShowActionsInCompactView(0, 1, 2).setMediaSession(mediaSession.getSessionToken()));
         //NotificationManagerCompat.from(MusicService.this).notify(NOTIFICATION_ID, builder.build());
         foreground = true;
         startForeground(NOTIFICATION_ID, builder.build());
