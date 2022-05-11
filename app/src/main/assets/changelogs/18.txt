@@ -1,3 +1,1 @@
-Version 1.4.2.
-- Fix save song pos.
-- Compile and target sdk version 31.
+../../../../../fastlane/metadata/android/en-US/changelogs/18.txt

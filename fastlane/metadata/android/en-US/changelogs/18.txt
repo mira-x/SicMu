@@ -1,0 +1,3 @@
+Version 1.4.2.
+- Fix save song pos.
+- Compile and target sdk version 31.

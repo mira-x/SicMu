@@ -1,0 +1,2 @@
+Version 2.0.1.
+- Fix external controls (headset, notifications, bluetooth, ...) stop working when sicmu player is paused by external events.

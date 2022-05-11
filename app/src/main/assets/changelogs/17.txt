@@ -1,2 +1,1 @@
-Version 1.4.1.
-- Fix loading dirs.
+../../../../../fastlane/metadata/android/en-US/changelogs/17.txt

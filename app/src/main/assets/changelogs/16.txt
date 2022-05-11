@@ -1,2 +1,1 @@
-Version 1.4.
-- Add details menu (Cover art && song details).
+../../../../../fastlane/metadata/android/en-US/changelogs/16.txt
