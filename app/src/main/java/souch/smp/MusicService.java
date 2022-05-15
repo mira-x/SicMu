@@ -108,6 +108,8 @@ public class MusicService extends Service implements
     private boolean hasAudioFocus;
     private AudioManager audioManager;
 
+    IntentFilter noisyReceiverFilter = null;
+
     // current state of the MediaPlayer
     private PlayerState state;
 
@@ -223,9 +225,18 @@ public class MusicService extends Service implements
     }
 
     private void initNoisyReceiver() {
-        // Handles headphones coming unplugged. cannot be done through a manifest receiver
-        IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        registerReceiver(noisyReceiver, filter);
+        if (noisyReceiverFilter == null) {
+            noisyReceiverFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            // Handles headphones coming unplugged. cannot be done through a manifest receiver
+            registerReceiver(noisyReceiver, noisyReceiverFilter);
+        }
+    }
+
+    private void unregisterNoisyReceiver() {
+        if (noisyReceiverFilter != null) {
+            unregisterReceiver(noisyReceiver);
+            noisyReceiverFilter = null;
+        }
     }
 
     private BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
@@ -386,7 +397,7 @@ public class MusicService extends Service implements
             mediaSession.setActive(false); // should be put in stop() ?
         }
 
-        unregisterReceiver(noisyReceiver);
+        unregisterNoisyReceiver();
     }
 
     @Override
