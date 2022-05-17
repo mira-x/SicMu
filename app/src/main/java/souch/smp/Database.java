@@ -104,7 +104,7 @@ public class Database {
         else {
             final long appOpenedOften = 20;
             config.nbTimeAppStartedSinceShowDonate++;
-            final long donatePeriodInDay = 31*3;
+            final long donatePeriodInDay = 31*1;
             long nowMs = (new Date()).getTime();
             if ((config.nbTimeAppStartedSinceShowDonate > appOpenedOften) &&
                 (nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000)
