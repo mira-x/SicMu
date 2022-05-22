@@ -23,6 +23,7 @@ git tag -a v1.9.1 -m "Version 1.9.1. Fix instant crash on android 12."
 git tag -a v2.0 -m "Version 2.0. Theme, Replace option menu by edit menu, Pro version, add various small parameters."
 git tag -a v2.0.1 -m "Version 2.0.1. Fix external controls stop working when sicmu player is paused by external events"
 git tag -a v2.0.2 -m "Version 2.0.2. Tag to trigger fdroid build"
+git tag -a v2.0.3 -m "Version 2.0.3. Tag to trigger fdroid build"
 
 # don't forgot to add changelog description here
     - readme.md
