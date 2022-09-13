@@ -19,5 +19,7 @@
 package souch.smp;
 
 public enum RepeatMode {
-    REPEAT_ALL, REPEAT_ONE, REPEAT_GROUP, REPEAT_NOT
+    REPEAT_ALL, REPEAT_ONE, REPEAT_GROUP,
+    REPEAT_NOT, // should be named STOP_AT_END_OF_FOLDER
+    STOP_AT_END_OF_TRACK
 }

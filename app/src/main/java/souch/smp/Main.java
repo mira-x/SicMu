@@ -54,7 +54,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -1069,6 +1068,7 @@ public class Main extends AppCompatActivity {
                 getString(R.string.action_repeat_group),
                 getString(R.string.action_repeat_one),
                 getString(R.string.action_repeat_not),
+                getString(R.string.action_stop_at_end_of_track),
         };
 
         int checkedItem;
@@ -1078,8 +1078,10 @@ public class Main extends AppCompatActivity {
             checkedItem = 1;
         else if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
             checkedItem = 2;
-        else
+        else if (rows.getRepeatMode() == RepeatMode.REPEAT_NOT)
             checkedItem = 3;
+        else
+            checkedItem = 4;
 
         altBld.setSingleChoiceItems(items, checkedItem, (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
@@ -1095,6 +1097,9 @@ public class Main extends AppCompatActivity {
                         break;
                     case 3:
                         rows.setRepeatMode(RepeatMode.REPEAT_NOT);
+                        break;
+                    case 4:
+                        rows.setRepeatMode(RepeatMode.STOP_AT_END_OF_TRACK);
                         break;
                 }
                 dialog.dismiss(); // dismiss the alertbox after chose option
@@ -1162,7 +1167,8 @@ public class Main extends AppCompatActivity {
             case REPEAT_ONE: res = R.drawable.ic_menu_repeat_one; break;
             case REPEAT_GROUP: res = R.drawable.ic_menu_repeat_group; break;
             case REPEAT_ALL: res = R.drawable.ic_menu_repeat_all; break;
-            default: res = R.drawable.ic_menu_repeat_not;
+            case REPEAT_NOT: res = R.drawable.ic_menu_repeat_not; break;
+            default: res = R.drawable.ic_menu_stop_at_end_of_track;
         }
         return res;
     }

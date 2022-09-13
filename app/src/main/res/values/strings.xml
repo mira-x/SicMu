@@ -222,6 +222,7 @@
     <string name="action_repeat_one">Repeat same track</string>
     <string name="action_repeat_group">Repeat same folder</string>
     <string name="action_repeat_not">Stop at the end of folder</string>
+    <string name="action_stop_at_end_of_track">Stop at the end of track</string>
 
     <string name="enabled">enabled</string>
     <string name="disabled">disabled</string>

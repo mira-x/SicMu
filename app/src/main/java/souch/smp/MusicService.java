@@ -577,7 +577,9 @@ public class MusicService extends Service implements
         if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
             playSame();
         else {
-            if (rows.getRepeatMode() == RepeatMode.REPEAT_NOT && rows.currPosIsLastSongInGroup()) {
+            if (rows.getRepeatMode() == RepeatMode.STOP_AT_END_OF_TRACK ||
+                    (rows.getRepeatMode() == RepeatMode.REPEAT_NOT && rows.currPosIsLastSongInGroup()))
+            {
                 state.setState(PlayerState.Stopped);
                 setChanged();
             }
