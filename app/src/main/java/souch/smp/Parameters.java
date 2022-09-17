@@ -37,6 +37,8 @@ public interface Parameters {
 
     int getSongPos();
     void setSongPos(int songPos);
+    int getSongPosId();
+    void setSongPosId(int songPosId);
 
     Filter getFilter();
     void setFilter(Filter filter);

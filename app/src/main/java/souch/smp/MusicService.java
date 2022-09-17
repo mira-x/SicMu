@@ -85,6 +85,8 @@ public class MusicService extends Service implements
     // seek to last song pos on startup in millisec
     // if -1: disabled (do not seek to on startup)
     private int savedSongPos;
+    // save song pos id to avoid restoring song pos if not same track
+    private int savedSongPosId;
 
     // need for focus
     private boolean wasPlaying;
@@ -367,6 +369,7 @@ public class MusicService extends Service implements
                 state.getState() != PlayerState.Error)
         {
             params.setSongPos(player.getCurrentPosition());
+            params.setSongPosId(player.getDuration());
         }
 
         state.setState(PlayerState.Nope);
@@ -602,14 +605,18 @@ public class MusicService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mp) {
         // if a songPos has been stored
-        if (savedSongPos > 0) {
+        Log.d("MusicService", "savedSongPosId: " + savedSongPosId + "getDuration" + mp.getDuration());
+        if (savedSongPos > 0 &&
+                savedSongPosId == mp.getDuration() &&
+                savedSongPos < mp.getDuration()) {
             // seek to it
-            if (savedSongPos < mp.getDuration())
-                mp.seekTo(savedSongPos);
-            // reset songPos
-            params.setSongPos(0);
-            savedSongPos = 0;
+            mp.seekTo(savedSongPos);
         }
+        // reset songPos
+        params.setSongPos(0);
+        params.setSongPosId(0);
+        savedSongPos = 0;
+        savedSongPosId = 0;
 
         applyPlaybackSpeed(playbackSpeed);
 
@@ -736,6 +743,7 @@ public class MusicService extends Service implements
 
         if (params.getSaveSongPos()) {
             params.setSongPos(player.getCurrentPosition());
+            params.setSongPosId(player.getDuration());
         }
 
         updateMediaPlaybackState();
@@ -892,10 +900,14 @@ public class MusicService extends Service implements
     private void restore() {
         enableShake = params.getEnableShake();
         shakeThreshold = params.getShakeThreshold() / 10;
-        if (params.getSaveSongPos())
+        if (params.getSaveSongPos()) {
             savedSongPos = params.getSongPos();
-        else
+            savedSongPosId = params.getSongPosId();
+        }
+        else {
             savedSongPos = -1;
+            savedSongPosId = -1;
+        }
         enableRating = params.getEnableRating();
         minRating = params.getMinRating();
     }

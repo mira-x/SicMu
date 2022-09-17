@@ -45,5 +45,6 @@ public enum PrefKeys {
     SLEEP_DELAY_M,
     SHOW_FILENAME,
     SHOW_REMAINING_TIME,
-    THEME
+    THEME,
+    SONG_POS_ID
 }

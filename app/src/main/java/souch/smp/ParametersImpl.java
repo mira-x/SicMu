@@ -84,7 +84,12 @@ public class ParametersImpl implements Parameters {
     public void setSongPos(int songPos) {
         getEditor().putInt(PrefKeys.SONG_POS.name(), songPos).commit();
     }
-
+    public int getSongPosId() {
+        return getPref().getInt(PrefKeys.SONG_POS_ID.name(), -1);
+    }
+    public void setSongPosId(int songPos) {
+        getEditor().putInt(PrefKeys.SONG_POS_ID.name(), songPos).commit();
+    }
 
     public Filter getFilter() {
         return Filter.valueOf(getPref().getString(PrefKeys.FILTER.name(), Filter.TREE.name()));
