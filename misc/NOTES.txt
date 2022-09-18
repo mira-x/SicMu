@@ -24,6 +24,7 @@ git tag -a v2.0 -m "Version 2.0. Theme, Replace option menu by edit menu, Pro ve
 git tag -a v2.0.1 -m "Version 2.0.1. Fix external controls stop working when sicmu player is paused by external events"
 git tag -a v2.0.2 -m "Version 2.0.2. Tag to trigger fdroid build"
 git tag -a v2.0.3 -m "Version 2.0.3. Tag to trigger fdroid build"
+git tag -a v2.0.4 -m "Version 2.0.4. Add stop at end of track, fix song pos"
 
 # don't forgot to add changelog description here
     - readme.md

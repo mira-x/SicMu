@@ -1,0 +1,3 @@
+Version 2.0.4.
+- Add option: stop at end of track
+- fix saved song pos when choosing different track
