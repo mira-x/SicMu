@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "souch.smp"
         minSdkVersion 14 // 14 -> Android 4.0
-        targetSdkVersion 31
+        targetSdkVersion 28
         versionCode 28
         versionName '2.0.4'
         vectorDrawables.useSupportLibrary = true

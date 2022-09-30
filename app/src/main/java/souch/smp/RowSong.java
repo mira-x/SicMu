@@ -233,13 +233,13 @@ public class RowSong extends Row {
                 rating >= params.getMinRating();
     }
 
-    public interface RatingCallbackInterface {
+    public interface LoadRatingCallbackInterface {
         // @param someRatingChanged set to true if loadRating brings new RowSong's rating
         // i.e. set to false if RowSong's rating did not change
         void ratingCallback(int rating, boolean ratingChanged);
     }
 
-    public synchronized void loadRatingAsync(RatingCallbackInterface ratingCallbackInterface) {
+    public synchronized void loadRatingAsync(LoadRatingCallbackInterface ratingCallbackInterface) {
         if (rating != RowSong.RATING_NOT_INITIALIZED) {
             ratingCallbackInterface.ratingCallback(rating, false);
         }
@@ -270,6 +270,9 @@ public class RowSong extends Row {
                 if (fileLastModifiedMs <= songORM.lastModifiedMs) {
                     Log.d("RowSong", "Found songORM for path=" + path);
                     rating = songORM.rating;
+                }
+                else {
+                    Log.d("RowSong", "Found songORM for path=" + path + " but cache is obsolete");
                 }
             }
 
@@ -316,8 +319,24 @@ public class RowSong extends Row {
         return rating;
     }
 
+    public interface SetRatingCallbackInterface {
+        void ratingCallback(boolean ratingChanged);
+    }
+    public void setRatingAsync(Context context,
+                                  int rating, SetRatingCallbackInterface ratingCallbackInterface)
+    {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ratingCallbackInterface.ratingCallback(setRating(rating, context));
+            }
+        };
+        thread.start();
+    }
+
     // return true if set rating succeed
-    public synchronized boolean setRating(int rating) {
+    public synchronized boolean setRating(int rating, Context context) {
+        int oldRating = this.rating;
         this.rating = rating;
         boolean ok = false;
         try {
@@ -333,8 +352,8 @@ public class RowSong extends Row {
         } catch (Exception e) {
             String wrn = "Unable to set rating for song:" + path +
                     ". Exception msg: " + e.getClass() + " - " + e.getMessage();
-            //Toast.makeText(context, wrn, Toast.LENGTH_SHORT).show();
             Log.w("RowSong", wrn);
+            this.rating = oldRating;
         }
         return ok;
     }

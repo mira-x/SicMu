@@ -352,16 +352,13 @@ public class Rows {
     }
 
     public void moveToNextSong() {
-        moveToNextSongNoRating();
-    }
-
-/*
         if (!params.getEnableRating() || params.getMinRating() <= 1)
             moveToNextSongNoRating();
         else {
             moveToNextSongRatingEnabled();
         }
     }
+
     private void moveToNextSongRatingEnabled() {
         if (rowsUnfolded.size() <= 0)
             return;
@@ -416,7 +413,7 @@ public class Rows {
             setGroupSelectedState(currPos, true);
         }
     }
-*/
+
     private void moveToNextSongNoRating() {
         if (rowsUnfolded.size() <= 0)
             return;

@@ -397,7 +397,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_button"
         android:orientation="horizontal"
-        android:weightSum="249">
+        android:weightSum="299">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
@@ -463,7 +463,6 @@
             android:onClick="openShuffle"
             android:src="@drawable/ic_menu_no_shuffle" />
 
-        <!--
         <ImageButton
             android:id="@+id/rating_button"
             style="@style/BottomButton"
@@ -475,7 +474,6 @@
             android:scaleType="centerInside"
             android:onClick="openMinRating"
             app:srcCompat="@drawable/ic_star_5_highlight" />
-        -->
 
         <ImageButton
             android:id="@+id/settings_button"
