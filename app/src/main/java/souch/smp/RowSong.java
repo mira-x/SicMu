@@ -258,6 +258,29 @@ public class RowSong extends Row {
         }
     }
 
+    private void updateOrInsertSongOrm(SongORM songORM) {
+        updateOrInsertSongOrm(songORM, true);
+    }
+
+    private void updateOrInsertSongOrm(SongORM songORM, boolean ratingSynchronized) {
+        try {
+            if (songORM != null) {
+                Log.d("RowSong", "Update songORM for path=" + path);
+                songORM.rating = rating;
+                songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
+                songORM.ratingSynchronized = ratingSynchronized;
+                songDAO.update(songORM);
+            }
+            else {
+                Log.d("RowSong", "New songORM for path=" + path);
+                songDAO.insert(new SongORM(path, rating, ratingSynchronized));
+            }
+        } catch (Exception e) {
+            Log.w("RowSong", "Unable to update/insert songORM for path=" + path
+                    + " e=" + e.toString());
+        }
+    }
+
     // ! must not be called from main thread !
     public synchronized int loadRating() {
         // get rating is computed on demand cause it is slow
@@ -298,22 +321,7 @@ public class RowSong extends Row {
                 if (rating < 0)
                     rating = RATING_UNKNOWN;
 
-                // update db songs
-                try {
-                    if (songORM != null) {
-                        Log.d("RowSong", "Update songORM for path=" + path);
-                        songORM.rating = rating;
-                        songORM.lastModifiedMs = fileLastModifiedMs;
-                        songDAO.update(songORM);
-                    }
-                    else {
-                        Log.d("RowSong", "New songORM for path=" + path);
-                        songDAO.insert(new SongORM(path, rating));
-                    }
-                } catch (Exception e) {
-                    Log.w("RowSong", "Unable to update/insert songORM for path=" + path
-                            + " e=" + e.toString());
-                }
+                updateOrInsertSongOrm(songORM);
             }
         }
         return rating;
@@ -323,7 +331,7 @@ public class RowSong extends Row {
         void ratingCallback(boolean ratingChanged);
     }
     public void setRatingAsync(Context context,
-                                  int rating, SetRatingCallbackInterface ratingCallbackInterface)
+                               int rating, SetRatingCallbackInterface ratingCallbackInterface)
     {
         Thread thread = new Thread() {
             @Override
@@ -334,10 +342,7 @@ public class RowSong extends Row {
         thread.start();
     }
 
-    // return true if set rating succeed
-    public synchronized boolean setRating(int rating, Context context) {
-        int oldRating = this.rating;
-        this.rating = rating;
+    public static boolean ApplyRating(String path, int rating) {
         boolean ok = false;
         try {
             AudioFile audioFile = AudioFileIO.read(new File(path));
@@ -353,8 +358,16 @@ public class RowSong extends Row {
             String wrn = "Unable to set rating for song:" + path +
                     ". Exception msg: " + e.getClass() + " - " + e.getMessage();
             Log.w("RowSong", wrn);
-            this.rating = oldRating;
         }
+        return ok;
+    }
+
+    // return true if set rating succeed
+    public synchronized boolean setRating(int rating, Context context) {
+        this.rating = rating;
+        boolean ok = ApplyRating(path, rating);
+        updateOrInsertSongOrm(songDAO.findByPath(path), ok);
+
         return ok;
     }
 
@@ -366,12 +379,12 @@ public class RowSong extends Row {
         001-031 = 1 star when READ with Windows Explorer, writes 1
     */
     // convert table 0-5 -> 0-255
-    public final int id3ConventionRating[] = {0, 1, 64, 128, 196, 255};
+    public static final int id3ConventionRating[] = {0, 1, 64, 128, 196, 255};
 
     /* rating can be from 0 to 5
      * ex: 3 return "128"
      */
-    public String convertToRating0to255(int rating) {
+    public static String convertToRating0to255(int rating) {
         if (rating < 0)
             rating = 0;
         if (rating > 5)

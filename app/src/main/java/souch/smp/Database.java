@@ -25,7 +25,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
+
+import static souch.smp.SongDatabase.MIGRATION_1_2;
 
 public class Database {
     private SongDAO songDAO;
@@ -36,6 +39,7 @@ public class Database {
         this.context = context;
         SongDatabase db = Room.databaseBuilder(context,
                 SongDatabase.class, "database-SMP")
+                .addMigrations(MIGRATION_1_2)
                 //.allowMainThreadQueries()
                 .build();
         songDAO = db.getSongDAO();
@@ -184,6 +188,53 @@ public class Database {
                     Log.i("Database", "Cleanup DB: " + nbDelete + "/" + songORMs.size() +
                             " songORM deleted in " + (end.getTime() - beg.getTime()) + "ms");
                 }
+            }
+        };
+        thread.start();
+    }
+
+    public interface SyncronizeRatingsCallbackInterface {
+        // if at least one synchronize fail -> succeed = false
+        void ratingCallback(boolean succeed, String msg);
+    }
+    public void trySyncronizeRatingsAsync(@NonNull SyncronizeRatingsCallbackInterface callback) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                boolean succeed = true;
+                String retMsg = "";
+                List<SongORM> songORMs = songDAO.getAll();
+                int nbSyncSucceed = 0;
+                int nbSyncTried = 0;
+                for (SongORM songORM : songORMs) {
+                    if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
+                        Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
+                        String msg = "trySyncronizeRating: synchronize rating of " +
+                                songORM.path + " to " + songORM.rating;
+                        if (RowSong.ApplyRating(songORM.path, songORM.rating)) {
+                            msg += " succeed\n";
+                            songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
+                            songORM.ratingSynchronized = true;
+                            songDAO.update(songORM);
+                            nbSyncSucceed++;
+                        }
+                        else {
+                            succeed = false;
+                            msg += " failed !\n";
+//                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
+                        }
+                        retMsg += msg;
+                        Log.d("Database", msg);
+                        nbSyncTried++;
+                    }
+                }
+                String msg = "Synchronized rating " + nbSyncSucceed + "/" + nbSyncTried + " succeed";
+//                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                Log.d("Database", msg);
+                retMsg += msg;
+                if (nbSyncTried == 0)
+                    retMsg = "";
+                callback.ratingCallback(succeed, retMsg);
             }
         };
         thread.start();

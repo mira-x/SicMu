@@ -18,12 +18,23 @@
 
 package souch.smp;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {SongORM.class, ConfigurationORM.class}, version = 1)
+@Database(entities = {SongORM.class, ConfigurationORM.class}, version = 2)
 public abstract class SongDatabase extends RoomDatabase {
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE songs "
+                    + " ADD COLUMN ratingSynchronized INTEGER DEFAULT 1 NOT NULL");
+        }
+    };
     public abstract SongDAO getSongDAO();
     public abstract ConfigurationDAO getConfigurationDAO();
 }
+
 

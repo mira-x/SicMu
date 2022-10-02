@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.room.Room;
 
@@ -830,7 +831,7 @@ public class Rows {
                 if (songORM == null) {
                     Log.d("Rows", "New songORM for path=" + rowSong.getPath());
                     try {
-                        database.getSongDAO().insert(new SongORM(rowSong.getPath(), rowSong.loadRating()));
+                        database.getSongDAO().insert(new SongORM(rowSong.getPath(), rowSong.loadRating(), true));
                     } catch (Exception e) {
                         Log.w("Rows", "Unable to add songORM for path=" + rowSong.getPath()
                                 + " e=" + e);

@@ -31,10 +31,14 @@ public class SongORM {
     public String path;
     public long lastModifiedMs; // ms since 1970
     public int rating;
-    public SongORM(String path, int rating) {
+    // set to true if DB's rating is synchronized to file's rating
+    public boolean ratingSynchronized;
+
+    public SongORM(String path, int rating, boolean ratingSynchronized) {
         this.path = path;
         this.rating = rating;
-        lastModifiedMs = (new File(path)).lastModified();
+        this.lastModifiedMs = (new File(path)).lastModified();
+        this.ratingSynchronized = ratingSynchronized;
     }
 }
 
