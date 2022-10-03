@@ -212,7 +212,7 @@ public class Database {
                         String msg = "trySyncronizeRating: synchronize rating of " +
                                 songORM.path + " to " + songORM.rating;
                         if (RowSong.ApplyRating(songORM.path, songORM.rating)) {
-                            msg += " succeed\n";
+                            msg += " succeed\n\n";
                             songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
                             songORM.ratingSynchronized = true;
                             songDAO.update(songORM);
@@ -220,7 +220,7 @@ public class Database {
                         }
                         else {
                             succeed = false;
-                            msg += " failed !\n";
+                            msg += " failed !\n\n";
 //                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
                         }
                         retMsg += msg;

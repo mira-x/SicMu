@@ -381,17 +381,6 @@ public class Main extends AppCompatActivity {
                 }
             });
 
-            (new Timer()).schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    database.trySyncronizeRatingsAsync((succeed, msg) -> {
-                            if (!succeed)
-                                runOnUiThread(() ->
-                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show());
-                    });
-                }
-            }, 10000, 10000);
-
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
             songView.setAdapter(songAdt);
@@ -999,6 +988,7 @@ public class Main extends AppCompatActivity {
                     setRatingDetails();
                     songAdt.notifyDataSetChanged();
                     if (!succeed) {
+                        musicSrv.setRatingFailed();
                         Toast.makeText(getApplicationContext(),
                                 "rating song " + rowSong.toString() + " to " + rating + " failed!",
                                 Toast.LENGTH_LONG).show();

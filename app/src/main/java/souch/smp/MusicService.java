@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -126,6 +127,7 @@ public class MusicService extends Service implements
     private boolean enableShake;
     private static boolean enableRating;
     private int minRating = 1;
+    private AtomicBoolean ratingsMustBeSynchronized;
     private float shakeThreshold;
     private float playbackSpeed = 1.0f;
     private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
@@ -285,6 +287,10 @@ public class MusicService extends Service implements
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
                 database);
 
+        ratingsMustBeSynchronized = new AtomicBoolean(false);
+        // try sync if sthg failed in the previous SMP session
+        synchronizeFailedRatings();
+
         restore();
 
         remoteControlResponder = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
@@ -391,6 +397,9 @@ public class MusicService extends Service implements
             audioManager.abandonAudioFocus(this);
             hasAudioFocus = false;
         }
+
+        // try sync when releasing audio
+        synchronizeFailedRatings();
 
         stopSensor();
 
@@ -569,12 +578,31 @@ public class MusicService extends Service implements
         updateMediaSessionMetadata();
         if(foreground)
             startNotification();
+
+        // try sync at each new song
+        synchronizeFailedRatings();
+    }
+
+    // failed ratings occurs usually when rating song that are currently playing
+    // so failed rating should be resync when another song is playing
+    private void synchronizeFailedRatings() {
+        if (ratingsMustBeSynchronized.getAndSet(false)) {
+            database.trySyncronizeRatingsAsync((succeed, msg) -> {
+                if (!succeed)
+                    ratingsMustBeSynchronized.set(true);
+                Log.d("MusicService", msg);
+                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+            });
+        }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
         state.setState(PlayerState.PlaybackCompleted);
         setChanged();
+
+        // try sync on song completion
+        synchronizeFailedRatings();
 
         // loop only to same track if not asked to change track (i.e. loop only on completion)
         if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
@@ -991,6 +1019,10 @@ public class MusicService extends Service implements
         minRating = rating;
         params.setMinRating(minRating);
         setChanged();
+    }
+
+    public void setRatingFailed() {
+        ratingsMustBeSynchronized.set(true);
     }
 
     public void setShakeThreshold(float threshold) {

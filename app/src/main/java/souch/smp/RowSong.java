@@ -180,8 +180,8 @@ public class RowSong extends Row {
     }
 
     public String toString() {
-        return "Song  pos: " + genuinePos + " level: " + level + " ID: " + id + " artist: " + artist +
-                " album: " + album + " title: " + title + " " +
+        return "title: " + title + " album: " + album + " artist: " + artist +
+                " pos: " + genuinePos + " level: " + level + " ID: " + id +
                 msToMinutes(durationMs) + " track:" + track + " path: " + path;
     }
 
