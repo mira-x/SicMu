@@ -313,7 +313,7 @@ public class Main extends AppCompatActivity {
 
     private void askPermissionAndroid11AndAbove() {
         if (SDK_INT >= Build.VERSION_CODES.R) {
-            Toast.makeText(getApplicationContext(), "askPermissionAndroid11AndAbove", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "askPermissionAndroid11AndAbove", Toast.LENGTH_SHORT).show();
             if (!Environment.isExternalStorageManager()) {
                 try {
                     Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -976,25 +976,9 @@ public class Main extends AppCompatActivity {
     private void rateCurrSong(int rating) {
         if (!serviceBound || rows == null)
             return;
-//        try {
-//            checkFilePermissions(new File("/storage/emulated/0/README.md"), false);
-//        } catch (Exception e) {
-//            Log.i("Main", "Unable to write:");
-//        }
-        RowSong rowSong = rows.getCurrSong();
-        rowSong.setRatingAsync(getApplicationContext(), rating,
-            (succeed) -> {
-                runOnUiThread(() -> {
-                    setRatingDetails();
-                    songAdt.notifyDataSetChanged();
-                    if (!succeed) {
-                        musicSrv.setRatingFailed();
-                        Toast.makeText(getApplicationContext(),
-                                "rating song " + rowSong.toString() + " to " + rating + " failed!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-            });
+        musicSrv.rateCurrSong(rating);
+        setRatingDetails();
+        songAdt.notifyDataSetChanged();
     }
 
 //    public void openSongFolder(View view) {

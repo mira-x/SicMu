@@ -262,6 +262,7 @@ public class RowSong extends Row {
         updateOrInsertSongOrm(songORM, true);
     }
 
+    // @param ratingSynchronized set to true if corresponding file has the rating property correctly set
     private void updateOrInsertSongOrm(SongORM songORM, boolean ratingSynchronized) {
         try {
             if (songORM != null) {
@@ -363,12 +364,28 @@ public class RowSong extends Row {
     }
 
     // return true if set rating succeed
-    public synchronized boolean setRating(int rating, Context context) {
+    private synchronized boolean setRating(int rating, Context context) {
         this.rating = rating;
         boolean ok = ApplyRating(path, rating);
         updateOrInsertSongOrm(songDAO.findByPath(path), ok);
 
         return ok;
+    }
+
+    // write rating to file later (useful to modify file when it is not currently reading)
+    public synchronized void scheduleSetRatingAsync(int rating)
+    {
+        // sync part
+        this.rating = rating;
+
+        // async part
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                updateOrInsertSongOrm(songDAO.findByPath(path), false);
+            }
+        };
+        thread.start();
     }
 
     /*

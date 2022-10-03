@@ -52,6 +52,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private final String DONATE_KEY = "DONATE";
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     private final String CHANGELOGS_KEY = "CHANGELOGS";
+    private final String RATINGS_NOT_WRITTEN_KEY = "RATINGS_NOT_WRITTEN_KEY";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
 
@@ -116,6 +117,9 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         Preference changelogs = findPreference(CHANGELOGS_KEY);
         changelogs.setOnPreferenceClickListener(this);
+
+        Preference ratings_not_written = findPreference(RATINGS_NOT_WRITTEN_KEY);
+        ratings_not_written.setOnPreferenceClickListener(this);
 
         ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
         if (Flavor.isFlavorFreeware(getActivity().getBaseContext())) {
@@ -321,6 +325,14 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             setSleepTimerTitle();
         } else if (preference.getKey().equals(CHANGELOGS_KEY)) {
             showChangelogs();
+        } else if (preference.getKey().equals(RATINGS_NOT_WRITTEN_KEY)) {
+            musicSrv.getDatabase().getRatingsToSynchronizeAsync(songs -> {
+                if (songs.isEmpty())
+                    songs = getResources().getString(R.string.settings_ratings_are_in_sync);
+                final String msg = songs;
+                getActivity().runOnUiThread(() ->
+                        Toast.makeText(getActivity().getBaseContext(), msg, Toast.LENGTH_LONG).show());
+            });
         }
         return false;
     }

@@ -1021,8 +1021,12 @@ public class MusicService extends Service implements
         setChanged();
     }
 
-    public void setRatingFailed() {
-        ratingsMustBeSynchronized.set(true);
+    public void rateCurrSong(int rating) {
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong != null) {
+            rowSong.scheduleSetRatingAsync(rating);
+            ratingsMustBeSynchronized.set(true);
+        }
     }
 
     public void setShakeThreshold(float threshold) {

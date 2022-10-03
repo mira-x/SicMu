@@ -239,4 +239,24 @@ public class Database {
         };
         thread.start();
     }
+
+    public interface RatingsToSyncronizeCallbackInterface {
+        void ratingCallback(String msg);
+    }
+    public void getRatingsToSynchronizeAsync(@NonNull RatingsToSyncronizeCallbackInterface callback) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                String msg = "";
+                List<SongORM> songORMs = songDAO.getAll();
+                for (SongORM songORM : songORMs) {
+                    if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
+                        msg += songORM.rating + " -> " + songORM.path + "\n";
+                    }
+                }
+                callback.ratingCallback(msg);
+            }
+        };
+        thread.start();
+    }
 }
