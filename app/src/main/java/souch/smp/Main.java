@@ -110,7 +110,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout moreButtonsLayout;
 
     private ImageButton albumImage;
-    private TextView songTitle, songAlbum, songArtist, warningText;
+    private TextView songTitle, songAlbum, songArtist, songMime, warningText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private LinearLayout details_right_layout;
@@ -188,6 +188,7 @@ public class Main extends AppCompatActivity {
         songTitle = findViewById(R.id.detail_title);
         songAlbum = findViewById(R.id.detail_album);
         songArtist = findViewById(R.id.detail_artist);
+        songMime = findViewById(R.id.detail_mime);
         warningText = findViewById(R.id.warning_text);
 
         askPermission();
@@ -819,6 +820,7 @@ public class Main extends AppCompatActivity {
             if (rowSong.getYear() > 1000)
                 album += " - " + rowSong.getYear();
             songAlbum.setText(album);
+            songMime.setText(rowSong.getMime());
             rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
                     (rowSongId, imageNum, bitmap) -> setCoverArt(rowSongId, imageNum, bitmap));
 

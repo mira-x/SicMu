@@ -724,7 +724,8 @@ public class Rows {
                 MediaStore.MediaColumns.DATA,
                 MediaStore.Audio.Media.TRACK,
                 MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.YEAR
+                MediaStore.Audio.Media.YEAR,
+                MediaStore.Audio.Media.MIME_TYPE
         };
         String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
 
@@ -883,6 +884,7 @@ public class Rows {
             int trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
             int albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
+            int mimeCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE);
 
             RowGroup prevArtistGroup = null;
             RowGroup prevAlbumGroup = null;
@@ -895,6 +897,7 @@ public class Rows {
                 int track = musicCursor.getInt(trackCol);
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
+                String mime = musicCursor.getString(mimeCol);
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
 
                 if (prevArtistGroup == null || artist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
@@ -914,7 +917,7 @@ public class Rows {
                 }
 
                 RowSong rowSong = new RowSong(database.getSongDAO(), rowsUnfolded.size(), 2, id, title, artist, album,
-                        durationMs, track, path, albumId, year, params);
+                        durationMs, track, path, albumId, year, mime, params);
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
@@ -942,6 +945,7 @@ public class Rows {
             int trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
             int albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
+            int mimeCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE);
 
             do {
                 long id = musicCursor.getLong(idCol);
@@ -953,9 +957,10 @@ public class Rows {
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
+                String mime = musicCursor.getString(mimeCol);
 
                 RowSong rowSong = new RowSong(database.getSongDAO(), -1, 2, id, title, artist, album,
-                        durationMs, track, path, albumId, year, params);
+                        durationMs, track, path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
@@ -1033,6 +1038,7 @@ public class Rows {
             int trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
             int albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
+            int mimeCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE);
 
             do {
                 long id = musicCursor.getLong(idCol);
@@ -1044,10 +1050,11 @@ public class Rows {
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
+                String mime = musicCursor.getString(mimeCol);
 
                 final int pos = -1, level = 2;
                 RowSong rowSong = new RowSong(database.getSongDAO(), pos, level, id, title, artist, album, durationMs,
-                        track, path, albumId, year, params);
+                        track, path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }

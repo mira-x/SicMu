@@ -280,6 +280,15 @@
                 android:maxLines="3"
                 android:text="" />
 
+            <TextView
+                android:id="@+id/detail_mime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:maxHeight="40dp"
+                android:maxLines="3"
+                android:text="" />
+
             <!--
             <LinearLayout
            android:id="@+id/details_buttons_layout"

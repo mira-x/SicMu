@@ -56,6 +56,7 @@ public class RowSong extends Row {
     private long durationMs;
     private int track;
     private int year;
+    private String mime;
     // actually 0 means not initialized too (we handle reading 0, but it is not very useful, cause
     // we cannot set a rating of 0 star in the UI)
     public static final int RATING_NOT_INITIALIZED = -2;
@@ -79,7 +80,7 @@ public class RowSong extends Row {
     public static int backgroundSongColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
-                   long durationMs, int songTrack, String songPath, long albumId, int year, Parameters params) {
+                   long durationMs, int songTrack, String songPath, long albumId, int year, String mime, Parameters params) {
         super(pos, level, Typeface.NORMAL);
         this.songDAO = songDAO;
         id = songID;
@@ -94,6 +95,7 @@ public class RowSong extends Row {
         rating = RATING_NOT_INITIALIZED;
         this.albumId = albumId;
         this.year = year;
+        this.mime = mime;
         if(path != null) {
             folder = Path.getFolder(path);
         }
@@ -103,6 +105,7 @@ public class RowSong extends Row {
     public long getID(){return id;}
     public String getTitle(){return title;}
     public int getYear(){return year;}
+    public String getMime(){return mime;}
     public String getArtist(){return artist;}
     public String getAlbum(){return album;}
     public long getDurationMs(){return durationMs;}
