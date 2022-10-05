@@ -813,14 +813,24 @@ public class Main extends AppCompatActivity {
     public void setDetails() {
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
-            String title = rowSong.getTrack() + ". " + rowSong.getTitle();
+            String title = rowSong.getTitle();
+            int trackNum = rowSong.getTrack();
+            // some songs are numbered from 1000 !?
+            if (trackNum > 1000 && trackNum < 2000)
+                trackNum -= 1000;
+            if (trackNum > 0)
+                title = trackNum + ". " + title;
             songTitle.setText(title);
+
             songArtist.setText(rowSong.getArtist());
+
             String album = rowSong.getAlbum();
             if (rowSong.getYear() > 1000)
-                album += " - " + rowSong.getYear();
+                album = rowSong.getYear() + " - " + album;
             songAlbum.setText(album);
+
             songMime.setText(rowSong.getMime());
+
             rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
                     (rowSongId, imageNum, bitmap) -> setCoverArt(rowSongId, imageNum, bitmap));
 
