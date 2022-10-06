@@ -395,9 +395,9 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return false;
 
-                        if (!isEditModeEnabled())
-                            longClickOnRow(position);
-                        else
+//                        if (!isEditModeEnabled())
+//                            longClickOnRow(position);
+//                        else
                             longClickOnRowEditMode(position);
 
                         return true;
@@ -1055,7 +1055,7 @@ public class Main extends AppCompatActivity {
     private void openEditGroupMenu(int position, RowGroup row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
-        altBld.setTitle(cutLongStringAndDots(row.getName(), 30));
+        altBld.setTitle(getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName(), 40)));
         final CharSequence[] items = {
                 getString(R.string.action_play),
                 getString(R.string.action_rate_group),
@@ -1069,10 +1069,10 @@ public class Main extends AppCompatActivity {
                         longClickOnRow(position);
                         break;
                     case 1:
-                        openRateGroupMenu(row.getName(), position, false);
+                        openRateRowMenu(row.getName(), position, false);
                         break;
                     case 2:
-                        openRateGroupMenu(row.getName(), position, true);
+                        openRateRowMenu(row.getName(), position, true);
                         break;
                 }
             }
@@ -1090,28 +1090,32 @@ public class Main extends AppCompatActivity {
         return str;
     }
 
-    private void openRateGroupMenu(String groupName, int position, boolean overwriteRating) {
+    private void openRateRowMenu(String rowName, int pos, boolean overwriteRating) {
         if (musicSrv == null)
             return;
+        Row row = rows.get(pos);
+        final boolean isRowGroup = row != null && row.getClass() == RowGroup.class;
 
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_star_5_highlight);
-        altBld.setTitle(getString(R.string.action_set_rating,
-                cutLongStringAndDots(groupName, 20)));
+        altBld.setTitle(getString(isRowGroup ? R.string.action_set_rating_folder :  R.string.action_set_rating_song,
+                cutLongStringAndDots(rowName, 40)));
         final CharSequence[] items = {
                 "1", "2", "3", "4", "5"
         };
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
-            rows.rateGroup(position, itemPos + 1, overwriteRating,
+            rows.rateSongs(pos, itemPos + 1, overwriteRating,
                     (nbChanged) -> {
                         runOnUiThread(() -> {
                             if (nbChanged > 0) {
                                 setRatingDetails();
                                 songAdt.notifyDataSetChanged();
                             }
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.songs_have_been_rated, nbChanged),
-                                    Toast.LENGTH_SHORT).show();
+
+                            if (isRowGroup)
+                                Toast.makeText(getApplicationContext(),
+                                        getString(R.string.songs_have_been_rated, nbChanged),
+                                        Toast.LENGTH_SHORT).show();
                         });
                     });
         });
@@ -1122,9 +1126,11 @@ public class Main extends AppCompatActivity {
     private void openEditSongMenu(int position, RowSong row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
-        altBld.setTitle(row.getTitle());
+        altBld.setTitle(getString(R.string.ic_action_edit_song,
+                cutLongStringAndDots(row.getTitle(), 40)));
         final CharSequence[] items = {
                 getString(R.string.action_play),
+                getString(R.string.action_rate_song),
                 //getString(R.string.show_song_details),
                 //getString(R.string.add_to_playlist),
         };
@@ -1134,6 +1140,9 @@ public class Main extends AppCompatActivity {
                 switch (item) {
                     case 0:
                         clickOnRow(position);
+                        break;
+                    case 1:
+                        openRateRowMenu(row.getTitle(), position, true);
                         break;
                 }
             }

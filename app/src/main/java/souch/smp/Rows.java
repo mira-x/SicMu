@@ -1243,8 +1243,9 @@ public class Rows {
         void ratingCallback(int nbSongsChanged) ;
     }
 
+    // rate songs from pos (if pos is folder rate every folder's songs)
     // return true if ratingsMustBeSynchronized (usually set when trying to rate the current played song)
-    public void rateGroup(int pos, int rating, boolean overwriteRating,
+    public void rateSongs(int pos, int rating, boolean overwriteRating,
                           RateGroupCallbackInterface callback) {
         Log.d("Rows", "rateGroup " + pos + " to " + rating +
                 " overwrite=" + overwriteRating);
@@ -1254,34 +1255,44 @@ public class Rows {
             public void run() {
                 int nbChanged = 0;
                 Row row = rows.get(pos);
-                if (row.getClass() != RowGroup.class)
-                    return;
-                RowGroup groupToRate = (RowGroup) row;
-                int i = 1;
-                while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
-                        (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
-                                groupToRate.getLevel()) {
-                    if (row.getClass() == RowSong.class) {
-                        RowSong rowSong = (RowSong) row;
-                        if (overwriteRating || rowSong.getRating() <= 0) {
-                            Log.d("Rows", "rate song " + rowSong.getTitle() + " to " + rating);
-                            RowSong currSong = getCurrSong();
-                            if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
-                                rowSong.setRating(rating, context);
-                            }
-                            else {
-                                rowSong.scheduleSetRating(rating, false);
-                                ratingsMustBeSynchronized.set(true);
-                            }
-                            nbChanged++;
+                if (row.getClass() == RowSong.class) {
+                    if (rateSong((RowSong) row, rating, overwriteRating))
+                        nbChanged++;
+                }
+                else {
+                    RowGroup groupToRate = (RowGroup) row;
+                    int i = 1;
+                    while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
+                            (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
+                                    groupToRate.getLevel()) {
+                        if (row.getClass() == RowSong.class) {
+                            if (rateSong((RowSong) row, rating, overwriteRating))
+                                nbChanged++;
                         }
+                        i++;
                     }
-                    i++;
                 }
                 callback.ratingCallback(nbChanged);
             }
         };
         thread.start();
+    }
+
+    private boolean rateSong(RowSong rowSong, int rating, boolean overwriteRating) {
+        boolean changed = false;
+        if (overwriteRating || rowSong.getRating() <= 0) {
+            Log.d("Rows", "rate song " + rowSong.getTitle() + " to " + rating);
+            RowSong currSong = getCurrSong();
+            if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
+                rowSong.setRating(rating, context);
+            }
+            else {
+                rowSong.scheduleSetRating(rating, false);
+                ratingsMustBeSynchronized.set(true);
+            }
+            changed = true;
+        }
+        return changed;
     }
 
     public void rateCurrSong(int rating) {
