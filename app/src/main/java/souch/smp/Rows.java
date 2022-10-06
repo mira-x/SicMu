@@ -1235,6 +1235,45 @@ public class Rows {
         thread.start();
     }
 
+    // return true if ratingsMustBeSynchronized (usually set when trying to rate the current played song)
+    public void rateGroup(int pos, int rating, boolean overwriteRating) {
+        Log.d("Rows", "rateGroup " + pos + " to " + rating +
+                " overwrite=" + overwriteRating);
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Row row = rows.get(pos);
+                if (row.getClass() != RowGroup.class)
+                    return;
+                RowGroup groupToRate = (RowGroup) row;
+                int i = 1;
+                while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
+                        (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
+                                groupToRate.getLevel()) {
+                    if (row.getClass() == RowSong.class) {
+                        RowSong rowSong = (RowSong) row;
+                        if (overwriteRating || rowSong.getRating() <= 0) {
+                            Log.d("Rows", "rate song " + rowSong.getTitle() + " to " + rating);
+                            RowSong currSong = getCurrSong();
+                            if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
+                                rowSong.setRating(rating, context);
+                            }
+                            // todo handle this
+//                            else {
+//                                rowSong.scheduleSetRatingAsync(rating);
+//                                ratingsMustBeSynchronized.set(true);
+//                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+        };
+        thread.start();
+    }
+
+
 //    public void deleteCurSong(Context context) {
 //        RowSong rowSong = getCurrSong();
 //        if(rowSong != null)

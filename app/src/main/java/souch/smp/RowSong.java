@@ -57,9 +57,11 @@ public class RowSong extends Row {
     private int track;
     private int year;
     private String mime;
+    // RATING_NOT_INITIALIZED means we did not tried to read id3 rating
     // actually 0 means not initialized too (we handle reading 0, but it is not very useful, cause
     // we cannot set a rating of 0 star in the UI)
     public static final int RATING_NOT_INITIALIZED = -2;
+    // RATING_UNKNOWN means we did read id3 rating, but it was not set
     public static final int RATING_UNKNOWN = -1;
     private int rating;
     // full filename
@@ -366,8 +368,9 @@ public class RowSong extends Row {
         return ok;
     }
 
+    // this func must not be called from main thread !
     // return true if set rating succeed
-    private synchronized boolean setRating(int rating, Context context) {
+    public synchronized boolean setRating(int rating, Context context) {
         this.rating = rating;
         boolean ok = ApplyRating(path, rating);
         updateOrInsertSongOrm(songDAO.findByPath(path), ok);

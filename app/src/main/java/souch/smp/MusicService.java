@@ -1029,6 +1029,12 @@ public class MusicService extends Service implements
         }
     }
 
+    public void rateGroup(int position, int rating, boolean overwriteRating) {
+//        Log.d("MusicService", "rateGroup " + position + " to " + rating +
+//                " overwrite=" + overwriteRating);
+        rows.rateGroup(position, rating, overwriteRating);
+    }
+
     public void setShakeThreshold(float threshold) {
         shakeThreshold = threshold / 10;
     }

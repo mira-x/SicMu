@@ -94,8 +94,6 @@ public class Main extends AppCompatActivity {
     private boolean detailsToggledFollowAuto;
     private boolean hasCoverArt;
 
-    private int menuToOpen;
-
     private Parameters params;
 
     private Vibrator vibrator;
@@ -385,51 +383,25 @@ public class Main extends AppCompatActivity {
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
             songView.setAdapter(songAdt);
-            songView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    if (!serviceBound)
-                        return;
+            songView.setOnItemClickListener(
+                    (AdapterView<?> parent, View view, int position, long id) -> {
+                        if (!serviceBound)
+                            return;
 
-                    coverArtNum = 0;
-                    Row row = rows.get(position);
-                    if (row.getClass() == RowGroup.class) {
-                        // vibrate when big font choosed
-                        if (params.getChoosedTextSize())
-                            vibrate();
+                        clickOnRow(position);
+                    });
+            songView.setOnItemLongClickListener(
+                    (AdapterView<?> parent, View view, int position, long id) -> {
+                        if (!serviceBound)
+                            return false;
 
-                        rows.invertFold(position);
-                        songAdt.notifyDataSetChanged();
-                    } else {
-                        vibrate();
+                        if (!isEditModeEnabled())
+                            longClickOnRow(position);
+                        else
+                            longClickOnRowEditMode(position);
 
-                        rows.selectNearestSong(position);
-                        musicSrv.playSong();
-                        updatePlayButton();
-                        disableTrackLooper();
-                    }
-                    scrollToSong(position);
-                    updateRatings();
-                }
-            });
-            songView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                               int position, long id) {
-                    if (!serviceBound)
-                        return false;
-
-                    vibrate();
-
-                    coverArtNum = 0;
-                    rows.selectNearestSong(position);
-                    playAlreadySelectedSong();
-                    updateRatings();
-
-                    return true;
-                }
-            });
+                        return true;
+                    });
             serviceBound = true;
 
             musicSrv.stopNotification();
@@ -468,6 +440,50 @@ public class Main extends AppCompatActivity {
             serviceBound = false;
         }
     };
+
+    private void clickOnRow(int position) {
+        coverArtNum = 0;
+        Row row = rows.get(position);
+        if (row != null) {
+            if (row.getClass() == RowGroup.class) {
+                // vibrate when big font choosed
+                if (params.getChoosedTextSize())
+                    vibrate();
+
+                rows.invertFold(position);
+                songAdt.notifyDataSetChanged();
+            } else {
+                vibrate();
+
+                rows.selectNearestSong(position);
+                musicSrv.playSong();
+                updatePlayButton();
+                disableTrackLooper();
+            }
+            scrollToSong(position);
+            updateRatings();
+        }
+    }
+
+    private void longClickOnRow(int position) {
+        vibrate();
+
+        coverArtNum = 0;
+        rows.selectNearestSong(position);
+        playAlreadySelectedSong();
+        updateRatings();
+    }
+
+    private void longClickOnRowEditMode(int position) {
+        Row row = rows.get(position);
+        if (row != null) {
+            if (row.getClass() == RowGroup.class) {
+                openEditGroupMenu(position, (RowGroup) row);
+            } else {
+                openEditSongMenu(position, (RowSong) row);
+            }
+        }
+    }
 
     private void playAlreadySelectedSong() {
         musicSrv.playSong();
@@ -1036,6 +1052,85 @@ public class Main extends AppCompatActivity {
 ////        }
 //    }
 
+    private void openEditGroupMenu(int position, RowGroup row) {
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(R.drawable.ic_action_edit);
+        altBld.setTitle(cutLongStringAndDots(row.getName(), 30));
+        final CharSequence[] items = {
+                getString(R.string.action_play),
+                getString(R.string.action_rate_group),
+                getString(R.string.action_rate_group_overwrite),
+        };
+
+        altBld.setItems(items, (DialogInterface dialog, int item) -> {
+            if (musicSrv != null) {
+                switch (item) {
+                    case 0:
+                        longClickOnRow(position);
+                        break;
+                    case 1:
+                        openRateGroupMenu(row.getName(), position, false);
+                        break;
+                    case 2:
+                        openRateGroupMenu(row.getName(), position, true);
+                        break;
+                }
+            }
+        });
+        AlertDialog alert = altBld.create();
+        alert.show();
+    }
+
+    private String cutLongStringAndDots(String str, int maxLength) {
+        final String dots = "...";
+        if (str.length() > maxLength) {
+            str = str.substring(0, maxLength - dots.length());
+            str += dots;
+        }
+        return str;
+    }
+
+    private void openRateGroupMenu(String groupName, int position, boolean overwriteRating) {
+        if (musicSrv == null)
+            return;
+
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(R.drawable.ic_star_5_highlight);
+        altBld.setTitle(getString(R.string.action_set_rating,
+                cutLongStringAndDots(groupName, 20)));
+        final CharSequence[] items = {
+                "1", "2", "3", "4", "5"
+        };
+        altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
+            musicSrv.rateGroup(position, itemPos + 1, overwriteRating);
+        });
+        AlertDialog alert = altBld.create();
+        alert.show();
+    }
+
+    private void openEditSongMenu(int position, RowSong row) {
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(R.drawable.ic_action_edit);
+        altBld.setTitle(row.getTitle());
+        final CharSequence[] items = {
+                getString(R.string.action_play),
+                //getString(R.string.show_song_details),
+                //getString(R.string.add_to_playlist),
+        };
+
+        altBld.setItems(items, (DialogInterface dialog, int item) -> {
+            if (musicSrv != null) {
+                switch (item) {
+                    case 0:
+                        clickOnRow(position);
+                        break;
+                }
+            }
+        });
+        AlertDialog alert = altBld.create();
+        alert.show();
+    }
+
     private void openSortMenu() {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(getSortResId());
@@ -1165,7 +1260,7 @@ public class Main extends AppCompatActivity {
 
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(getMinRatingResId());
-        altBld.setTitle(getString(R.string.action_rating));
+        altBld.setTitle(getString(R.string.action_min_rating));
         final CharSequence[] items = {
                 "1", "2", "3", "4", "5"
         };
@@ -1530,13 +1625,17 @@ public class Main extends AppCompatActivity {
 
     public void toggleMoreButtons(View view) {
         ImageButton more_button = findViewById(R.id.more_button);
-        if (moreButtonsLayout.getVisibility() == View.VISIBLE) {
+        if (isEditModeEnabled()) {
             moreButtonsLayout.setVisibility(View.GONE);
             more_button.setImageResource(R.drawable.ic_action_note);
         } else {
             moreButtonsLayout.setVisibility(View.VISIBLE);
             more_button.setImageResource(R.drawable.ic_action_edit);
         }
+    }
+
+    private boolean isEditModeEnabled() {
+        return moreButtonsLayout.getVisibility() == View.VISIBLE;
     }
 
     private final int SETTINGS_ACTION = 1;

@@ -39,12 +39,18 @@
     <string name="action_music_mode">Music mode</string>
     <string name="action_edit_mode">Edit mode</string>
 
-    <string name="action_rating">Play songs with rating >=</string>
+    <string name="action_rate_group">rate every song</string>
+    <string name="action_rate_group_overwrite">rate every song overwrite already rated</string>
+
+    <string name="action_min_rating">Play songs with rating >=</string>
+    <string name="action_set_rating">Set "%s" ratings to</string>
 
     <string name="action_play">play</string>
     <string name="action_pause">pause</string>
     <string name="action_next">next</string>
     <string name="action_prev">previous</string>
+
+    <string name="show_song_details">Show details</string>
 
     <string name="app_playing">SicMu playing</string>
 
