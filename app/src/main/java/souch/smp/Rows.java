@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.room.Room;
 
@@ -64,6 +65,7 @@ public class Rows {
     private int currPos;
 
     private Database database;
+    private AtomicBoolean ratingsMustBeSynchronized;
 
     private Resources resources;
 
@@ -88,6 +90,8 @@ public class Rows {
 
         rowsUnfolded = new ArrayList<>();
         rows = new ArrayList<>();
+
+        ratingsMustBeSynchronized = new AtomicBoolean(false);
 
         restore();
         init();
@@ -1235,14 +1239,20 @@ public class Rows {
         thread.start();
     }
 
+    public interface RateGroupCallbackInterface {
+        void ratingCallback(int nbSongsChanged) ;
+    }
+
     // return true if ratingsMustBeSynchronized (usually set when trying to rate the current played song)
-    public void rateGroup(int pos, int rating, boolean overwriteRating) {
+    public void rateGroup(int pos, int rating, boolean overwriteRating,
+                          RateGroupCallbackInterface callback) {
         Log.d("Rows", "rateGroup " + pos + " to " + rating +
                 " overwrite=" + overwriteRating);
 
         Thread thread = new Thread() {
             @Override
             public void run() {
+                int nbChanged = 0;
                 Row row = rows.get(pos);
                 if (row.getClass() != RowGroup.class)
                     return;
@@ -1259,20 +1269,38 @@ public class Rows {
                             if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
                                 rowSong.setRating(rating, context);
                             }
-                            // todo handle this
-//                            else {
-//                                rowSong.scheduleSetRatingAsync(rating);
-//                                ratingsMustBeSynchronized.set(true);
-//                            }
+                            else {
+                                rowSong.scheduleSetRating(rating, false);
+                                ratingsMustBeSynchronized.set(true);
+                            }
+                            nbChanged++;
                         }
                     }
                     i++;
                 }
+                callback.ratingCallback(nbChanged);
             }
         };
         thread.start();
     }
 
+    public void rateCurrSong(int rating) {
+        RowSong rowSong = getCurrSong();
+        if (rowSong != null) {
+            rowSong.scheduleSetRating(rating, true);
+            ratingsMustBeSynchronized.set(true);
+        }
+    }
+
+    public void synchronizeFailedRatings() {
+        if (ratingsMustBeSynchronized.getAndSet(false)) {
+            database.trySyncronizeRatingsAsync((succeed, msg) -> {
+                if (!succeed)
+                    ratingsMustBeSynchronized.set(true);
+                Log.d("Rows", msg);
+            });
+        }
+    }
 
 //    public void deleteCurSong(Context context) {
 //        RowSong rowSong = getCurrSong();

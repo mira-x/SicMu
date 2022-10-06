@@ -379,19 +379,23 @@ public class RowSong extends Row {
     }
 
     // write rating to file later (useful to modify file when it is not currently reading)
-    public synchronized void scheduleSetRatingAsync(int rating)
+    public synchronized void scheduleSetRating(int rating, boolean async)
     {
         // sync part
         this.rating = rating;
 
-        // async part
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                updateOrInsertSongOrm(songDAO.findByPath(path), false);
-            }
-        };
-        thread.start();
+        if (async) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    updateOrInsertSongOrm(songDAO.findByPath(path), false);
+                }
+            };
+            thread.start();
+        }
+        else {
+            updateOrInsertSongOrm(songDAO.findByPath(path), false);
+        }
     }
 
     /*

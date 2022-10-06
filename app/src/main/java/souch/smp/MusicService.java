@@ -127,7 +127,6 @@ public class MusicService extends Service implements
     private boolean enableShake;
     private static boolean enableRating;
     private int minRating = 1;
-    private AtomicBoolean ratingsMustBeSynchronized;
     private float shakeThreshold;
     private float playbackSpeed = 1.0f;
     private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
@@ -287,7 +286,6 @@ public class MusicService extends Service implements
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
                 database);
 
-        ratingsMustBeSynchronized = new AtomicBoolean(false);
         // try sync if sthg failed in the previous SMP session
         synchronizeFailedRatings();
 
@@ -586,14 +584,7 @@ public class MusicService extends Service implements
     // failed ratings occurs usually when rating song that are currently playing
     // so failed rating should be resync when another song is playing
     private void synchronizeFailedRatings() {
-        if (ratingsMustBeSynchronized.getAndSet(false)) {
-            database.trySyncronizeRatingsAsync((succeed, msg) -> {
-                if (!succeed)
-                    ratingsMustBeSynchronized.set(true);
-                Log.d("MusicService", msg);
-                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            });
-        }
+        rows.synchronizeFailedRatings();
     }
 
     @Override
@@ -1019,20 +1010,6 @@ public class MusicService extends Service implements
         minRating = rating;
         params.setMinRating(minRating);
         setChanged();
-    }
-
-    public void rateCurrSong(int rating) {
-        RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null) {
-            rowSong.scheduleSetRatingAsync(rating);
-            ratingsMustBeSynchronized.set(true);
-        }
-    }
-
-    public void rateGroup(int position, int rating, boolean overwriteRating) {
-//        Log.d("MusicService", "rateGroup " + position + " to " + rating +
-//                " overwrite=" + overwriteRating);
-        rows.rateGroup(position, rating, overwriteRating);
     }
 
     public void setShakeThreshold(float threshold) {

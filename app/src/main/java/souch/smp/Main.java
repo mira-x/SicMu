@@ -1004,7 +1004,7 @@ public class Main extends AppCompatActivity {
     private void rateCurrSong(int rating) {
         if (!serviceBound || rows == null)
             return;
-        musicSrv.rateCurrSong(rating);
+        rows.rateCurrSong(rating);
         setRatingDetails();
         songAdt.notifyDataSetChanged();
     }
@@ -1102,7 +1102,18 @@ public class Main extends AppCompatActivity {
                 "1", "2", "3", "4", "5"
         };
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
-            musicSrv.rateGroup(position, itemPos + 1, overwriteRating);
+            rows.rateGroup(position, itemPos + 1, overwriteRating,
+                    (nbChanged) -> {
+                        runOnUiThread(() -> {
+                            if (nbChanged > 0) {
+                                setRatingDetails();
+                                songAdt.notifyDataSetChanged();
+                            }
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.songs_have_been_rated, nbChanged),
+                                    Toast.LENGTH_SHORT).show();
+                        });
+                    });
         });
         AlertDialog alert = altBld.create();
         alert.show();

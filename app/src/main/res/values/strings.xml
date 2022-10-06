@@ -45,6 +45,8 @@
     <string name="action_min_rating">Play songs with rating >=</string>
     <string name="action_set_rating">Set "%s" ratings to</string>
 
+    <string name="songs_have_been_rated">%d ratings has been applied</string>
+
     <string name="action_play">play</string>
     <string name="action_pause">pause</string>
     <string name="action_next">next</string>
