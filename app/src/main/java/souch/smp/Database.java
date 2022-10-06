@@ -211,7 +211,7 @@ public class Database {
                         Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
                         String msg = "trySyncronizeRating: synchronize rating of " +
                                 songORM.path + " to " + songORM.rating;
-                        if (RowSong.ApplyRating(songORM.path, songORM.rating)) {
+                        if (RowSong.WriteRatingToFile(songORM.path, songORM.rating)) {
                             msg += " succeed\n\n";
                             songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
                             songORM.ratingSynchronized = true;

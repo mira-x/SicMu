@@ -1105,17 +1105,22 @@ public class Main extends AppCompatActivity {
         };
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
             rows.rateSongs(pos, itemPos + 1, overwriteRating,
-                    (nbChanged) -> {
+                    (nbChanged, errorMsg) -> {
                         runOnUiThread(() -> {
-                            if (nbChanged > 0) {
-                                setRatingDetails();
-                                songAdt.notifyDataSetChanged();
-                            }
+                            if (errorMsg.isEmpty()) {
+                                if (nbChanged > 0) {
+                                    setRatingDetails();
+                                    songAdt.notifyDataSetChanged();
+                                }
 
-                            if (isRowGroup)
-                                Toast.makeText(getApplicationContext(),
-                                        getString(R.string.songs_have_been_rated, nbChanged),
-                                        Toast.LENGTH_SHORT).show();
+                                if (isRowGroup)
+                                    Toast.makeText(getApplicationContext(),
+                                            getString(R.string.songs_have_been_rated, nbChanged),
+                                            Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                            }
                         });
                     });
         });

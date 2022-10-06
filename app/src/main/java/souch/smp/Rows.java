@@ -65,7 +65,7 @@ public class Rows {
     private int currPos;
 
     private Database database;
-    private AtomicBoolean ratingsMustBeSynchronized;
+    private AtomicBoolean ratingsMustBeSynchronized, ratingsSynchronizing;
 
     private Resources resources;
 
@@ -92,6 +92,7 @@ public class Rows {
         rows = new ArrayList<>();
 
         ratingsMustBeSynchronized = new AtomicBoolean(false);
+        ratingsSynchronizing = new AtomicBoolean(false);
 
         restore();
         init();
@@ -1240,7 +1241,7 @@ public class Rows {
     }
 
     public interface RateGroupCallbackInterface {
-        void ratingCallback(int nbSongsChanged) ;
+        void ratingCallback(int nbSongsChanged, String errorMsg) ;
     }
 
     // rate songs from pos (if pos is folder rate every folder's songs)
@@ -1250,38 +1251,47 @@ public class Rows {
         Log.d("Rows", "rateGroup " + pos + " to " + rating +
                 " overwrite=" + overwriteRating);
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                int nbChanged = 0;
-                Row row = rows.get(pos);
-                if (row.getClass() == RowSong.class) {
-                    if (rateSong((RowSong) row, rating, overwriteRating))
-                        nbChanged++;
-                }
-                else {
-                    RowGroup groupToRate = (RowGroup) row;
-                    int i = 1;
-                    while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
-                            (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
-                                    groupToRate.getLevel()) {
-                        if (row.getClass() == RowSong.class) {
-                            if (rateSong((RowSong) row, rating, overwriteRating))
-                                nbChanged++;
+        if (ratingsSynchronizing.getAndSet(true)) {
+            callback.ratingCallback(0,
+                    context.getString(R.string.action_set_rating_song_failed));
+        }
+        else {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    int nbChanged = 0;
+                    Row row = rows.get(pos);
+                    if (row.getClass() == RowSong.class) {
+                        if (rateSong((RowSong) row, rating, overwriteRating))
+                            nbChanged++;
+                    } else {
+                        RowGroup groupToRate = (RowGroup) row;
+                        int i = 1;
+                        while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
+                                (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
+                                        groupToRate.getLevel()) {
+                            if (row.getClass() == RowSong.class) {
+                                if (rateSong((RowSong) row, rating, overwriteRating))
+                                    nbChanged++;
+                            }
+                            i++;
                         }
-                        i++;
                     }
+                    callback.ratingCallback(nbChanged, "");
+                    ratingsSynchronizing.set(false);
                 }
-                callback.ratingCallback(nbChanged);
-            }
-        };
-        thread.start();
+            };
+            thread.start();
+        }
     }
 
+    // not must be called from main thread
     private boolean rateSong(RowSong rowSong, int rating, boolean overwriteRating) {
         boolean changed = false;
-        if (overwriteRating || rowSong.getRating() <= 0) {
-            Log.d("Rows", "rate song " + rowSong.getTitle() + " to " + rating);
+        if (rowSong.getRating() == rating)
+            Log.d("Rows", "song " + rowSong.getTitle() + " rating already set to " + rating + " -> skipping");
+        else if (overwriteRating || rowSong.getRating() <= 0) {
+            Log.d("Rows", "set song " + rowSong.getTitle() + " rating to " + rating);
             RowSong currSong = getCurrSong();
             if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
                 rowSong.setRating(rating, context);

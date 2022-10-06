@@ -50,6 +50,7 @@
     <string name="action_min_rating">Play songs with rating >=</string>
     <string name="action_set_rating_folder">Set ratings for folder: %s</string>
     <string name="action_set_rating_song">Set rating for song: %s</string>
+    <string name="action_set_rating_song_failed">Abort set rating: rating currently in progress</string>
 
     <string name="songs_have_been_rated">%d ratings has been applied</string>
 

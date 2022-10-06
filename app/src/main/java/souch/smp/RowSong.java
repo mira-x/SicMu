@@ -333,22 +333,7 @@ public class RowSong extends Row {
         return rating;
     }
 
-    public interface SetRatingCallbackInterface {
-        void ratingCallback(boolean ratingChanged);
-    }
-    public void setRatingAsync(Context context,
-                               int rating, SetRatingCallbackInterface ratingCallbackInterface)
-    {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                ratingCallbackInterface.ratingCallback(setRating(rating, context));
-            }
-        };
-        thread.start();
-    }
-
-    public static boolean ApplyRating(String path, int rating) {
+    public static boolean WriteRatingToFile(String path, int rating) {
         boolean ok = false;
         try {
             AudioFile audioFile = AudioFileIO.read(new File(path));
@@ -372,7 +357,7 @@ public class RowSong extends Row {
     // return true if set rating succeed
     public synchronized boolean setRating(int rating, Context context) {
         this.rating = rating;
-        boolean ok = ApplyRating(path, rating);
+        boolean ok = WriteRatingToFile(path, rating);
         updateOrInsertSongOrm(songDAO.findByPath(path), ok);
 
         return ok;
