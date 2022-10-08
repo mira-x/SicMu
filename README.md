@@ -37,6 +37,7 @@ Works on rather old devices (from Android 4.0).
     - loop on part of the song (A to B repeat feature)
     - adjustable playback speed
     - shake the phone to go to next song
+    - rate songs and filter by rating
 - User Interface:
     - notification with media controls
     - disable / enable lockscreen
@@ -56,7 +57,6 @@ Works on rather old devices (from Android 4.0).
 
 ### Todo (perhaps :-)
 
-- rate songs and filter by rating
 - remove file
 - browse folder
 - block song/folder

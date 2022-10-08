@@ -1,0 +1,3 @@
+Version 2.1.
+- Ability to set ratings on songs and folders
+- That is a fucking release that I like !
