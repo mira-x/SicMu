@@ -233,9 +233,10 @@ public class RowSong extends Row {
     }
 
     public boolean isRatingEnough() {
-        return rating == RATING_NOT_INITIALIZED ||
-                rating == RATING_UNKNOWN ||
-                rating >= params.getMinRating();
+        final boolean uninitialized = rating == RATING_NOT_INITIALIZED || rating == RATING_UNKNOWN;
+        final int minRating = params.getMinRating();
+        return (uninitialized && params.getUninitializedDefaultRating() >= minRating) ||
+                rating >= minRating;
     }
 
     public interface LoadRatingCallbackInterface {

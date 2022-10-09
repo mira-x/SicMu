@@ -187,4 +187,8 @@ public class ParametersImpl implements Parameters {
     public Integer getTheme() {
         return Integer.valueOf(getPref().getString(PrefKeys.THEME.name(), "0"));
     }
+
+    public int getUninitializedDefaultRating() {
+        return Integer.valueOf(getPref().getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
+    }
 }

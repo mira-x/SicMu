@@ -54,6 +54,23 @@
 
     <string name="songs_have_been_rated">%d ratings has been applied</string>
 
+    <!--Below which "min rating" do we play song with rating not initialized (e.g. if 5 we play always song not initiliazed) -->
+    <string name="uninitialized_default_rating">Default uninitialized songs rating</string>
+    <string-array name="uninitialized_default_rating_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="uninitialized_default_rating_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string name="action_play">play</string>
     <string name="action_pause">pause</string>
     <string name="action_next">next</string>

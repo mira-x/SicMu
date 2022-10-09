@@ -143,6 +143,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         setFoldSummary();
         setThemeSummary();
+        setUninitializedDefaultRatingSummary();
 
         getActivity().onContentChanged();
     }
@@ -208,6 +209,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             }
         } else if (key.equals(PrefKeys.SHOW_FILENAME.name())) {
             musicSrv.setChanged();
+        } else if (key.equals(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name())) {
+            setUninitializedDefaultRatingSummary();
         }
     }
 
@@ -226,6 +229,17 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         int idx = params.getDefaultFold();
         ListPreference prefFold = (ListPreference) findPreference(PrefKeys.DEFAULT_FOLD.name());
         String[] foldEntries = getResources().getStringArray(R.array.settings_fold_entries);
+        if (idx >= foldEntries.length)
+            idx = foldEntries.length - 1;
+        if (idx >= 0)
+            prefFold.setSummary(foldEntries[idx]);
+    }
+
+    private void setUninitializedDefaultRatingSummary() {
+        int idx = params.getUninitializedDefaultRating();
+        ListPreference prefFold = (ListPreference) findPreference(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name());
+        String[] foldEntries = getResources().getStringArray(R.array.uninitialized_default_rating_entries);
+        idx--;
         if (idx >= foldEntries.length)
             idx = foldEntries.length - 1;
         if (idx >= 0)

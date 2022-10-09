@@ -79,4 +79,6 @@ public interface Parameters {
     boolean getShowRemainingTime();
 
     Integer getTheme();
+
+    int getUninitializedDefaultRating();
 }

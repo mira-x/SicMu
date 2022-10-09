@@ -219,6 +219,14 @@
             android:title="@string/settings_root_folder"
             />
 
+        <ListPreference
+            android:key="UNINITIALIZED_DEFAULT_RATING"
+            android:title="@string/uninitialized_default_rating"
+            android:entryValues="@array/uninitialized_default_rating_values"
+            android:entries="@array/uninitialized_default_rating_entries"
+            android:defaultValue="3"
+            />
+
     </PreferenceCategory>
 
 
