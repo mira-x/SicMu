@@ -1,3 +1,4 @@
 Version 2.1.
+- Choose next song that have a given minimum rating (or above)
 - Ability to set ratings on songs and folders
 - That is a fucking release that I like !

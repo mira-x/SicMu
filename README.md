@@ -66,6 +66,7 @@ Works on rather old devices (from Android 4.0).
 - mp3 tag editor ?
 - playlist?
 - audioeffect/equalizer
+- migrate to kotlin
 
 Detailed todo list available in [TODO.txt](misc/TODO.txt).
 
