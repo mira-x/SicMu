@@ -18,38 +18,43 @@
 
 package souch.smp;
 
-import android.test.AndroidTestCase;
-import android.util.Log;
-
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
-public class PathTest extends AndroidTestCase {
 
-    public void setUp() throws Exception {
-        super.setUp();
-        Log.d("PathTest", "====================================");
+public class PathTest {
+
+    private void tryGetFolder(String path, String expectedFolder) {
+        String folder = Path.getFolder(path);
+        assertEquals(expectedFolder, folder);
     }
 
-    public void testGetFolderEmpty() throws Exception {
+    @Test
+    public void testGetFolderEmpty() {
         tryGetFolder("", ".");
     }
 
-    public void testGetFolderUsual() throws Exception {
+    @Test
+    public void testGetFolderUsual() {
         Path.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/toto/tata.mp3", "toto");
     }
 
-    public void testGetFolderUsual2() throws Exception {
+    @Test
+    public void testGetFolderUsual2() {
         Path.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
-    public void testGetFolderUsualSlashRootFolder() throws Exception {
+    @Test
+    public void testGetFolderUsualSlashRootFolder() {
         Path.rootFolders = "/mnt/sdcard/";
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
-    public void testGetFolderAllRootFolder() throws Exception {
+    @Test
+    public void testGetFolderAllRootFolder() {
         Path.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
 
@@ -57,7 +62,8 @@ public class PathTest extends AndroidTestCase {
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
     }
 
-    public void testGetFolderMangleRootFolder() throws Exception {
+    @Test
+    public void testGetFolderMangleRootFolder() {
         Path.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard.mp3", ".");
 
@@ -65,28 +71,29 @@ public class PathTest extends AndroidTestCase {
         tryGetFolder("/mnt/sdcard.mp3", "/mnt");
     }
 
-    private void tryGetFolder(String path, String expectedFolder) throws Exception {
-        String folder = Path.getFolder(path);
-        if (!folder.equals(expectedFolder)) {
-            String msg = "Expected '" + expectedFolder + "' got: '" + folder + "'";
-            Log.d("PathTest", msg);
-            throw new Exception(msg);
+    private void tryTokenizeFolder(String folder, String[] expectedFolders) {
+        ArrayList<String> folders = Path.tokenizeFolder(folder);
+        assertEquals(expectedFolders.length, folders.size());
+        for (int i = 0; i < folders.size(); i++) {
+            assertEquals(expectedFolders[i], folders.get(i));
         }
     }
 
-
-    public void testTokenizeFolderUsual() throws Exception {
+    @Test
+    public void testTokenizeFolderUsual() {
         tryTokenizeFolder("/mnt/sdcard/toto", new String[]{"mnt", "sdcard", "toto"});
         tryTokenizeFolder("/mnt/sdcard/toto/", new String[]{"mnt", "sdcard", "toto"});
         tryTokenizeFolder("/mnt/sdcard/toto/o", new String[]{"mnt", "sdcard", "toto", "o"});
     }
 
-    public void testTokenizeFolderOne() throws Exception {
+    @Test
+    public void testTokenizeFolderOne() {
         tryTokenizeFolder("/mnt/", new String[]{"mnt"});
         tryTokenizeFolder("/mnt", new String[]{"mnt"});
     }
 
-    public void testTokenizeFolderStrange() throws Exception {
+    @Test
+    public void testTokenizeFolderStrange() {
         tryTokenizeFolder("/./", new String[]{"."});
         tryTokenizeFolder(".", new String[]{"."});
         tryTokenizeFolder("/toot///yo", new String[]{"toot", "yo"});
@@ -94,21 +101,5 @@ public class PathTest extends AndroidTestCase {
         tryTokenizeFolder("//", new String[]{});
         tryTokenizeFolder("/", new String[]{});
         tryTokenizeFolder("", new String[]{});
-    }
-
-    private void tryTokenizeFolder(String folder, String[] expectedFolders) throws Exception {
-        ArrayList<String> folders = Path.tokenizeFolder(folder);
-        if (folders.size() != expectedFolders.length) {
-            String msg = "Expected folder length'" + expectedFolders.length + "' got: '" + folders.size() + "'";
-            Log.d("PathTest", msg);
-            throw new Exception(msg);
-        }
-        for(int i = 0; i < folders.size(); i++) {
-            if (!folders.get(i).equals(expectedFolders[i])) {
-                String msg = "Expected folder " + expectedFolders[i] + "' got: '" + folders.get(i) + "'";
-                Log.d("PathTest", msg);
-                throw new Exception(msg);
-            }
-        }
     }
 }

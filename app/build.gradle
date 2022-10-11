@@ -44,7 +44,9 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.2.1'
+    //androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.2.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'androidx.test:core:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.core:core:1.7.0'
     implementation 'androidx.media:media:1.4.3'

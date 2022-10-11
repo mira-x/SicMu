@@ -57,6 +57,16 @@ public class ParametersStub implements Parameters {
     }
     public void setSongPos(int songPos) {}
 
+    @Override
+    public int getSongPosId() {
+        return 0;
+    }
+
+    @Override
+    public void setSongPosId(int songPosId) {
+
+    }
+
     public Filter getFilter() {
         return Filter.FOLDER;
     }
@@ -114,4 +124,6 @@ public class ParametersStub implements Parameters {
     public boolean getShowRemainingTime() { return false; }
 
     public Integer getTheme() { return 0; }
+
+    public int getUninitializedDefaultRating() { return 0; }
 }
