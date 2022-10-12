@@ -321,14 +321,17 @@ public class RowSong extends Row {
                     } else {
                         Log.d("RowSong", "song rating " + path + " tag not available");
                     }
+                    if (rating < 0)
+                        rating = RATING_UNKNOWN;
+
+                    updateOrInsertSongOrm(songORM);
                 } catch (Exception e) {
                     Log.w("RowSong", "Unable to get rating of song " + path +
                             ". Exception msg: " + e.getClass() + " - " + e.getMessage());
+                    // if id3tag read failed we do not update or create an entry in the database
+                    // that means, the database will not be used as cached and
+                    // if several files can not be read : that will slow down the app
                 }
-                if (rating < 0)
-                    rating = RATING_UNKNOWN;
-
-                updateOrInsertSongOrm(songORM);
             }
         }
         return rating;
