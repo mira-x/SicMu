@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -190,6 +191,8 @@ public class Main extends AppCompatActivity {
         warningText = findViewById(R.id.warning_text);
 
         askPermission();
+        // permission will be granted in onRequestPermissionsResult callback
+        // and service will be started and bind in that function
 
         playIntent = new Intent(this, MusicService.class);
         startService(playIntent);
@@ -520,6 +523,10 @@ public class Main extends AppCompatActivity {
                         songAdt.notifyDataSetChanged();
                     unfoldAndscrollToCurrSong();
                     hideWarning();
+
+//                    playIntent = new Intent(Main.this, MusicService.class);
+//                    startService(playIntent);
+//                    bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
                 }  else {
                     Log.e("Main","Permission READ_EXTERNAL_STORAGE refused!");
                     showWarning();
@@ -532,7 +539,9 @@ public class Main extends AppCompatActivity {
                         showWarning();
                     }
                 }
-                return;
+//                playIntent = new Intent(Main.this, MusicService.class);
+//                startService(playIntent);
+//                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -959,27 +968,25 @@ public class Main extends AppCompatActivity {
         }
     }
 
-
-    public void deleteSong(View view) {
-        final RowSong song = rows.getCurrSong();
-        if (song == null) {
-            // err msg ?
-            return;
-        }
+    public void deleteSongFile(@NonNull RowSong song) {
+        String songTitle = song.getPath();
+        boolean isCurrSong = song == rows.getCurrSong();
         new AlertDialog.Builder(this)
-                .setTitle("Delete ")
-                .setMessage("Do you really want to delete " + song.getPath() + " ?")
+                .setTitle(R.string.action_delete_song)
+                .setMessage(getString(R.string.action_ask_delete_song, songTitle))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (song.delete(getApplicationContext()))
-                            Toast.makeText(getApplicationContext(),
-                                    "del ok", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getApplicationContext(),
-                                    "del NOK!", Toast.LENGTH_SHORT).show();
-                    }})
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    boolean succeed = rows.deleteSongFile(song);
+                    // todo: improve curr song delete...
+                    if (succeed)
+                        songAdt.notifyDataSetChanged();
+                    int resId = succeed ? (isCurrSong ? R.string.action_delete_curr_song_ok :
+                            R.string.action_delete_song_ok) :
+                            R.string.action_delete_song_ok;
+                    Toast.makeText(getApplicationContext(),
+                            getString(resId, songTitle),
+                            Toast.LENGTH_LONG).show();
+                    })
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
@@ -1136,6 +1143,7 @@ public class Main extends AppCompatActivity {
         final CharSequence[] items = {
                 getString(R.string.action_play),
                 getString(R.string.action_rate_song),
+                getString(R.string.action_delete_song),
                 //getString(R.string.show_song_details),
                 //getString(R.string.add_to_playlist),
         };
@@ -1148,6 +1156,9 @@ public class Main extends AppCompatActivity {
                         break;
                     case 1:
                         openRateRowMenu(row.getTitle(), position, true);
+                        break;
+                    case 2:
+                        deleteSongFile(row);
                         break;
                 }
             }

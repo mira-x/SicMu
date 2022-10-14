@@ -38,6 +38,7 @@ Works on rather old devices (from Android 4.0).
     - adjustable playback speed
     - shake the phone to go to next song
     - rate songs and filter by rating
+    - remove file from device (on FDroid only)
 - User Interface:
     - notification with media controls
     - disable / enable lockscreen
@@ -57,7 +58,6 @@ Works on rather old devices (from Android 4.0).
 
 ### Todo (perhaps :-)
 
-- remove file
 - browse folder
 - block song/folder
 - group by genre?
@@ -66,7 +66,7 @@ Works on rather old devices (from Android 4.0).
 - mp3 tag editor ?
 - playlist?
 - audioeffect/equalizer
-- migrate to kotlin
+- migrate to kotlin, enable lint checks
 
 Detailed todo list available in [TODO.txt](misc/TODO.txt).
 

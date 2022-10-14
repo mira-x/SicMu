@@ -47,6 +47,12 @@
 
     <string name="action_rate_song">rate song</string>
 
+    <string name="action_delete_song">delete song</string>
+    <string name="action_ask_delete_song">Do you really want to delete %s ?</string>
+    <string name="action_delete_song_ok">Delete song %s succeed.</string>
+    <string name="action_delete_curr_song_ok">Delete song %s succeed. Song will be erased from list after restart.</string>
+    <string name="action_delete_song_nok">Delete song %s failed!</string>
+
     <string name="action_min_rating">Play songs with rating >=</string>
     <string name="action_set_rating_folder">Set ratings for folder: %s</string>
     <string name="action_set_rating_song">Set rating for song: %s</string>

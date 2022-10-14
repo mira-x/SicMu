@@ -19,6 +19,7 @@
 package souch.smp;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -35,13 +36,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import androidx.room.Room;
+import androidx.annotation.NonNull;
+
 
 public class Rows {
     Context context;
@@ -1323,9 +1323,28 @@ public class Rows {
         }
     }
 
-//    public void deleteCurSong(Context context) {
-//        RowSong rowSong = getCurrSong();
-//        if(rowSong != null)
-//            rowSong.delete(context);
-//    }
+    private void deleteSongFromList(@NonNull RowSong song) {
+        for (int i = 0; i < rowsUnfolded.size(); i++) {
+            Row row = rowsUnfolded.get(i);
+            if (row == song) {
+                rowsUnfolded.remove(i);
+                break;
+            }
+        }
+        for (int i = 0; i < rows.size(); i++) {
+            Row row = rows.get(i);
+            if (row == song) {
+                rows.remove(i);
+                break;
+            }
+        }
+    }
+
+    public boolean deleteSongFile(@NonNull RowSong song) {
+        boolean succeed = song.deleteFile(context);
+        if (succeed && song != getCurrSong())
+            deleteSongFromList(song);
+
+        return succeed;
+    }
 }

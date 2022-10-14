@@ -209,8 +209,7 @@ public class RowSong extends Row {
         return msToMinutes(durationMs, durationMs < 100*60*1000);
     }
 
-
-    public boolean delete(Context context) {
+    public boolean deleteFile(Context context) {
         if ((new File(path)).delete()) {
             // delete it from media store too
             Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);

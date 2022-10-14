@@ -46,7 +46,6 @@ import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -583,6 +582,7 @@ public class MusicService extends Service implements
 
     // failed ratings occurs usually when rating song that are currently playing
     // so failed rating should be resync when another song is playing
+    // todo: use an Observer design pattern ?
     private void synchronizeFailedRatings() {
         rows.synchronizeFailedRatings();
     }
