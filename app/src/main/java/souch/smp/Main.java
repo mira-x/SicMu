@@ -969,23 +969,25 @@ public class Main extends AppCompatActivity {
     }
 
     public void deleteSongFile(@NonNull RowSong song) {
+        if (song == rows.getCurrSong())
+            return;
         String songTitle = song.getPath();
-        boolean isCurrSong = song == rows.getCurrSong();
         new AlertDialog.Builder(this)
                 .setTitle(R.string.action_delete_song)
                 .setMessage(getString(R.string.action_ask_delete_song, songTitle))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                    boolean succeed = rows.deleteSongFile(song);
-                    // todo: improve curr song delete...
-                    if (succeed)
+                    if (rows.deleteSongFile(song)) {
                         songAdt.notifyDataSetChanged();
-                    int resId = succeed ? (isCurrSong ? R.string.action_delete_curr_song_ok :
-                            R.string.action_delete_song_ok) :
-                            R.string.action_delete_song_ok;
-                    Toast.makeText(getApplicationContext(),
-                            getString(resId, songTitle),
-                            Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.action_delete_song_ok, songTitle),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.action_delete_song_nok, songTitle),
+                                Toast.LENGTH_LONG).show();
+                    }
                     })
                 .setNegativeButton(android.R.string.no, null).show();
     }
@@ -1140,13 +1142,22 @@ public class Main extends AppCompatActivity {
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_song,
                 cutLongStringAndDots(row.getTitle(), 40)));
-        final CharSequence[] items = {
-                getString(R.string.action_play),
-                getString(R.string.action_rate_song),
-                getString(R.string.action_delete_song),
-                //getString(R.string.show_song_details),
-                //getString(R.string.add_to_playlist),
-        };
+        CharSequence[] items;
+        if (row != rows.getCurrSong()) {
+              items = new CharSequence[] {
+                      getString(R.string.action_play),
+                      getString(R.string.action_rate_song),
+                      getString(R.string.action_delete_song),
+                      //getString(R.string.show_song_details),
+                      //getString(R.string.add_to_playlist),
+              };
+        }
+        else {
+            items = new CharSequence[] {
+                    getString(R.string.action_play),
+                    getString(R.string.action_rate_song)
+            };
+        }
 
         altBld.setItems(items, (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
