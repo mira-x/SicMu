@@ -65,6 +65,10 @@
             android:icon="@drawable/ic_action_open_pos"/>
 
         <Preference
+            android:title="@string/help_context_menu"
+            android:summary="@string/help_context_menu_summary"/>
+
+        <Preference
             android:title="@string/help_root_folders"
             android:summary="@string/help_root_folders_summary"/>
 

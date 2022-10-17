@@ -188,7 +188,7 @@
     <string name="settings_min_rating">Minimum rating</string>
 
     <string name="settings_help">Help</string>
-    <string name="settings_help_summary">If you are a bit lost.</string>
+    <string name="settings_help_summary">If you are a bit lost or if you want to discover hidden SicMu Player features</string>
 
     <string name="help_start_song">Start playing song</string>
     <string name="help_start_song_summary">Tap on a song to start it.</string>
@@ -219,6 +219,8 @@
     <string name="help_seek_menu">Seek menu</string>
     <string name="help_seek_menu_summary">Click at the top right to open seek menu. Long tap on next/prev will seek forward or backward continuously.</string>
 
+    <string name="help_context_menu">Context menu</string>
+    <string name="help_context_menu_summary">Long tap on the songs list makes a context menu appears. From this context menu one can rate song, remove file, ...</string>
 
     <string name="settings_misc">Miscellaneous</string>
 
