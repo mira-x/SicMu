@@ -58,6 +58,7 @@
     <string name="action_set_rating_song_failed">Abort set rating: rating currently in progress</string>
 
     <string name="songs_have_been_rated">%d ratings has been applied</string>
+    <string name="current_rating_idx">\u0020&lt;= current rating</string>
 
     <!--Below which "min rating" do we play song with rating not initialized (e.g. if 5 we play always song not initiliazed) -->
     <string name="uninitialized_default_rating">Default uninitialized songs rating</string>

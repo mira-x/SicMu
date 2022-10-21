@@ -1109,9 +1109,15 @@ public class Main extends AppCompatActivity {
         altBld.setIcon(R.drawable.ic_star_5_highlight);
         altBld.setTitle(getString(isRowGroup ? R.string.action_set_rating_folder :  R.string.action_set_rating_song,
                 cutLongStringAndDots(rowName, 40)));
-        final CharSequence[] items = {
+        CharSequence[] items = {
                 "1", "2", "3", "4", "5"
         };
+        // show song's current rating
+        if (!isRowGroup) {
+            int rate = ((RowSong) row).getRating();
+            if (rate > 0 || rate <= 5)
+                items[rate -1] += getString(R.string.current_rating_idx);
+        }
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
             rows.rateSongs(pos, itemPos + 1, overwriteRating,
                     (nbChanged, errorMsg) -> {
