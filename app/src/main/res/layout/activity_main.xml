@@ -563,7 +563,7 @@
             android:layout_weight="50"
             android:longClickable="true"
             android:onClick="toggleMoreButtons"
-            app:srcCompat="@drawable/ic_action_note" />
+            app:srcCompat="@drawable/ic_option" />
 
     </LinearLayout>
 

@@ -1677,13 +1677,13 @@ public class Main extends AppCompatActivity {
     }
 
     public void toggleMoreButtons(View view) {
-        ImageButton more_button = findViewById(R.id.more_button);
+        //ImageButton more_button = findViewById(R.id.more_button);
         if (isEditModeEnabled()) {
             moreButtonsLayout.setVisibility(View.GONE);
-            more_button.setImageResource(R.drawable.ic_action_note);
+            //more_button.setImageResource(R.drawable.ic_action_note);
         } else {
             moreButtonsLayout.setVisibility(View.VISIBLE);
-            more_button.setImageResource(R.drawable.ic_action_edit);
+            //more_button.setImageResource(R.drawable.ic_action_edit);
         }
     }
 
