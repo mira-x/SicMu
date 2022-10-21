@@ -1116,7 +1116,7 @@ public class Main extends AppCompatActivity {
         if (!isRowGroup) {
             int rate = ((RowSong) row).getRating();
             if (rate > 0 || rate <= 5)
-                items[rate -1] += getString(R.string.current_rating_idx);
+                items[rate -1] += " <- " + getString(R.string.current_rating_idx);
         }
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
             rows.rateSongs(pos, itemPos + 1, overwriteRating,

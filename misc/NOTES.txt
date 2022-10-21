@@ -53,7 +53,7 @@ git push --delete origin v8.1
 # google console
 https://play.google.com/console/signup
 
-# gitlab CI/CD
+# gitlab CI/CD
 https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/lib/gitlab/ci/templates/Android.latest.gitlab-ci.yml
 
 # fdroid
