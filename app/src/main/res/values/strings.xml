@@ -18,7 +18,7 @@
 -->
 <resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="settings_version">2.0.4</string>
+    <string name="settings_version">2.1</string>
 
     <string name="permission_needed">The app needs read storage permission in order to show songs
         and play them !\n\nWhen aske, please allow access to photos and multimedia content on your android device.

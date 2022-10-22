@@ -67,6 +67,7 @@ Works on rather old devices (from Android 4.0).
 - playlist?
 - audioeffect/equalizer
 - migrate to kotlin, enable lint checks
+- make rating and remove file works for GooglePlay too
 
 Detailed todo list available in [TODO.txt](misc/TODO.txt).
 
