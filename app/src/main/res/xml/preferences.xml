@@ -92,6 +92,12 @@
             android:title="@string/help_stop"
             android:summary="@string/help_stop_summary"/>
 
+        <Preference
+            android:title="@string/donate_title"
+            android:icon="@drawable/coins"
+            android:summary="@string/help_donate"/>
+
+
     </PreferenceScreen>
 
     <ListPreference

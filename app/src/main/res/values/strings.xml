@@ -219,6 +219,7 @@
     <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show details of current song (album\'s cover art, ...)</string>
     <string name="help_seek_menu">Seek menu</string>
     <string name="help_seek_menu_summary">Click at the top right to open seek menu. Long tap on next/prev will seek forward or backward continuously.</string>
+    <string name="help_donate">Tap 3 times on donate button and the donate popup will never show again.</string>
 
     <string name="help_context_menu">Context menu</string>
     <string name="help_context_menu_summary">Long tap on the songs list makes a context menu appears. From this context menu one can rate song, remove file, ...</string>

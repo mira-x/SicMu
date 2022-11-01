@@ -1,6 +1,5 @@
 Version 2.1. (on FDroid only)
 - Choose next song that have a given minimum rating (or above)
 - from context menu:
-    - Ability to set ratings on songs and folders
-    - Ability to remove file
-- That is a fucking release that I like !
+-  - Ability to set ratings on songs and folders
+-  - Ability to remove file
