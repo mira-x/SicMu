@@ -348,6 +348,8 @@ public class MusicService extends Service implements
         }
 
         if (player == null) {
+            Log.d("MusicService", "create player");
+
             initMediaSession();
             initNoisyReceiver();
 
@@ -365,6 +367,8 @@ public class MusicService extends Service implements
     }
 
     private void releaseAudio() {
+        Log.d("MusicService", "releaseAudio");
+
         if (params.getSaveSongPos() &&
                 player != null &&
                 state.getState() != PlayerState.Nope &&
