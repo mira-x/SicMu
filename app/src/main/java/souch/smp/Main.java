@@ -683,11 +683,11 @@ public class Main extends AppCompatActivity {
             // stop the service if not playing music
             if (!musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
-                if (Flavor.isFlavorFDroid(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
-                            getResources().getString(R.string.app_name) + " destroyed.",
-                            Toast.LENGTH_SHORT).show();
-                }
+//                if (Flavor.isFlavorFDroid(getApplicationContext())) {
+//                    Toast.makeText(getApplicationContext(),
+//                            getResources().getString(R.string.app_name) + " destroyed.",
+//                            Toast.LENGTH_SHORT).show();
+//                }
             }
             unbindService(musicConnection);
             serviceBound = false;
@@ -1115,8 +1115,9 @@ public class Main extends AppCompatActivity {
         // show song's current rating
         if (!isRowGroup) {
             int rate = ((RowSong) row).getRating();
-            if (rate > 0 || rate <= 5)
-                items[rate -1] += " <- " + getString(R.string.current_rating_idx);
+            int idx = rate - 1;
+            if (idx >= 0 && idx < items.length)
+                items[idx] += " <- " + getString(R.string.current_rating_idx);
         }
         altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
             rows.rateSongs(pos, itemPos + 1, overwriteRating,
