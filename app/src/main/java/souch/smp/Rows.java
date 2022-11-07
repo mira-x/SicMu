@@ -384,12 +384,14 @@ public class Rows {
                     currPos = firstSongPos;
                 else
                     currPos++;
-                // next song with adequat rating not found => return next song regardless of rating
+                // next song with suitable rating not found => return next song regardless of rating
                 if (currPos == lastCurrPos) {
                     if (currPos == lastSongPos)
                         currPos = firstSongPos;
                     else
                         currPos++;
+                    Log.d("Rows", "move to next in REPEAT_GROUP with suitable " +
+                            "rating not found => return next song regardless of rating");
                     break;
                 }
                 rowSong = (RowSong) rowsUnfolded.get(currPos);
@@ -407,8 +409,10 @@ public class Rows {
                 while (currPos < rowsUnfolded.size() &&
                         rowsUnfolded.get(currPos).getClass() != RowSong.class)
                     currPos++;
-                // next song with adequat rating not found
+                // next song with suitable rating not found
                 if (currPos == lastCurrPos) {
+                    Log.d("Rows", "move to next song with suitable rating not " +
+                            "found => return next song regardless of rating");
                     moveToNextSongNoRating();
                     return;
                 }
@@ -813,6 +817,8 @@ public class Rows {
         Log.d("Rows", "songPos: " + currPos);
 
         //preloadDBSongsAsync();
+        if (params.getEnableRating())
+            preloadSongRatingAsync();
     }
 
     private void preloadDBSongsAsync() {
@@ -828,7 +834,7 @@ public class Rows {
     private void preloadDBSongs() {
         Date beg = new Date();
         int nbLoaded = 0;
-        // preload in db songs that can be seen by users (i.e. songs from rowsUnfolded)
+        // preload in db every songs
         for (Row row : rowsUnfolded) {
             if (row.getClass() == RowSong.class) {
                 RowSong rowSong = (RowSong) row;
@@ -864,7 +870,33 @@ public class Rows {
             }
         }
         Date end = new Date();
-        Log.d("Rows", nbLoaded + " songORM loaded in " +
+        Log.d("Rows", "preloadDBSongs: " + nbLoaded + " songORM loaded in " +
+                (end.getTime() - beg.getTime()) + "ms");
+    }
+
+    private void preloadSongRatingAsync() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                preloadSongsRatings();
+            }
+        };
+        thread.start();
+    }
+
+    private void preloadSongsRatings() {
+        Log.d("Rows", "preloadSongsRatings start");
+        Date beg = new Date();
+        int nbLoaded = 0;
+        for (Row row : rowsUnfolded) {
+            if (row.getClass() == RowSong.class) {
+                RowSong rowSong = (RowSong) row;
+                rowSong.loadRating();
+                nbLoaded++;
+            }
+        }
+        Date end = new Date();
+        Log.d("Rows", "preloadSongsRatings: " + nbLoaded + " songs loaded in " +
                 (end.getTime() - beg.getTime()) + "ms");
     }
 

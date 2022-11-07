@@ -1011,6 +1011,7 @@ public class MusicService extends Service implements
         return minRating;
     }
     public void setMinRating(int rating) {
+        Log.d("MusicService", "set min rating to " + rating);
         minRating = rating;
         params.setMinRating(minRating);
         setChanged();
