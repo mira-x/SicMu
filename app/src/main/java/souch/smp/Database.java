@@ -50,7 +50,7 @@ public class Database {
         return songDAO;
     }
 
-    public ConfigurationORM getConfigurationORM() {
+    public synchronized ConfigurationORM getConfigurationORM() {
         ConfigurationORM config = configurationDAO.getConfiguration();
         if (config == null) {
             config = new ConfigurationORM();
