@@ -37,6 +37,8 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1149,24 +1152,15 @@ public class Main extends AppCompatActivity {
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_song,
                 cutLongStringAndDots(row.getTitle(), 40)));
-        CharSequence[] items;
-        if (row != rows.getCurrSong()) {
-              items = new CharSequence[] {
-                      getString(R.string.action_play),
-                      getString(R.string.action_rate_song),
-                      getString(R.string.action_delete_song),
-                      //getString(R.string.show_song_details),
-                      //getString(R.string.add_to_playlist),
-              };
-        }
-        else {
-            items = new CharSequence[] {
-                    getString(R.string.action_play),
-                    getString(R.string.action_rate_song)
-            };
-        }
+        ArrayList<String> list = new ArrayList<>();
+        list.add(getString(R.string.action_play));
+        list.add(getString(R.string.action_rate_song));
+        list.add(getString(R.string.show_song_details));
+        //getString(R.string.add_to_playlist),
+        if (row != rows.getCurrSong())
+            list.add(getString(R.string.action_delete_song));
 
-        altBld.setItems(items, (DialogInterface dialog, int item) -> {
+        altBld.setItems(list.toArray(new CharSequence[list.size()]), (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
                 switch (item) {
                     case 0:
@@ -1176,6 +1170,9 @@ public class Main extends AppCompatActivity {
                         openRateRowMenu(row.getTitle(), position, true);
                         break;
                     case 2:
+                        showPopupSongInfo(row);
+                        break;
+                    case 3:
                         deleteSongFile(row);
                         break;
                 }
@@ -1183,6 +1180,29 @@ public class Main extends AppCompatActivity {
         });
         AlertDialog alert = altBld.create();
         alert.show();
+    }
+
+    private void showPopupSongInfo(RowSong rowSong) {
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_song_details, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        popupWindow.showAtLocation(findViewById(R.id.main_layout), Gravity.CENTER, 0, 0);
+        ((TextView) popupView.findViewById(R.id.detail_artist)).setText(rowSong.getArtist());
+        ((TextView) popupView.findViewById(R.id.detail_album)).setText(rowSong.getAlbum());
+        ((TextView) popupView.findViewById(R.id.detail_title)).setText(rowSong.getTitle());
+        ((TextView) popupView.findViewById(R.id.detail_mime)).setText(rowSong.getMime());
+        ((TextView) popupView.findViewById(R.id.detail_path)).setText(
+                getString(R.string.popup_song_path, rowSong.getPath()));
+        popupView.setOnTouchListener((view,  event) -> {
+                popupWindow.dismiss();
+                return true;
+            });
     }
 
     private void openSortMenu() {

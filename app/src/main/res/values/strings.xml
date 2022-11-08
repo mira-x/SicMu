@@ -82,7 +82,9 @@
     <string name="action_next">next</string>
     <string name="action_prev">previous</string>
 
-    <string name="show_song_details">Show details</string>
+    <string name="show_song_details">details</string>
+    <string name="popup_song_info_title">Song details:</string>
+    <string name="popup_song_path">path: %s</string>
 
     <string name="app_playing">SicMu playing</string>
 
