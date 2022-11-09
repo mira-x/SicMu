@@ -831,6 +831,7 @@ public class Rows {
         thread.start();
     }
 
+    // must not be called from main thread !
     private void preloadDBSongs() {
         Date beg = new Date();
         int nbLoaded = 0;
@@ -884,14 +885,23 @@ public class Rows {
         thread.start();
     }
 
+    // must not be called from main thread !
     private void preloadSongsRatings() {
         Log.d("Rows", "preloadSongsRatings start");
         Date beg = new Date();
         int nbLoaded = 0;
-        for (Row row : rowsUnfolded) {
+        // preload from the currpos so that next songs are loaded earlier
+        for (int i = currPos; i < rowsUnfolded.size(); i++) {
+            Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {
-                RowSong rowSong = (RowSong) row;
-                rowSong.loadRating();
+                ((RowSong) row).loadRating();
+                nbLoaded++;
+            }
+        }
+        for (int i = 0; i < currPos; i++) {
+            Row row = rowsUnfolded.get(i);
+            if (row.getClass() == RowSong.class) {
+                ((RowSong) row).loadRating();
                 nbLoaded++;
             }
         }
