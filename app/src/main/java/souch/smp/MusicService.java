@@ -75,6 +75,7 @@ public class MusicService extends Service implements
 
     private Parameters params;
     private MediaPlayer player;
+    private PowerManager.WakeLock wakeLock;
 
     //private MediaNotificationManager mediaNotificationManager;
     private MediaSessionCompat mediaSession;
@@ -285,6 +286,9 @@ public class MusicService extends Service implements
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
                 database);
 
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "souch.smp:MusicService");
+
         // try sync if sthg failed in the previous SMP session
         synchronizeFailedRatings();
 
@@ -355,13 +359,16 @@ public class MusicService extends Service implements
 
             player = new MediaPlayer();
             //set player properties
-            player.setWakeMode(getApplicationContext(),
-                    PowerManager.PARTIAL_WAKE_LOCK);
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             player.setOnPreparedListener(this);
             player.setOnCompletionListener(this);
             player.setOnErrorListener(this);
             player.setOnSeekCompleteListener(this);
+//            player.setWakeMode(getApplicationContext(),
+//                    PowerManager.PARTIAL_WAKE_LOCK);
+
+            if (!wakeLock.isHeld())
+                wakeLock.acquire();
         }
         return player;
     }
@@ -392,6 +399,8 @@ public class MusicService extends Service implements
             }
             player.release();
             player = null;
+        if (wakeLock.isHeld())
+            wakeLock.release();
         }
 
         if (hasAudioFocus) {
