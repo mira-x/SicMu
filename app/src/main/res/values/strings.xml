@@ -84,6 +84,12 @@
 
     <string name="show_song_details">details</string>
     <string name="popup_song_info_title">Song details:</string>
+    <string name="popup_song_artist">artist: %s</string>
+    <string name="popup_song_album">album: %s</string>
+    <string name="popup_song_title">title: %s</string>
+    <string name="popup_song_year">year: %d</string>
+    <string name="popup_song_rating">rating: %d</string>
+    <string name="popup_song_mime">mime: %s</string>
     <string name="popup_song_path">path: %s</string>
 
     <string name="app_playing">SicMu playing</string>

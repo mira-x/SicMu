@@ -1193,10 +1193,18 @@ public class Main extends AppCompatActivity {
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         popupWindow.showAtLocation(findViewById(R.id.main_layout), Gravity.CENTER, 0, 0);
-        ((TextView) popupView.findViewById(R.id.detail_artist)).setText(rowSong.getArtist());
-        ((TextView) popupView.findViewById(R.id.detail_album)).setText(rowSong.getAlbum());
-        ((TextView) popupView.findViewById(R.id.detail_title)).setText(rowSong.getTitle());
-        ((TextView) popupView.findViewById(R.id.detail_mime)).setText(rowSong.getMime());
+        ((TextView) popupView.findViewById(R.id.detail_artist)).setText(
+                getString(R.string.popup_song_artist, rowSong.getArtist()));
+        ((TextView) popupView.findViewById(R.id.detail_album)).setText(
+                getString(R.string.popup_song_album, rowSong.getAlbum()));
+        ((TextView) popupView.findViewById(R.id.detail_title)).setText(
+                getString(R.string.popup_song_title, rowSong.getTitle()));
+        ((TextView) popupView.findViewById(R.id.detail_year)).setText(
+                getString(R.string.popup_song_year, rowSong.getYear()));
+        ((TextView) popupView.findViewById(R.id.detail_rating)).setText(
+                getString(R.string.popup_song_rating, rowSong.getRating()));
+        ((TextView) popupView.findViewById(R.id.detail_mime)).setText(
+                getString(R.string.popup_song_mime, rowSong.getMime()));
         ((TextView) popupView.findViewById(R.id.detail_path)).setText(
                 getString(R.string.popup_song_path, rowSong.getPath()));
         popupView.setOnTouchListener((view,  event) -> {

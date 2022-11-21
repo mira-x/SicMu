@@ -41,6 +41,7 @@ https://www.iconfinder.com/icons/103855/speaker_volume_icon#size=128
 https://www.iconfinder.com/icons/208018/audio_play_sound_start_video_icon#size=128
 https://www.iconfinder.com/icons/111044/closed_lock_secure_icon#size=64
 https://www.iconfinder.com/icons/344692/arrow_audio_media_music_outline_play_player_right_sound_video_icon#size=128
+https://thenounproject.com/
 
 # perf tips
 https://developer.android.com/training/articles/perf-tips.html

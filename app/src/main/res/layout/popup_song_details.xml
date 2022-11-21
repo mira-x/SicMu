@@ -49,6 +49,22 @@
             android:maxLines="3"
             android:text="" />
         <TextView
+            android:id="@+id/detail_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:maxHeight="40dp"
+            android:maxLines="3"
+            android:text="" />
+        <TextView
+            android:id="@+id/detail_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:maxHeight="40dp"
+            android:maxLines="3"
+            android:text="" />
+        <TextView
             android:id="@+id/detail_mime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
