@@ -345,7 +345,11 @@ public class Path {
 
     public static void scanMediaFolder(Context context, String path,
                                        MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
+        if (path == null)
+            return;
         File file = new File(path);
+        if (!file.exists())
+            return;
         Vector<File> files = new Vector<>();
         if (file.isDirectory())
             files.add(file);

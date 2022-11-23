@@ -297,7 +297,7 @@ public class RowSong extends Row {
             if (songORM != null) {
                 fileLastModifiedMs = (new File(songORM.path)).lastModified();
                 if (fileLastModifiedMs <= songORM.lastModifiedMs) {
-                    Log.d("RowSong", "Found songORM for path=" + path);
+                    //Log.d("RowSong", "Found songORM for path=" + path);
                     rating = songORM.rating;
                 }
                 else {

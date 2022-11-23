@@ -26,12 +26,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
+
 public class RowGroup extends Row {
     protected String name;
     protected boolean folded;
     protected boolean selected;
     private boolean overrideBackgroundColor;
     private int nbRowSong;
+    private String path;
     public static Filter rowType;
     protected static int textSize = 18;
 
@@ -40,15 +43,31 @@ public class RowGroup extends Row {
     public static int playingTextColor;
     public static int backgroundOverrideColor;
 
-    public RowGroup(int pos, int level, String name, int typeface, boolean overrideBackgroundColor) {
+    public RowGroup(int pos, int level, String name, String path, int typeface, boolean overrideBackgroundColor) {
         super(pos, level, typeface);
         this.name = name;
+        setPath(path);
         folded = false;
         selected = false;
         this.overrideBackgroundColor = overrideBackgroundColor;
     }
 
     public String getName() { return name; }
+    public String getPath() { return path; }
+
+    private void setPath(String path) {
+        this.path = "";
+        if (path != null) {
+            File f = new File(path);
+            if (f.exists()) {
+                if (f.isDirectory())
+                    this.path = f.getAbsolutePath();
+                else
+                    // if path points to a file get the folder of that path
+                    this.path = f.getParentFile().getAbsolutePath();
+            }
+        }
+    }
 
     public boolean isFolded() { return folded; }
     public void setFolded(boolean fold) { folded = fold; }

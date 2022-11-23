@@ -1,0 +1,6 @@
+Version 2.2 (on FDroid only)
+- preload every ratings
+- from context menu:
+-  - song details
+-  - rescan folder
+- fix wakelock

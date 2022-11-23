@@ -1064,7 +1064,7 @@ public class Main extends AppCompatActivity {
 ////        }
 //    }
 
-    private void openEditGroupMenu(int position, RowGroup row) {
+    private void openEditGroupMenu(int position, @NonNull RowGroup row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName(), 40)));
@@ -1072,6 +1072,7 @@ public class Main extends AppCompatActivity {
                 getString(R.string.action_play),
                 getString(R.string.action_rate_group),
                 getString(R.string.action_rate_group_overwrite),
+                getString(R.string.action_rescan),
         };
 
         altBld.setItems(items, (DialogInterface dialog, int item) -> {
@@ -1085,6 +1086,9 @@ public class Main extends AppCompatActivity {
                         break;
                     case 2:
                         openRateRowMenu(row.getName(), position, true);
+                        break;
+                    case 3:
+                        rescan(row);
                         break;
                 }
             }
@@ -1147,7 +1151,7 @@ public class Main extends AppCompatActivity {
         alert.show();
     }
 
-    private void openEditSongMenu(int position, RowSong row) {
+    private void openEditSongMenu(int position, @NonNull RowSong row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_song,
@@ -1211,6 +1215,20 @@ public class Main extends AppCompatActivity {
                 popupWindow.dismiss();
                 return true;
             });
+    }
+
+    private void rescan(@NonNull RowGroup rowGroup) {
+        Toast.makeText(getApplicationContext(),
+                getString(R.string.start_rescan) + rowGroup.getPath(),
+                Toast.LENGTH_SHORT).show();
+        Path.scanMediaFolder(getApplicationContext(), rowGroup.getPath(), (String path, Uri uri) ->
+            runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, Toast.LENGTH_LONG).show();
+                    if (rows != null)
+                        rows.reinit();
+                    unfoldAndscrollToCurrSong();
+                })
+        );
     }
 
     private void openSortMenu() {
