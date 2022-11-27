@@ -89,12 +89,11 @@ Compiled with Android Studio.
 Tested on Kitkat (4.4.4), Samsung S3 (7.1), Android 11...
 
 Feel free to add GitLab issues (feature request, bugs...).
-If you need a feature that is in the todolist, open a feature request on gitlab to speed up its development.
+If you need a feature that is in the todo list, open a feature request on gitlab to speed up its development.
 
-A UML class diagram describe a bit the architecture for people that would want to develop the software [UmlClass.png](misc/UmlClass.png).
+An UML class diagram describe a bit the architecture for people that would want to help developing the software [UmlClass.png](misc/UmlClass.png).
 
 SicMu player pronounced zicmu. S is for Super Simple Sorted Souch player.
-
 
 ### Donation
 
