@@ -1093,7 +1093,7 @@ public class Rows {
                 String artist = getDefaultStrIfNull(musicCursor.getString(artistCol));
                 String album = getDefaultStrIfNull(musicCursor.getString(albumCol));
                 long durationMs = musicCursor.getLong(durationCol);
-                int track = musicCursor.getInt(trackCol);
+                String track = get0StrIfNull(musicCursor.getString(trackCol));
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
@@ -1101,7 +1101,7 @@ public class Rows {
 
                 final int pos = -1, level = 2;
                 RowSong rowSong = new RowSong(database.getSongDAO(), pos, level, id, title, artist, album, durationMs,
-                        track, path, albumId, year, mime, params);
+                        Integer.parseInt(track), path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
@@ -1116,15 +1116,18 @@ public class Rows {
                 RowSong b = (RowSong) second;
 //                int cmp = a.getFolder().compareToIgnoreCase(b.getFolder());
                 int cmp = Path.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
-                if (cmp == 0) {
-                    cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
-                    if (cmp == 0) {
-                        cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
+//                if (cmp == 0) {
+//                    cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
+//                    if (cmp == 0) {
+//                        cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
                         if (cmp == 0) {
                             cmp = a.getTrack() - b.getTrack();
                         }
-                    }
-                }
+                        if (cmp == 0) {
+                            cmp = a.getTitle().compareToIgnoreCase(b.getTitle());
+                        }
+//                    }
+//                }
                 return cmp;
             }
         });
@@ -1198,6 +1201,7 @@ public class Rows {
 
 
     private String getDefaultStrIfNull(String str) { return str != null ? str : defaultStr; }
+    private String get0StrIfNull(String str) { return str != null ? str : "0"; }
 
     private void restore() {
         savedID = params.getSongID();
