@@ -10,8 +10,8 @@ Works on rather old devices (from Android 4.0).
 4.3" screen:
 
 ![Tree folder list](misc/screenshots/screen4.3_tree_resized.png)&nbsp;
-![Artist list](misc/screenshots/screen4.3_artists_coverdetails_resized.png)
-![Fullscreen cover art](misc/screenshots/screen4.3_bigcover_resized.png)
+![Artist list](misc/screenshots/screen_4.6_cover_resized.png)
+![Fullscreen cover art](misc/screenshots/screen_4.6_coverbig_resized.png)
 
 [Video (outdated)](http://youtu.be/LGyjDfwimzA)
 
