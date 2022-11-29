@@ -39,6 +39,7 @@ import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Vector;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Path {
@@ -419,5 +420,10 @@ public class Path {
             Log.e("Rows", "getFilePathFromUri :" + e.getMessage());
         }
         return null;
+    }
+
+    public static String getFilename(@NonNull String path) {
+        File f = new File(path);
+        return f.getName();
     }
 }

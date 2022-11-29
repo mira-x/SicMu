@@ -1093,41 +1093,42 @@ public class Rows {
                 String artist = getDefaultStrIfNull(musicCursor.getString(artistCol));
                 String album = getDefaultStrIfNull(musicCursor.getString(albumCol));
                 long durationMs = musicCursor.getLong(durationCol);
-                String track = get0StrIfNull(musicCursor.getString(trackCol));
                 String path = getDefaultStrIfNull(musicCursor.getString(pathCol));
+                int track = getTrackNumber(musicCursor.getString(trackCol), path);
                 long albumId = musicCursor.getLong(albumIdCol);
                 int year = musicCursor.getInt(yearCol);
                 String mime = musicCursor.getString(mimeCol);
 
                 final int pos = -1, level = 2;
                 RowSong rowSong = new RowSong(database.getSongDAO(), pos, level, id, title, artist, album, durationMs,
-                        Integer.parseInt(track), path, albumId, year, mime, params);
+                        track, path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
             while (musicCursor.moveToNext());
         }
 
+        final boolean showFilename = params.getShowFilename();
         // sort
         Collections.sort(rowsUnfolded, new Comparator<Row>() {
             public int compare(Row first, Row second) {
                 // only Song has been added so far, so unchecked cast is ok
                 RowSong a = (RowSong) first;
                 RowSong b = (RowSong) second;
-//                int cmp = a.getFolder().compareToIgnoreCase(b.getFolder());
                 int cmp = Path.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
-//                if (cmp == 0) {
-//                    cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
-//                    if (cmp == 0) {
-//                        cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
-                        if (cmp == 0) {
+                if (cmp == 0) {
+                    if (!showFilename) {
+                        //cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
+                        cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
+                        if (cmp == 0)
                             cmp = a.getTrack() - b.getTrack();
-                        }
-                        if (cmp == 0) {
+                        if (cmp == 0)
                             cmp = a.getTitle().compareToIgnoreCase(b.getTitle());
-                        }
-//                    }
-//                }
+                    }
+                    else {
+                         cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
+                    }
+                }
                 return cmp;
             }
         });
@@ -1201,7 +1202,36 @@ public class Rows {
 
 
     private String getDefaultStrIfNull(String str) { return str != null ? str : defaultStr; }
-    private String get0StrIfNull(String str) { return str != null ? str : "0"; }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+    private int getTrackNumber(String strTrack, String path) {
+        int track = 0;
+        try {
+            track = Integer.parseInt(strTrack);
+        }
+        catch (Exception e) {}
+
+        // get track number from path
+//        if (track == 0 && path != null) {
+//            String filename = Path.getFilename(path);
+//            String filenameBegin = "";
+//            if (filename.length() > 0 && isDigit(filename.charAt(0))) {
+//                filenameBegin += filename.charAt(0);
+//                if (filename.length() > 1 && isDigit(filename.charAt(1)))
+//                    filenameBegin += filename.charAt(1);
+//            }
+//            if (!filenameBegin.isEmpty()) {
+//                try {
+//                    track = Integer.parseInt(filenameBegin);
+//                } catch (Exception e) {
+//                }
+//            }
+//        }
+
+        return track;
+    }
 
     private void restore() {
         savedID = params.getSongID();

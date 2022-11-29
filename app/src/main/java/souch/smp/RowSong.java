@@ -91,6 +91,13 @@ public class RowSong extends Row {
         album = songAlbum;
         this.durationMs = durationMs;
         track = songTrack;
+//        // some songs are numbered from 1000, usually when there is 2 CD
+//        if (track > 1000 && track < 2000)
+//            track -= 1000;
+//        if (track > 2000 && track < 3000)
+//            track -= 2000;
+//        if (track > 3000 && track < 4000)
+//            track -= 3000;
         path = songPath;
         File f = new File(path);
         filename = f.getName();
@@ -152,10 +159,12 @@ public class RowSong extends Row {
     }
 
     private void setText(TextView text) {
-        if (params.getShowFilename())
+        if (params.getShowFilename()) {
             text.setText(filename);
-        else
-            text.setText(title);
+        }
+        else {
+            text.setText((track > 0 ? track + ". " : "") + title);
+        }
         text.setTextColor(normalSongTextColor);
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
     }

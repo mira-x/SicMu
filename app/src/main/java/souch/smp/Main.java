@@ -843,9 +843,6 @@ public class Main extends AppCompatActivity {
         if (rowSong != null) {
             String title = rowSong.getTitle();
             int trackNum = rowSong.getTrack();
-            // some songs are numbered from 1000 !?
-            if (trackNum > 1000 && trackNum < 2000)
-                trackNum -= 1000;
             if (trackNum > 0)
                 title = trackNum + ". " + title;
             songTitle.setText(title);
@@ -1203,6 +1200,8 @@ public class Main extends AppCompatActivity {
                 getString(R.string.popup_song_album, rowSong.getAlbum()));
         ((TextView) popupView.findViewById(R.id.detail_title)).setText(
                 getString(R.string.popup_song_title, rowSong.getTitle()));
+        ((TextView) popupView.findViewById(R.id.detail_track)).setText(
+                getString(R.string.popup_song_track, rowSong.getTrack()));
         ((TextView) popupView.findViewById(R.id.detail_year)).setText(
                 getString(R.string.popup_song_year, rowSong.getYear()));
         ((TextView) popupView.findViewById(R.id.detail_rating)).setText(
