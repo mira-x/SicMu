@@ -891,14 +891,15 @@ public class Rows {
         Date beg = new Date();
         int nbLoaded = 0;
         // preload from the currpos so that next songs are loaded earlier
-        for (int i = currPos; i < rowsUnfolded.size(); i++) {
+        int startPos = currPos < 0 ? 0 : currPos;
+        for (int i = startPos; i < rowsUnfolded.size(); i++) {
             Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {
                 ((RowSong) row).loadRating();
                 nbLoaded++;
             }
         }
-        for (int i = 0; i < currPos && i < rowsUnfolded.size(); i++) {
+        for (int i = 0; i < startPos && i < rowsUnfolded.size(); i++) {
             Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {
                 ((RowSong) row).loadRating();
@@ -1211,7 +1212,7 @@ public class Rows {
         try {
             track = Integer.parseInt(strTrack);
         }
-        catch (Exception e) {}
+        catch (NumberFormatException e) {}
 
         // get track number from path
 //        if (track == 0 && path != null) {
