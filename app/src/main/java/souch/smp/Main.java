@@ -63,6 +63,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -124,6 +127,8 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Main", "onCreate");
+
+        hideSystemBars();
 
         params = new ParametersImpl(this);
 
@@ -356,6 +361,20 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    private void hideSystemBars() {
+        WindowInsetsControllerCompat windowInsetsController =
+                ViewCompat.getWindowInsetsController(getWindow().getDecorView());
+        if (windowInsetsController == null) {
+            return;
+        }
+        // Configure the behavior of the hidden system bars
+        windowInsetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
+        // Hide both the status bar and the navigation bar
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
+    }
+
     public int getColorFromAttr(int attr) {
         TypedValue typedValue = new TypedValue();
         getTheme().resolveAttribute(attr, typedValue, true);
@@ -394,6 +413,7 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return;
 
+                        hideSystemBars();
                         clickOnRow(position);
                     });
             songView.setOnItemLongClickListener(
@@ -401,6 +421,7 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return false;
 
+                        hideSystemBars();
 //                        if (!isEditModeEnabled())
 //                            longClickOnRow(position);
 //                        else
@@ -1484,6 +1505,8 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
+        hideSystemBars();
+
         if (musicSrv.isInState(PlayerState.Started)) {
             // valid state {Started, Paused, PlaybackCompleted}
             // if the player is between idle and prepared state, it will not be paused!
@@ -1506,6 +1529,7 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
+        hideSystemBars();
         coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
@@ -1518,6 +1542,7 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
+        hideSystemBars();
         coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
