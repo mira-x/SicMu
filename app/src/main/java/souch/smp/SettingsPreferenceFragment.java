@@ -208,6 +208,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                         Toast.LENGTH_LONG).show();
             }
         } else if (key.equals(PrefKeys.SHOW_FILENAME.name())) {
+            musicSrv.getRows().reinit();
             musicSrv.setChanged();
         } else if (key.equals(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name())) {
             setUninitializedDefaultRatingSummary();
