@@ -1,0 +1,4 @@
+Version 2.2.1 (on FDroid only)
+- improve sorting
+- remove system bar
+- add french translation
