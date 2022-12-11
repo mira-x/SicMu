@@ -35,11 +35,34 @@ public class TreeRowComparatorTest {
                 "", null);
     }
 
+    String[] filenameSongsSorted = {
+            "01 filename only.mp3",
+            "02 filename+title.mp3",
+            "03 filename+tracknr.mp3",
+            "04 filename+title+tracknr.mp3",
+            "05 filename+wrong title.mp3",
+            "06 filename+wrong tracknr.mp3",
+            "07 filename+title+tracknr.mp3",
+            "afilename.mp3",
+            "zfilename.mp3",
+    };
+
+    void checkSortedPath(String[] expectedSongsPath, ArrayList<Row> rows) {
+        assertEquals(rows.size(), expectedSongsPath.length);
+        for(int i = 0; i < expectedSongsPath.length; i++)
+            assertEquals(expectedSongsPath[i], ((RowSong) rows.get(i)).getPath());
+    }
+    void checkSortedTrack(ArrayList<Row> rows) {
+        for(int i = 0; i < rows.size(); i++)
+            assertEquals(i, ((RowSong) rows.get(i)).getTrack());
+    }
+
     @Test
     public void testSimple() {
         ArrayList<Row> rows = new ArrayList<>();
         rows.add(createSong("title2", 0, "/path/title2"));
         rows.add(createSong("title1", 0, "/path/title1"));
+        @SuppressWarnings("unchecked")
         ArrayList<Row> rowsSorted = (ArrayList<Row>) rows.clone();
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
         Collections.sort(rowsSorted, treeRowComparator);
@@ -48,52 +71,47 @@ public class TreeRowComparatorTest {
     }
 
     @Test
-    public void testDaald() {
+    public void testShowFilename1() {
         ArrayList<Row> rows = new ArrayList<>();
-        String[] strAr = {
-                "01 filename only.mp3",
-                "02 filename+title.mp3",
-                "03 filename+tracknr.mp3",
-                "04 filename+title+tracknr.mp3",
-                "05 filename+wrong title.mp3",
-                "06 filename+wrong tracknr.mp3",
-                "07 filename+title+tracknr.mp3"
-        };
-        Arrays.stream(strAr).forEach(str ->
+        Arrays.stream(filenameSongsSorted).forEach(str ->
                 rows.add(createSong("title2", 0, str)));
-        ArrayList<Row> rowsSorted = (ArrayList<Row>) rows.clone();
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
-        Collections.sort(rowsSorted, treeRowComparator);
+        Collections.sort(rows, treeRowComparator);
 
-        for(int i = 0; i < strAr.length; i++)
-                assertEquals(rows.get(i), rowsSorted.get(i));
+        checkSortedPath(filenameSongsSorted, rows);
     }
 
     @Test
-    public void testDaald2() {
+    public void testShowFilename2() {
         ArrayList<Row> rows = new ArrayList<>();
-        String[] strAr = {
-                "05 filename+wrong title.mp3",
-                "03 filename+tracknr.mp3",
-                "04 filename+title+tracknr.mp3",
-                "02 filename+title.mp3",
-                "01 filename only.mp3",
-                "07 filename+title+tracknr.mp3",
-                "06 filename+wrong tracknr.mp3",
-        };
-        Arrays.stream(strAr).forEach(str ->
-                rows.add(createSong("title2", 0, str)));
-        ArrayList<Row> rowsSorted = (ArrayList<Row>) rows.clone();
+        Arrays.stream(new Integer[]{8, 4, 2, 3, 1, 7, 0, 6, 5}).forEach(i ->
+                rows.add(createSong("title2", 0, filenameSongsSorted[i])));
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
-        Collections.sort(rowsSorted, treeRowComparator);
+        Collections.sort(rows, treeRowComparator);
+        checkSortedPath(filenameSongsSorted, rows);
+    }
 
-        assertEquals(rows.get(0), rowsSorted.get(4));
-        assertEquals(rows.get(1), rowsSorted.get(2));
-        assertEquals(rows.get(2), rowsSorted.get(3));
-        assertEquals(rows.get(3), rowsSorted.get(1));
-        assertEquals(rows.get(4), rowsSorted.get(0));
-        assertEquals(rows.get(5), rowsSorted.get(6));
-        assertEquals(rows.get(6), rowsSorted.get(5));
+    @Test
+    public void testTrack() {
+        ArrayList<Row> rows = new ArrayList<>();
+        Arrays.stream(new Integer[]{4, 8, 2, 3, 7, 1, 0, 6, 5}).forEach(i ->
+                rows.add(createSong(filenameSongsSorted[i], i, filenameSongsSorted[i])));
+        TreeRowComparator treeRowComparator = new TreeRowComparator(false);
+        Collections.sort(rows, treeRowComparator);
+        checkSortedTrack(rows);
+    }
+
+    // todo more test
+
+
+    @Test
+    public void testPathComparator() {
+        ArrayList<Row> rows = new ArrayList<>();
+        Arrays.stream(new Integer[]{4, 8, 2, 3, 7, 1, 0, 6, 5}).forEach(i ->
+                rows.add(createSong(filenameSongsSorted[i], i, filenameSongsSorted[i])));
+        TreeRowComparator treeRowComparator = new TreeRowComparator(false);
+        Collections.sort(rows, treeRowComparator);
+        checkSortedTrack(rows);
     }
 }
 

@@ -19,9 +19,9 @@ package souch.smp;
 
 import java.util.Comparator;
 
-public class TreeRowComparator implements Comparator<Row> {
+public class PathRowComparator implements Comparator<Row> {
     private boolean showFilename;
-    public TreeRowComparator(boolean showFilename) {
+    public PathRowComparator(boolean showFilename) {
         this.showFilename = showFilename;
     }
 
@@ -29,18 +29,19 @@ public class TreeRowComparator implements Comparator<Row> {
         // only Song has been added so far, so unchecked cast is ok
         RowSong a = (RowSong) first;
         RowSong b = (RowSong) second;
-        int cmp = Path.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
+        int cmp = a.getFolder().compareToIgnoreCase(b.getFolder());
         if (cmp == 0) {
-            if (!showFilename) {
-                //cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
-                cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
-                if (cmp == 0)
-                    cmp = a.getTrack() - b.getTrack();
-                if (cmp == 0)
-                    cmp = a.getTitle().compareToIgnoreCase(b.getTitle());
-            }
-            else {
-                cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
+            cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
+            if (cmp == 0) {
+                if (!showFilename) {
+                    cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
+                    if (cmp == 0) {
+                        cmp = a.getTrack() - b.getTrack();
+                    }
+                }
+                else {
+                    cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
+                }
             }
         }
         return cmp;
