@@ -1108,31 +1108,8 @@ public class Rows {
             }
             while (musicCursor.moveToNext());
         }
-
-        final boolean showFilename = params.getShowFilename();
-        // sort
-        Collections.sort(rowsUnfolded, new Comparator<Row>() {
-            public int compare(Row first, Row second) {
-                // only Song has been added so far, so unchecked cast is ok
-                RowSong a = (RowSong) first;
-                RowSong b = (RowSong) second;
-                int cmp = Path.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
-                if (cmp == 0) {
-                    if (!showFilename) {
-                        //cmp = a.getArtist().compareToIgnoreCase(b.getArtist());
-                        cmp = a.getAlbum().compareToIgnoreCase(b.getAlbum());
-                        if (cmp == 0)
-                            cmp = a.getTrack() - b.getTrack();
-                        if (cmp == 0)
-                            cmp = a.getTitle().compareToIgnoreCase(b.getTitle());
-                    }
-                    else {
-                         cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
-                    }
-                }
-                return cmp;
-            }
-        });
+        TreeRowComparator treeRowComparator = new TreeRowComparator(params.getShowFilename());
+        Collections.sort(rowsUnfolded, treeRowComparator);
 
         // add groups
         ArrayList<RowGroup> prevGroups = new ArrayList<>();
