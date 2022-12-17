@@ -21,8 +21,11 @@ import java.util.Comparator;
 
 public class PathRowComparator implements Comparator<Row> {
     private boolean showFilename;
+    AlphaNumComparator alphaNumComparator;
+
     public PathRowComparator(boolean showFilename) {
         this.showFilename = showFilename;
+        alphaNumComparator = new AlphaNumComparator();
     }
 
     public int compare(Row first, Row second) {
@@ -40,7 +43,8 @@ public class PathRowComparator implements Comparator<Row> {
                     }
                 }
                 else {
-                    cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
+                    cmp = alphaNumComparator.compare(a.getFilename(), b.getFilename());
+                    //cmp = Path.getFilename(a.getPath()).compareToIgnoreCase(Path.getFilename(b.getPath()));
                 }
             }
         }

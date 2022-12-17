@@ -122,6 +122,7 @@ public class RowSong extends Row {
     public String getPath(){return path;}
     public String getFolder(){return folder;}
     public long getAlbumId(){return albumId;}
+    public String getFilename() {return filename;}
 
     public void setView(RowViewHolder holder, Main main, int position) {
         super.setView(holder, main, position);
@@ -159,14 +160,18 @@ public class RowSong extends Row {
     }
 
     private void setText(TextView text) {
-        if (params.getShowFilename()) {
-            text.setText(filename);
-        }
-        else {
-            text.setText((track > 0 ? track + ". " : "") + title);
-        }
+        text.setText(getText());
         text.setTextColor(normalSongTextColor);
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+    }
+
+    public String getText() {
+        if (params.getShowFilename())
+            return filename;
+        else if (track > 0)
+            return track + ". " + title;
+        else
+            return title;
     }
 
     private void setDuration(TextView duration) {
