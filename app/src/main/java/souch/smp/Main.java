@@ -371,8 +371,17 @@ public class Main extends AppCompatActivity {
         windowInsetsController.setSystemBarsBehavior(
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         );
-        // Hide both the status bar and the navigation bar
+        // Hide the navigation bar
         windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
+
+        View decorView = getWindow().getDecorView();
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+                      //| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     public int getColorFromAttr(int attr) {
@@ -413,7 +422,6 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return;
 
-                        hideSystemBars();
                         clickOnRow(position);
                     });
             songView.setOnItemLongClickListener(
@@ -421,7 +429,6 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return false;
 
-                        hideSystemBars();
 //                        if (!isEditModeEnabled())
 //                            longClickOnRow(position);
 //                        else
@@ -1505,8 +1512,6 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        hideSystemBars();
-
         if (musicSrv.isInState(PlayerState.Started)) {
             // valid state {Started, Paused, PlaybackCompleted}
             // if the player is between idle and prepared state, it will not be paused!
@@ -1529,7 +1534,6 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        hideSystemBars();
         coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
@@ -1542,7 +1546,6 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        hideSystemBars();
         coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
