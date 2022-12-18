@@ -106,9 +106,9 @@ public class Database {
             Log.d("Database", "Show donate disabled");
         }
         else {
-            final long appOpenedOften = 20;
+            final long appOpenedOften = 100;
             config.nbTimeAppStartedSinceShowDonate++;
-            final long donatePeriodInDay = 31*1;
+            final long donatePeriodInDay = 31*12;
             long nowMs = (new Date()).getTime();
             if ((config.nbTimeAppStartedSinceShowDonate > appOpenedOften) &&
                 (nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000)
