@@ -55,17 +55,6 @@ import java.util.stream.Collectors;
  */
 public class AlphaNumComparator implements Comparator<String>
 {
-
-    private static Comparator<String> instance;
-    public static Comparator<String> alphaNumOrder()
-    {
-        if (instance == null)
-        {
-            instance = new AlphaNumComparator();
-        }
-        return instance;
-    }
-
     private final boolean isDigit(char ch)
     {
         return ((ch >= 48) && (ch <= 57));
@@ -155,13 +144,4 @@ public class AlphaNumComparator implements Comparator<String>
 
         return s1.compareTo(s2);
     }
-
-    /**
-     * Shows an example of how the comparator works.
-     * Feel free to delete this in your own code!
-     */
-//    public static void main(String[] args) {
-//        List<String> values = Arrays.asList("dazzle2", "dazzle10", "dazzle1", "dazzle2.7", "dazzle2.10", "2", "10", "1", "EctoMorph6", "EctoMorph62", "EctoMorph7");
-//        System.out.println(values.stream().sorted(new AlphanumComparator()).collect(Collectors.joining(" ")));
-//    }
 }
