@@ -113,6 +113,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout warningLayout;
 
     private LinearLayout moreButtonsLayout;
+    private Timer closeMoreButtonsTimer;
 
     private ImageButton albumImage;
     private TextView songTitle, songAlbum, songArtist, songMime, warningText;
@@ -1753,35 +1754,61 @@ public class Main extends AppCompatActivity {
     public void toggleMoreButtons(View view) {
         //ImageButton more_button = findViewById(R.id.more_button);
         if (isEditModeEnabled()) {
+            stopCloseMoreButtonsTimer();
+
             moreButtonsLayout.setVisibility(View.GONE);
             //more_button.setImageResource(R.drawable.ic_action_note);
         } else {
             moreButtonsLayout.setVisibility(View.VISIBLE);
+
+            startCloseMoreButtonsTimer();
             //more_button.setImageResource(R.drawable.ic_action_edit);
         }
     }
-
     private boolean isEditModeEnabled() {
         return moreButtonsLayout.getVisibility() == View.VISIBLE;
     }
+
+    private void startCloseMoreButtonsTimer() {
+        stopCloseMoreButtonsTimer();
+
+        closeMoreButtonsTimer = new Timer();
+        closeMoreButtonsTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> moreButtonsLayout.setVisibility(View.GONE));
+            }
+        }, 16 * 1000);
+    }
+    private void stopCloseMoreButtonsTimer() {
+        if (closeMoreButtonsTimer != null) {
+            closeMoreButtonsTimer.cancel();
+            closeMoreButtonsTimer = null;
+        }
+    }
+
 
     private final int SETTINGS_ACTION = 1;
     public void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_ACTION);
+        startCloseMoreButtonsTimer();
     }
 
 
     public void openSort(View view) {
         openSortMenu();
+        startCloseMoreButtonsTimer();
     }
 
     public void openRepeat(View view) {
         openRepeatMenu();
+        startCloseMoreButtonsTimer();
     }
 
     public void openShuffle(View view) {
         openShuffleMenu();
+        startCloseMoreButtonsTimer();
     }
 
     public void openTextSize(View view) {
@@ -1802,10 +1829,12 @@ public class Main extends AppCompatActivity {
 //                Toast.LENGTH_LONG).show();
         songAdt.notifyDataSetChanged();
         setTextSizeButton();
+        startCloseMoreButtonsTimer();
     }
 
     public void openMinRating(View view) {
         openRatingMenu();
+        startCloseMoreButtonsTimer();
     }
 
     public void unfoldAndscrollToCurrSong() {
