@@ -267,7 +267,8 @@
 
         <Preference
             android:key="RATINGS_NOT_WRITTEN_KEY"
-            android:title="@string/settings_ratings_not_written_title"/>
+            android:title="@string/settings_ratings_not_written_title"
+            android:summary="@string/settings_ratings_not_written"/>
 
         <CheckBoxPreference
             android:key="MEDIA_BUTTON_START_APP"

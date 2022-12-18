@@ -41,8 +41,8 @@
     <string name="ic_action_edit_folder">dossier: %s</string>
     <string name="ic_action_edit_song">chanson: %s</string>
 
-    <string name="action_rate_group">évaluer chaque chanson (conserver)</string>
-    <string name="action_rate_group_overwrite">évaluer chaque chanson (remplacer)</string>
+    <string name="action_rate_group">noter chaque chanson (conserver)</string>
+    <string name="action_rate_group_overwrite">noter chaque chanson (remplacer)</string>
 
     <string name="action_rate_song">noter</string>
 
@@ -56,15 +56,15 @@
     <string name="action_delete_song_nok">Suppression de la chanson %s échouée !</string>
 
     <string name="action_min_rating">Jouer les chansons avec une note >=</string>
-    <string name="action_set_rating_folder">Évaluer le dossier : %s</string>
-    <string name="action_set_rating_song">Évaluer la chanson : %s</string>
+    <string name="action_set_rating_folder">Noter le dossier : %s</string>
+    <string name="action_set_rating_song">Noter la chanson : %s</string>
     <string name="action_set_rating_song_failed">Annulation de l\'évaluation : déjà en cours</string>
 
     <string name="songs_have_been_rated">%d notes ont été appliqué</string>
     <string name="current_rating_idx">note actuelle</string>
 
     <!--Below which "min rating" do we play song with rating not initialized (e.g. if 5 we play always song not initiliazed) -->
-    <string name="uninitialized_default_rating">Valeur par défaut des chansons non encore évaluées</string>
+    <string name="uninitialized_default_rating">Valeur par défaut des chansons non encore notées</string>
 
     <string name="action_play">lecture</string>
     <string name="action_pause">pause</string>
@@ -78,7 +78,7 @@
     <string name="popup_song_title">titre : %s</string>
     <string name="popup_song_track">piste : %d</string>
     <string name="popup_song_year">année : %d</string>
-    <string name="popup_song_rating">évaluation : %d</string>
+    <string name="popup_song_rating">note : %d</string>
     <string name="popup_song_mime">mime : %s</string>
     <string name="popup_song_path">chemin : %s</string>
 
@@ -132,12 +132,12 @@
     <string name="settings_text_size_big">Taille de la police grasse</string>
     <string name="settings_text_size_ratio">Ratio de taille entre le dossier et le titre de la chanson</string>
 
-    <string name="settings_ratings_not_written_title">Afficher les évaluations qui n\'ont pas été écrites
-        dans le fichier</string>
-    <string name="settings_ratings_are_in_sync">Toutes les évaluations ont été écrit</string>
+    <string name="settings_ratings_not_written_title">Afficher les notes</string>
+    <string name="settings_ratings_not_written">Afficher les notes qui n\'ont pas été synchronisé</string>
+    <string name="settings_ratings_are_in_sync">Toutes les notes ont été synchronisé</string>
 
     <string name="settings_rescan_title">Rescanner</string>
-    <string name="settings_rescan">Rescanner les fichiers musique.</string>
+    <string name="settings_rescan">Rescanner tous les fichiers musique du téléphone.</string>
     <!-- <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string> -->
     <string name="settings_rescan_triggered">Scan des fichiers lancé...</string>
     <string name="settings_rescan_storage">Dossier de scan %s</string>
@@ -147,7 +147,7 @@
         le stockage : doit-on le supprimer de la base ?</string>
 
     <string name="settings_media_button_start_app_title">Démarrage automatique par les boutons média</string>
-    <string name="settings_media_button_start_app">Les boutons média démarre l\'application si elle
+    <string name="settings_media_button_start_app">Les boutons média démarrent l\'application si elle
         n\'est pas déjà lancée.</string>
 
     <string name="settings_autoscroll">Défiler jusqu\'à la nouvelle chanson jouée</string>
@@ -228,7 +228,7 @@
 
     <string name="help_context_menu">Menu contextuel</string>
     <string name="help_context_menu_summary">Un appui long sur une chanson fait apparaitre un menu
-        contextuel où vous pouvez évaluer la chanson, supprimer le fichier, ...</string>
+        contextuel où vous pouvez noter la chanson, supprimer le fichier, ...</string>
 
     <string name="settings_misc">Divers</string>
 
