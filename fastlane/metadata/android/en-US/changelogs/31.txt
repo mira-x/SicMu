@@ -1,4 +1,4 @@
-Version 2.2.1 (on FDroid only)
+Version 2.3 (on FDroid only)
 - improve sorting
 - hide automatically navigation bar
 - add french translation
