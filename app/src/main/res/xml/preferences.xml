@@ -242,6 +242,12 @@
 
     <PreferenceCategory android:title="@string/settings_misc">
         <CheckBoxPreference
+            android:key="HIDE_NAVIGATION_BAR"
+            android:title="@string/settings_hide_navigation_bar"
+            android:summary="@string/settings_hide_navigation_bar_summary"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
             android:key="SAVE_SONG_POS"
             android:title="@string/settings_songpos_title"
             android:summary="@string/settings_songpos"

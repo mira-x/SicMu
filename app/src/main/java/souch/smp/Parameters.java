@@ -81,4 +81,6 @@ public interface Parameters {
     Integer getTheme();
 
     int getUninitializedDefaultRating();
+
+    boolean getHideNavigationBar();
 }

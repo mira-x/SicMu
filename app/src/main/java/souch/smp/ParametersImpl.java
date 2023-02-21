@@ -191,4 +191,8 @@ public class ParametersImpl implements Parameters {
     public int getUninitializedDefaultRating() {
         return Integer.valueOf(getPref().getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
     }
+
+    public boolean getHideNavigationBar() {
+        return getPref().getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), true);
+    }
 }

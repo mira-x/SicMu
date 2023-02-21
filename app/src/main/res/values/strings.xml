@@ -275,6 +275,9 @@
     <string name="settings_show_remaining_time">Show remaining time</string>
     <string name="settings_show_remaining_time_summary">Show songs remaining time rather than elapsed time</string>
 
+    <string name="settings_hide_navigation_bar">Hide navigation bar</string>
+    <string name="settings_hide_navigation_bar_summary">Hide navigation bar automatically</string>
+
     <string name="action_repeat_title">Repeat mode</string>
     <string name="action_repeat_all">Repeat all songs</string>
     <string name="action_repeat_one">Repeat same track</string>

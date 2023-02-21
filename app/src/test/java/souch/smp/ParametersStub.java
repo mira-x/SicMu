@@ -126,4 +126,6 @@ public class ParametersStub implements Parameters {
     public Integer getTheme() { return 0; }
 
     public int getUninitializedDefaultRating() { return 0; }
+
+    public boolean getHideNavigationBar() { return true; }
 }

@@ -129,9 +129,9 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("Main", "onCreate");
 
-        hideSystemBars();
-
         params = new ParametersImpl(this);
+
+        hideSystemBars();
 
         switch (params.getTheme()) {
             case 1:
@@ -363,17 +363,19 @@ public class Main extends AppCompatActivity {
     }
 
     private void hideSystemBars() {
-        WindowInsetsControllerCompat windowInsetsController =
-                ViewCompat.getWindowInsetsController(getWindow().getDecorView());
-        if (windowInsetsController == null) {
-            return;
+        if (params.getHideNavigationBar()) {
+            WindowInsetsControllerCompat windowInsetsController =
+                    ViewCompat.getWindowInsetsController(getWindow().getDecorView());
+            if (windowInsetsController == null) {
+                return;
+            }
+            // Configure the behavior of the hidden system bars
+            windowInsetsController.setSystemBarsBehavior(
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+            // Hide the navigation bar
+            windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
         }
-        // Configure the behavior of the hidden system bars
-        windowInsetsController.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        );
-        // Hide the navigation bar
-        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
     }
 
     public int getColorFromAttr(int attr) {
