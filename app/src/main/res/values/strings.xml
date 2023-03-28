@@ -278,6 +278,9 @@
     <string name="settings_hide_navigation_bar">Hide navigation bar</string>
     <string name="settings_hide_navigation_bar_summary">Hide navigation bar automatically</string>
 
+    <string name="settings_show_group_total_time">Show group total time</string>
+    <string name="settings_show_group_total_time_summary">Show group total time rather than total number of songs</string>
+
     <string name="action_repeat_title">Repeat mode</string>
     <string name="action_repeat_all">Repeat all songs</string>
     <string name="action_repeat_one">Repeat same track</string>

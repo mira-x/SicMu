@@ -950,7 +950,7 @@ public class Rows {
 
                 if (prevArtistGroup == null || artist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
                     RowGroup artistGroup = new RowGroup(rowsUnfolded.size(), 0, artist,
-                            path, Typeface.BOLD, false);
+                            path, Typeface.BOLD, false, params);
                     rowsUnfolded.add(artistGroup);
                     prevArtistGroup = artistGroup;
                     prevAlbumGroup = null;
@@ -958,7 +958,7 @@ public class Rows {
 
                 if (prevAlbumGroup == null || album.compareToIgnoreCase(prevAlbumGroup.getName()) != 0) {
                     RowGroup albumGroup = new RowGroup(rowsUnfolded.size(), 1, album,
-                            path, Typeface.ITALIC, true);
+                            path, Typeface.ITALIC, true, params);
                     albumGroup.setParent(prevArtistGroup);
                     rowsUnfolded.add(albumGroup);
                     prevAlbumGroup = albumGroup;
@@ -973,7 +973,9 @@ public class Rows {
 
                 rowsUnfolded.add(rowSong);
                 prevArtistGroup.incNbRowSong();
+                prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
                 prevAlbumGroup.incNbRowSong();
+                prevAlbumGroup.incTotalDuration(rowSong.getDurationMs());
             }
             while (musicCursor.moveToNext());
             setGroupSelectedState(currPos, true);
@@ -1027,7 +1029,7 @@ public class Rows {
             String curFolder = rowSong.getFolder();
             if (prevFolderGroup == null || curFolder.compareToIgnoreCase(prevFolderGroup.getName()) != 0) {
                 RowGroup folderGroup = new RowGroup(idx, 0, curFolder,
-                        rowSong.getPath(), Typeface.BOLD, false);
+                        rowSong.getPath(), Typeface.BOLD, false, params);
                 rowsUnfolded.add(idx, folderGroup);
                 idx++;
                 prevFolderGroup = folderGroup;
@@ -1037,7 +1039,7 @@ public class Rows {
             String curArtist = rowSong.getArtist();
             if (prevArtistGroup == null || curArtist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
                 RowGroup artistGroup = new RowGroup(idx, 1, curArtist,
-                        rowSong.getPath(), Typeface.BOLD, true);
+                        rowSong.getPath(), Typeface.BOLD, true, params);
                 artistGroup.setParent(prevFolderGroup);
                 rowsUnfolded.add(idx, artistGroup);
                 idx++;
@@ -1051,7 +1053,9 @@ public class Rows {
             rowSong.setParent(prevArtistGroup);
 
             prevFolderGroup.incNbRowSong();
+            prevFolderGroup.incTotalDuration(rowSong.getDurationMs());
             prevArtistGroup.incNbRowSong();
+            prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
         }
         setGroupSelectedState(currPos, true);
     }
@@ -1091,8 +1095,12 @@ public class Rows {
             while (musicCursor.moveToNext());
         }
 
+//        long beforeMs = (new Date()).getTime();
         TreeRowComparator treeRowComparator = new TreeRowComparator(params.getShowFilename());
         Collections.sort(rowsUnfolded, treeRowComparator);
+//        Log.w("Rows==========", "Sort time: " + ((new Date()).getTime() - beforeMs) + " ms");
+//        // 127 ms tree no show filename
+//        // 283 ms tree show filename
 
         // add groups
         ArrayList<RowGroup> prevGroups = new ArrayList<>();
@@ -1132,7 +1140,7 @@ public class Rows {
                 }
 
                 RowGroup aGroup = new RowGroup(idx, level, folders.get(level),
-                        path, Typeface.BOLD, false);
+                        path, Typeface.BOLD, false, params);
                 aGroup.setParent(parentGroup);
                 parentGroup = aGroup;
                 rowsUnfolded.add(idx, aGroup);
@@ -1145,6 +1153,7 @@ public class Rows {
             while (groupIdx != null) {
                 // update group
                 groupIdx.incNbRowSong();
+                groupIdx.incTotalDuration(rowSong.getDurationMs());
 
                 prevGroups.add(0, groupIdx);
                 groupIdx = (RowGroup) groupIdx.getParent();

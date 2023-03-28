@@ -269,6 +269,9 @@
     <string name="settings_hide_navigation_bar">Cache la barre de navigation</string>
     <string name="settings_hide_navigation_bar_summary">Cache automatiquement la barre de navigation</string>
 
+    <string name="settings_show_group_total_time">Afficher le temps total des dossiers</string>
+    <string name="settings_show_group_total_time_summary">Afficher le temps total des dossiers plutôt que le nombre de chansons</string>
+
     <string name="action_repeat_title">Mode de répétition</string>
     <string name="action_repeat_all">Répéter toutes les chansons</string>
     <string name="action_repeat_one">Répéter la même chanson</string>

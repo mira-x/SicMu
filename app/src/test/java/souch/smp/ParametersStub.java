@@ -128,4 +128,6 @@ public class ParametersStub implements Parameters {
     public int getUninitializedDefaultRating() { return 0; }
 
     public boolean getHideNavigationBar() { return true; }
+
+    public boolean getShowGroupTotalTime() { return true; }
 }

@@ -195,4 +195,8 @@ public class ParametersImpl implements Parameters {
     public boolean getHideNavigationBar() {
         return getPref().getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), false);
     }
+
+    public boolean getShowGroupTotalTime() {
+        return getPref().getBoolean(PrefKeys.SHOW_GROUP_TOTAL_TIME.name(), false);
+    }
 }

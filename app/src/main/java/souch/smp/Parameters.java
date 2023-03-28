@@ -83,4 +83,6 @@ public interface Parameters {
     int getUninitializedDefaultRating();
 
     boolean getHideNavigationBar();
+
+    boolean getShowGroupTotalTime();
 }

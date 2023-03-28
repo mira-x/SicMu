@@ -35,21 +35,25 @@ public class RowGroup extends Row {
     private boolean overrideBackgroundColor;
     private int nbRowSong;
     private String path;
+    private long totalDurationMs = 0;
     public static Filter rowType;
     protected static int textSize = 18;
+    private Parameters params;
 
     // must be set outside before calling setText
     public static int normalTextColor;
     public static int playingTextColor;
     public static int backgroundOverrideColor;
 
-    public RowGroup(int pos, int level, String name, String path, int typeface, boolean overrideBackgroundColor) {
+    public RowGroup(int pos, int level, String name, String path, int typeface,
+                    boolean overrideBackgroundColor, Parameters params) {
         super(pos, level, typeface);
         this.name = name;
         setPath(path);
         folded = false;
         selected = false;
         this.overrideBackgroundColor = overrideBackgroundColor;
+        this.params = params;
     }
 
     public String getName() { return name; }
@@ -78,6 +82,9 @@ public class RowGroup extends Row {
     // get number of songs (excluding RowGroup) inside this group
     public int nbRowSong() { return nbRowSong; }
     public void incNbRowSong() { nbRowSong++; }
+
+    public void incTotalDuration(long totalDurationMs) { this.totalDurationMs += totalDurationMs; }
+    public long getTotalDuration() { return totalDurationMs; }
 
     public void setView(RowViewHolder holder, Main main, int position) {
         super.setView(holder, main, position);
@@ -128,6 +135,42 @@ public class RowGroup extends Row {
         //text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     }
 
+    static public String msToTime(long durationMs){
+        long seconds = durationMs / 1000;
+        long minutes = seconds / 60;
+        long hours = seconds / 3600;
+        if (seconds < 60) {
+            return (seconds < 10 ? "0:0" : "0:")  + seconds;
+        }
+        else if (minutes < 60) {
+            seconds %= 60;
+            return minutes + (seconds < 10 ? ":0" : ":") + seconds;
+        }
+        else {
+            seconds %= 60;
+            minutes %= 60;
+            return hours + (minutes < 10 ? ":0" : ":") + minutes +
+                    (seconds < 10 ? ":0" : ":") + seconds;
+        }
+//        if (seconds < 60) {
+//            return seconds + "s";
+//        }
+//        else if (seconds < 600) {
+//            seconds = seconds % 60;
+//            return minutes + (seconds < 10 ? "m0" : "m") + seconds;
+//        }
+//        else if (seconds < 3600) {
+//            return minutes + "m";
+//        }
+//        else if (minutes < 60 * 5) {
+//            minutes = minutes % 60;
+//            return hours + (minutes < 10 ? "h0" : "h") + minutes;
+//        }
+//        else {
+//            return hours + "h";
+//        }
+    }
+
     private void setDuration(TextView duration) {
         String rightSpace = getStringOffset();
         //super.setText(text);
@@ -136,7 +179,10 @@ public class RowGroup extends Row {
                 duration.setTextColor(playingTextColor);
             else
                 duration.setTextColor(normalTextColor);
-            duration.setText(nbRowSong + " |" + rightSpace);
+            if (params.getShowGroupTotalTime())
+                duration.setText(msToTime(totalDurationMs) + " |" + rightSpace);
+            else
+                duration.setText(nbRowSong + " |" + rightSpace);
         }
         else {
             duration.setText("/" + rightSpace);
