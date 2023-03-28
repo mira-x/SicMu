@@ -193,6 +193,6 @@ public class ParametersImpl implements Parameters {
     }
 
     public boolean getHideNavigationBar() {
-        return getPref().getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), true);
+        return getPref().getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), false);
     }
 }
