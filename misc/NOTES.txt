@@ -28,6 +28,7 @@ git tag -a v2.0.4 -m "Version 2.0.4. Add stop at end of track, fix song pos"
 git tag -a v2.1 -m "Version 2.1. Set and filter ratings, Context menu, Remove file"
 git tag -a v2.2 -m "Version 2.2. Song details and rescan folder from context menu. Load every ratings at startup, fix wakelock"
 git tag -a v2.3 -m "Version 2.3. Improve sorting, hide automatically navigation bar, add french translation"
+git tag -a v2.3.1 -m "Version 2.3.1. add hide navigation bar in settings, show group total time"
 
 # don't forgot to add changelog description here
     - readme.md
