@@ -195,6 +195,12 @@
             android:summary="@string/settings_show_remaining_time_summary"
             android:defaultValue="false"/>
 
+        <CheckBoxPreference
+            android:key="SHOW_GROUP_TOTAL_TIME"
+            android:title="@string/settings_show_group_total_time"
+            android:summary="@string/settings_show_group_total_time_summary"
+            android:defaultValue="false"/>
+
         <ListPreference
             android:key="DEFAULT_FOLD"
             android:title="@string/settings_fold_title"
@@ -245,12 +251,6 @@
             android:key="HIDE_NAVIGATION_BAR"
             android:title="@string/settings_hide_navigation_bar"
             android:summary="@string/settings_hide_navigation_bar_summary"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="SHOW_GROUP_TOTAL_TIME"
-            android:title="@string/settings_show_group_total_time"
-            android:summary="@string/settings_show_group_total_time_summary"
             android:defaultValue="false"/>
 
         <CheckBoxPreference
