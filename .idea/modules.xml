@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SMP.iml" filepath="$PROJECT_DIR$/SMP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SMP.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SMP.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SMP.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SMP.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SMP.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SMP.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SMP.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SMP.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sic-mu.iml" filepath="$PROJECT_DIR$/.idea/modules/sic-mu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/sic-mu.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/sic-mu.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/sic-mu.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/sic-mu.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/sic-mu.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/sic-mu.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/sic-mu.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/sic-mu.app.unitTest.iml" />
     </modules>
   </component>
 </project>
