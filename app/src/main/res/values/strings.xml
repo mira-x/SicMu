@@ -264,7 +264,7 @@
 
     <string name="settings_thanks">Special thanks</string>
     <string name="settings_thanks_icons">Icons</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (icons found on iconfinder.com)</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (icons found on iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutorial</string>
     <string name="settings_thanks_doc_summary">Sue Smith (tutorials on creating a Music Player on Android)</string>
     <string name="settings_thanks_i15n">Translation</string>
