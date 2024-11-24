@@ -19,7 +19,6 @@
 package souch.smp;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -33,7 +32,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
@@ -451,6 +449,58 @@ public class Rows {
 
             setGroupSelectedState(currPos, true);
         }
+    }
+
+    public int FoldedToUnfoldedIndex(int index) {
+        Row foldedRow = rows.get(index);
+        if(foldedRow == null)
+            return -1;
+        for (int i = 0; i < rowsUnfolded.size(); i++) {
+            Row unfoldedRow = rowsUnfolded.get(i);
+            if(unfoldedRow == foldedRow)
+                return i;
+        }
+        return -1; // This should never occur
+    }
+
+    // Get the next song position, where a keyword is contained in the song metadata.
+    // Returns -1 when not found
+    public Row getNextSongByKeyword(String keyword) {
+        if (rowsUnfolded.isEmpty())
+            return null;
+
+        int currPos = FoldedToUnfoldedIndex(getCurrPos());
+
+        // Iterate from (currently selected song + 1) -> end of playlist
+        for(int i = currPos+1; i < rowsUnfolded.size(); i++) {
+            Row row = rowsUnfolded.get(i);
+
+            if(row.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                return row;
+            }
+        }
+        // Iterate from beginning of playlist -> current song
+        for(int i = 0; i < currPos; i++) {
+            Row row = rowsUnfolded.get(i);
+
+            if(row.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                return row;
+            }
+        }
+
+        return null;
+    }
+
+    public int getFoldedIndex(Row row) {
+        if(row == null)
+            return -1;
+
+        for (int i = 0; i < rows.size(); i++) {
+            if(rows.get(i) == row)
+                return i;
+        }
+
+        return -1;
     }
 
     public void moveToPrevSong() {

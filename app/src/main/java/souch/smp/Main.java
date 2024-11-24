@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
@@ -35,6 +36,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -44,6 +46,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +56,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -1408,6 +1412,67 @@ public class Main extends AppCompatActivity {
         });
         AlertDialog alert = altBld.create();
         alert.show();
+    }
+
+    public void openSearchDialog(View view) {
+        if (musicSrv == null)
+            return;
+
+        // Init dialog
+        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
+        altBld.setIcon(R.drawable.ic_action_search);
+        altBld.setTitle(getString(R.string.action_search));
+
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+        // Set up text box
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(prefs.getString("search_query", ""));
+        altBld.setView(input);
+
+        Context ctx = this;
+
+        // Set up the search button
+        altBld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String query = input.getText().toString();
+                // Save query for quick access later
+                prefs.edit().putString("search_query", query).apply();
+
+                Row row = rows.getNextSongByKeyword(query);
+                if(row == null) {
+                    // Nothing found!
+                    Toast.makeText(ctx, R.string.search_unsuccessful, Toast.LENGTH_LONG).show();
+                } else {
+                    // clickOnRow(...) only works using folded indexes, so we have
+                    // to unfold the parent groups first, and then play the song itself
+
+                    // Collect parent elements, then unfold them in reverse order
+                    // (topmost group/folder -> deepest group/folder)
+                    ArrayList<RowGroup> parents = new ArrayList<RowGroup>();
+                    for(RowGroup group = (RowGroup)row.getParent();
+                            group != null;
+                            group = (RowGroup)group.getParent()) {
+                        parents.add(group);
+                    }
+                    for(int i = parents.size() - 1; i >= 0; i--) {
+                        RowGroup parent = parents.get(i);
+                        if(parent.isFolded())
+                            clickOnRow(rows.getFoldedIndex(parent));
+                    }
+
+                    // Don't click (=close) unfolded groups! Just scroll to them.
+                    if(row instanceof RowGroup && !((RowGroup) row).isFolded())
+                            scrollToSong(rows.getFoldedIndex(row));
+                    else // Click it! (=open a group or play a song)
+                            clickOnRow(rows.getFoldedIndex(row));
+                }
+            }
+        });
+
+        altBld.show();
     }
 
     private int getRepeatResId() {

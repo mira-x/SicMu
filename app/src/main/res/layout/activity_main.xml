@@ -392,21 +392,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/more_buttons"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/details_layout"
+        android:layout_alignParentLeft="true"
         android:choiceMode="singleChoice"
         android:fastScrollEnabled="false"
         android:hapticFeedbackEnabled="false"
         android:scrollbarThumbVertical="@drawable/scrollbar"
         android:scrollbars="vertical" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/more_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_button"
         android:orientation="horizontal"
-        android:weightSum="299">
+        android:weightSum="350">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
@@ -420,10 +420,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:scaleType="centerInside"
-            android:padding="12dp"
-            android:onClick="openSort"
             android:longClickable="true"
+            android:onClick="openSort"
+            android:padding="12dp"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_menu_tree" />
 
         <!--
@@ -455,9 +455,9 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:scaleType="fitCenter"
             android:longClickable="true"
             android:onClick="openRepeat"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_menu_repeat_all" />
 
         <ImageButton
@@ -466,10 +466,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:padding="14dp"
-            android:scaleType="fitCenter"
             android:longClickable="true"
             android:onClick="openShuffle"
+            android:padding="14dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_menu_no_shuffle" />
 
         <ImageButton
@@ -479,10 +479,22 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:longClickable="true"
+            android:onClick="openMinRating"
             android:padding="14dp"
             android:scaleType="centerInside"
-            android:onClick="openMinRating"
             app:srcCompat="@drawable/ic_star_5_highlight" />
+
+        <ImageButton
+            android:id="@+id/search_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:longClickable="true"
+            android:onClick="openSearchDialog"
+            android:padding="14dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_action_search" />
 
         <ImageButton
             android:id="@+id/settings_button"
@@ -495,13 +507,13 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/action_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:weightSum="251">
+        android:weightSum="250">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
@@ -515,9 +527,9 @@
             android:layout_height="60dp"
             android:layout_weight="48"
             android:onClick="playOrPause"
-            android:scaleType="fitCenter"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/action_play" />
 
         <ImageButton
@@ -526,9 +538,9 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
-            android:scaleType="fitCenter"
             android:longClickable="true"
             android:onClick="playPrev"
+            android:scaleType="fitCenter"
             android:src="@drawable/action_prev" />
 
         <ImageButton
@@ -537,9 +549,9 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="51"
-            android:scaleType="fitCenter"
-            android:onClick="playNext"
             android:longClickable="true"
+            android:onClick="playNext"
+            android:scaleType="fitCenter"
             android:src="@drawable/action_next" />
 
         <ImageButton
@@ -550,9 +562,9 @@
             android:layout_weight="50"
             android:longClickable="true"
             android:onClick="gotoCurrSong"
-            android:scaleType="fitCenter"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/action_goto_play" />
 
         <ImageButton
