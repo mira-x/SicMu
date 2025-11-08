@@ -9,7 +9,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "souch.smp"
-        minSdkVersion 14 // 14 -> Android 4.0
+        minSdkVersion 24 // Android 7.0
         targetSdkVersion 28
         versionCode 32
         versionName '2.3.1'
@@ -37,6 +37,10 @@ android {
             versionNameSuffix "-pro"
         }
 
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 //    lintOptions {
 //        baseline file("lint-baseline.xml")
