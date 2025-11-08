@@ -31,6 +31,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
+import android.util.Pair;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.View;
@@ -45,7 +46,13 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class RowSong extends Row {
     private long id;
@@ -488,6 +495,22 @@ public class RowSong extends Row {
      * @return null if bitmap not found
      * ! sync method: should avoid to call it from UI thread
      */
+
+    private static int getCommonPrefix(String a, String b) {
+        var commonPrefix = 0;
+        while (true) {
+            if (commonPrefix >= a.length() || commonPrefix >= b.length())
+                break;
+
+            if (a.charAt(commonPrefix) == b.charAt(commonPrefix))
+                commonPrefix++;
+            else
+                break;
+        }
+
+        return commonPrefix;
+    }
+
     public synchronized Bitmap getAlbumBmp(Context context, int imageNum) {
         if (imageNum == 0 && cachedAlbumBmpID == albumId) {
             Log.d("RowSong", "getAlbumBmp cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
@@ -496,75 +519,85 @@ public class RowSong extends Row {
         Log.d("RowSong", "getAlbumBmp rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
 
         Bitmap bmp = null;
-        try {
-            // try first by searching manually in song's path (as it gives better resolution)
-            if (bmp == null && path != null) {
-                File dir = new File(path).getParentFile();
-                if (dir.exists() && dir.isDirectory()) {
-                    File[] files = dir.listFiles(new FilenameFilter() {
-                        public boolean accept(File dir, String name) {
-                            return Path.filenameIsImage(name);
-                        }
-                    });
-                    int currImgIdx = imageNum;
-                    if (files != null)
-                        for (File file : files) {
-                            if (currImgIdx == 0) {
-                                // found
-                                bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-                                break;
-                            }
-                            currImgIdx--;
-                        }
+
+        // Search in the file metadata for an image
+        if (imageNum == 0) {
+            try {
+                final int thumb_size = getScreenWidth();
+                // Android 10 "Quince Tart"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    // try with loadThumbnail
+                    Size size = new Size(thumb_size, thumb_size);
+                    bmp = context.getContentResolver().loadThumbnail(getExternalContentUri(), size, null);
+
+                    // try with createAudioThumbnail
+                    bmp = ThumbnailUtils.createAudioThumbnail(
+                            new File(path),
+                            new Size(thumb_size, thumb_size),
+                            null);
                 }
-            }
+            } catch (Exception ignored) { }
 
-            if (imageNum == 0) {
-                if (bmp == null) {
-                    final int thumb_size = getScreenWidth();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        // try with loadThumbnail
-                        Size size = new Size(thumb_size, thumb_size);
-                        bmp = context.getContentResolver().loadThumbnail(getExternalContentUri(), size, null);
-
-                        // try with createAudioThumbnail
-                        if (bmp == null) {
-                            bmp = ThumbnailUtils.createAudioThumbnail(
-                                    new File(path),
-                                    new Size(thumb_size, thumb_size),
-                                    null);
-                        }
-                    }
-                }
-
-                // try with MediaMetadataRetriever
-                if (bmp == null) {
+            // try with MediaMetadataRetriever
+            if (bmp == null) {
+                try {
                     MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                     mmr.setDataSource(path);
                     byte[] img_byte = mmr.getEmbeddedPicture();
                     if (img_byte != null)
                         bmp = BitmapFactory.decodeByteArray(img_byte, 0, img_byte.length,
                                 new BitmapFactory.Options());
-                }
+                } catch (Exception ignored) { }
+            }
 
-                // try with media store ?
-                if (bmp == null) {
+            // try with media store ?
+            if (bmp == null) {
+                try {
                     Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                             new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
                             MediaStore.Audio.Albums._ID + "=?",
                             new String[]{String.valueOf(albumId)},
                             null);
-                    if (cursor.moveToFirst()) {
+                    if (cursor != null && cursor.moveToFirst()) {
                         int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
-                        String path = cursor.getString(colIdx < 0 ? 0 : colIdx);
+                        String path = cursor.getString(Math.max(colIdx, 0));
                         bmp = BitmapFactory.decodeFile(path);
                     }
+                } catch (Exception ignored) { }
+            }
+        }
+
+        // Fallback: Search for image files in the same directory, prefer files with the closest file name or album name match
+        if (path != null && bmp == null) {
+            File dir = new File(path).getParentFile();
+            if (dir != null && dir.exists() && dir.isDirectory()) {
+                var imageFiles = Arrays.stream(dir.listFiles())
+                        .filter(f -> Path.filenameIsImage(f.getName()))
+                        .map(f -> {
+                            var imgName = f.getName().toLowerCase().trim();
+                            var songFileName = this.getFilename().toLowerCase().trim();
+                            var albumName = this.getAlbum().toLowerCase().trim();
+
+                            // Try to match album names (either in metadata or as file name prefix)
+                            var commonPrefix = getCommonPrefix(imgName, songFileName);
+                            if (!albumName.isEmpty()) {
+                                commonPrefix += getCommonPrefix(imgName, albumName);
+                            }
+
+                            return Pair.create(f, commonPrefix);
+                        })
+                        .sorted(Comparator.comparing(pair -> pair.second))
+                        //.peek(pair -> Log.d("RowSong", "Got pair:" + pair.first.getName() + ", Common prefix len: " + pair.second))
+                        .collect(Collectors.toList());
+
+                if (!imageFiles.isEmpty()) {
+                    var lastImage = imageFiles.get(imageFiles.size() - 1).first;
+                    bmp = BitmapFactory.decodeFile(lastImage.getAbsolutePath());
                 }
             }
         }
-        catch(Exception e) {
-            bmp = null;
-        }
+
+        // (Implicit) fallback: return null, this will cause the SicMu album placeholder image to be shown.
 
         if (imageNum == 0) {
             cachedAlbumBmpID = albumId;
