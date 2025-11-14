@@ -56,9 +56,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.sql.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1192,6 +1195,7 @@ public class Main extends AppCompatActivity {
         list.add(getString(R.string.action_play));
         list.add(getString(R.string.action_rate_song));
         list.add(getString(R.string.show_song_details));
+        list.add(getString(R.string.action_genius_lyrics));
         //getString(R.string.add_to_playlist),
         if (row != rows.getCurrSong())
             list.add(getString(R.string.action_delete_song));
@@ -1209,6 +1213,9 @@ public class Main extends AppCompatActivity {
                         showPopupSongInfo(row);
                         break;
                     case 3:
+                        openGeniusLyrics(row);
+                        break;
+                    case 4:
                         deleteSongFile(row);
                         break;
                 }
@@ -1216,6 +1223,24 @@ public class Main extends AppCompatActivity {
         });
         AlertDialog alert = altBld.create();
         alert.show();
+    }
+
+    private void openGeniusLyrics(RowSong song) {
+        var filenameSplit = song.getFilename().split(" - ");
+
+        var artist = song.getArtist();
+        if (artist.isEmpty() && filenameSplit.length > 1) {
+            artist = filenameSplit[0];
+        }
+
+        var title = song.getTitle();
+        if (title.isEmpty() && filenameSplit.length > 1) {
+            title = filenameSplit[filenameSplit.length - 1];
+        }
+
+        var queryParameter = URLEncoder.encode(artist + " " + title);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + queryParameter));
+        startActivity(browserIntent);
     }
 
     private void showPopupSongInfo(RowSong rowSong) {

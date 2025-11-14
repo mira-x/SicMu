@@ -61,6 +61,8 @@
     <string name="action_set_rating_song">Set rating for song: %s</string>
     <string name="action_set_rating_song_failed">Abort set rating: rating currently in progress</string>
 
+    <string name="action_genius_lyrics">Search on genius.com</string>
+
     <string name="action_search">Search for keywords</string>
     <string name="search_unsuccessful">No such file has been found!</string>
 
