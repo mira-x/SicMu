@@ -139,7 +139,7 @@
     <string name="settings_unfold_subgroup">Unfold subgroups</string>
     <string name="settings_unfold_subgroup_summary">If checked: tap on group unfold every subgroup and songs.</string>
     <string name="settings_unfold_subgroup_threshold">Unfold subgroups if group</string>
-    <string name="settings_unfold_subgroup_threshold_default">18</string>
+    <string name="settings_unfold_subgroup_threshold_default" translatable="false">18</string>
     <string name="settings_unfold_subgroup_threshold_summary">has less than %d songs</string>
 
 
@@ -152,20 +152,20 @@
 
     <string name="settings_song_view_font">Song view font</string>
     <string name="settings_text_size_choosed">Choose font size</string>
-    <string name="settings_text_size_choosed_default">false</string>
+    <string name="settings_text_size_choosed_default" translatable="false">false</string>
     <string name="settings_text_size">Font size:</string>
     <string name="settings_text_size_small">small</string>
     <string name="settings_text_size_bold">bold</string>
     <string name="settings_text_size_regular">Small font size</string>
-    <string name="settings_text_size_regular_default">15</string>
+    <string name="settings_text_size_regular_default" translatable="false">15</string>
     <string name="settings_text_size_big">Bold font size</string>
-    <string name="settings_text_size_big_default">19</string>
+    <string name="settings_text_size_big_default" translatable="false">19</string>
     <string name="settings_text_size_ratio">Group/song ratio text size</string>
-    <string name="settings_text_size_ratio_default">1.1</string>
+    <string name="settings_text_size_ratio_default" translatable="false">1.1</string>
 
     <string name="settings_ratings_not_written_title">Show ratings</string>
     <string name="settings_ratings_not_written">Show ratings not written to file</string>
-    <string name="settings_ratings_are_in_sync">Every songs rating have been written</string>
+    <string name="settings_ratings_are_in_sync">All song ratings have been written</string>
 
     <string name="settings_rescan_title">Rescan</string>
     <string name="settings_rescan">Rescan media files.</string>
@@ -199,7 +199,7 @@
     <string name="settings_accelerometer">Accelerometer shake</string>
     <string name="settings_accelerometer_summary">Go to next song when shaken.</string>
     <string name="settings_accelerometer_threshold">Shake force threshold</string>
-    <string name="settings_default_shake_threshold">100</string>
+    <string name="settings_default_shake_threshold" translatable="false">100</string>
     <string name="settings_no_accelerometer">Your device has no accelerometer. Shake functionality is disabled.</string>
 
     <string name="settings_rating">Enable rating</string>
@@ -252,7 +252,7 @@
     <string name="settings_author_title">Author</string>
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Sources</string>
-    <string name="settings_source">https://gitlab.com/souch/SMP</string>
+    <string name="settings_source" translatable="false">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">License</string>
     <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Donate</string>

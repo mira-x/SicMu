@@ -112,7 +112,6 @@
     <string name="settings_unfold_subgroup_summary">Si coché : tapoter sur un dossier déplie tous les
         sous-dossiers et chansons.</string>
     <string name="settings_unfold_subgroup_threshold">Déplie les sous-dossiers si dossier</string>
-    <string name="settings_unfold_subgroup_threshold_default">18</string>
     <string name="settings_unfold_subgroup_threshold_summary">a moins de %d chansons</string>
 
 
@@ -172,7 +171,6 @@
     <string name="settings_accelerometer">Accéléromètre</string>
     <string name="settings_accelerometer_summary">Aller à la chanson suivante quand l\'appareil est secoué.</string>
     <string name="settings_accelerometer_threshold">Seuil de secouage</string>
-    <string name="settings_default_shake_threshold">100</string>
     <string name="settings_no_accelerometer">Votre appareil n\'a pas d\'accéléromètre. Cette fonctionnalité est désactivée.</string>
 
     <string name="settings_rating">Activer les notes</string>

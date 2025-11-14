@@ -48,7 +48,6 @@
 
     <string name="settings_song_view_font">Şarkı görünümü yazıtipi</string>
     <string name="settings_text_size_choosed">Punto seçin</string>
-    <string name="settings_text_size_choosed_default">yanlış</string>
     <string name="settings_text_size_regular">Normal yazıtipi</string>
     <string name="settings_text_size_big">Büyük yazıtipi</string>
     <string name="settings_text_size_ratio">Grup/şarkı punto oranı</string>
@@ -120,7 +119,6 @@
     <string name="settings_author_title">Hazırlayan</string>
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Kaynak</string>
-    <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Lisans</string>
     <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Bağış Yap</string>

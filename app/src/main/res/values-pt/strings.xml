@@ -51,7 +51,6 @@
 
     <string name="settings_song_view_font">Fonte para visão das músicas</string>
     <string name="settings_text_size_choosed">Escolha o tamanho da fonte</string>
-    <string name="settings_text_size_choosed_default">false</string>
     <string name="settings_text_size_regular">Fonte pequena</string>
     <string name="settings_text_size_big">Fonte grande</string>
     <string name="settings_text_size_ratio">Proporção entre tamnho de texto grupo/música</string>
@@ -131,7 +130,6 @@
     <string name="settings_author_title">Autor</string>
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Código fonte</string>
-    <string name="settings_source">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">Licença</string>
     <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Doar</string>

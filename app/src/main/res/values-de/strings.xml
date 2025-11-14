@@ -17,10 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <string name="permission_needed">Diese App benötigt Lese Berechtigung auf den
+    <string name="permission_needed">Diese App benötigt Leseberechtigungen für den
     Gerätespeicher, um Lieder zu finden, anzuzeigen und abspielen!
-    Bitte Zugriff auf Fotos und Medien erlauben, wenn das Betriebssystem darum bittet.</string>
-    <!-- - und Schreib- -->
+    Bitte Zugriff auf Fotos und Medien gewähren, wenn das Betriebssystem darum bittet.</string>
 
     <string name="action_settings">Einstellungen</string>
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
@@ -36,6 +35,7 @@
     <string name="action_music_mode">Musik-Modus</string>
     <string name="action_edit_mode">Eingabe-Modus</string>
 
+    <string name="popup_song_path">Dateipfad: %s</string>
     <string name="app_playing">SicMu spielt</string>
 
     <string name="explain_playback_speed">Nach oben/unten bzw. links/rechts wischen, um die Abspielgeschwindigkeit zu erhöhen/verringern.</string>
@@ -59,9 +59,9 @@
     <string name="settings_unfold_subgroup_threshold_summary">wenn sie weniger als %d Lieder enthält.</string>
 
 
+    <string name="settings_sleep_timer_delay_wrong">Dauer muss positiv sein!</string>
     <string name="settings_song_view_font">Schrift für Liedansicht</string>
     <string name="settings_text_size_choosed">Wähle Schriftgröße</string>
-    <string name="settings_text_size_choosed_default">false</string>
     <string name="settings_text_size">Schriftgröße:</string>
     <string name="settings_text_size_small">klein</string>
     <string name="settings_text_size_bold">fett</string>
@@ -69,9 +69,10 @@
     <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
     <string name="settings_text_size_regular">Größe für kleine Schrift</string>
 
+    <string name="settings_ratings_are_in_sync">Alle Bewertungen wurden gespeichert.</string>
     <string name="settings_rescan_title">Neu einlesen</string>
     <string name="settings_rescan">Mediendateien neu einlesen.</string>
-    <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
+    <string name="settings_rescan_disabled">Neu einlesen von Android gestoppt</string>
     <string name="settings_rescan_triggered">Mediendateien einlesen gestartet...</string>
     <string name="settings_rescan_storage">Lese Speicherverzeichnis %s</string>
     <string name="settings_rescan_finished">Mediendateien Einlesen beendet. Es kann ein bisschen dauern, bis die neu eingelesenen Daten erscheinen (evtl. SicmuPlayer neu starten).</string>
@@ -107,7 +108,7 @@
     <string name="settings_rating_summary">CPU immer mit voller Leistung nutzen.</string>
 
     <string name="settings_help">Hilfe</string>
-    <string name="settings_help_summary">... wenn Du nicht mehr weiterweißt...</string>
+    <string name="settings_help_summary">Eine Bedienungsanleitung</string>
 
     <string name="help_start_song">Lied abspielen</string>
     <string name="help_start_song_summary">Tippe auf ein Lied, um es abzuspielen.</string>
@@ -124,21 +125,22 @@
     <string name="help_root_folders">Wurzelverzeichnisse</string>
     <string name="help_root_folders_summary">Die Festlegung der Wurzelverzeichnisse erfolgt in den Erweiterten Einstellungen: sie werden nur verwendet, um den vorderen Teil des Verzeichnispfades zu verbergen, wenn die Lieder nach Verzeichnis geordnet angezeigt werden. Mehrere Wurzelverzeichniseinträge werden durch Semikolon getrennt angegeben.</string>
     <string name="help_background">Hintergrund</string>
-    <string name="help_background_summary">Wenn ein Lied abgespielt wird, lässt das Drücken der HOME oder Zurück-Buttons die App im Hintergrund weiterlaufen.</string>
+    <string name="help_background_summary">Wenn ein Lied abgespielt wird, lässt das Drücken der Home oder Zurück-Buttons die App im Hintergrund weiterlaufen.</string>
     <string name="help_quit">Beenden</string>
     <string name="help_quit_summary">App wird sofort beenden, wenn kein Lied mehr spielt oder der Zurück-Button gedrückt wird. Android kann die App beenden, wenn es die Systemresource benötigt.</string>
     <string name="help_stop">Beibehalten</string>
-    <string name="help_stop_summary">Die App bleibt weiter im Speicher, auch wenn gerade kein Lied abgespielt is und der HOME-Button gedrückt wird. Wenn Android kann die App beenden, wenn es die Systemresourcen benötigt.</string>
+    <string name="help_stop_summary">Die App bleibt weiter im Arbeitsspeicher, auch wenn gerade kein Lied abgespielt wird und der Home-Button gedrückt wird. Wenn Android kann die App beenden, wenn es die Systemresourcen benötigt.</string>
     <string name="help_mediabutton">Media-Buttons</string>
     <string name="help_mediabutton_summary">Media-Buttons (z.B. in Bluetooth-Kopfhörern) können die App steuern (Nächstes, Vorheriges, Pause/Abspielen).</string>
     <string name="help_mediabutton_autostart">Starten durch Media-Buttons</string>
-    <string name="help_mediabutton_autostart_summary">Wenn die App nicht läuft, wird sie durch drücken der Media-Buttons gestarted. Um das Starten der App durch Media-Buttons auszuschalten, in den Einstellungen "Starten durch Media-Buttons" abwählen.</string>
-    <string name="help_details_menu">Liedinformationen (Albumbild, ...)</string>
-    <string name="help_details_menu_summary">Auf das Sicmu\'s Icon tippen, um Informationen zum abgespielten Lied anzuzeigen (Albumbild, ...)</string>
+    <string name="help_mediabutton_autostart_summary">Wenn die App nicht läuft, wird sie durch drücken der Media-Buttons gestartet. Um das Starten der App durch Media-Buttons auszuschalten, in den Einstellungen "Starten durch Media-Buttons" abwählen.</string>
+    <string name="help_details_menu">Liedinformationen (Cover, ...)</string>
+    <string name="help_details_menu_summary">Auf das SicMu Icon tippen, um Informationen zum abgespielten Lied anzuzeigen (Cover, ...)</string>
     <string name="help_seek_menu">Sprungmenü</string>
     <string name="help_seek_menu_summary">Rechts oben in der Menüleiste tippen, um das Sprungmenü ein-/auszuklappen. Langes Tippen auf "Nächstes"/"Vorheriges" spult anhaltend vor/zurück.</string>
 
 
+    <string name="help_context_menu_summary">Drücke lange auf das Lied, um ein Menü mit zusätzlichen Optionen wie Bewerten oder Löschen anzuzeigen</string>
     <string name="settings_misc">Verschiedenes</string>
 
     <string name="settings_about">Über</string>
@@ -148,11 +150,11 @@
     <string name="settings_author_title">Autor</string>
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Quellen</string>
-    <string name="settings_source">https://github.com/souch/SMP</string>
     <string name="settings_licence_title">Lizenz</string>
     <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Spenden</string>
 
+    <string name="changelogs_header">Was ist neu:</string>
     <string name="settings_thanks">Danksagungen</string>
     <string name="settings_thanks_icons">Icons</string>
     <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (Icons von iconfinder.com)</string>
@@ -163,9 +165,74 @@
     <string name="settings_locked">Gesperrt</string>
     <string name="settings_unlocked">Entsperrt</string>
 
+    <string name="settings_show_group_total_time_summary">Die Gesamtdauer der Gruppe anstatt der Liedanzahl anzeigen</string>
     <string name="action_repeat_title">Wiederholen</string>
     <string name="action_repeat_all">Alle</string>
     <string name="action_repeat_one">Lied</string>
     <string name="action_repeat_group">Gruppe</string>
+    <string name="action_set_rating_song_failed">Bewerten fehlgeschlagen</string>
     <string name="action_genius_lyrics">Auf genius.com suchen</string>
+    <string name="ic_action_edit_folder">Ordner: %s</string>
+    <string name="ic_action_edit_song">Lied: %s</string>
+    <string name="action_rate_group">Jedes Lied bewerten (behalten)</string>
+    <string name="action_rate_group_overwrite">Jedes Lied bewerten (überschreiben)</string>
+    <string name="action_rate_song">Lied bewerten</string>
+    <string name="action_rescan">Neu einlesen</string>
+    <string name="start_rescan">Neu einlesen:</string>
+    <string name="rescanned">Neu eingelesen:</string>
+    <string name="action_delete_song">Lied löschen</string>
+    <string name="action_ask_delete_song">Möchten Sie \'%s\' wirklich löschen?</string>
+    <string name="action_delete_song_ok">Löschen erfolgreich.</string>
+    <string name="action_delete_song_nok">Löschen fehlgeschlagen!</string>
+    <string name="action_min_rating">Lieder mit Bewertung >=</string>
+    <string name="action_set_rating_folder">Ordner bewerten: %s</string>
+    <string name="action_set_rating_song">Lied bewerten: %s</string>
+    <string name="action_search">Suchen</string>
+    <string name="search_unsuccessful">Nichts gefunden!</string>
+    <string name="songs_have_been_rated">%d Lieder wurden bewertet</string>
+    <string name="current_rating_idx">Aktuelle Bewertung</string>
+    <string name="action_play">Abspielen</string>
+    <string name="action_pause">Pausieren</string>
+    <string name="action_next">Vor</string>
+    <string name="action_prev">Zurück</string>
+    <string name="show_song_details">Detailansicht</string>
+    <string name="popup_song_info_title">Lieddetails:</string>
+    <string name="popup_song_artist">Interpret: %s</string>
+    <string name="popup_song_album">Album: %s</string>
+    <string name="popup_song_title">Titel: %s</string>
+    <string name="popup_song_track">Track: %s</string>
+    <string name="popup_song_year">Jahr: %s</string>
+    <string name="popup_song_rating">Bewertung: %s</string>
+    <string name="popup_song_mime">MIME-Typ: %s</string>
+    <string name="settings_theme_title_free">Farbschema (nur für Pro-Nutzer)</string>
+    <string name="settings_theme_title">Farbschema (dunkel spart Akku)</string>
+    <string-array name="settings_theme_entries">
+        <item>Dunkel, rote Akzente</item>
+        <item>Dunkel, weiße Akzente</item>
+        <item>Weiß, schwarze Akzente</item>
+    </string-array>
+    <string name="settings_sleep_timer">Schlaftimer</string>
+    <string name="settings_sleep_timer_start">Starten</string>
+    <string name="settings_sleep_timer_stop">Beenden</string>
+    <string name="settings_sleep_timer_delay">Dauer (min)</string>
+    <string name="settings_sleep_timer_remaining">Wiedergabe stoppt um %s Uhr</string>
+    <string name="settings_ratings_not_written_title">Bewertungen anzeigen</string>
+    <string name="settings_ratings_not_written">Ungespeicherte Bewertungen anzeigen</string>
+    <string name="help_donate">Spenden</string>
+    <string name="help_context_menu">Kontextmenü</string>
+    <string name="donate_summary">Spenden sind immer willkommen!</string>
+    <string name="buy_pro_summary">Kaufe die Pro-Version um die Entwicklung zu unterstützen!</string>
+    <string name="close">Schließen</string>
+    <string name="changelogs_title">Änderungen in dieser Version</string>
+    <string name="settings_show_filename">Dateiname anzeigen</string>
+    <string name="settings_show_filename_summary">Dateiname anstatt Liedtitel anzeigen</string>
+    <string name="settings_show_remaining_time">Übrige Zeit anzeigen</string>
+    <string name="settings_show_remaining_time_summary">Zeigt die übrige Zeit anstatt der Gesamtzeit an</string>
+    <string name="settings_hide_navigation_bar">Navigationsleiste schließen</string>
+    <string name="settings_hide_navigation_bar_summary">Die Navigationsleiste automatisch schließen</string>
+    <string name="settings_show_group_total_time">Gesamtdauer anzeigen</string>
+    <string name="action_repeat_not">Am Ende des Ordners aufhören</string>
+    <string name="action_stop_at_end_of_track">Nach dem Lied aufhören</string>
+    <string name="enabled">aktiviert</string>
+    <string name="disabled">deaktiviert</string>
 </resources>
