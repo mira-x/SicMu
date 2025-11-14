@@ -1239,6 +1239,10 @@ public class Main extends AppCompatActivity {
         }
 
         var queryParameter = URLEncoder.encode(artist + " " + title);
+        if (title.isEmpty() && artist.isEmpty()) {
+            queryParameter = URLEncoder.encode(song.getFilename());
+        }
+
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + queryParameter));
         startActivity(browserIntent);
     }
