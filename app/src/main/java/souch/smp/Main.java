@@ -1226,24 +1226,17 @@ public class Main extends AppCompatActivity {
     }
 
     private void openGeniusLyrics(RowSong song) {
-        var filenameSplit = song.getFilename().split(" - ");
-
-        var artist = song.getArtist();
-        if (artist.isEmpty() && filenameSplit.length > 1) {
-            artist = filenameSplit[0];
+        var filename = song.getFilename();
+        // remove extension
+        if (filename.contains(".")) {
+            filename = filename.substring(0, filename.lastIndexOf('.'));
         }
+        // Remove dashes and hierarchy
+        filename = filename.replaceAll(" - ", " ");
+        // Remove remixes, like "Simply Red - Something got me started (Hourleys House Remix)"
+        filename = filename.replaceAll("\\(([^\\)]+)\\)", "");
 
-        var title = song.getTitle();
-        if (title.isEmpty() && filenameSplit.length > 1) {
-            title = filenameSplit[filenameSplit.length - 1];
-        }
-
-        var queryParameter = URLEncoder.encode(artist + " " + title);
-        if (title.isEmpty() && artist.isEmpty()) {
-            queryParameter = URLEncoder.encode(song.getFilename());
-        }
-
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + queryParameter));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename)));
         startActivity(browserIntent);
     }
 
