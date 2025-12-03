@@ -1648,21 +1648,15 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
         long newPosMs = musicSrv.getCurrentPositionMs();
-        switch (view.getId()) {
-            case R.id.m5_button:
-                newPosMs -= 5*1000;
-                break;
-            case R.id.p5_button:
-                newPosMs += 5*1000;
-                break;
-            case R.id.m20_button:
-            case R.id.m20_text:
-                newPosMs -= 20*1000;
-                break;
-            case R.id.p20_button:
-            case R.id.p20_text:
-                newPosMs += 20*1000;
-                break;
+        var id = view.getId();
+        if (id == R.id.m5_button) {
+            newPosMs -= 5*1000;
+        } else if (id == R.id.p5_button) {
+            newPosMs += 5*1000;
+        } else if (id == R.id.m20_button || id == R.id.m20_text) {
+            newPosMs -= 20*1000;
+        } else if (id == R.id.p20_button || id == R.id.p20_text) {
+            newPosMs += 20*1000;
         }
 
         newPosMs = newPosMs < 0 ? 0 : newPosMs;
@@ -1798,23 +1792,17 @@ public class Main extends AppCompatActivity {
 
         private long getSeekOffsetSec(View view, long duration) {
             long offsetMs = 0;
-            switch (view.getId()) {
-                case R.id.m5_button:
-                case R.id.p5_button:
-                    offsetMs = 5000;
-                    break;
-                case R.id.m20_button:
-                case R.id.m20_text:
-                case R.id.p20_button:
-                case R.id.p20_text:
-                    if (duration < 5000) {
-                        // seek at 10x speed for the first 5 seconds
-                        offsetMs = duration * 10;
-                    } else {
-                        // seek at 40x after that
-                        offsetMs = 50000 + (duration - 5000) * 40;
-                    }
-                    break;
+            var id = view.getId();
+            if (id == R.id.m5_button || id == R.id.p5_button) {
+                offsetMs = 5000;
+            } else if (id == R.id.m20_button || id == R.id.m20_text || id == R.id.p20_button || id == R.id.p20_text) {
+                if (duration < 5000) {
+                    // seek at 10x speed for the first 5 seconds
+                    offsetMs = duration * 10;
+                } else {
+                    // seek at 40x after that
+                    offsetMs = 50000 + (duration - 5000) * 40;
+                }
             }
             return offsetMs;
         }
