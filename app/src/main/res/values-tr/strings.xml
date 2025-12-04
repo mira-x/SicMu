@@ -66,9 +66,6 @@
     <string name="settings_songpos_title">Kaldığım yeri hatırla</string>
     <string name="settings_songpos">Şarkı tekrar çalındığında son kaldığı yerden devam edecek.</string>
 
-    <string name="settings_shuffle_title">Rasgele</string>
-    <string name="settings_shuffle">Sonraki şarkı rasgele seçilir</string>
-
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Çalınan şarkıların ayrıntılarını Last.FM veya Libre.FM\'e yolla (Scrobble Droid veya Simple Last.fm Scrobbler kurulmuş olmalı)</string>
 

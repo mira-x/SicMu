@@ -73,6 +73,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static android.widget.Toast.LENGTH_LONG;
 
 public class Main extends AppCompatActivity {
     private Rows rows;
@@ -314,7 +315,7 @@ public class Main extends AppCompatActivity {
             }
 
             public void performClick() {
-                Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, LENGTH_LONG).show();
             }
         });
     }
@@ -1027,12 +1028,12 @@ public class Main extends AppCompatActivity {
                         songAdt.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.action_delete_song_ok, songTitle),
-                                Toast.LENGTH_LONG).show();
+                                LENGTH_LONG).show();
                     }
                     else {
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.action_delete_song_nok, songTitle),
-                                Toast.LENGTH_LONG).show();
+                                LENGTH_LONG).show();
                     }
                     })
                 .setNegativeButton(android.R.string.no, null).show();
@@ -1185,7 +1186,7 @@ public class Main extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), errorMsg, LENGTH_LONG).show();
                             }
                         });
                     });
@@ -1287,7 +1288,7 @@ public class Main extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
         Path.scanMediaFolder(getApplicationContext(), rowGroup.getPath(), (String path, Uri uri) ->
             runOnUiThread(() -> {
-                    Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, LENGTH_LONG).show();
                     if (rows != null)
                         rows.reinit();
                     unfoldAndscrollToCurrSong();
@@ -1395,31 +1396,6 @@ public class Main extends AppCompatActivity {
         alert.show();
     }
 
-    private void openShuffleMenu() {
-        if (musicSrv == null)
-            return;
-
-        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
-        altBld.setIcon(getShuffleResId());
-        altBld.setTitle(getString(R.string.settings_shuffle_title));
-        final CharSequence[] items = {
-            getString(R.string.settings_shuffle_sequential),
-            getString(R.string.settings_shuffle_random),
-            getString(R.string.settings_shuffle_radio),
-        };
-        altBld.setSingleChoiceItems(items, params.getShuffle().num, (DialogInterface dialog, int item) -> {
-                params.setShuffle(ShuffleMode.valueOf(item));
-                dialog.dismiss(); // dismiss the alertbox after chose option
-                setShuffleButton();
-//              Toast.makeText(getApplicationContext(),
-//                   getString(R.string.settings_shuffle_title) + " " + items[item],
-//                   Toast.LENGTH_SHORT).show();
-            }
-        );
-        AlertDialog alert = altBld.create();
-        alert.show();
-    }
-
     private void openRatingMenu() {
         if (musicSrv == null)
             return;
@@ -1476,7 +1452,7 @@ public class Main extends AppCompatActivity {
                 Row row = rows.getNextSongByKeyword(query);
                 if(row == null) {
                     // Nothing found!
-                    Toast.makeText(ctx, R.string.search_unsuccessful, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, R.string.search_unsuccessful, LENGTH_LONG).show();
                 } else {
                     // clickOnRow(...) only works using folded indexes, so we have
                     // to unfold the parent groups first, and then play the song itself
@@ -1898,8 +1874,11 @@ public class Main extends AppCompatActivity {
         startCloseMoreButtonsTimer();
     }
 
-    public void openShuffle(View view) {
-        openShuffleMenu();
+    public void changeShuffle(View view) {
+        var mode = params.getShuffle().next();
+        params.setShuffle(mode);
+        setShuffleButton();
+        mode.showExplainToast(view);
         startCloseMoreButtonsTimer();
     }
 

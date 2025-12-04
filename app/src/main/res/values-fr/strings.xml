@@ -155,9 +155,6 @@
     <string name="settings_songpos_title">Conserver la position dans la chanson</string>
     <string name="settings_songpos">Au démarrage, la chanson reprendra où elle s\'était arrêtée précédemment.</string>
 
-    <string name="settings_shuffle_title">Lecture aléatoire</string>
-    <string name="settings_shuffle">La prochaine chanson est choisie aléatoirement</string>
-
     <string name="settings_scrobble_title">Scrobbler</string>
     <string name="settings_scrobble">Envoyer les détails des chansons jouées vers Last.FM ou Libre.FM
         (nécessite d\'avoir installé Scrobble Droid ou Last.fm Scrobbler sur l\'appareil)</string>

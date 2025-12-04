@@ -87,9 +87,7 @@
     <string name="settings_songpos_title">Speichern der Abspielposition</string>
     <string name="settings_songpos">Lied beim nächsten Mal von gespeicherter Position abspielen.</string>
 
-    <string name="settings_shuffle_title">Zufälliges Abspielen</string>
-    <string name="settings_shuffle">Nächstes abgespieltes Lied zufällig auswählen</string>
-
+    <string name="settings_shuffle_explainer_radio">Shuffle + Lieder zufällig beginnen</string>
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Informationen zum abgespielten Lied an Last.FM oder Libre.FM schicken (Scrobble Droid oder Simple Last.fm Scrobbler müssen installiert sein)</string>
 
@@ -235,4 +233,6 @@
     <string name="action_stop_at_end_of_track">Nach dem Lied aufhören</string>
     <string name="enabled">aktiviert</string>
     <string name="disabled">deaktiviert</string>
+    <string name="settings_shuffle_explainer_sequential">Shuffle aus</string>
+    <string name="settings_shuffle_explainer_random">Shuffle an</string>
 </resources>

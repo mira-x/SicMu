@@ -72,9 +72,6 @@
     <string name="settings_songpos_title">Gravar posição na música</string>
     <string name="settings_songpos">Ao iniciar a música começará da posição em que estava tocando anteriormente.</string>
 
-    <string name="settings_shuffle_title">Embaralhar</string>
-    <string name="settings_shuffle">A próxima música é escolhida aleatoriamente</string>
-
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Mandar detalhes das faixas tocadas para Last.FM ou Libre.FM (requer Scrobble Droid ou Simple Last.fm Scrobbler instalado)</string>
 
