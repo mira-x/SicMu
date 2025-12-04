@@ -35,7 +35,7 @@ public enum PrefKeys {
     TEXT_SIZE_CHOOSED,
     MEDIA_BUTTON_START_APP,
     VIBRATE,
-    SHUFFLE,
+    SHUFFLE_V2,
     SCROBBLE,
     SONG_POS,
     SAVE_SONG_POS,

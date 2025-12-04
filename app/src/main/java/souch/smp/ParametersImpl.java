@@ -160,12 +160,12 @@ public class ParametersImpl implements Parameters {
         return getPref().getBoolean(PrefKeys.VIBRATE.name(), true);
     }
 
-    public boolean getShuffle() {
-        return getPref().getBoolean(PrefKeys.SHUFFLE.name(), false);
+    public ShuffleMode getShuffle() {
+        return ShuffleMode.valueOf(getPref().getInt(PrefKeys.SHUFFLE_V2.name(), ShuffleMode.SEQUENTIAL.num));
     }
 
-    public void setShuffle(boolean shuffle) {
-        getEditor().putBoolean(PrefKeys.SHUFFLE.name(), shuffle).commit();
+    public void setShuffle(ShuffleMode shuffle) {
+        getEditor().putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).commit();
     }
 
     public boolean getScrobble() {

@@ -30,6 +30,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -44,7 +46,7 @@ import androidx.annotation.NonNull;
 public class Rows {
     Context context;
 
-    private Random random;
+    private Random random = new Random(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
     private ArrayList<Integer> shuffleSavedPos;
 
     private ContentResolver musicResolver;
@@ -58,8 +60,8 @@ public class Rows {
     // todo: see if another Collection than ArrayList would give better perf and code simplicity
     private ArrayList<Row> rows;
     private ArrayList<Row> rowsUnfolded;
-    // current selected position within rowsUnfolded
-    // never assign this directly, instead use setCurrPos
+    /// Current selected position within rowsUnfolded.
+    /// Never assign this directly, instead use setCurrPos
     private int currPos;
 
     private Database database;
@@ -250,6 +252,17 @@ public class Rows {
     public void moveToRandomSong() {
         if (rowsUnfolded.size() <= 0)
             return;
+
+        if(false) {
+            // A more stupid, but simpler Shuffle function.
+            // Might delete later. Or the one below. Disabled for now.
+            int _firstSongPos = getFirstSongPosInGroup(currPos);
+            int _lastSongPos = getLastSongPosInGroup(currPos);
+            int len = _lastSongPos - _firstSongPos;
+            int pos = _firstSongPos + Math.abs(random.nextInt() % len);
+            setCurrPos(pos);
+            return;
+        }
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
             int firstSongPos = getFirstSongPosInGroup(currPos);
@@ -699,7 +712,7 @@ public class Rows {
         final int autoUnfoldThreshold = params.getUnfoldSubGroupThreshold();
         if (params.getUnfoldSubGroup() ||
                 group.getLevel() != 0 ||
-                group.nbRowSong() < autoUnfoldThreshold ||
+                group.getSongCount() < autoUnfoldThreshold ||
                 hasOneSubGroup(group, pos)) {
             // unfold everything
             for (int i = 1;
@@ -1022,9 +1035,9 @@ public class Rows {
                     currPos = rowsUnfolded.size();
 
                 rowsUnfolded.add(rowSong);
-                prevArtistGroup.incNbRowSong();
+                prevArtistGroup.increaseSongCount();
                 prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
-                prevAlbumGroup.incNbRowSong();
+                prevAlbumGroup.increaseSongCount();
                 prevAlbumGroup.incTotalDuration(rowSong.getDurationMs());
             }
             while (musicCursor.moveToNext());
@@ -1102,9 +1115,9 @@ public class Rows {
             rowSong.setGenuinePos(idx);
             rowSong.setParent(prevArtistGroup);
 
-            prevFolderGroup.incNbRowSong();
+            prevFolderGroup.increaseSongCount();
             prevFolderGroup.incTotalDuration(rowSong.getDurationMs());
-            prevArtistGroup.incNbRowSong();
+            prevArtistGroup.increaseSongCount();
             prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
         }
         setGroupSelectedState(currPos, true);
@@ -1202,7 +1215,7 @@ public class Rows {
             RowGroup groupIdx = parentGroup;
             while (groupIdx != null) {
                 // update group
-                groupIdx.incNbRowSong();
+                groupIdx.increaseSongCount();
                 groupIdx.incTotalDuration(rowSong.getDurationMs());
 
                 prevGroups.add(0, groupIdx);

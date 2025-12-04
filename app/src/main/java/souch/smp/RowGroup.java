@@ -79,9 +79,9 @@ public class RowGroup extends Row {
     public void setSelected(boolean selected) { this.selected = selected; }
     public boolean isSelected() { return selected; }
 
-    // get number of songs (excluding RowGroup) inside this group
-    public int nbRowSong() { return nbRowSong; }
-    public void incNbRowSong() { nbRowSong++; }
+    /// get number of songs (excluding RowGroup) inside this group
+    public int getSongCount() { return nbRowSong; }
+    public void increaseSongCount() { nbRowSong++; }
 
     public void incTotalDuration(long totalDurationMs) { this.totalDurationMs += totalDurationMs; }
     public long getTotalDuration() { return totalDurationMs; }

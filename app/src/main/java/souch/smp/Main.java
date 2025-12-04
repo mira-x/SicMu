@@ -57,11 +57,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.sql.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -500,11 +498,21 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private void longClickOnRow(int position) {
+    private void startGroupPlayback(@NonNull RowGroup row, int position) {
         vibrate();
 
         coverArtNum = 0;
-        rows.selectNearestSong(position);
+        var offset = 0;
+        var mode = params.getShuffle();
+        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO) {
+            offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
+        }
+
+        if (row.isFolded()) {
+            rows.invertFold(position);
+        }
+        rows.selectNearestSong(position + offset);
+
         playAlreadySelectedSong();
         updateRatings();
     }
@@ -1114,7 +1122,7 @@ public class Main extends AppCompatActivity {
             if (musicSrv != null) {
                 switch (item) {
                     case 0:
-                        longClickOnRow(position);
+                        startGroupPlayback(row, position);
                         break;
                     case 1:
                         openRateRowMenu(row.getName(), position, false);
@@ -1395,10 +1403,12 @@ public class Main extends AppCompatActivity {
         altBld.setIcon(getShuffleResId());
         altBld.setTitle(getString(R.string.settings_shuffle_title));
         final CharSequence[] items = {
-                getString(R.string.disabled), getString(R.string.enabled)
+            getString(R.string.settings_shuffle_sequential),
+            getString(R.string.settings_shuffle_random),
+            getString(R.string.settings_shuffle_radio),
         };
-        altBld.setSingleChoiceItems(items, params.getShuffle() ? 1 : 0, (DialogInterface dialog, int item) -> {
-                params.setShuffle(item == 1);
+        altBld.setSingleChoiceItems(items, params.getShuffle().num, (DialogInterface dialog, int item) -> {
+                params.setShuffle(ShuffleMode.valueOf(item));
                 dialog.dismiss(); // dismiss the alertbox after chose option
                 setShuffleButton();
 //              Toast.makeText(getApplicationContext(),
@@ -1539,10 +1549,15 @@ public class Main extends AppCompatActivity {
     }
 
     private int getShuffleResId() {
-        if (params.getShuffle())
-            return R.drawable.ic_menu_shuffle;
-        else
-            return R.drawable.ic_menu_no_shuffle;
+        switch(params.getShuffle()) {
+            case SEQUENTIAL:
+                return R.drawable.ic_menu_no_shuffle;
+            case RANDOM:
+                return R.drawable.ic_menu_shuffle;
+            case RADIO:
+                return R.drawable.ic_menu_shuffle_radio;
+        }
+        throw new IllegalStateException("Shuffle mode is invalid");
     }
 
     private void setRepeatButton() {

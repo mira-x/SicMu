@@ -108,8 +108,8 @@ public class ParametersStub implements Parameters {
 
     public boolean getVibrate() { return true; }
 
-    public void setShuffle(boolean shuffle) {};
-    public boolean getShuffle() { return false; }
+    public void setShuffle(ShuffleMode shuffle) {};
+    public ShuffleMode getShuffle() { return ShuffleMode.SEQUENTIAL; }
 
     public boolean getScrobble() { return false; }
 

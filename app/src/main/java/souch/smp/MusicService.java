@@ -559,6 +559,7 @@ public class MusicService extends Service implements
     }
 
     public void playSong() {
+        var oldState = state.getState();
         RowSong rowSong = rows.getCurrSong();
         if (rowSong == null)
             return;
@@ -581,8 +582,26 @@ public class MusicService extends Service implements
             return;
         }
         state.setState(PlayerState.Initialized);
-        getPlayer().prepareAsync();
-        state.setState(PlayerState.Preparing);
+
+        var t = new Thread(() -> {
+            state.setState(PlayerState.Preparing);
+            try {
+                getPlayer().prepare();
+            } catch (Exception e) {
+                state.setState(PlayerState.Error);
+                Log.e("MusicService", "Preparing player: " + e.toString());
+                return;
+            }
+
+            // If a song is started for the first time, i.e. this is not the automatic follow up
+            // to a previously played song, and we are in radio FM mode, we want to start playback at a
+            // random point in time.
+            if (params.getShuffle() == ShuffleMode.RADIO && oldState != PlayerState.PlaybackCompleted) {
+                var ms = (double) (getDurationMs()) * Math.random();
+                seekTo((long)ms);
+            }
+        });
+        t.start();
 
         updateMediaPlaybackState();
         updateMediaSessionMetadata();
@@ -785,7 +804,8 @@ public class MusicService extends Service implements
     }
 
     public void playPrev() {
-        if (params.getShuffle())
+        var mode = params.getShuffle();
+        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevSong();
@@ -794,7 +814,8 @@ public class MusicService extends Service implements
     }
 
     public void playNext() {
-        if (params.getShuffle())
+        var mode = params.getShuffle();
+        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
             rows.moveToRandomSong();
         else
             rows.moveToNextSong();
@@ -803,7 +824,8 @@ public class MusicService extends Service implements
     }
 
     public void playPrevGroup() {
-        if (params.getShuffle())
+        var mode = params.getShuffle();
+        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevGroup();
@@ -812,7 +834,8 @@ public class MusicService extends Service implements
     }
 
     public void playNextGroup() {
-        if (params.getShuffle())
+        var mode = params.getShuffle();
+        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
             rows.moveToRandomSong();
         else
             rows.moveToNextGroup();

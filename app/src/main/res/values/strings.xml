@@ -184,8 +184,10 @@
     <string name="settings_songpos_title">Save song position</string>
     <string name="settings_songpos">At starting up song will start from its last playing position.</string>
 
-    <string name="settings_shuffle_title">Shuffle</string>
-    <string name="settings_shuffle">Next song is chosen randomly</string>
+    <string name="settings_shuffle_title">Playback Mode</string>
+    <string name="settings_shuffle_sequential">Sequential</string>
+    <string name="settings_shuffle_random">Shuffle</string>
+    <string name="settings_shuffle_radio">Radio FM</string>
 
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Send details of played tracks to Last.FM or Libre.FM (requires that Scrobble Droid or Simple Last.fm Scrobbler installed on the device)</string>

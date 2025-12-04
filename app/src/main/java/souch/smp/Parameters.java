@@ -68,8 +68,8 @@ public interface Parameters {
 
     boolean getVibrate();
 
-    void setShuffle(boolean shuffle);
-    boolean getShuffle();
+    void setShuffle(ShuffleMode shuffle);
+    ShuffleMode getShuffle();
 
     boolean getScrobble();
 
