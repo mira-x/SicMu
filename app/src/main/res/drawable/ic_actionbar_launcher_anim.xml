@@ -18,7 +18,7 @@
 -->
 
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/selected" android:oneshot="false" >
+    android:oneshot="false" >
 
     <item
         android:drawable="@drawable/ic_actionbar_launcher_0"

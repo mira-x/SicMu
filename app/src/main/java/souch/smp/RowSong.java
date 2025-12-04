@@ -40,30 +40,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.database.Cursor;
 
+import androidx.annotation.NonNull;
+
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class RowSong extends Row {
-    private long id;
-    private long albumId;
-    private String title;
-    private String artist;
-    private String album;
-    private long durationMs;
-    private int track;
-    private int year;
-    private String mime;
+    private final long id;
+    private final long albumId;
+    private final String title;
+    private final String artist;
+    private final String album;
+    private final long durationMs;
+    private final int track;
+    private final int year;
+    private final String mime;
     // RATING_NOT_INITIALIZED means we did not tried to read id3 rating
     // actually 0 means not initialized too (we handle reading 0, but it is not very useful, cause
     // we cannot set a rating of 0 star in the UI)
@@ -72,14 +71,14 @@ public class RowSong extends Row {
     public static final int RATING_UNKNOWN = -1;
     private int rating;
     // full filename
-    private String path;
-    private String filename;
+    private final String path;
+    private final String filename;
     // folder of the path (i.e. last folder containing the file's song)
     private String folder;
 
-    private SongDAO songDAO;
+    private final SongDAO songDAO;
 
-    private Parameters params;
+    private final Parameters params;
 
     protected static int textSize = 15;
 
@@ -112,9 +111,7 @@ public class RowSong extends Row {
         this.albumId = albumId;
         this.year = year;
         this.mime = mime;
-        if(path != null) {
-            folder = Path.getFolder(path);
-        }
+        folder = Path.getFolder(path);
         this.params = params;
     }
 
@@ -147,21 +144,17 @@ public class RowSong extends Row {
             holder.ratingStar.setVisibility(View.VISIBLE);
             holder.ratingStar.setImageResource(getDrawableStarFromRating());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
-                // removeRule is not in sdk < 17
-                params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                holder.duration.setLayoutParams(params);
-            }
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+            // removeRule is not in sdk < 17
+            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.duration.setLayoutParams(params);
         }
         else {
             holder.ratingStar.setVisibility(View.INVISIBLE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                holder.duration.setLayoutParams(params);
-            }
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.duration.setLayoutParams(params);
         }
         setBackgroundColor(holder, backgroundSongColor);
     }
@@ -205,6 +198,7 @@ public class RowSong extends Row {
         img.setTag(currIcon);
     }
 
+    @NonNull
     public String toString() {
         return "title: " + title + " album: " + album + " artist: " + artist +
                 " pos: " + genuinePos + " level: " + level + " ID: " + id +
@@ -252,11 +246,11 @@ public class RowSong extends Row {
         return rating;
     }
 
-    public boolean isRatingEnough() {
+    public boolean isRatingInsufficient() {
         final boolean uninitialized = rating == RATING_NOT_INITIALIZED || rating == RATING_UNKNOWN;
         final int minRating = params.getMinRating();
-        return (uninitialized && params.getUninitializedDefaultRating() >= minRating) ||
-                rating >= minRating;
+        return (!uninitialized || params.getUninitializedDefaultRating() < minRating) &&
+                rating < minRating;
     }
 
     public interface LoadRatingCallbackInterface {
@@ -274,9 +268,7 @@ public class RowSong extends Row {
                 @Override
                 public void run() {
                     Log.d("RowSong", "loadRating");
-                    boolean someRatingChanged = false;
-                    if (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0)
-                        someRatingChanged = true;
+                    boolean someRatingChanged = (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0);
                     ratingCallbackInterface.ratingCallback(rating, someRatingChanged);
                 }
             };
@@ -304,7 +296,7 @@ public class RowSong extends Row {
             }
         } catch (Exception e) {
             Log.w("RowSong", "Unable to update/insert songORM for path=" + path
-                    + " e=" + e.toString());
+                    + " e=" + e);
         }
     }
 
@@ -313,7 +305,7 @@ public class RowSong extends Row {
         // get rating is computed on demand cause it is slow
         if (rating == RATING_NOT_INITIALIZED) {
             // try to load rating from cache
-            long fileLastModifiedMs = 0;
+            long fileLastModifiedMs;
             SongORM songORM = songDAO.findByPath(path);
             if (songORM != null) {
                 fileLastModifiedMs = (new File(songORM.path)).lastModified();
@@ -379,7 +371,7 @@ public class RowSong extends Row {
 
     // this func must not be called from main thread !
     // return true if set rating succeed
-    public synchronized boolean setRating(int rating, Context context) {
+    public synchronized boolean setRating(int rating) {
         this.rating = rating;
         boolean ok = WriteRatingToFile(path, rating);
         updateOrInsertSongOrm(songDAO.findByPath(path), ok);
@@ -415,7 +407,7 @@ public class RowSong extends Row {
         001-031 = 1 star when READ with Windows Explorer, writes 1
     */
     // convert table 0-5 -> 0-255
-    public static final int id3ConventionRating[] = {0, 1, 64, 128, 196, 255};
+    public static final int[] id3ConventionRating = {0, 1, 64, 128, 196, 255};
 
     /* rating can be from 0 to 5
      * ex: 3 return "128"
@@ -491,11 +483,6 @@ public class RowSong extends Row {
         return getAlbumBmp(context, 0);
     }
 
-    /** if imageNum > 0: try to get Nth bitmap from same folder
-     * @return null if bitmap not found
-     * ! sync method: should avoid to call it from UI thread
-     */
-
     private static int getCommonPrefix(String a, String b) {
         var commonPrefix = 0;
         while (true) {
@@ -511,6 +498,10 @@ public class RowSong extends Row {
         return commonPrefix;
     }
 
+    /** if imageNum > 0: try to get Nth bitmap from same folder
+     * @return null if bitmap not found
+     * ! sync method: should avoid to call it from UI thread
+     */
     public synchronized Bitmap getAlbumBmp(Context context, int imageNum) {
         if (imageNum == 0 && cachedAlbumBmpID == albumId) {
             Log.d("RowSong", "getAlbumBmp cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
@@ -540,8 +531,7 @@ public class RowSong extends Row {
 
             // try with MediaMetadataRetriever
             if (bmp == null) {
-                try {
-                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                try (MediaMetadataRetriever mmr = new MediaMetadataRetriever()){
                     mmr.setDataSource(path);
                     byte[] img_byte = mmr.getEmbeddedPicture();
                     if (img_byte != null)
@@ -552,12 +542,11 @@ public class RowSong extends Row {
 
             // try with media store ?
             if (bmp == null) {
-                try {
-                    Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                            new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                            MediaStore.Audio.Albums._ID + "=?",
-                            new String[]{String.valueOf(albumId)},
-                            null);
+                try (Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                        new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                        MediaStore.Audio.Albums._ID + "=?",
+                        new String[]{String.valueOf(albumId)},
+                        null)) {
                     if (cursor != null && cursor.moveToFirst()) {
                         int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
                         String path = cursor.getString(Math.max(colIdx, 0));
@@ -570,7 +559,8 @@ public class RowSong extends Row {
         // Fallback: Search for image files in the same directory, prefer files with the closest file name or album name match
         if (path != null && bmp == null) {
             File dir = new File(path).getParentFile();
-            if (dir != null && dir.exists() && dir.isDirectory()) {
+            if (dir != null && dir.exists() && dir.isDirectory() && dir.listFiles() != null) {
+                //noinspection DataFlowIssue (Android Studio might warn that listFiles() may be null, but it can't be)
                 var imageFiles = Arrays.stream(dir.listFiles())
                         .filter(f -> Path.filenameIsImage(f.getName()))
                         .map(f -> {

@@ -17,25 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <string name="action_settings">Confgurações</string>
-    <string name="advanced_settings_title">Configurações avançadas</string>
-    <string name="action_shake_disabled">Ação de sacudir desligada</string>
-    <string name="action_shake_enabled">Ação de sacudir ligada</string>
 
     <string name="action_sort_folder">pasta</string>
     <string name="action_sort_artist">artista</string>
     <string name="action_sort_tree">árvore</string>
-    <string name="action_sort_by">Ordem: por</string>
     <string name="action_sort">Ordenar músics por:</string>
-
-    <string name="app_playing">SicMu tocando</string>
 
     <string name="focus_error">Não consegui foco do áudio! Reinicie o app!</string>
 
     <string name="settings_title">Configurações</string>
-
-    <string name="action_fold">Colapsar (fechar)</string>
-    <string name="action_unfold">Abrir</string>
 
     <string name="settings_song_view">Visão das músicas</string>
     <string name="settings_fold_title">Estado das pastas ao iniciar</string>
@@ -50,15 +40,13 @@
 
 
     <string name="settings_song_view_font">Fonte para visão das músicas</string>
-    <string name="settings_text_size_choosed">Escolha o tamanho da fonte</string>
     <string name="settings_text_size_regular">Fonte pequena</string>
     <string name="settings_text_size_big">Fonte grande</string>
     <string name="settings_text_size_ratio">Proporção entre tamnho de texto grupo/música</string>
 
     <string name="settings_rescan_title">Procurar músicas</string>
     <string name="settings_rescan">Iniciar busca por arquivos de mídia no dispositivo.</string>
-    <string name="settings_rescan_disabled">Broadcast de busca desabilitado por Android KitKat.</string>
-    <string name="settings_rescan_triggered">Buscador de Mídia Iniciado...</string>
+    <string name="settings_rescan_triggered">Buscador de Mídia Iniciado…</string>
     <string name="settings_rescan_storage">Procurando em armazenamento: %s</string>
     <string name="settings_rescan_finished">Busca de mídia terminada. Pode levar algum tempo até que os novos arquivos apareçam.</string>
 
@@ -100,8 +88,6 @@
     <string name="help_unfold_group_summary">Toque em um grupo para colapsar (fechar) ou abrir.</string>
     <string name="help_scroll">Rolar até a música atual</string>
     <string name="help_scroll_summary">Pressione o botão à direita do botão \'próximo\' para rolar a lista até a música atual. Um toque longo fecha tudo exceto a música atual.</string>
-    <string name="help_lock">Desabilitar travamento da tela</string>
-    <string name="help_lock_summary">Abra o botão com ícone de cadeado para impedir que o Android trave a tela (só funciona quando o app está com sua tela aberta; não funciona em aguns disositivos).</string>
     <string name="help_root_folders">Pastas Raiz</string>
     <string name="help_root_folders_summary">As pastas raíz podem ser modificadas nas configuações avançadas: só são usadas para esconder a primeira parte das pastas quando as músicas são ordenadas por pasta (não interfere nos caminhos de busca de músicas). Para incluir várias pastas raiz, separe os caminhos com ponto-e-ivírgula.</string>
     <string name="help_background">Música em background</string>
@@ -143,9 +129,6 @@
     <string name="action_repeat_all">Tudo</string>
     <string name="action_repeat_one">Faixa</string>
     <string name="action_repeat_group">Grupo</string>
-
-    <string name="action_music_mode">Modo de música</string>
-    <string name="action_edit_mode">Modo de edição</string>
 
 
 </resources>

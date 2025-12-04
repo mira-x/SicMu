@@ -2,7 +2,6 @@
 <resources>
     <color name="Blood">#f30000</color>
     <color name="DarkBlood">#c00000</color>
-    <color name="Blue">#0022dd</color>
     <color name="White">#ffffffff</color>
     <color name="Black">#ff000000</color>
     <color name="LightBlack">#ff353535</color>

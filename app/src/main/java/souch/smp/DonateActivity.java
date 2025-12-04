@@ -29,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DonateActivity extends AppCompatActivity {
     private LinearLayout donateLayout;
-    private Button closeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class DonateActivity extends AppCompatActivity {
             //findViewById(R.id.donate_button).setVisibility(View.GONE);
         }
 
-        closeButton = findViewById(R.id.close_button);
+        Button closeButton = findViewById(R.id.close_button);
         closeButton.setOnClickListener(view -> {
             finish();
         });

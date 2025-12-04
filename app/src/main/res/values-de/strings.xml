@@ -21,31 +21,18 @@
     Gerätespeicher, um Lieder zu finden, anzuzeigen und abspielen!
     Bitte Zugriff auf Fotos und Medien gewähren, wenn das Betriebssystem darum bittet.</string>
 
-    <string name="action_settings">Einstellungen</string>
-    <string name="advanced_settings_title">Erweiterte Einstellungen</string>
-    <string name="action_shake_disabled">Schütteln zum Anhalten</string>
-    <string name="action_shake_enabled">Schütteln zum Abspielen</string>
-
     <string name="action_sort_folder">Ordner</string>
     <string name="action_sort_artist">Künstler</string>
     <string name="action_sort_tree">Verzeichnisbaum</string>
-    <string name="action_sort_by">Sortieren nach:</string>
     <string name="action_sort">Lieder sortieren nach:</string>
 
-    <string name="action_music_mode">Musik-Modus</string>
-    <string name="action_edit_mode">Eingabe-Modus</string>
-
     <string name="popup_song_path">Dateipfad: %s</string>
-    <string name="app_playing">SicMu spielt</string>
 
     <string name="explain_playback_speed">Nach oben/unten bzw. links/rechts wischen, um die Abspielgeschwindigkeit zu erhöhen/verringern.</string>
 
     <string name="focus_error">Zugriff auf Audio nicht möglich! Bitte App neustarten.</string>
 
     <string name="settings_title">Einstellungen</string>
-
-    <string name="action_fold">Einklappen</string>
-    <string name="action_unfold">Ausklappen</string>
 
     <string name="settings_song_view">Liedansicht</string>
     <string name="settings_fold_title">Ein/Ausklappen Ausgangszustand</string>
@@ -61,10 +48,6 @@
 
     <string name="settings_sleep_timer_delay_wrong">Dauer muss positiv sein!</string>
     <string name="settings_song_view_font">Schrift für Liedansicht</string>
-    <string name="settings_text_size_choosed">Wähle Schriftgröße</string>
-    <string name="settings_text_size">Schriftgröße:</string>
-    <string name="settings_text_size_small">klein</string>
-    <string name="settings_text_size_bold">fett</string>
     <string name="settings_text_size_big">Größe für fette Schrift</string>
     <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
     <string name="settings_text_size_regular">Größe für kleine Schrift</string>
@@ -72,8 +55,7 @@
     <string name="settings_ratings_are_in_sync">Alle Bewertungen wurden gespeichert.</string>
     <string name="settings_rescan_title">Neu einlesen</string>
     <string name="settings_rescan">Mediendateien neu einlesen.</string>
-    <string name="settings_rescan_disabled">Neu einlesen von Android gestoppt</string>
-    <string name="settings_rescan_triggered">Mediendateien einlesen gestartet...</string>
+    <string name="settings_rescan_triggered">Mediendateien einlesen gestartet…</string>
     <string name="settings_rescan_storage">Lese Speicherverzeichnis %s</string>
     <string name="settings_rescan_finished">Mediendateien Einlesen beendet. Es kann ein bisschen dauern, bis die neu eingelesenen Daten erscheinen (evtl. SicmuPlayer neu starten).</string>
     <string name="settings_rescan_purge">Mediendateien Einlesen hat (%s) frühere Einträge nicht mehr gefunden. Einträge wurden aus der Liste gelöscht.</string>
@@ -118,8 +100,6 @@
     <string name="help_unfold_group_summary">Auf eine Gruppe tippen, um sie ein- bzw. auszuklappen.</string>
     <string name="help_scroll">Aktuelles Lied in Liste zeigen</string>
     <string name="help_scroll_summary">Den Button rechts von "Nächstes" drücken, um in der Liederliste zum gerade abgespielten Lied zu springen. Langes Tippen klappt alle Gruppen bis auf das gerade abgespielte Lied zu.</string>
-    <string name="help_lock">Bildschirmsperre ausschalten</string>
-    <string name="help_lock_summary">Padlock-Button, um die Bildschirmsperre auszuschalten (Sperre wird nur verhindern, wenn die App im Vordergrund läuft; nicht auf allen Geräten).</string>
     <string name="help_root_folders">Wurzelverzeichnisse</string>
     <string name="help_root_folders_summary">Die Festlegung der Wurzelverzeichnisse erfolgt in den Erweiterten Einstellungen: sie werden nur verwendet, um den vorderen Teil des Verzeichnispfades zu verbergen, wenn die Lieder nach Verzeichnis geordnet angezeigt werden. Mehrere Wurzelverzeichniseinträge werden durch Semikolon getrennt angegeben.</string>
     <string name="help_background">Hintergrund</string>
@@ -132,8 +112,8 @@
     <string name="help_mediabutton_summary">Media-Buttons (z.B. in Bluetooth-Kopfhörern) können die App steuern (Nächstes, Vorheriges, Pause/Abspielen).</string>
     <string name="help_mediabutton_autostart">Starten durch Media-Buttons</string>
     <string name="help_mediabutton_autostart_summary">Wenn die App nicht läuft, wird sie durch drücken der Media-Buttons gestartet. Um das Starten der App durch Media-Buttons auszuschalten, in den Einstellungen "Starten durch Media-Buttons" abwählen.</string>
-    <string name="help_details_menu">Liedinformationen (Cover, ...)</string>
-    <string name="help_details_menu_summary">Auf das SicMu Icon tippen, um Informationen zum abgespielten Lied anzuzeigen (Cover, ...)</string>
+    <string name="help_details_menu">Liedinformationen (Cover, …)</string>
+    <string name="help_details_menu_summary">Auf das SicMu Icon tippen, um Informationen zum abgespielten Lied anzuzeigen (Cover, …)</string>
     <string name="help_seek_menu">Sprungmenü</string>
     <string name="help_seek_menu_summary">Rechts oben in der Menüleiste tippen, um das Sprungmenü ein-/auszuklappen. Langes Tippen auf "Nächstes"/"Vorheriges" spult anhaltend vor/zurück.</string>
 
@@ -160,8 +140,6 @@
     <string name="settings_thanks_doc_summary">Sue Smith (Tutorial zum Erstellen eines Music Players auf Android)</string>
     <string name="settings_thanks_i15n">Übersetzung</string>
     <string name="settings_thanks_i15n_summary">Mladen Pejaković (Serbisch), Jerônimo Cordoni Pellegrini (Portugisisch), Mehmet Gülmen (Türkisch), Martin Scherbaum (Deutsch)</string>
-    <string name="settings_locked">Gesperrt</string>
-    <string name="settings_unlocked">Entsperrt</string>
 
     <string name="settings_show_group_total_time_summary">Die Gesamtdauer der Gruppe anstatt der Liedanzahl anzeigen</string>
     <string name="action_repeat_title">Wiederholen</string>
@@ -180,8 +158,8 @@
     <string name="rescanned">Neu eingelesen:</string>
     <string name="action_delete_song">Lied löschen</string>
     <string name="action_ask_delete_song">Möchten Sie \'%s\' wirklich löschen?</string>
-    <string name="action_delete_song_ok">Löschen erfolgreich.</string>
-    <string name="action_delete_song_nok">Löschen fehlgeschlagen!</string>
+    <string name="action_delete_song_ok">Löschen von \'%s\' erfolgreich.</string>
+    <string name="action_delete_song_nok">Löschen von \'%s\' fehlgeschlagen!</string>
     <string name="action_min_rating">Lieder mit Bewertung >=</string>
     <string name="action_set_rating_folder">Ordner bewerten: %s</string>
     <string name="action_set_rating_song">Lied bewerten: %s</string>
@@ -198,9 +176,9 @@
     <string name="popup_song_artist">Interpret: %s</string>
     <string name="popup_song_album">Album: %s</string>
     <string name="popup_song_title">Titel: %s</string>
-    <string name="popup_song_track">Track: %s</string>
-    <string name="popup_song_year">Jahr: %s</string>
-    <string name="popup_song_rating">Bewertung: %s</string>
+    <string name="popup_song_track">Track: %d</string>
+    <string name="popup_song_year">Jahr: %d</string>
+    <string name="popup_song_rating">Bewertung: %d</string>
     <string name="popup_song_mime">MIME-Typ: %s</string>
     <string name="settings_theme_title_free">Farbschema (nur für Pro-Nutzer)</string>
     <string name="settings_theme_title">Farbschema (dunkel spart Akku)</string>
@@ -231,8 +209,6 @@
     <string name="settings_show_group_total_time">Gesamtdauer anzeigen</string>
     <string name="action_repeat_not">Am Ende des Ordners aufhören</string>
     <string name="action_stop_at_end_of_track">Nach dem Lied aufhören</string>
-    <string name="enabled">aktiviert</string>
-    <string name="disabled">deaktiviert</string>
     <string name="settings_shuffle_explainer_sequential">Shuffle aus</string>
     <string name="settings_shuffle_explainer_random">Shuffle an</string>
 </resources>

@@ -44,7 +44,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -59,7 +58,6 @@ import android.widget.Toast;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,9 +94,6 @@ public class Main extends AppCompatActivity {
 
     private ImageButton posButton;
 
-    // true if the user want to disable lockscreen
-    private boolean noLock;
-
     // true if you want to keep the current song played visible
     private boolean followSong;
 
@@ -125,7 +120,6 @@ public class Main extends AppCompatActivity {
     private TextView songTitle, songAlbum, songArtist, songMime, warningText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
-    private LinearLayout details_right_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
     private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
@@ -135,7 +129,7 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("Main", "onCreate");
 
-        params = new ParametersImpl(this);
+        params = new Parameters(this);
 
         hideSystemBars();
 
@@ -151,51 +145,47 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         finishing = false;
 
-        songView = (ListView) findViewById(R.id.song_list);
-        playButton = (ImageButton) findViewById(R.id.play_button);
+        songView = findViewById(R.id.song_list);
+        playButton = findViewById(R.id.play_button);
         // useful only for testing
         playButton.setTag(R.drawable.ic_action_play);
         playButton.setOnTouchListener(touchListener);
 
-        ImageButton gotoButton = (ImageButton) findViewById(R.id.goto_button);
+        ImageButton gotoButton = findViewById(R.id.goto_button);
         gotoButton.setOnTouchListener(touchListener);
         gotoButton.setOnLongClickListener(gotoSongLongListener);
-//        ImageButton lockButton = (ImageButton) findViewById(R.id.lock_button);
-//        lockButton.setOnTouchListener(touchListener);
 
-        posButton = (ImageButton) findViewById(R.id.toggle_seek_buttons);
+        posButton = findViewById(R.id.toggle_seek_buttons);
         seekButtonsOpened = false;
         posButton.setImageDrawable(null);
-        seekButtonsLayout = (LinearLayout) findViewById(R.id.seek_buttons_layout);
+        seekButtonsLayout = findViewById(R.id.seek_buttons_layout);
         seekButtonsLayout.setVisibility(View.GONE);
         warningLayout = findViewById(R.id.warning_layout);
         warningLayout.setVisibility(View.GONE);
-        warningLayout.setOnClickListener(view -> {
-            hideWarning();
-        });
-        detailsLayout = (LinearLayout) findViewById(R.id.details_layout);
+        warningLayout.setOnClickListener(view -> hideWarning());
+        detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
-        ImageButton prevButton = (ImageButton) findViewById(R.id.prev_button);
+        ImageButton prevButton = findViewById(R.id.prev_button);
         prevButton.setOnLongClickListener(prevGroupLongListener);
         prevButton.setOnTouchListener(touchListener);
-        ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
+        ImageButton nextButton = findViewById(R.id.next_button);
         nextButton.setOnLongClickListener(nextGroupLongListener);
         nextButton.setOnTouchListener(touchListener);
 
         RepeatingImageButton seekButton;
-        seekButton = (RepeatingImageButton) findViewById(R.id.m20_button);
+        seekButton = findViewById(R.id.m20_button);
         seekButton.setRepeatListener(rewindListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
-        seekButton = (RepeatingImageButton) findViewById(R.id.p20_button);
+        seekButton = findViewById(R.id.p20_button);
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
-        seekButton = (RepeatingImageButton) findViewById(R.id.m5_button);
+        seekButton = findViewById(R.id.m5_button);
         seekButton.setRepeatListener(rewindListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
-        seekButton = (RepeatingImageButton) findViewById(R.id.p5_button);
+        seekButton = findViewById(R.id.p5_button);
         seekButton.setRepeatListener(forwardListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
 
@@ -213,10 +203,10 @@ public class Main extends AppCompatActivity {
         startService(playIntent);
         bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
 
-        duration = (TextView) findViewById(R.id.duration);
-        currDuration = (TextView) findViewById(R.id.curr_duration);
+        duration = findViewById(R.id.duration);
+        currDuration = findViewById(R.id.curr_duration);
         touchSeekbar = false;
-        seekbar = (SeekBar) findViewById(R.id.seek_bar);
+        seekbar = findViewById(R.id.seek_bar);
         seekbar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         followSong = false;
@@ -239,15 +229,15 @@ public class Main extends AppCompatActivity {
         RowGroup.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying);
         RowGroup.backgroundOverrideColor = getColorFromAttr(R.attr.colorRowGroup2nd);
 
-        ImageView appButton = (ImageView) findViewById(R.id.app_button);
+        ImageView appButton = findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);
         appAnimation = (AnimationDrawable) appButton.getBackground();
 
-        albumImage = (ImageButton) findViewById(R.id.album_image);
+        albumImage = findViewById(R.id.album_image);
         albumImage.setVisibility(View.VISIBLE);
         albumImage.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeTop() {
-                if (detailsBigCoverArt == true) {
+                if (detailsBigCoverArt) {
                     detailsBigCoverArt = false;
                     applyBiggerCoverArt();
                 } else
@@ -281,22 +271,21 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        details_right_layout = (LinearLayout) findViewById(R.id.details_right_layout);
         detailsBigCoverArt = false;
 
-        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_1));
-        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_2));
-        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_3));
-        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_4));
-        ratingButtons.add((ImageButton) findViewById(R.id.rating_button_5));
-        details_rating_layout = (LinearLayout) findViewById(R.id.details_rating);
+        ratingButtons.add(findViewById(R.id.rating_button_1));
+        ratingButtons.add(findViewById(R.id.rating_button_2));
+        ratingButtons.add(findViewById(R.id.rating_button_3));
+        ratingButtons.add(findViewById(R.id.rating_button_4));
+        ratingButtons.add(findViewById(R.id.rating_button_5));
+        details_rating_layout = findViewById(R.id.details_rating);
 
         moreButtonsLayout = findViewById(R.id.more_buttons);
         moreButtonsLayout.setVisibility(View.GONE);
         setShuffleButton();
         setTextSizeButton();
 
-        playbackSpeedText = (TextView) findViewById(R.id.playBackSpeed);
+        playbackSpeedText = findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeTop() {
                 changePlaybackSpeed(0.1f);
@@ -391,7 +380,7 @@ public class Main extends AppCompatActivity {
     }
 
     // connect to the service
-    private ServiceConnection musicConnection = new ServiceConnection() {
+    private final ServiceConnection musicConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -429,11 +418,7 @@ public class Main extends AppCompatActivity {
                         if (!serviceBound)
                             return false;
 
-//                        if (!isEditModeEnabled())
-//                            longClickOnRow(position);
-//                        else
-                            longClickOnRowEditMode(position);
-
+                        longClickOnRowEditMode(position);
                         return true;
                     });
             serviceBound = true;
@@ -442,7 +427,7 @@ public class Main extends AppCompatActivity {
             musicSrv.setMainIsVisible(true);
 
             // listView.getVisiblePosition() is wrong while the listview is not shown.
-            // wait a bit that it is visible (should be replace by sthg like onXXX)
+            // wait a bit that it is visible (should be replace by sth like onXXX)
             (new Timer()).schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -459,7 +444,7 @@ public class Main extends AppCompatActivity {
             Uri uri = intent.getData();
             String mimeType = intent.getType();
             if (uri != null && !uri.toString().isEmpty()) {
-                Log.d("Main", "Receiving intent with uri: " + uri.toString() + ", mime: " + mimeType);
+                Log.d("Main", "Receiving intent with uri: " + uri + ", mime: " + mimeType);
                 rows = musicSrv.getRows();
                 if (rows.setCurrPosFromUri(getApplicationContext(), uri)) {
                      playAlreadySelectedSong();
@@ -551,35 +536,32 @@ public class Main extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case EXTERNAL_STORAGE_REQUEST_CODE:
-                //Toast.makeText(getApplicationContext(), "EXTERNAL_STORAGE_REQUEST_CODE", Toast.LENGTH_SHORT).show();
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Main","Permission READ_EXTERNAL_STORAGE granted");
-                    if (rows != null)
-                        rows.reinit();
-                    if (songAdt != null)
-                        songAdt.notifyDataSetChanged();
-                    unfoldAndscrollToCurrSong();
-                    hideWarning();
+        if (requestCode == EXTERNAL_STORAGE_REQUEST_CODE) {//Toast.makeText(getApplicationContext(), "EXTERNAL_STORAGE_REQUEST_CODE", Toast.LENGTH_SHORT).show();
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Main", "Permission READ_EXTERNAL_STORAGE granted");
+                if (rows != null)
+                    rows.reinit();
+                if (songAdt != null)
+                    songAdt.notifyDataSetChanged();
+                unfoldAndscrollToCurrSong();
+                hideWarning();
 
 //                    playIntent = new Intent(Main.this, MusicService.class);
 //                    startService(playIntent);
 //                    bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-                }  else {
-                    Log.e("Main","Permission READ_EXTERNAL_STORAGE refused!");
+            } else {
+                Log.e("Main", "Permission READ_EXTERNAL_STORAGE refused!");
+                showWarning();
+            }
+            if (grantResults.length > 1) {
+                if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Main", "Permission WRITE_EXTERNAL_STORAGE granted");
+                } else {
+                    Log.w("Main", "Permission WRITE_EXTERNAL_STORAGE refused!");
                     showWarning();
                 }
-                if (grantResults.length > 1) {
-                    if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d("Main", "Permission WRITE_EXTERNAL_STORAGE granted");
-                    } else {
-                        Log.w("Main", "Permission WRITE_EXTERNAL_STORAGE refused!");
-                        showWarning();
-                    }
-                }
+            }
 //                playIntent = new Intent(Main.this, MusicService.class);
 //                startService(playIntent);
 //                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
@@ -589,6 +571,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int SET_RATING_REQUEST_CODE = 1024;
         if (requestCode == SET_RATING_REQUEST_CODE) {
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
@@ -628,7 +611,7 @@ public class Main extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener
+    private final SeekBar.OnSeekBarChangeListener seekBarChangeListener
             = new SeekBar.OnSeekBarChangeListener() {
 
         @Override
@@ -666,7 +649,6 @@ public class Main extends AppCompatActivity {
         Log.d("Main", "onStart");
 
         restore();
-        applyLock();
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -700,20 +682,12 @@ public class Main extends AppCompatActivity {
 
         hideSystemBars();
     }
-/*
-    @Override
-    protected void onPause(){
-        super.onPause();
-        Log.d("Main", "onPause");
-    }
-*/
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d("Main", "onStop");
         timer.cancel();
-        save();
 
         if (serviceBound) {
             if (!finishing && musicSrv.playingLaunched())
@@ -733,11 +707,6 @@ public class Main extends AppCompatActivity {
             // stop the service if not playing music
             if (!musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
-//                if (Flavor.isFlavorFDroid(getApplicationContext())) {
-//                    Toast.makeText(getApplicationContext(),
-//                            getResources().getString(R.string.app_name) + " destroyed.",
-//                            Toast.LENGTH_SHORT).show();
-//                }
             }
             unbindService(musicConnection);
             serviceBound = false;
@@ -903,8 +872,7 @@ public class Main extends AppCompatActivity {
 
             songMime.setText(rowSong.getMime());
 
-            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
-                    (rowSongId, imageNum, bitmap) -> setCoverArt(rowSongId, imageNum, bitmap));
+            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum, this::setCoverArt);
 
             setRatingDetails();
         }
@@ -963,7 +931,7 @@ public class Main extends AppCompatActivity {
                                 }
                             }, 500);
                         } else {
-                            runOnUiThread(() -> setDetails());
+                            runOnUiThread(this::setDetails);
                         }
                     });
         }
@@ -976,42 +944,31 @@ public class Main extends AppCompatActivity {
     }
 
     public void applyBiggerCoverArt() {
+        ViewGroup.LayoutParams params = detailsLayout.getLayoutParams();
         if (detailsBigCoverArt) {
             // increase cover art size
-            ViewGroup.LayoutParams params = detailsLayout.getLayoutParams();
             params.height = params.height * 2;
             detailsLayout.setLayoutParams(params);
 
             // hide text details
             albumImage.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                            LinearLayout.LayoutParams.FILL_PARENT, 0f));
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT, 0f));
 
             // click on image go back to normal details
-            albumImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleBiggerCoverArt(v);
-                }
-            });
+            albumImage.setOnClickListener(this::toggleBiggerCoverArt);
         } else {
             // decrease cover art size
-            ViewGroup.LayoutParams params = detailsLayout.getLayoutParams();
             params.height = params.height / 2;
             detailsLayout.setLayoutParams(params);
 
             // show text details
             albumImage.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                            LinearLayout.LayoutParams.FILL_PARENT, 1f));
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT, 1f));
 
             // click on image hide details
-            albumImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleDetails(v);
-                }
-            });
+            albumImage.setOnClickListener(this::toggleDetails);
         }
     }
 
@@ -1023,7 +980,7 @@ public class Main extends AppCompatActivity {
                 .setTitle(R.string.action_delete_song)
                 .setMessage(getString(R.string.action_ask_delete_song, songTitle))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> {
                     if (rows.deleteSongFile(song)) {
                         songAdt.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(),
@@ -1036,10 +993,9 @@ public class Main extends AppCompatActivity {
                                 LENGTH_LONG).show();
                     }
                     })
-                .setNegativeButton(android.R.string.no, null).show();
+                .setNegativeButton(android.R.string.cancel, null).show();
     }
 
-    private final int SET_RATING_REQUEST_CODE = 1024;
     public void ratingClick(View view) {
         for (int i = 0; i < ratingButtons.size(); i++) {
             if (view == ratingButtons.get(i)) {
@@ -1111,7 +1067,7 @@ public class Main extends AppCompatActivity {
     private void openEditGroupMenu(int position, @NonNull RowGroup row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
-        altBld.setTitle(getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName(), 40)));
+        altBld.setTitle(getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName())));
         final CharSequence[] items = {
                 getString(R.string.action_play),
                 getString(R.string.action_rate_group),
@@ -1141,10 +1097,10 @@ public class Main extends AppCompatActivity {
         alert.show();
     }
 
-    private String cutLongStringAndDots(String str, int maxLength) {
+    private String cutLongStringAndDots(String str) {
         final String dots = "...";
-        if (str.length() > maxLength) {
-            str = str.substring(0, maxLength - dots.length());
+        if (str.length() > 40) {
+            str = str.substring(0, 40 - dots.length());
             str += dots;
         }
         return str;
@@ -1154,12 +1110,15 @@ public class Main extends AppCompatActivity {
         if (musicSrv == null)
             return;
         Row row = rows.get(pos);
-        final boolean isRowGroup = row != null && row.getClass() == RowGroup.class;
+        if (row == null) {
+            return;
+        }
+        final boolean isRowGroup = row.getClass() == RowGroup.class;
 
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_star_5_highlight);
         altBld.setTitle(getString(isRowGroup ? R.string.action_set_rating_folder :  R.string.action_set_rating_song,
-                cutLongStringAndDots(rowName, 40)));
+                cutLongStringAndDots(rowName)));
         CharSequence[] items = {
                 "1", "2", "3", "4", "5"
         };
@@ -1170,27 +1129,23 @@ public class Main extends AppCompatActivity {
             if (idx >= 0 && idx < items.length)
                 items[idx] += " <- " + getString(R.string.current_rating_idx);
         }
-        altBld.setItems(items, (DialogInterface dialog, int itemPos) -> {
-            rows.rateSongs(pos, itemPos + 1, overwriteRating,
-                    (nbChanged, errorMsg) -> {
-                        runOnUiThread(() -> {
-                            if (errorMsg.isEmpty()) {
-                                if (nbChanged > 0) {
-                                    setRatingDetails();
-                                    songAdt.notifyDataSetChanged();
-                                }
+        altBld.setItems(items, (DialogInterface dialog, int itemPos) -> rows.rateSongs(pos, itemPos + 1, overwriteRating,
+                (nbChanged, errorMsg) -> runOnUiThread(() -> {
+                    if (errorMsg.isEmpty()) {
+                        if (nbChanged > 0) {
+                            setRatingDetails();
+                            songAdt.notifyDataSetChanged();
+                        }
 
-                                if (isRowGroup)
-                                    Toast.makeText(getApplicationContext(),
-                                            getString(R.string.songs_have_been_rated, nbChanged),
-                                            Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), errorMsg, LENGTH_LONG).show();
-                            }
-                        });
-                    });
-        });
+                        if (isRowGroup)
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.songs_have_been_rated, nbChanged),
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), errorMsg, LENGTH_LONG).show();
+                    }
+                })));
         AlertDialog alert = altBld.create();
         alert.show();
     }
@@ -1199,7 +1154,7 @@ public class Main extends AppCompatActivity {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_song,
-                cutLongStringAndDots(row.getTitle(), 40)));
+                cutLongStringAndDots(row.getTitle())));
         ArrayList<String> list = new ArrayList<>();
         list.add(getString(R.string.action_play));
         list.add(getString(R.string.action_rate_song));
@@ -1243,10 +1198,14 @@ public class Main extends AppCompatActivity {
         // Remove dashes and hierarchy
         filename = filename.replaceAll(" - ", " ");
         // Remove remixes, like "Simply Red - Something got me started (Hourleys House Remix)"
-        filename = filename.replaceAll("\\(([^\\)]+)\\)", "");
+        filename = filename.replaceAll("\\(([^)]+)\\)", "");
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename)));
-        startActivity(browserIntent);
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename, "UTF-8")));
+            startActivity(browserIntent);
+        } catch (Exception e) {
+            Log.e("sicmu", "Error while creating genius.com URL: " + e);
+        }
     }
 
     private void showPopupSongInfo(RowSong rowSong) {
@@ -1334,8 +1293,6 @@ public class Main extends AppCompatActivity {
                     setSortButton();
                 }
                 dialog.dismiss(); // dismiss the alertbox after chose option
-//              Toast.makeText(getApplicationContext(),
-//                  getString(R.string.action_sort) + " " + items[item], Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alert = altBld.create();
@@ -1388,8 +1345,6 @@ public class Main extends AppCompatActivity {
                 }
                 dialog.dismiss(); // dismiss the alertbox after chose option
                 setRepeatButton();
-//              Toast.makeText(getApplicationContext(),
-//                  getString(R.string.action_repeat_title) + " " + items[item], Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alert = altBld.create();
@@ -1413,9 +1368,6 @@ public class Main extends AppCompatActivity {
                 musicSrv.setMinRating(item + 1);
                 setMinRatingButton();
                 dialog.dismiss(); // dismiss the alertbox after chose option
-//              Toast.makeText(getApplicationContext(),
-//                  getString(R.string.action_rating) + " " + items[item],
-//                  Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alert = altBld.create();
@@ -1442,41 +1394,38 @@ public class Main extends AppCompatActivity {
         Context ctx = this;
 
         // Set up the search button
-        altBld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String query = input.getText().toString();
-                // Save query for quick access later
-                prefs.edit().putString("search_query", query).apply();
+        altBld.setPositiveButton("OK", (dialog, which) -> {
+            String query = input.getText().toString();
+            // Save query for quick access later
+            prefs.edit().putString("search_query", query).apply();
 
-                Row row = rows.getNextSongByKeyword(query);
-                if(row == null) {
-                    // Nothing found!
-                    Toast.makeText(ctx, R.string.search_unsuccessful, LENGTH_LONG).show();
-                } else {
-                    // clickOnRow(...) only works using folded indexes, so we have
-                    // to unfold the parent groups first, and then play the song itself
+            Row row = rows.getNextSongByKeyword(query);
+            if(row == null) {
+                // Nothing found!
+                Toast.makeText(ctx, R.string.search_unsuccessful, LENGTH_LONG).show();
+            } else {
+                // clickOnRow(...) only works using folded indexes, so we have
+                // to unfold the parent groups first, and then play the song itself
 
-                    // Collect parent elements, then unfold them in reverse order
-                    // (topmost group/folder -> deepest group/folder)
-                    ArrayList<RowGroup> parents = new ArrayList<RowGroup>();
-                    for(RowGroup group = (RowGroup)row.getParent();
-                            group != null;
-                            group = (RowGroup)group.getParent()) {
-                        parents.add(group);
-                    }
-                    for(int i = parents.size() - 1; i >= 0; i--) {
-                        RowGroup parent = parents.get(i);
-                        if(parent.isFolded())
-                            clickOnRow(rows.getFoldedIndex(parent));
-                    }
-
-                    // Don't click (=close) unfolded groups! Just scroll to them.
-                    if(row instanceof RowGroup && !((RowGroup) row).isFolded())
-                            scrollToSong(rows.getFoldedIndex(row));
-                    else // Click it! (=open a group or play a song)
-                            clickOnRow(rows.getFoldedIndex(row));
+                // Collect parent elements, then unfold them in reverse order
+                // (topmost group/folder -> deepest group/folder)
+                ArrayList<RowGroup> parents = new ArrayList<>();
+                for(RowGroup group = (RowGroup)row.getParent();
+                        group != null;
+                        group = (RowGroup)group.getParent()) {
+                    parents.add(group);
                 }
+                for(int i = parents.size() - 1; i >= 0; i--) {
+                    RowGroup parent = parents.get(i);
+                    if(parent.isFolded())
+                        clickOnRow(rows.getFoldedIndex(parent));
+                }
+
+                // Don't click (=close) unfolded groups! Just scroll to them.
+                if(row instanceof RowGroup && !((RowGroup) row).isFolded())
+                        scrollToSong(rows.getFoldedIndex(row));
+                else // Click it! (=open a group or play a song)
+                        clickOnRow(rows.getFoldedIndex(row));
             }
         });
 
@@ -1559,18 +1508,6 @@ public class Main extends AppCompatActivity {
     private void setMinRatingButton() {
         ImageView img = findViewById(R.id.rating_button);
         img.setImageResource(getMinRatingResId());
-    }
-
-    public void applyLock() {
-//        ImageButton lockButton = (ImageButton) findViewById(R.id.lock_button);
-        if(noLock) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-//            lockButton.setImageResource(R.drawable.ic_action_unlocked);
-        }
-        else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-//            lockButton.setImageResource(R.drawable.ic_action_locked);
-        }
     }
 
     public void fold() {
@@ -1704,25 +1641,19 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private View.OnTouchListener touchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                vibrate();
-            }
-            return false;
+    private final View.OnTouchListener touchListener = (v, event) -> {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            vibrate();
         }
+        return false;
     };
 
-    private View.OnLongClickListener gotoSongLongListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            fold();
-            return true;
-        }
+    private final View.OnLongClickListener gotoSongLongListener = v -> {
+        fold();
+        return true;
     };
 
-    private View.OnLongClickListener nextGroupLongListener = new View.OnLongClickListener() {
+    private final View.OnLongClickListener nextGroupLongListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
             if(!serviceBound)
@@ -1739,7 +1670,7 @@ public class Main extends AppCompatActivity {
         }
     };
 
-    private View.OnLongClickListener prevGroupLongListener = new View.OnLongClickListener() {
+    private final View.OnLongClickListener prevGroupLongListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
             if(!serviceBound)
@@ -1756,7 +1687,7 @@ public class Main extends AppCompatActivity {
         }
     };
 
-    private RepeatingImageButton.RepeatListener rewindListener =
+    private final RepeatingImageButton.RepeatListener rewindListener =
         new RepeatingImageButton.RepeatListener() {
             /**
              * This method will be called repeatedly at roughly the interval
@@ -1798,7 +1729,7 @@ public class Main extends AppCompatActivity {
             return offsetMs;
         }
 
-    private RepeatingImageButton.RepeatListener forwardListener =
+    private final RepeatingImageButton.RepeatListener forwardListener =
         new RepeatingImageButton.RepeatListener() {
             public void onRepeat(View view, long duration, int repeatcount) {
                 Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
@@ -1885,19 +1816,13 @@ public class Main extends AppCompatActivity {
     public void openTextSize(View view) {
         params.setChooseTextSize(!params.getChoosedTextSize());
         ImageButton img = findViewById(R.id.text_size_button);
-        int txtChoosed;
         if (params.getChoosedTextSize()) {
             img.setImageResource(R.drawable.ic_menu_text_big);
-            txtChoosed = R.string.settings_text_size_bold;
         }
         else {
             img.setImageResource(R.drawable.ic_menu_text_regular);
-            txtChoosed = R.string.settings_text_size_small;
         }
         applyTextSize();
-//        Toast.makeText(getApplicationContext(),
-//                getString(R.string.settings_text_size) + getString(txtChoosed),
-//                Toast.LENGTH_LONG).show();
         songAdt.notifyDataSetChanged();
         setTextSizeButton();
         startCloseMoreButtonsTimer();
@@ -1940,10 +1865,10 @@ public class Main extends AppCompatActivity {
 
         // to show a bit of songItems before or after the cur song
         int showAroundTop = nbRow / 5;
-        showAroundTop = showAroundTop < 1 ? 1 : showAroundTop;
+        showAroundTop = Math.max(showAroundTop, 1);
         // show more song after the gotoSong
         int showAroundBottom = nbRow / 2;
-        showAroundBottom = showAroundBottom < 1 ? 1 : showAroundBottom;
+        showAroundBottom = Math.max(showAroundBottom, 1);
         Log.d("Main", "scrollToSong showAroundTop: " + showAroundTop + " showAroundBottom: " + showAroundBottom);
 
 
@@ -1987,20 +1912,6 @@ public class Main extends AppCompatActivity {
         return musicSrv;
     }
 
-/*
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                Log.d("Main", "Exit app");
-                finishing = true;
-                finish();
-                return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-*/
-
     public void applyTextSize() {
         int textSize;
         if (!params.getChoosedTextSize())
@@ -2015,13 +1926,8 @@ public class Main extends AppCompatActivity {
     }
 
     private void restore() {
-        noLock = params.getNoLock();
         followSong = params.getFollowSong();
         applyTextSize();
-    }
-
-    private void save() {
-        params.setNoLock(noLock);
     }
 
     private void vibrate() {

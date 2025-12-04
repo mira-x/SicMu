@@ -100,11 +100,9 @@ public class RowGroup extends Row {
         holder.image.setImageDrawable(null);
 
         holder.ratingStar.setVisibility(View.INVISIBLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.duration.setLayoutParams(params);
-        }
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.duration.getLayoutParams();
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        holder.duration.setLayoutParams(params);
 
         if (overrideBackgroundColor && backgroundOverrideColor != 0) {
             setBackgroundColor(holder, backgroundOverrideColor);

@@ -32,11 +32,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ChangelogsActivity extends AppCompatActivity {
-    private Button closeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +52,18 @@ public class ChangelogsActivity extends AppCompatActivity {
             finish();
         });
 
-        closeButton = findViewById(R.id.close_button);
+        Button closeButton = findViewById(R.id.close_button);
         closeButton.setOnClickListener(view -> {
             finish();
         });
 
         TextView changelogsTextview = findViewById(R.id.changelogs_text);
         changelogsTextview.setMovementMethod(new ScrollingMovementMethod());
-        changelogsTextview.setText(Html.fromHtml(getChangelogsHTMLText()));
+        changelogsTextview.setText(Html.fromHtml(getChangelogsHTMLText(), Html.FROM_HTML_MODE_LEGACY));
     }
 
     public String getChangelogsHTMLText() {
-        String logText = new String();
+        String logText = "";
 
         Log.d("Changelogs", "loading logs");
         AssetManager assetManager = getAssets();

@@ -21,23 +21,14 @@
     <string name="settings_version">2.3.1</string>
 
     <string name="permission_needed">The app needs read storage permission in order to show songs
-        and play them !\n\nWhen aske, please allow access to photos and multimedia content on your android device.
+        and play them!\n\nWhen asked, please allow access to photos and multimedia content on your android device.
     </string>
     <!-- and write storage permissions -->
-
-    <string name="action_settings">Open settings</string>
-    <string name="advanced_settings_title">Advanced settings</string>
-    <string name="action_shake_disabled">Shake off</string>
-    <string name="action_shake_enabled">Shake on</string>
 
     <string name="action_sort_folder">folder</string>
     <string name="action_sort_artist">artist</string>
     <string name="action_sort_tree">tree</string>
-    <string name="action_sort_by">Sort by</string>
     <string name="action_sort">Sort songs by:</string>
-
-    <string name="action_music_mode">Music mode</string>
-    <string name="action_edit_mode">Edit mode</string>
 
     <string name="ic_action_edit_folder">folder: %s</string>
     <string name="ic_action_edit_song">song: %s</string>
@@ -102,16 +93,11 @@
     <string name="popup_song_mime">mime: %s</string>
     <string name="popup_song_path">path: %s</string>
 
-    <string name="app_playing">SicMu playing</string>
-
     <string name="explain_playback_speed">Swipe up/down or left/right to decrease/increase speed playback!</string>
 
     <string name="focus_error">Could not get audio focus! Restart the app!</string>
 
     <string name="settings_title">Settings</string>
-
-    <string name="action_fold">Fold</string>
-    <string name="action_unfold">Unfold</string>
 
     <string name="settings_theme_title_free">Theme (only available on pro version)</string>
     <string name="settings_theme_title">Theme (dark themes save battery)</string>
@@ -151,11 +137,7 @@
     <string name="settings_sleep_timer_delay_wrong">Sleep timer delay must be a positive number</string>
 
     <string name="settings_song_view_font">Song view font</string>
-    <string name="settings_text_size_choosed">Choose font size</string>
     <string name="settings_text_size_choosed_default" translatable="false">false</string>
-    <string name="settings_text_size">Font size:</string>
-    <string name="settings_text_size_small">small</string>
-    <string name="settings_text_size_bold">bold</string>
     <string name="settings_text_size_regular">Small font size</string>
     <string name="settings_text_size_regular_default" translatable="false">15</string>
     <string name="settings_text_size_big">Bold font size</string>
@@ -169,8 +151,7 @@
 
     <string name="settings_rescan_title">Rescan</string>
     <string name="settings_rescan">Rescan media files.</string>
-    <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string>
-    <string name="settings_rescan_triggered">Media scanner triggered...</string>
+    <string name="settings_rescan_triggered">Media scanner triggered…</string>
     <string name="settings_rescan_storage">Scan storage %s</string>
     <string name="settings_rescan_finished">Media scanner has finished. It can take a while before the new files will become visible (possibly SicmuPlayer needs to be restarted).</string>
     <string name="settings_rescan_purge">Media scanner found a file (%s) that does is not present in the file system: remove its entry from MediaStore ?</string>
@@ -206,8 +187,6 @@
     <string name="settings_rating">Enable rating</string>
     <string name="settings_rating_summary">Lower a bit CPU consumption if disabled</string>
 
-    <string name="settings_min_rating">Minimum rating</string>
-
     <string name="settings_help">Help</string>
     <string name="settings_help_summary">If you are a bit lost or if you want to discover hidden SicMu Player features</string>
 
@@ -221,8 +200,6 @@
     <string name="help_unfold_group_summary">Tap on a group to fold / unfold it.</string>
     <string name="help_scroll">Scroll to current song</string>
     <string name="help_scroll_summary">Press the button to the right of \'next\' button to scroll the list to currently playing song. Long tap folds everything except current song.</string>
-    <string name="help_lock">Disable lock screen</string>
-    <string name="help_lock_summary">Open the padlock button to disable the lock screen (it prevents locking only when the app is on foreground; does not work on some devices).</string>
     <string name="help_root_folders">Root folders</string>
     <string name="help_root_folders_summary">Root folders can be customized from advanced settings: it is used only for hiding the first portion of folders path when songs are sorted by folder. To put several root folders, separate path using a semi-colon.</string>
     <string name="help_background">Background</string>
@@ -235,14 +212,14 @@
     <string name="help_mediabutton_summary">Media buttons (like in bluetooth headphones) can control the app (next, prev, pause/play).</string>
     <string name="help_mediabutton_autostart">Media buttons auto start</string>
     <string name="help_mediabutton_autostart_summary">If the app is closed pressing a media button will start it. To disable media button ability to start the app automatically uncheck settings->media buttons auto start.</string>
-    <string name="help_details_menu">Song details (covert art, ...)</string>
-    <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show details of current song (album\'s cover art, ...)</string>
+    <string name="help_details_menu">Song details (covert art, …)</string>
+    <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show details of current song (album\'s cover art, …)</string>
     <string name="help_seek_menu">Seek menu</string>
     <string name="help_seek_menu_summary">Click at the top right to open seek menu. Long tap on next/prev will seek forward or backward continuously.</string>
     <string name="help_donate">Tap 3 times on donate button and the donate popup will never show again.</string>
 
     <string name="help_context_menu">Context menu</string>
-    <string name="help_context_menu_summary">Long tap on the songs list makes a context menu appears. From this context menu one can rate song, remove file, ...</string>
+    <string name="help_context_menu_summary">Long tap on the songs list makes a context menu appears. From this context menu one can rate song, remove file, …</string>
 
     <string name="settings_misc">Miscellaneous</string>
 
@@ -272,8 +249,6 @@
     <string name="settings_thanks_doc_summary">Sue Smith (tutorials on creating a Music Player on Android)</string>
     <string name="settings_thanks_i15n">Translation</string>
     <string name="settings_thanks_i15n_summary">Mladen Pejaković (Serbian), Jerônimo Cordoni Pellegrini (Portuguese), Mehmet Gülmen (Turkish)</string>
-    <string name="settings_locked">Do not prevent lock</string>
-    <string name="settings_unlocked">Prevent lock</string>
 
     <string name="settings_show_filename">Show filename</string>
     <string name="settings_show_filename_summary">Show songs filename (e.g. james_brown_01.mp3) rather than songs title</string>
@@ -293,8 +268,5 @@
     <string name="action_repeat_group">Repeat same folder</string>
     <string name="action_repeat_not">Stop at the end of folder</string>
     <string name="action_stop_at_end_of_track">Stop at the end of track</string>
-
-    <string name="enabled">enabled</string>
-    <string name="disabled">disabled</string>
 
 </resources>

@@ -24,15 +24,12 @@
     </string>
     <!-- and write storage permissions -->
 
-    <string name="action_settings">Paramètres</string>
-    <string name="advanced_settings_title">Paramètres avancés</string>
-   <!--  <string name="action_shake_disabled">Shake off</string>
+    <!--  <string name="action_shake_disabled">Shake off</string>
     <string name="action_shake_enabled">Shake on</string> -->
 
     <string name="action_sort_folder">dossier</string>
     <string name="action_sort_artist">artiste</string>
     <string name="action_sort_tree">arborescence</string>
-    <string name="action_sort_by">Trier par</string>
     <string name="action_sort">Trier les chansons par :</string>
 
    <!--  <string name="action_music_mode">Musique</string>
@@ -91,9 +88,6 @@
 
     <string name="settings_title">Paramètres</string>
 
-    <string name="action_fold">Replier</string>
-    <string name="action_unfold">Déplier</string>
-
     <string name="settings_theme_title_free">Thème (en version pro uniquement)</string>
     <string name="settings_theme_title">Thème</string>
     <string-array name="settings_theme_entries">
@@ -123,10 +117,6 @@
     <string name="settings_sleep_timer_delay_wrong">Le délai d\'extinction doit être un nombre entier positif</string>
 
     <string name="settings_song_view_font">Police d\'affichage de la vue chanson</string>
-    <string name="settings_text_size_choosed">Choisir la taille de la police</string>
-    <string name="settings_text_size">Taille de la police :</string>
-    <string name="settings_text_size_small">petit</string>
-    <string name="settings_text_size_bold">gras</string>
     <string name="settings_text_size_regular">Taille de la police</string>
     <string name="settings_text_size_big">Taille de la police grasse</string>
     <string name="settings_text_size_ratio">Ratio de taille entre le dossier et le titre de la chanson</string>
@@ -138,7 +128,7 @@
     <string name="settings_rescan_title">Rescanner</string>
     <string name="settings_rescan">Rescanner tous les fichiers musique du téléphone.</string>
     <!-- <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string> -->
-    <string name="settings_rescan_triggered">Scan des fichiers lancé...</string>
+    <string name="settings_rescan_triggered">Scan des fichiers lancé…</string>
     <string name="settings_rescan_storage">Dossier de scan %s</string>
     <string name="settings_rescan_finished">Le scan des fichiers est terminé. L\'affichage des nouveaux
         fichiers peut prendre un certains temps (SicmuPlayer peut avoir besoin d\'être redémarré).</string>
@@ -213,9 +203,9 @@
     <string name="help_mediabutton_autostart">Démarrage automatique par les boutons média</string>
     <string name="help_mediabutton_autostart_summary">Si l\'application est fermée, appuyer sur un
         bouton média la démarrera automatiquement. Pour désactiver cela, décocher l\'option Paramètres->Démarrage automatique par les boutons média.</string>
-    <string name="help_details_menu">Détails des chansons (pochette, ...)</string>
+    <string name="help_details_menu">Détails des chansons (pochette, …)</string>
     <string name="help_details_menu_summary">Appuyer sur l\'icône de Sicmu pour afficher les détails
-        de la chanson en cours de lecture (couverture de l\'album, ...)</string>
+        de la chanson en cours de lecture (couverture de l\'album, …)</string>
     <string name="help_seek_menu">Menu de lecture</string>
     <string name="help_seek_menu_summary">Cliquez en haut à droite pour ouvrir le menu de lecture. Un
         appuie prolongé sur suivant/précédent avancera/reculera la lecture sans cesse.</string>
@@ -223,7 +213,7 @@
 
     <string name="help_context_menu">Menu contextuel</string>
     <string name="help_context_menu_summary">Un appui long sur une chanson fait apparaitre un menu
-        contextuel où vous pouvez noter la chanson, supprimer le fichier, ...</string>
+        contextuel où vous pouvez noter la chanson, supprimer le fichier, …</string>
 
     <string name="settings_misc">Divers</string>
 
@@ -273,8 +263,5 @@
     <string name="action_repeat_group">Répéter le même dossier</string>
     <string name="action_repeat_not">Arrêter à la fin du dossier</string>
     <string name="action_stop_at_end_of_track">Arrêter à la fin de la chanson</string>
-
-    <string name="enabled">activé</string>
-    <string name="disabled">désactivé</string>
 
 </resources>

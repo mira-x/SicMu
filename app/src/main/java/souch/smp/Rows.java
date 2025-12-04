@@ -30,8 +30,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -46,7 +44,7 @@ import androidx.annotation.NonNull;
 public class Rows {
     Context context;
 
-    private Random random = new Random(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+    private Random random = new Random();
     private ArrayList<Integer> shuffleSavedPos;
 
     private ContentResolver musicResolver;
@@ -67,8 +65,6 @@ public class Rows {
     private Database database;
     private AtomicBoolean ratingsMustBeSynchronized, ratingsSynchronizing;
 
-    private Resources resources;
-
     private Timer timer;
 
     static final public String defaultStr = "<null>";
@@ -79,7 +75,6 @@ public class Rows {
     public Rows(Context context, ContentResolver resolver, Parameters params, Resources resources,
                 Database database) {
         this.context = context;
-        this.resources = resources;
         this.params = params;
         this.database = database;
         musicResolver = resolver;
@@ -406,7 +401,7 @@ public class Rows {
                     break;
                 }
                 rowSong = (RowSong) rowsUnfolded.get(currPos);
-            } while (!rowSong.isRatingEnough());
+            } while (rowSong.isRatingInsufficient());
         }
         else {
             int lastCurrPos = currPos;
@@ -428,7 +423,7 @@ public class Rows {
                     return;
                 }
                 rowSong = (RowSong) rowsUnfolded.get(currPos);
-            } while (!rowSong.isRatingEnough());
+            } while (rowSong.isRatingInsufficient());
 
             setGroupSelectedState(lastCurrPos, false);
             setGroupSelectedState(currPos, true);
@@ -1412,7 +1407,7 @@ public class Rows {
             Log.d("Rows", "set song " + rowSong.getTitle() + " rating to " + rating);
             RowSong currSong = getCurrSong();
             if (currSong == null || (rowSong.getGenuinePos() != currSong.getGenuinePos())) {
-                rowSong.setRating(rating, context);
+                rowSong.setRating(rating);
             }
             else {
                 rowSong.scheduleSetRating(rating, false);

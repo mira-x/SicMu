@@ -40,10 +40,7 @@ package souch.smp;
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is an updated version with enhancements made by Daniel Migowski,
@@ -55,13 +52,13 @@ import java.util.stream.Collectors;
  */
 public class AlphaNumComparator implements Comparator<String>
 {
-    private final boolean isDigit(char ch)
+    private boolean isDigit(char ch)
     {
         return ((ch >= 48) && (ch <= 57));
     }
 
     /** Length of string is passed in for improved efficiency (only need to calculate it once) **/
-    private final String getChunk(String s, int slength, int marker)
+    private String getChunk(String s, int len, int marker)
     {
         StringBuilder chunk = new StringBuilder();
         char c = s.charAt(marker);
@@ -69,7 +66,7 @@ public class AlphaNumComparator implements Comparator<String>
         marker++;
         if (isDigit(c))
         {
-            while (marker < slength)
+            while (marker < len)
             {
                 c = s.charAt(marker);
                 if (!isDigit(c))
@@ -79,7 +76,7 @@ public class AlphaNumComparator implements Comparator<String>
             }
         } else
         {
-            while (marker < slength)
+            while (marker < len)
             {
                 c = s.charAt(marker);
                 if (isDigit(c))

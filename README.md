@@ -4,8 +4,7 @@ Every songs of the phone are put in a unique big song list.
 
 Songs are sorted and grouped by folders, artists, albums and album's track.
 
-Works on rather old devices (from Android 4.0).
-
+Requires at least Android 7.0.
 
 4.3" screen:
 
@@ -32,6 +31,7 @@ Works on rather old devices (from Android 4.0).
 - songs navigation:
     - repeat mode (all, group, one track)
     - shuffle mode
+    - radio mode (shuffle + begin songs at random position)
     - seek bar
     - auto repeat seek buttons
     - loop on part of the song (A to B repeat feature)

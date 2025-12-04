@@ -100,7 +100,6 @@ public class MusicService extends Service implements
     // a notification has been launched
     private boolean foreground;
     private static final int NOTIFICATION_ID = 1;
-    private boolean notificationStarted = false;
 
     private boolean mainIsVisible;
     public void setMainIsVisible(boolean visible) { mainIsVisible = visible; }
@@ -129,7 +128,6 @@ public class MusicService extends Service implements
     private int minRating = 1;
     private float shakeThreshold;
     private float playbackSpeed = 1.0f;
-    private final int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
     private double accelLast;
     private double accelCurrent;
     private double accel;
@@ -137,7 +135,7 @@ public class MusicService extends Service implements
     private Scrobble scrobble;
 
     // used for handling playback state when media session actions occur.
-    private MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
+    private final MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
 
         @Override
         public void onPlay() {
@@ -181,7 +179,6 @@ public class MusicService extends Service implements
         mediaSession = new MediaSessionCompat(getApplicationContext(), MediaSessionTag, mediaButtonReceiver, null);
 
         mediaSession.setCallback(mMediaSessionCallback);
-        mediaSession.setFlags( MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS );
 
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
@@ -242,7 +239,7 @@ public class MusicService extends Service implements
         }
     }
 
-    private BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             handleCommand(CMDPAUSE);
@@ -280,7 +277,7 @@ public class MusicService extends Service implements
         audioManager = null;
         hasAudioFocus = false;
 
-        params = new ParametersImpl(this);
+        params = new Parameters(this);
         database = new Database(getApplicationContext());
         database.cleanupSongsDB();
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
@@ -289,7 +286,7 @@ public class MusicService extends Service implements
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "souch.smp:MusicService");
 
-        // try sync if sthg failed in the previous SMP session
+        // try sync if sth failed in the previous SMP session
         synchronizeFailedRatings();
 
         restore();
@@ -525,7 +522,6 @@ public class MusicService extends Service implements
     }
 
     private int seekPosNbLoop;
-    private final int seekPosMaxLoop = 15;
     private Timer trackLooperTimer = null;
     @Override
     public void onSeekComplete(MediaPlayer mp) {
@@ -534,7 +530,7 @@ public class MusicService extends Service implements
         // last position. So wait the seekpos goes after the asked seekpos.
         if(seekPosMsBug != -1) {
             // todo: make it thread safe?
-            seekPosNbLoop = seekPosMaxLoop;
+            seekPosNbLoop = 15;
 
             final Timer seekPosTimer = new Timer();
             seekPosTimer.schedule(new TimerTask() {
@@ -589,7 +585,7 @@ public class MusicService extends Service implements
                 getPlayer().prepare();
             } catch (Exception e) {
                 state.setState(PlayerState.Error);
-                Log.e("MusicService", "Preparing player: " + e.toString());
+                Log.e("MusicService", "Preparing player: " + e);
                 return;
             }
 
@@ -680,18 +676,15 @@ public class MusicService extends Service implements
     }
 
     private boolean applyPlaybackSpeed(float speed) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                PlaybackParams params = getPlayer().getPlaybackParams();
-                params.setSpeed(speed);
-                getPlayer().setPlaybackParams(params);
-                return true;
-            } catch (Exception e) {
-                Log.e("MusicService", "setPlaySpeed: ", e);
-                return false;
-            }
+        try {
+            PlaybackParams params = getPlayer().getPlaybackParams();
+            params.setSpeed(speed);
+            getPlayer().setPlaybackParams(params);
+            return true;
+        } catch (Exception e) {
+            Log.e("MusicService", "setPlaySpeed: ", e);
+            return false;
         }
-        return false;
     }
 
     /*** PLAY ACTION ***/
@@ -714,12 +707,8 @@ public class MusicService extends Service implements
             return;
 
         seekFinished = false;
-        long gotoPosMs = posMs;
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            seekPosMsBug = gotoPosMs;
-
-        player.seekTo((int) gotoPosMs);
+        player.seekTo((int) posMs);
     }
 
     public boolean getSeekFinished() {
@@ -990,12 +979,13 @@ public class MusicService extends Service implements
 
         // algo found here : http://stackoverflow.com/questions/2317428/android-i-want-to-shake-it
         accelLast = accelCurrent;
-        accelCurrent = Math.sqrt((double) (x*x + y*y + z*z));
+        accelCurrent = Math.sqrt((x*x + y*y + z*z));
         double delta = accelCurrent - accelLast;
         accel = accel * 0.9f + delta; // perform low-cut filter
 
         if (accel > shakeThreshold) {
             final long actualTime = event.timestamp;
+            int MIN_SHAKE_PERIOD = 1000 * 1000 * 1000;
             if (actualTime - lastUpdate < MIN_SHAKE_PERIOD) {
                 return;
             }
@@ -1101,7 +1091,7 @@ public class MusicService extends Service implements
             return;
 
         stopSleepTimer();
-        final long delayMillis = delayMinutes * 60 * 1000;
+        final long delayMillis = (long) delayMinutes * 60 * 1000;
         sleepTimerScheduleMs = System.currentTimeMillis() + delayMillis;
         sleepTimer = new Timer();
         sleepTimer.schedule(new TimerTask() {

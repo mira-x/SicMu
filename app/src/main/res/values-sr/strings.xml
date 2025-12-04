@@ -17,21 +17,13 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <string name="action_settings">Поставке</string>
-    <string name="action_shake_disabled">Протрес. иск.</string>
-    <string name="action_shake_enabled">Протрес. укљ.</string>
 
     <string name="action_sort_folder">Поређај по фасцикли</string>
     <string name="action_sort_artist">Поређај по извођачу</string>
 
-    <string name="app_playing">Пуштање</string>
-
     <string name="focus_error">Не могу да привилегујем звучни излаз! Поново покрените апликацију!</string>
 
     <string name="settings_title">Поставке</string>
-
-    <string name="action_fold">Сажми</string>
-    <string name="action_unfold">Рашири</string>
 
     <string name="settings_song_view">Приказ песама</string>
     <string name="settings_fold_title">Стање фасцикли по покретању</string>
@@ -46,7 +38,6 @@
 
 
     <string name="settings_song_view_font">Фонт приказа песама</string>
-    <string name="settings_text_size_choosed">Изаберите величину фонта</string>
     <string name="settings_text_size_regular">Нормални фонт</string>
     <string name="settings_text_size_big">Велики фонт</string>
     <string name="settings_text_size_ratio">Однос величине текста извођач/песма</string>
@@ -54,8 +45,7 @@
 
     <string name="settings_rescan_title">Поново скенирај</string>
     <string name="settings_rescan">Поновна претрага медија фајлова.</string>
-    <string name="settings_rescan_disabled">Андроид Киткет онемогућио поновно скенирање.</string>
-    <string name="settings_rescan_triggered">Скенирање медија окинуто...</string>
+    <string name="settings_rescan_triggered">Скенирање медија окинуто…</string>
 
     <string name="settings_media_button_start_app_title">Медија тастери аутоматски покрећу</string>
     <string name="settings_media_button_start_app">Медија тастери покрећу апликацију ако већ није покренута.</string>
@@ -86,8 +76,6 @@
     <string name="help_unfold_group_summary">Тапните групу да бисте је сажели/раширили.</string>
     <string name="help_scroll">Клизање на текућу песму</string>
     <string name="help_scroll_summary">Притисните дугме десно од дугмета „следећа“ да бисте клизали на песму која се пушта.</string>
-    <string name="help_lock">Онемогућавање закључавања екрана</string>
-    <string name="help_lock_summary">Притисните дугме-катанац да бисте онемогућили екран закључавања (спречава закључавање само кад је апликација у првом плану; не ради на неким уређајима).</string>
     <string name="help_root_folders">Корена фасцикла</string>
     <string name="help_root_folders_summary">Можете да прилагодите корену фасциклу: користи се само за скривање првог дела путање фасцикли када су песме поређане по фасцикли.</string>
     <string name="help_background">Позадина</string>

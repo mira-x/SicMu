@@ -46,13 +46,16 @@ public class Path {
     public final static char separatorChar = System.getProperty("file.separator", "/").charAt(0);
     public static String rootFolders = "";
 
-    /*
-     @param path must not be null
-     rootFolders is removed from the beginning of the path
+    /**
+     @example
      if rootFolders = "" and path = /mnt/sdcard/toto/tata.mp3 -> return /mnt/sdcard/toto
+     @example
      if rootFolders = "/mnt/sdcard" and path = /mnt/sdcard/toto/tata.mp3 -> return toto
+     @example
      if rootFolders = "/mnt/sdcard/" and path = /mnt/sdcard/toto/tata.mp3 -> return toto
-    */
+
+     @param path must not be null. rootFolders is removed from the beginning of the path.
+     */
     static public String getFolder(String path) {
         String folder = null;
 
@@ -204,17 +207,15 @@ public class Path {
 
         dirsToScan.add(Environment.getExternalStorageDirectory());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // hack. Don't know if it work well on other devices!
-            String userPathToRemove = "Android/data/souch.smp/files";
-            File[] files = context.getExternalFilesDirs(null);
-            if (files != null)
-                for (File dir : files) {
-                    if (dir != null && dir.getAbsolutePath().endsWith(userPathToRemove)) {
-                        dirsToScan.add(dir.getParentFile().getParentFile().getParentFile().getParentFile());
-                    }
+        // hack. Don't know if it work well on other devices!
+        String userPathToRemove = "Android/data/souch.smp/files";
+        File[] files = context.getExternalFilesDirs(null);
+        if (files != null)
+            for (File dir : files) {
+                if (dir != null && dir.getAbsolutePath().endsWith(userPathToRemove)) {
+                    dirsToScan.add(dir.getParentFile().getParentFile().getParentFile().getParentFile());
                 }
-        }
+            }
 
         for (File dir : dirsToScan) {
             Log.d("Settings", "userDir: " + dir.getAbsolutePath());
@@ -237,19 +238,8 @@ public class Path {
 
 
     public static void rescanWhole(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //purgeFiles(context);
-            scanMediaFiles(context);
-        } else {
-            if (android.os.Environment.getExternalStorageState().equals(
-                    android.os.Environment.MEDIA_MOUNTED))
-                // Broadcast the Media Scanner Intent to trigger it
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                        Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-
-            Toast.makeText(context,
-                    context.getResources().getString(R.string.settings_rescan_triggered), Toast.LENGTH_SHORT).show();
-        }
+        //purgeFiles(context);
+        scanMediaFiles(context);
     }
 
 

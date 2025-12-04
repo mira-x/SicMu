@@ -23,9 +23,9 @@ import android.content.Intent;
 import android.util.Log;
 
 public class Scrobble {
-    private Rows rows;
-    private Parameters params;
-    private Context context;
+    private final Rows rows;
+    private final Parameters params;
+    private final Context context;
 
     // from API spcecification
     public static final int SCROBBLE_START = 0;
@@ -74,7 +74,6 @@ public class Scrobble {
             started = false;
         }
 
-        Intent bCast;
         // from https://github.com/tgwizard/sls/blob/master/Developer%27s%20API.md
         // do not enable Simple Last.FM Droid broadcast as Simple Last.FM Droid handles Scrobble Droid broadcast
         /*
@@ -91,7 +90,7 @@ public class Scrobble {
         */
 
         // from https://code.google.com/p/scrobbledroid/wiki/DeveloperAPI
-        bCast = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
+        var bCast = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
         bCast.putExtra("playing", scrobbleState == SCROBBLE_START || scrobbleState == SCROBBLE_RESUME);
         bCast.putExtra("artist", artist);
         bCast.putExtra("album", album);

@@ -46,7 +46,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         Preference.OnPreferenceClickListener {
     private Parameters params;
     private MusicService musicSrv;
-    private Intent playIntent;
     private boolean serviceBound = false;
     private final String RESCAN_KEY = "RESCAN";
     private final String DONATE_KEY = "DONATE";
@@ -62,7 +61,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        params = new ParametersImpl(getActivity().getApplicationContext());
+        params = new Parameters(getActivity().getApplicationContext());
         switch (params.getTheme()) {
             case 0:
                 getActivity().setTheme(R.style.AppTheme);
@@ -75,7 +74,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 break;
         }
 
-        playIntent = new Intent(getActivity(), MusicService.class);
+        Intent playIntent = new Intent(getActivity(), MusicService.class);
         getActivity().bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
 
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
@@ -362,7 +361,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             findPreference(START_SLEEP_TIMER_KEY).setTitle(
                     getResources().getString(R.string.settings_sleep_timer_stop));
             Date schedule = new Date(stopTimerScheduleMs);
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            var formatter = SimpleDateFormat.getTimeInstance();
             findPreference(START_SLEEP_TIMER_KEY).setSummary(
                     getResources().getString(R.string.settings_sleep_timer_remaining, formatter.format(schedule)));
         } else {
