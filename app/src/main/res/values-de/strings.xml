@@ -136,7 +136,7 @@
     <string name="changelogs_header">Was ist neu:</string>
     <string name="settings_thanks">Danksagungen</string>
     <string name="settings_thanks_icons">Icons</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (Icons von iconfinder.com)</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (Icons von iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutorial</string>
     <string name="settings_thanks_doc_summary">Sue Smith (Tutorial zum Erstellen eines Music Players auf Android)</string>
     <string name="settings_thanks_i15n">Übersetzung</string>

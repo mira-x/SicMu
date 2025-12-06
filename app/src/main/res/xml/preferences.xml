@@ -297,7 +297,7 @@
         android:key="button_about"
         android:title="@string/settings_about"
         android:summary="@string/settings_about_summary"
-        android:icon="@drawable/ic_menu_skull"
+        android:icon="@drawable/ic_info"
         android:persistent="false">
 
         <PreferenceCategory android:title="@string/settings_about">
