@@ -29,6 +29,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioDeviceCallback;
+import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -218,6 +220,8 @@ public class Main extends AppCompatActivity {
         // tells the OS that the volume buttons should affect the "media" volume when your application is visible
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        var audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.registerAudioDeviceCallback(audioDeviceStereoConfigCallback, null);
 
         // set the color statically for speed (don't know another prettier method)
         Row.levelOffset = 14; // todo what?
@@ -1970,6 +1974,23 @@ public class Main extends AppCompatActivity {
         if (params.getVibrate())
             vibrator.vibrate(20);
     }
+
+    /// This callback is used for audio channel config. Each different set of audio output
+    /// devices generates a hardware ID, each having a stereo config. This allows us to
+    /// have different configs, for instance, for our AirPods and our Phone speaker.
+    private AudioDeviceCallback audioDeviceStereoConfigCallback = new AudioDeviceCallback() {
+        @Override
+        public void onAudioDevicesAdded(AudioDeviceInfo[] addedDevices) {
+            setStereoButton();
+            applyStereo();
+        }
+
+        @Override
+        public void onAudioDevicesRemoved(AudioDeviceInfo[] removedDevices) {
+            setStereoButton();
+            applyStereo();
+        }
+    };
 }
 
 

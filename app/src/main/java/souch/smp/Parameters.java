@@ -20,7 +20,13 @@ package souch.smp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.preference.PreferenceManager;
+
+import androidx.core.util.Pair;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Parameters {
     private final Context context;
@@ -161,12 +167,36 @@ public class Parameters {
         getEditor().putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).commit();
     }
 
-    public boolean getStereo() {
-        return getPref().getBoolean(PrefKeys.STEREO.name(), true);
+    private static String PairFirst(Pair<String, String> p) {
+        return p.first;
+    }
+    private static String PairSecond(Pair<String, String> p) {
+        return p.second;
+    }
+    /// This generates an ID for the current audio output devices hardware. It is used so that
+    /// we can have distinct audio channel configurations for different devices.
+    private int getAudioHardwareId() {
+        var aman = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        var outs = aman.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS);
+        var s = new StringBuilder();
+        Arrays.stream(outs)
+                .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
+                .distinct()
+                .sorted(Comparator.comparing(Parameters::PairFirst).thenComparing(Parameters::PairSecond))
+                .forEach(dev -> {s.append(dev.first); s.append(dev.second);});
+        return s.toString().hashCode();
     }
 
+    /// The stereo/mono setting is unique to each device.
+    public boolean getStereo() {
+        var key = PrefKeys.STEREO.name() + getAudioHardwareId();
+        return getPref().getBoolean(key, true);
+    }
+
+    /// The stereo/mono setting is unique to each device.
     public void setStereo(boolean stereo) {
-        getEditor().putBoolean(PrefKeys.STEREO.name(), stereo).commit();
+        var key = PrefKeys.STEREO.name() + getAudioHardwareId();
+        getEditor().putBoolean(key, stereo).commit();
     }
 
     public boolean getScrobble() {
