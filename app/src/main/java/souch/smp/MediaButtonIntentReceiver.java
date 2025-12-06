@@ -74,6 +74,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             int action = event.getAction();
             long eventtime = event.getEventTime();
 
+            // TODO: Check if this works. Or if it works with bluetooth headsets.
             // single quick press: pause/resume.
             // double press: next track
             // long press: start auto-shuffle mode.

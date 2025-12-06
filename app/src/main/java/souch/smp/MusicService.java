@@ -33,8 +33,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.PlaybackParams;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -42,7 +40,6 @@ import android.os.PowerManager;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,11 +47,14 @@ import java.util.TimerTask;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.media.session.MediaButtonReceiver;
-
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.exoplayer.ExoPlayer;
 
 public class MusicService extends Service implements
-        MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener,
         AudioManager.OnAudioFocusChangeListener, SensorEventListener
 {
     // drive app from hardware key (from MediaButtonIntentReceiver)
@@ -74,7 +74,7 @@ public class MusicService extends Service implements
     public static final String NEXT_ACTION        = "souch.smp.musicservicecommand.next";
 
     private Parameters params;
-    private MediaPlayer player;
+    private ExoPlayer player;
     private PowerManager.WakeLock wakeLock;
 
     //private MediaNotificationManager mediaNotificationManager;
@@ -83,21 +83,21 @@ public class MusicService extends Service implements
 
     private Rows rows;
 
-    // seek to last song pos on startup in millisec
-    // if -1: disabled (do not seek to on startup)
-    private int savedSongPos;
-    // save song pos id to avoid restoring song pos if not same track
-    private int savedSongPosId;
+    /// seek to last song pos on startup in milliseconds.
+    /// if -1: disabled (do not seek to on startup)
+    private long savedSongPos;
+    /// save song pos id to avoid restoring song pos if not same track
+    private long savedSongPosId;
 
-    // need for focus
+    /// need for focus
     private boolean wasPlaying;
-    // sthg happened and the Main do not know it: a song has finish to play, another app gain focus, ...
+    /// sth happened and the Main do not know it: a song has finish to play, another app gain focus, ...
     private boolean changed;
 
-    // useful only for buggy android seek
+    /// useful only for buggy android seek
     private long seekPosMsBug;
 
-    // a notification has been launched
+    /// a notification has been launched
     private boolean foreground;
     private static final int NOTIFICATION_ID = 1;
 
@@ -107,17 +107,16 @@ public class MusicService extends Service implements
     private final IBinder musicBind = new MusicBinder();
 
     private ComponentName remoteControlResponder;
-    private boolean hasAudioFocus;
     private AudioManager audioManager;
 
     IntentFilter noisyReceiverFilter = null;
 
-    // current state of the MediaPlayer
+    /// current state of the MediaPlayer
     private PlayerState state;
 
     private Database database;
 
-    // set to false if seekTo() has been called but the seek is still not done
+    /// set to false if seekTo() has been called but the seek is still not done
     private boolean seekFinished;
 
     private SensorManager sensorManager;
@@ -134,7 +133,7 @@ public class MusicService extends Service implements
 
     private Scrobble scrobble;
 
-    // used for handling playback state when media session actions occur.
+    /// used for handling playback state when media session actions occur.
     private final MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
 
         @Override
@@ -275,7 +274,6 @@ public class MusicService extends Service implements
         player = null;
         remoteControlResponder = null;
         audioManager = null;
-        hasAudioFocus = false;
 
         params = new Parameters(this);
         database = new Database(getApplicationContext());
@@ -331,22 +329,8 @@ public class MusicService extends Service implements
 
     // create AudioManager and MediaPlayer at the last moment
     // this func assure they are initialized
-    private MediaPlayer getPlayer() {
+    private ExoPlayer getPlayer() {
         seekPosMsBug = -1;
-
-        if (!hasAudioFocus) {
-            int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN);
-
-            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                hasAudioFocus = true;
-            }
-            else {
-                Toast.makeText(getApplicationContext(),
-                        getResources().getString(R.string.focus_error),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
 
         if (player == null) {
             Log.d("MusicService", "create player");
@@ -354,13 +338,42 @@ public class MusicService extends Service implements
             initMediaSession();
             initNoisyReceiver();
 
-            player = new MediaPlayer();
-            //set player properties
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setOnPreparedListener(this);
-            player.setOnCompletionListener(this);
-            player.setOnErrorListener(this);
-            player.setOnSeekCompleteListener(this);
+            player = new ExoPlayer.Builder(this).build();
+
+            player.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                            .setUsage(C.USAGE_MEDIA)
+                            .build(),
+                    /* handleAudioFocus= */ true
+            );
+
+            player.addListener(new Player.Listener() {
+                @Override
+                public void onPlaybackStateChanged(int playbackState) {
+                    if (playbackState == Player.STATE_READY) {
+                        onPrepared(getPlayer());
+                    } else if (playbackState == Player.STATE_ENDED) {
+                        onCompletion(getPlayer());
+                    }
+                }
+
+                @Override
+                public void onPlayerError(PlaybackException error) {
+                    Log.e("MusicService", error.toString());
+                }
+
+                @Override
+                public void onPositionDiscontinuity(
+                        Player.PositionInfo oldPosition,
+                        Player.PositionInfo newPosition,
+                        int reason) {
+                    if (reason == Player.DISCONTINUITY_REASON_SEEK) {
+                        onSeekComplete(getPlayer());
+                    }
+                }
+            });
+
 //            player.setWakeMode(getApplicationContext(),
 //                    PowerManager.PARTIAL_WAKE_LOCK);
 
@@ -398,11 +411,6 @@ public class MusicService extends Service implements
             player = null;
         if (wakeLock.isHeld())
             wakeLock.release();
-        }
-
-        if (hasAudioFocus) {
-            audioManager.abandonAudioFocus(this);
-            hasAudioFocus = false;
         }
 
         // try sync when releasing audio
@@ -523,8 +531,7 @@ public class MusicService extends Service implements
 
     private int seekPosNbLoop;
     private Timer trackLooperTimer = null;
-    @Override
-    public void onSeekComplete(MediaPlayer mp) {
+    public void onSeekComplete(ExoPlayer mp) {
         // on a 4.1 phone no bug : calling getCurrentPosition now gives the new seeked position
         // on My 2.3.6 phone, the phone seems bugged : calling now getCurrentPosition gives
         // last position. So wait the seekpos goes after the asked seekpos.
@@ -565,39 +572,33 @@ public class MusicService extends Service implements
         startSensor();
         disableTrackLooper();
 
-        getPlayer().reset();
+        getPlayer().stop();
+        getPlayer().clearMediaItems();
         state.setState(PlayerState.Idle);
 
         try{
-            getPlayer().setDataSource(getApplicationContext(), rowSong.getExternalContentUri());
+            state.setState(PlayerState.Preparing);
+            var audio = MediaItem.fromUri(rowSong.getExternalContentUri());
+            var dur = getRows().getCurrSong().getDurationMs();
+            var startTime = 0L;
+
+            if (params.getShuffle() == ShuffleMode.RADIO) {
+                // If a song is started for the first time, i.e. this is not the automatic follow up
+                // to a previously played song, and we are in radio FM mode, we want to start playback at a
+                // random point in time.
+                startTime = (long)(Math.random() * (float)dur);
+            }
+
+            getPlayer().setMediaItem(audio, startTime);
+            getPlayer().prepare();
         }
         catch(Exception e){
-            Log.e("MUSIC SERVICE", "Error setting data source", e);
+            Log.e("MusicService", "Error setting data source", e);
             state.setState(PlayerState.Error);
             // todo: improve error handling
             return;
         }
         state.setState(PlayerState.Initialized);
-
-        var t = new Thread(() -> {
-            state.setState(PlayerState.Preparing);
-            try {
-                getPlayer().prepare();
-            } catch (Exception e) {
-                state.setState(PlayerState.Error);
-                Log.e("MusicService", "Preparing player: " + e);
-                return;
-            }
-
-            // If a song is started for the first time, i.e. this is not the automatic follow up
-            // to a previously played song, and we are in radio FM mode, we want to start playback at a
-            // random point in time.
-            if (params.getShuffle() == ShuffleMode.RADIO && oldState != PlayerState.PlaybackCompleted) {
-                var ms = (double) (getDurationMs()) * Math.random();
-                seekTo((long)ms);
-            }
-        });
-        t.start();
 
         updateMediaPlaybackState();
         updateMediaSessionMetadata();
@@ -615,8 +616,7 @@ public class MusicService extends Service implements
         rows.synchronizeFailedRatings();
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
+    public void onCompletion(ExoPlayer mp) {
         state.setState(PlayerState.PlaybackCompleted);
         setChanged();
 
@@ -639,18 +639,10 @@ public class MusicService extends Service implements
         }
     }
 
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        // todo: check if this func is ok
-        /*
-        mp.reset();
-        state.setState(PlayerState.Idle);
-        */
-        return false;
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp) {
+    /// When we want to play a song, we "prepare" it first. This loads the sound data from our mp3 files,
+    /// and prepares the player. If that is done, this callback fires. We then want to actually
+    /// start the sound file.
+    public void onPrepared(ExoPlayer mp) {
         // if a songPos has been stored
         Log.d("MusicService", "savedSongPosId: " + savedSongPosId + "getDuration" + mp.getDuration());
         if (savedSongPos > 0 &&
@@ -659,16 +651,17 @@ public class MusicService extends Service implements
             // seek to it
             mp.seekTo(savedSongPos);
         }
-        // reset songPos
-        params.setSongPos(0);
-        params.setSongPosId(0);
-        savedSongPos = 0;
+
+        savedSongPos = mp.getCurrentPosition();
         savedSongPosId = 0;
+        params.setSongPos(savedSongPos);
+        params.setSongPosId(savedSongPosId);
+
 
         applyPlaybackSpeed(playbackSpeed);
 
         // start playback
-        mp.start();
+        mp.play();
         state.setState(PlayerState.Started);
 
         scrobble.send(Scrobble.SCROBBLE_COMPLETE);
@@ -677,9 +670,8 @@ public class MusicService extends Service implements
 
     private boolean applyPlaybackSpeed(float speed) {
         try {
-            PlaybackParams params = getPlayer().getPlaybackParams();
-            params.setSpeed(speed);
-            getPlayer().setPlaybackParams(params);
+            var params = getPlayer().getPlaybackParameters().withSpeed(speed);
+            getPlayer().setPlaybackParameters(params);
             return true;
         } catch (Exception e) {
             Log.e("MusicService", "setPlaySpeed: ", e);
@@ -700,7 +692,7 @@ public class MusicService extends Service implements
     }
 
     // get current song total duration
-    public int getDurationMs(){
+    public long getDurationMs(){
         if(player == null)
             return 0;
         return player.getDuration();
@@ -763,7 +755,7 @@ public class MusicService extends Service implements
     // unpause
     public void start() {
         applyPlaybackSpeed(playbackSpeed);
-        getPlayer().start();
+        getPlayer().play();
         state.setState(PlayerState.Started);
         startSensor();
         scrobble.send(Scrobble.SCROBBLE_RESUME);

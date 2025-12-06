@@ -71,17 +71,17 @@ public class Parameters {
         return getPref().getBoolean(PrefKeys.SAVE_SONG_POS.name(), false);
     }
 
-    public int getSongPos() {
-        return getPref().getInt(PrefKeys.SONG_POS.name(), -1);
+    public long getSongPos() {
+        return getPref().getLong(PrefKeys.SONG_POS.name(), -1);
     }
-    public void setSongPos(int songPos) {
-        getEditor().putInt(PrefKeys.SONG_POS.name(), songPos).commit();
+    public void setSongPos(long songPos) {
+        getEditor().putLong(PrefKeys.SONG_POS.name(), songPos).commit();
     }
-    public int getSongPosId() {
-        return getPref().getInt(PrefKeys.SONG_POS_ID.name(), -1);
+    public long getSongPosId() {
+        return getPref().getLong(PrefKeys.SONG_POS_ID.name(), -1);
     }
-    public void setSongPosId(int songPos) {
-        getEditor().putInt(PrefKeys.SONG_POS_ID.name(), songPos).commit();
+    public void setSongPosId(long songPos) {
+        getEditor().putLong(PrefKeys.SONG_POS_ID.name(), songPos).commit();
     }
 
     public Filter getFilter() {
