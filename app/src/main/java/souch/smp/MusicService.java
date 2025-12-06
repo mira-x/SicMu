@@ -44,6 +44,7 @@ import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.media.session.MediaButtonReceiver;
@@ -52,8 +53,14 @@ import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
+import androidx.media3.common.audio.AudioProcessor;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.audio.AudioSink;
+import androidx.media3.exoplayer.audio.DefaultAudioSink;
 
+@UnstableApi
 public class MusicService extends Service implements
         AudioManager.OnAudioFocusChangeListener, SensorEventListener
 {
@@ -76,6 +83,7 @@ public class MusicService extends Service implements
     private Parameters params;
     private ExoPlayer player;
     private PowerManager.WakeLock wakeLock;
+    private MergeAudioProcessor mergeAudioProcessor;
 
     //private MediaNotificationManager mediaNotificationManager;
     private MediaSessionCompat mediaSession;
@@ -259,6 +267,7 @@ public class MusicService extends Service implements
 
     /*** SERVICE ***/
 
+    @Override
     public void onCreate() {
         Log.d("MusicService", "onCreate()");
         super.onCreate();
@@ -294,6 +303,8 @@ public class MusicService extends Service implements
         audioManager.registerMediaButtonEventReceiver(remoteControlResponder);
         foreground = false;
         mainIsVisible = false;
+        mergeAudioProcessor = new MergeAudioProcessor();
+        mergeAudioProcessor.setStereo(params.getStereo());
 
         scrobble = new Scrobble(rows, params, getApplicationContext());
     }
@@ -327,8 +338,10 @@ public class MusicService extends Service implements
 
     /*** PLAYER ***/
 
-    // create AudioManager and MediaPlayer at the last moment
-    // this func assure they are initialized
+    /**
+     * This gets the ExoPlayer, and creates one if neccessary. It also creates an AudioManager.
+     * @return The ExoPlayer, fully initialized
+     */
     private ExoPlayer getPlayer() {
         seekPosMsBug = -1;
 
@@ -338,7 +351,24 @@ public class MusicService extends Service implements
             initMediaSession();
             initNoisyReceiver();
 
-            player = new ExoPlayer.Builder(this).build();
+            // This boilerplate is necessary in order to allow use of our custom AudioProcessor
+            var renderersFactory = new DefaultRenderersFactory(this) {
+                @Override
+                protected AudioSink buildAudioSink(
+                        @NonNull Context context,
+                        boolean enableFloatOutput,
+                        boolean enableAudioTrackPlaybackParams) {
+                    return new DefaultAudioSink.Builder(context)
+                            .setAudioProcessors(new AudioProcessor[]{mergeAudioProcessor})
+                            .setEnableFloatOutput(enableFloatOutput)
+                            .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
+                            .build();
+                }
+            };
+
+            player = new ExoPlayer.Builder(this)
+                    .setRenderersFactory(renderersFactory)
+                    .build();
 
             player.setAudioAttributes(
                     new AudioAttributes.Builder()
@@ -680,7 +710,7 @@ public class MusicService extends Service implements
     }
 
     public void applyStereo(boolean stereo) {
-        // TODO: Implement
+        mergeAudioProcessor.setStereo(stereo);
     }
 
     /*** PLAY ACTION ***/

@@ -56,7 +56,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -70,10 +69,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.media3.common.util.UnstableApi;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.widget.Toast.LENGTH_LONG;
 
+@UnstableApi
 public class Main extends AppCompatActivity {
     private Rows rows;
     private ListView songView;
@@ -285,7 +286,6 @@ public class Main extends AppCompatActivity {
         moreButtonsLayout.setVisibility(View.GONE);
         setShuffleButton();
         setStereoButton();
-        applyStereo();
 
         playbackSpeedText = findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
@@ -1203,7 +1203,7 @@ public class Main extends AppCompatActivity {
         filename = filename.replaceAll("\\(([^)]+)\\)", "");
 
         try {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename, StandardCharsets.UTF_8)));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename)));
             startActivity(browserIntent);
         } catch (Exception e) {
             Log.e("sicmu", "Error while creating genius.com URL: " + e);
