@@ -32,8 +32,12 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
@@ -49,6 +53,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private boolean serviceBound = false;
     private final String RESCAN_KEY = "RESCAN";
     private final String DONATE_KEY = "DONATE";
+    private final String TEXT_SIZE_TOGGLE_KEY = "TEXT_SIZE_TOGGLE";
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     private final String CHANGELOGS_KEY = "CHANGELOGS";
     private final String RATINGS_NOT_WRITTEN_KEY = "RATINGS_NOT_WRITTEN_KEY";
@@ -94,6 +99,10 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         }
         CheckBoxPreference prefEnableRating = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_RATING.name());
         prefEnableRating.setChecked(params.getEnableRating());
+
+        Preference fontSize = findPreference(TEXT_SIZE_TOGGLE_KEY);
+        fontSize.setOnPreferenceClickListener(this);
+        setFontSizeIcon();
 
         findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(params.getNormalTextSize()));
         findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(params.getBigTextSize()));
@@ -347,12 +356,25 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 getActivity().runOnUiThread(() ->
                         Toast.makeText(getActivity().getBaseContext(), msg, Toast.LENGTH_LONG).show());
             });
+        } else if (preference.getKey().equals(TEXT_SIZE_TOGGLE_KEY)) {
+            var size = !params.getChoosedTextSize();
+            params.setChooseTextSize(size);
+            setFontSizeIcon();
         }
         return false;
     }
 
     public void rescan() {
         Path.rescanWhole(getActivity().getBaseContext());
+    }
+
+    void setFontSizeIcon() {
+        int icon;
+        if (params.getChoosedTextSize())
+            icon = R.drawable.ic_menu_text_big;
+        else
+            icon = R.drawable.ic_menu_text_regular;
+        findPreference(TEXT_SIZE_TOGGLE_KEY).setIcon(icon);
     }
 
     private void setSleepTimerTitle() {

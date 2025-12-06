@@ -47,6 +47,7 @@
 
 
     <string name="settings_sleep_timer_delay_wrong">Dauer muss positiv sein!</string>
+    <string name="settings_toggle_font_size_label">Tippen, um zwischen groß und klein wechseln.</string>
     <string name="settings_song_view_font">Schrift für Liedansicht</string>
     <string name="settings_text_size_big">Größe für fette Schrift</string>
     <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
@@ -70,6 +71,7 @@
     <string name="settings_songpos">Lied beim nächsten Mal von gespeicherter Position abspielen.</string>
 
     <string name="settings_shuffle_explainer_radio">Shuffle + Lieder zufällig beginnen</string>
+    <string name="settings_stereo_off">Mono</string>
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Informationen zum abgespielten Lied an Last.FM oder Libre.FM schicken (Scrobble Droid oder Simple Last.fm Scrobbler müssen installiert sein)</string>
 
@@ -210,4 +212,6 @@
     <string name="action_stop_at_end_of_track">Nach dem Lied aufhören</string>
     <string name="settings_shuffle_explainer_sequential">Shuffle aus</string>
     <string name="settings_shuffle_explainer_random">Shuffle an</string>
+    <string name="settings_stereo_on">Stereo</string>
+    <string name="settings_toggle_font_size">Schriftgröße</string>
 </resources>

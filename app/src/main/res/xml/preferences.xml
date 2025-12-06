@@ -132,12 +132,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_song_view_font">
+        <Preference
+            android:key="TEXT_SIZE_TOGGLE"
+            android:title="@string/settings_toggle_font_size"
+            android:icon="@drawable/ic_menu_text_regular"
+            android:summary="@string/settings_toggle_font_size_label"/>
 
         <EditTextPreference
             android:key="TEXT_SIZE_NORMAL"
             android:title="@string/settings_text_size_regular"
             android:inputType="number"
-            android:icon="@drawable/ic_menu_text_regular"
             android:summary=""
             android:defaultValue="@string/settings_text_size_regular_default"
             />
@@ -147,7 +151,6 @@
             android:title="@string/settings_text_size_big"
             android:inputType="number"
             android:summary=""
-            android:icon="@drawable/ic_menu_text_big"
             android:defaultValue="@string/settings_text_size_big_default"
             />
 

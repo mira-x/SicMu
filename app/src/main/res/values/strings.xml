@@ -136,6 +136,8 @@
     <string name="settings_sleep_timer_remaining">Playback will pause at: %s</string>
     <string name="settings_sleep_timer_delay_wrong">Sleep timer delay must be a positive number</string>
 
+    <string name="settings_toggle_font_size">Font size</string>
+    <string name="settings_toggle_font_size_label">Tap to switch between regular and big font.</string>
     <string name="settings_song_view_font">Song view font</string>
     <string name="settings_text_size_choosed_default" translatable="false">false</string>
     <string name="settings_text_size_regular">Small font size</string>
