@@ -105,7 +105,6 @@
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Kaynak</string>
     <string name="settings_licence_title">Lisans</string>
-    <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Bağış Yap</string>
 
     <string name="settings_thanks">Teşekkürler</string>

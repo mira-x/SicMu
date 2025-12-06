@@ -235,7 +235,7 @@
 
     <string name="settings_thanks">Remerciements particuliers</string>
     <string name="settings_thanks_icons">Icônes</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (icônes trouvés sur iconfinder.com)</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (icônes trouvés sur iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutoriel</string>
     <string name="settings_thanks_doc_summary">Sue Smith (tutoriels sur comment créer un lecteur de musique sur Android)</string>
     <string name="settings_thanks_i15n">Traduction</string>

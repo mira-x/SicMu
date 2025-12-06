@@ -114,7 +114,6 @@
     <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Código fonte</string>
     <string name="settings_licence_title">Licença</string>
-    <string name="settings_licence">GPLv3</string>
     <string name="donate_title">Doar</string>
 
     <string name="settings_thanks">Agradecimentos espciais</string>

@@ -232,7 +232,7 @@
     <string name="settings_source_title">Sources</string>
     <string name="settings_source" translatable="false">https://gitlab.com/souch/SMP</string>
     <string name="settings_licence_title">License</string>
-    <string name="settings_licence">GPLv3</string>
+    <string name="settings_licence" translatable="false">GPLv3-only</string>
     <string name="donate_title">Donate</string>
     <string name="donate_summary">If you like the app, donate to reward me for the hard work !</string>
     <string name="buy_pro_summary">If you like the app, donate or buy the pro version to reward me for the hard work !</string>
