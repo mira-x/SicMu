@@ -161,12 +161,20 @@ public class Parameters {
         getEditor().putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).commit();
     }
 
+    public boolean getStereo() {
+        return getPref().getBoolean(PrefKeys.STEREO.name(), true);
+    }
+
+    public void setStereo(boolean stereo) {
+        getEditor().putBoolean(PrefKeys.STEREO.name(), stereo).commit();
+    }
+
     public boolean getScrobble() {
         return getPref().getBoolean(PrefKeys.SCROBBLE.name(), false);
     }
 
     public int getSleepDelayM() {
-        return Integer.valueOf(getPref().getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
+        return Integer.parseInt(getPref().getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
     }
 
     public boolean getShowFilename() {
@@ -182,7 +190,7 @@ public class Parameters {
     }
 
     public int getUninitializedDefaultRating() {
-        return Integer.valueOf(getPref().getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
+        return Integer.parseInt(getPref().getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
     }
 
     public boolean getHideNavigationBar() {

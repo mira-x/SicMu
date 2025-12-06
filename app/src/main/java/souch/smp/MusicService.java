@@ -687,6 +687,10 @@ public class MusicService extends Service implements
         }
     }
 
+    public void applyStereo(boolean stereo) {
+        // TODO: Implement
+    }
+
     /*** PLAY ACTION ***/
 
     public long getCurrentPositionMs(){

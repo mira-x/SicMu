@@ -169,6 +169,9 @@
     <string name="settings_shuffle_explainer_random">Shuffle on</string>
     <string name="settings_shuffle_explainer_radio">Shuffle + Start songs at random time</string>
 
+    <string name="settings_stereo_on">Stereo</string>
+    <string name="settings_stereo_off">Mono</string>
+
     <string name="settings_scrobble_title">Scrobble</string>
     <string name="settings_scrobble">Send details of played tracks to Last.FM or Libre.FM (requires that Scrobble Droid or Simple Last.fm Scrobbler installed on the device)</string>
 

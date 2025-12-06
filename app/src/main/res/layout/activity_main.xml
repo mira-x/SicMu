@@ -439,14 +439,14 @@
             -->
 
         <ImageButton
-            android:id="@+id/text_size_button"
+            android:id="@+id/stereo_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:layout_weight="50"
-            android:onClick="openTextSize"
+            android:onClick="toggleStereo"
             android:scaleType="center"
-            android:src="@drawable/ic_menu_text_big" />
+            android:src="@drawable/ic_stereo" />
 
         <ImageButton
             android:id="@+id/repeat_button"

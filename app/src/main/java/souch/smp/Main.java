@@ -56,6 +56,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -283,7 +284,8 @@ public class Main extends AppCompatActivity {
         moreButtonsLayout = findViewById(R.id.more_buttons);
         moreButtonsLayout.setVisibility(View.GONE);
         setShuffleButton();
-        setTextSizeButton();
+        setStereoButton();
+        applyStereo();
 
         playbackSpeedText = findViewById(R.id.playBackSpeed);
         playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
@@ -1201,7 +1203,7 @@ public class Main extends AppCompatActivity {
         filename = filename.replaceAll("\\(([^)]+)\\)", "");
 
         try {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename, "UTF-8")));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename, StandardCharsets.UTF_8)));
             startActivity(browserIntent);
         } catch (Exception e) {
             Log.e("sicmu", "Error while creating genius.com URL: " + e);
@@ -1490,14 +1492,28 @@ public class Main extends AppCompatActivity {
         img.setImageResource(getRepeatResId());
     }
 
-    private void setTextSizeButton() {
-        ImageView img = findViewById(R.id.text_size_button);
-        img.setImageResource(getTextSizeResId());
-    }
-
     private void setSortButton() {
         ImageView img = findViewById(R.id.sort_button);
         img.setImageResource(getSortResId());
+    }
+
+    ///  Sets the stereo button image to reflect the Mono/Stereo setting
+    private void setStereoButton() {
+        var stereo = params.getStereo();
+        ImageButton btn = findViewById(R.id.stereo_button);
+        if (stereo) {
+            btn.setImageResource(R.drawable.ic_stereo);
+        } else {
+            btn.setImageResource(R.drawable.ic_mono);
+        }
+    }
+
+    ///  This contacts the music service to apply the stereo setting
+    private void applyStereo() {
+        if(musicSrv == null) {
+            return;
+        }
+        musicSrv.applyStereo(params.getStereo());
     }
 
     private void setShuffleButton() {
@@ -1813,6 +1829,26 @@ public class Main extends AppCompatActivity {
         startCloseMoreButtonsTimer();
     }
 
+    public void toggleStereo(View view) {
+        var stereo = !params.getStereo();
+        params.setStereo(stereo);
+        setStereoButton();
+        showStereoToast(view.getContext());
+        applyStereo();
+    }
+
+    /// Shows a toast showing "Stereo" or "Mono"
+    public void showStereoToast(Context ctx) {
+        int toastText;
+        if (params.getStereo()) {
+            toastText = R.string.settings_stereo_on;
+        } else {
+            toastText = R.string.settings_stereo_off;
+        }
+        Toast.makeText(ctx, getText(toastText), Toast.LENGTH_SHORT).show();
+    }
+
+/*
     public void openTextSize(View view) {
         params.setChooseTextSize(!params.getChoosedTextSize());
         ImageButton img = findViewById(R.id.text_size_button);
@@ -1827,7 +1863,7 @@ public class Main extends AppCompatActivity {
         setTextSizeButton();
         startCloseMoreButtonsTimer();
     }
-
+*/
     public void openMinRating(View view) {
         openRatingMenu();
         startCloseMoreButtonsTimer();

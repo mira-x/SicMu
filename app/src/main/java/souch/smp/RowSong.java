@@ -48,7 +48,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -74,7 +73,7 @@ public class RowSong extends Row {
     private final String path;
     private final String filename;
     // folder of the path (i.e. last folder containing the file's song)
-    private String folder;
+    private final String folder;
 
     private final SongDAO songDAO;
 
