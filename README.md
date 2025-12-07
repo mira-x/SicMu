@@ -6,7 +6,7 @@ SicMu Neo is a file-based music player with a very basic UI. You can use your fo
 
 ### Screenshots
 
-![Screenshots](misc/screenshots.jpg)
+![Screenshots](misc/screenshots.png)
 
 ### Upstream Changes
 This fork retains the spirit of the original app and adds these features:

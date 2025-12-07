@@ -17,7 +17,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
-        maven { url "https://jitpack.io" }
+        maven { url = "https://jitpack.io" }
     }
     // increase compilation log level
     tasks.withType(JavaCompile).tap {

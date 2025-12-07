@@ -1,0 +1,2 @@
+Version 2.4.1
+This rebrands the app with a new icon to easier differentiate it from SicMu Legacy

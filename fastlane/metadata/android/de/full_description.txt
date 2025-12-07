@@ -1,0 +1,22 @@
+SicMu Neo ist ein schlanker, umfangreicher und dateibasierter Musikplayer. Die Nutzeroberfläche ist simpel und die App schont die Systemresourcen.
+
+Installationshinweise:
+Nach der Installation kann es nötig sein, in die Einstellungen zu gehen, runter zu scrollen und das Einlesen der Mediendateien manuell auszulösen. Dies sollte nicht länger als eine Minute dauern. Nach einem Neustart der App sollten die Lieder erscheinen.
+
+Funktionen:
+* Gruppierung nach Künstler/Album oder nach Ordnerhierarchie
+* Mehrere Shuffle-Modi, verschiedene Wiederhol-Optionen, A-B Wiederholung und einstellbare Wiedergabegeschwindigkeit
+* Smartphone schütteln, um ein Lied zu überspringen (falls aktiviert)
+* Schnell: Startet in unter einer Sekunde bei großen Musikbibliotheken mit über Eintausend Dateien
+* Auslesen von Metadaten aus Dateien
+* Filtern nach, und erstellen von Sternbewertungen
+* Unterstützung für Scrobble über Drittanbieter-Apps
+* Schlaftimer (Musik nach X Minuten/Stunden ausschalten)
+* Verschiedene Farbschema (dunkel-rot, dunkel-weiß, weiß)
+* Unterstützt praktisch alle Dateiformate (mp3, ogg, flac, wav, ...)
+
+Neu in diesem Fork:
+* Suchfunktion
+* Mehrere Quellen für Albumcover (Metadaten, Rückfall auf einzelne Bilddateien mit der größten Namensähnlichkeit im Ordner)
+* Mono/Stereo Einstellung für jedes Ausgabegerät
+* "Auf genius.com suchen" Knopf durch langes Drücken auf ein Lied
