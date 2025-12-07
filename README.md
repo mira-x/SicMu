@@ -1,107 +1,37 @@
-## SicMu Player for Android
+# SicMu Neo
 
-Every songs of the phone are put in a unique big song list.
+This is a fork of [Mathieu Souchaud's SicMu alias SMP](https://gitlab.com/souch/SMP).
 
-Songs are sorted and grouped by folders, artists, albums and album's track.
+SicMu Neo is a file-based music player with a very basic UI. You can use your folder hierarchy to group and organize music, or you can use the audio file metadata to group the music by artist and album. It supports a wide range of playback options, and includes support for Last.FM scrobbling via third-party apps.
 
-Requires at least Android 7.0.
+### Screenshots
 
-4.3" screen:
+![Screenshots](misc/screenshots.jpg)
 
-![Tree folder list](misc/screenshots/screen4.3_tree_resized.png)&nbsp;
-![Artist list](misc/screenshots/screen_4.6_cover_resized.png)
-![Fullscreen cover art](misc/screenshots/screen_4.6_coverbig_resized.png)
+### Upstream Changes
+This fork retains the spirit of the original app and adds these features:
+- Search
+- Advanced album art loading (You have an Album.jpg file? It will be considered.)
+- Per-audio-device mono/stereo settings
+- Radio shuffle mode (Random song order, starts first song selected at random point in the song)
+- "Search on genius.com" button when long-pressing on audio file
 
-[Video (outdated)](http://youtu.be/LGyjDfwimzA)
+The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 7.0.
 
-[More screenshots](Screenshots.md)
-
+<!--
 ### Installation
 
+These are links for the original SicMu Player:
+
 [<img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png">](https://f-droid.org/repository/browse/?fdid=souch.smp)
-[<img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png">](https://play.google.com/store/apps/details?id=souch.smp)
+-->
 
-### Detailed features
+### License and Credits
 
-- sort mode:
-    - sort by folder tree, useful for big music list (default)
-    - sort by artists, albums and track number
-    - sort by folders, artists, albums and track number, flattening folder hierarchy
-- cover art image
-- songs navigation:
-    - repeat mode (all, group, one track)
-    - shuffle mode
-    - radio mode (shuffle + begin songs at random position)
-    - seek bar
-    - auto repeat seek buttons
-    - loop on part of the song (A to B repeat feature)
-    - adjustable playback speed
-    - shake the phone to go to next song
-    - rate songs and filter by rating
-    - remove file from device (on FDroid only)
-- User Interface:
-    - notification with media controls
-    - disable / enable lockscreen
-    - configurable font size
-- bluetooth & scrobble
-    - bluetooth support (play through bluetooth device)
-    - media buttons support (next, prev, play/pause) from external device (bluetooth headphones...)
-    - support [Simple Last.fm Scrobbler](https://github.com/tgwizard/sls) or [Scrobble Droid](https://code.google.com/p/scrobbledroid) (disabled by default in settings)
-- play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
-- light and fast: starts in 0.5s and uses 40Mo of RAM with 18Go of music (3000 files, 200 folders) on an old 2*1.7GHz ARM processor.
+SicMu Player is licensed under the GPLv3 only. See file [LICENSE](LICENSE) for more details.
 
-
-### Help
-
-- see help section in app's settings
-
-
-### Todo (perhaps :-)
-
-- browse folder
-- block song/folder
-- group by genre?
-- search?
-- pinned section (upper group level stay at top until another one appears)?
-- mp3 tag editor ?
-- playlist?
-- audioeffect/equalizer
-- migrate to kotlin, enable lint checks
-- make rating and remove file works for GooglePlay too
-
-Detailed todo list available in [TODO.txt](misc/TODO.txt).
-
-
-### Credits
-
-Lot's of time saved thanks to Sue Smith's [tutorials on creating a Music Player on Android](http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764).
-
-Use some icons done by Daniele De Santis (Creative Commons Attribution 3.0 Unported), found on iconfinder.com.
-
-Seekbar style created by Jérôme Van Der Linden (Creative Commons Attribution 3.0 Unported), found on http://android-holo-colors.com.
-
-RepeatingImageButton.java and MediaButtonIntentReceiver.java file mostly copied from official android music player (Apache License, Version 2.0).
-
-
-### Developer
-
-Compiled with Android Studio.
-Tested on Kitkat (4.4.4), Samsung S3 (7.1), Android 11...
-
-Feel free to add GitLab issues (feature request, bugs...).
-If you need a feature that is in the todo list, open a feature request on gitlab to speed up its development.
-
-An UML class diagram describe a bit the architecture for people that would want to help developing the software [UmlClass.png](misc/UmlClass.png).
-
-SicMu player pronounced zicmu. S is for Super Simple Sorted Souch player.
-
-### Donation
-
-If you like the app, donate to reward me for the hard work ! :
-[donate](https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE)
-
-
-### License
-
-SicMu Player is licensed under the GPLv3. See file [LICENSE](LICENSE) for more details.
-
+- Original app by [Mathieu Souchaud](https://gitlab.com/souch/SMP) [(Donate)](https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE).
+- Thanks to Sue Smith for [tutorials on creating a Music Player on Android](http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764).
+- Icons from Daniele De Santis / iconfinder.com (Creative Commons Attribution 3.0 Unported)
+- Icons from Google Material Symbols (Apache 2.0)
+- Seekbar style by [Jérôme Van Der Linden](https://android-holo-colors.com)

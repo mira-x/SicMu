@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "souch.smp"
+    namespace "xyz.mordorx.sicmu"
     signingConfigs {
         release {
         }
     }
     compileSdkVersion 36
     defaultConfig {
-        applicationId "souch.smp"
+        applicationId "xyz.mordorx.sicmu"
         minSdkVersion 24 // Android 7.0
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
@@ -29,17 +29,9 @@ android {
     }
     flavorDimensions "version"
     productFlavors {
-        // for freeware and fdroid version
         free {
-            resValue "string", "app_name", "SicMu Player"
+            resValue "string", "app_name", "SicMu Neo"
         }
-        // for pro version
-        pro {
-            resValue "string", "app_name", "SicMu Player Pro"
-            applicationIdSuffix ".pro"
-            versionNameSuffix "-pro"
-        }
-
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

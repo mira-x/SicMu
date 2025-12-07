@@ -118,7 +118,7 @@
             android:gravity="center"
             android:text="1.0x"/>
 
-        <souch.smp.RepeatingImageButton
+        <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/m20_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
@@ -140,7 +140,7 @@
             android:text="20s"
             android:textColor="?attr/colorActionBtn" />
 
-        <souch.smp.RepeatingImageButton
+        <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/m5_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
@@ -160,7 +160,7 @@
             android:text="5s"
             android:textColor="?attr/colorActionBtn" />
 
-        <souch.smp.RepeatingImageButton
+        <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/p5_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
@@ -182,7 +182,7 @@
             android:text="20s"
             android:textColor="?attr/colorActionBtn" />
 
-        <souch.smp.RepeatingImageButton
+        <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/p20_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"

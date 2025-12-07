@@ -1,0 +1,8 @@
+Version 2.4.0 - First release of SicMu Neo
+- Added a search function
+- Fixed music service being destroyed when in background
+- Added per-device mono audio mode (+ Backend Migration to ExoPlayer)
+- Raised minimum Android Version to 7.0
+- Added a radio shuffle mode (songs are played randomly, and the first one begins at a random play time)
+- Added "Search on genius.com" button
+- Advanced album art lookup through longest prefix match

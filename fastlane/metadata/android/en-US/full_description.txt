@@ -1,23 +1,24 @@
-<i>SicMu player</i> is lightweight audio player which features a single over-all playlist with every song on the device.
-Very useful for large music lists organized by folder.
+<i>SicMu Neo</i> is a lightweight, full-featured, file-based audio player with a simple to use UI and low resource footprint. It is especially well-suited for large music libraries organized in folder structures.
 
 <b>Features</b>
+* Song grouping by artist/album or folder structure
+* Multiple shuffle modes, multiple song repeatition options, A-B looping, set playback speed
+* Shake the phone to skip a song (after enabled)
+* Light: starts in sub-second time and runs with no delay for music libraries with >1K files
+* Audio metadata reading
+* Filter by and edit star ratings
+* Notification with sound control
+* Scrobble support via third-party apps
+* Sleep timer (turn of music after X minutes/hours)
+* Multiple color themes (dark-red, dark-white, white)
+* Supports virtually all audio formats (mp3, ogg, flac, wav, ...)
 
-* show songs in a tree view following device's folder hierarchy
-* show songs grouping by artist
-* show songs grouping by folders
-* cover art image
-* repeat mode (all, group, one track)
-* shuffle mode
-* shake the phone to go to next song
-* notification with media controls
-* disable / enable lockscreen
-* advanced playback control (forward/backward of 5/20 s, adjustable playback speed, A to B repeat loop)
-* configurable font size
-* bluetooth & scrobble support
-* play mp3, ogg, flac, midi, wav, 3gp... see android mediaplayer supported media formats (depends on android version).
-* light and fast: starts in 0.5s and uses 10Mo of RAM with 5Go of music (1000 files, 100 folders) on a 700MHz ARM processor.
+<b>New in this fork</b>
+* Search function
+* Multiple sources for album art (metadata, fallback to longest filename prefix match for .jpg and .png files in the same folder)
+* Per-device mono/stereo settings
+* "Search on genius.com" button when long pressing on a song
 
-<b>Donate</b>
 
-One can donate a bit through paypal or flattr <a href="http://rodolphe.souchaud.free.fr/donate">here</a>.
+
+

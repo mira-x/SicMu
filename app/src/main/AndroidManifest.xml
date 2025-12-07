@@ -106,17 +106,7 @@
             android:parentActivityName=".Main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="souch.smp.Main" />
-        </activity>
-
-        <activity
-            android:name=".DonateActivity"
-            android:label="@string/donate_title"
-            android:theme="@style/Theme.AppTheme"
-            android:parentActivityName=".Main" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="souch.smp.Main" />
+                android:value="xyz.mordorx.sicmu.Main" />
         </activity>
 
         <activity
@@ -126,7 +116,7 @@
             android:parentActivityName=".Main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="souch.smp.Main" />
+                android:value="xyz.mordorx.sicmu.Main" />
         </activity>
 
     </application>

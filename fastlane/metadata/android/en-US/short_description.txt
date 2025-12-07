@@ -1,1 +1,1 @@
-Best tree view music player for Android
+Simple, full-featured, file-based music player
