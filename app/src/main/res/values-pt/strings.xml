@@ -111,7 +111,6 @@
 
     <string name="settings_version_title">Versão</string>
     <string name="settings_author_title">Autor</string>
-    <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Código fonte</string>
     <string name="settings_licence_title">Licença</string>
     <string name="donate_title">Doar</string>

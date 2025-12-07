@@ -315,6 +315,7 @@
                 android:title="@string/changelogs_title"/>
 
             <Preference
+                android:key="GITHUB_SOURCE_URL"
                 android:title="@string/settings_source_title"
                 android:summary="@string/settings_source"/>
 

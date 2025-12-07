@@ -225,9 +225,6 @@
 
     <string name="donate_title">Donation</string>
     <string name="donate_summary">Si vous aimez l\'application, merci de faire un don pour récompenser mon dur labeur !</string>
-    <string name="buy_pro_summary">Si vous aimez l\'application, merci de faire un don ou d\'acheter la
-        version pro pour récompenser mon dur labeur !</string>
-    <string name="show_donate_disabled">Affichage du rappel de donation désactivé</string>
     <string name="close">Fermer</string>
 
     <string name="changelogs_title">Notes de version</string>

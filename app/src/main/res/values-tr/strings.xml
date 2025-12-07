@@ -102,7 +102,6 @@
 
     <string name="settings_version_title">Sürüm numarası</string>
     <string name="settings_author_title">Hazırlayan</string>
-    <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Kaynak</string>
     <string name="settings_licence_title">Lisans</string>
     <string name="donate_title">Bağış Yap</string>

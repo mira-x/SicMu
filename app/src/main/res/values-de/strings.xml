@@ -128,7 +128,6 @@
 
     <string name="settings_version_title">Version</string>
     <string name="settings_author_title">Autor</string>
-    <string name="settings_author">Mathieu Souchaud</string>
     <string name="settings_source_title">Quellen</string>
     <string name="settings_licence_title">Lizenz</string>
     <string name="donate_title">Spenden</string>
@@ -198,7 +197,6 @@
     <string name="help_donate">Spenden</string>
     <string name="help_context_menu">Kontextmenü</string>
     <string name="donate_summary">Spenden sind immer willkommen!</string>
-    <string name="buy_pro_summary">Kaufe die Pro-Version um die Entwicklung zu unterstützen!</string>
     <string name="close">Schließen</string>
     <string name="changelogs_title">Änderungen in dieser Version</string>
     <string name="settings_show_filename">Dateiname anzeigen</string>

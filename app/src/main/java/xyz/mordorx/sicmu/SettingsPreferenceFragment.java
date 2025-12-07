@@ -53,6 +53,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     private final String CHANGELOGS_KEY = "CHANGELOGS";
     private final String RATINGS_NOT_WRITTEN_KEY = "RATINGS_NOT_WRITTEN_KEY";
+    private final String GITHUB_SOURCE_URL_KEY = "GITHUB_SOURCE_URL";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
 
@@ -112,6 +113,9 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         Preference changelogs = findPreference(CHANGELOGS_KEY);
         changelogs.setOnPreferenceClickListener(this);
+
+        Preference sourceUrl = findPreference(GITHUB_SOURCE_URL_KEY);
+        sourceUrl.setOnPreferenceClickListener(this);
 
         Preference ratings_not_written = findPreference(RATINGS_NOT_WRITTEN_KEY);
         ratings_not_written.setOnPreferenceClickListener(this);
@@ -252,9 +256,10 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         webIntent.setData(Uri.parse("https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE"));
         return webIntent;
     }
-    static public Intent GetProWebsiteIntent() {
-        Intent webIntent = new Intent(Intent.ACTION_VIEW);
-        webIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=souch.smp.pro")); // todo change sicmuplayer to pro
+    public Intent GetGithubSourceWebsiteIntent() {
+        var url = findPreference(GITHUB_SOURCE_URL_KEY).getSummary().toString();
+        var webIntent = new Intent(Intent.ACTION_VIEW);
+        webIntent.setData(Uri.parse(url));
         return webIntent;
     }
 
@@ -309,19 +314,12 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    private int nbDonateClick = 0;
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(RESCAN_KEY)) {
             rescan();
         } else if (preference.getKey().equals(DONATE_KEY)) {
             showDonateWebsite();
-            nbDonateClick++;
-            if (nbDonateClick >= 3) {
-                musicSrv.getDatabase().disableShowDonate();
-                Toast.makeText(getActivity().getBaseContext(),
-                        getResources().getString(R.string.show_donate_disabled), Toast.LENGTH_SHORT).show();
-            }
         } else if (preference.getKey().equals(START_SLEEP_TIMER_KEY)) {
             if (musicSrv.getSleepTimerScheduleMs() > 0) {
                 musicSrv.stopSleepTimer();
@@ -343,6 +341,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             var size = !params.getChoosedTextSize();
             params.setChooseTextSize(size);
             setFontSizeIcon();
+        } else if (preference.getKey().equals(GITHUB_SOURCE_URL_KEY)) {
+            startActivity(GetGithubSourceWebsiteIntent());
         }
         return false;
     }
