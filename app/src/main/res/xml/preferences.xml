@@ -57,7 +57,7 @@
         <Preference
             android:title="@string/help_details_menu"
             android:summary="@string/help_details_menu_summary"
-            android:icon="@mipmap/ic_launcher"/>
+            android:icon="@mipmap/ic_app"/>
 
         <Preference
             android:title="@string/help_seek_menu"

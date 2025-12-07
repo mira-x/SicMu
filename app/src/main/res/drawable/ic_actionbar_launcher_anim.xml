@@ -38,5 +38,24 @@
     <item
         android:drawable="@drawable/ic_actionbar_launcher_5"
         android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_6"
+        android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_7"
+        android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_8"
+        android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_9"
+        android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_10"
+        android:duration="200"/>
+    <item
+        android:drawable="@drawable/ic_actionbar_launcher_11"
+        android:duration="200"/>
+
 
 </animation-list>

@@ -1,6 +1,9 @@
-<i>SicMu Neo</i> is a lightweight, full-featured, file-based audio player with a simple to use UI and low resource footprint. It is especially well-suited for large music libraries organized in folder structures.
+SicMu Neo is a lightweight, full-featured, file-based audio player with a simple to use UI and low resource footprint. It is especially well-suited for large music libraries organized in folder structures.
 
-<b>Features</b>
+Installation Note:
+After a fresh install it might be necessary to go into the settings, scroll down and trigger a media scan. This will take at most one minute. After restarting the app, your music should appear.
+
+Features:
 * Song grouping by artist/album or folder structure
 * Multiple shuffle modes, multiple song repeatition options, A-B looping, set playback speed
 * Shake the phone to skip a song (after enabled)
@@ -13,7 +16,7 @@
 * Multiple color themes (dark-red, dark-white, white)
 * Supports virtually all audio formats (mp3, ogg, flac, wav, ...)
 
-<b>New in this fork</b>
+New in this fork:
 * Search function
 * Multiple sources for album art (metadata, fallback to longest filename prefix match for .jpg and .png files in the same folder)
 * Per-device mono/stereo settings

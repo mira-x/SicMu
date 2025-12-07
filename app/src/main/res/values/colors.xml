@@ -7,4 +7,8 @@
     <color name="LightBlack">#ff353535</color>
     <color name="LightGrey">#ff666666</color>
     <color name="LightWhite">#ffefefef</color>
+    <color name="Yellow">#f9dd16</color>
+    <color name="DarkYellow">#b5a351</color>
+    <color name="Blue">#3a74c2</color>
+    <color name="DarkBlue">#576c95</color>
 </resources>
