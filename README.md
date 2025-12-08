@@ -15,6 +15,7 @@ This fork retains the spirit of the original app and adds these features:
 - Per-audio-device mono/stereo settings
 - Radio shuffle mode (Random song order, starts first song selected at random point in the song)
 - "Search on genius.com" button when long-pressing on audio file
+- Changed the audio backend to the modern ExoPlayer, causing less RAM usage (220MB prior vs 135MB now)
 
 The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 7.0.
 
