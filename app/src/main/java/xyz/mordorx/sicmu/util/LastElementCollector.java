@@ -1,4 +1,4 @@
-package xyz.mordorx.sicmu;
+package xyz.mordorx.sicmu.util;
 
 import java.util.Collections;
 import java.util.Optional;

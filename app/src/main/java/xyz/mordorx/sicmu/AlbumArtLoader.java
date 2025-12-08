@@ -14,14 +14,15 @@ import android.util.Size;
 
 import androidx.annotation.Nullable;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheBuilderSpec;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
+
+import xyz.mordorx.sicmu.util.DeduplicationCache;
+import xyz.mordorx.sicmu.util.LastElementCollector;
 
 /**
  * This class is responsive for loading album art data from multiple sources (metadata, jpg files, etc).
@@ -36,11 +37,9 @@ public class AlbumArtLoader {
     /// 1. Key not in cache / null: We have not yet looked for this image
     /// 2. Optional.isEmpty(): We looked for an image, but there is none
     /// 3. Optional.isPresent(): We looked for an image and found one
-    private final static Cache<Long, Optional<Bitmap>> cache = CacheBuilder
-            .newBuilder()
-            .maximumSize(20)
-            .expireAfterAccess(Duration.ofHours(1))
-            .build();
+    private final static DeduplicationCache<Long, Optional<Bitmap>> cache =
+            new DeduplicationCache<>(CacheBuilderSpec.parse("maximumSize=10, expireAfterAccess=6h"), AlbumArtLoader::bitmapsAreSame);
+
     private final Context ctx;
     private final RowSong song;
     public AlbumArtLoader(Context ctx, RowSong song) {
@@ -157,6 +156,18 @@ public class AlbumArtLoader {
         if (width < 512)
             width = 512;
         return width;
+    }
+
+    private static boolean bitmapsAreSame(Optional<Bitmap> b1, Optional<Bitmap> b2) {
+        if (b1.isEmpty() && b2.isEmpty()) return true;
+
+        if (b1.isPresent() && b2.isEmpty()) return false;
+        if (b1.isEmpty()/* && b2.isPresent() */) return false;
+
+        var bmp1 = b1.get();
+        var bmp2 = b2.get();
+
+        return bmp1.sameAs(bmp2);
     }
 
     /**
