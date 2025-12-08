@@ -223,8 +223,8 @@ public class MusicService extends Service implements
 
         RowSong rowSong = rows.getCurrSong();
         if (rowSong != null) {
-            rowSong.getAlbumBmpAsync(getApplicationContext(), 0,
-                    (rowSongId, imageNum, bitmap) -> {
+            new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(
+                    (rowSongId, bitmap) -> {
                         // albumbmp will be in cache, so don't bother to pass bitmap param to getMediaMetadata
                         mediaSession.setMetadata(rowSong.getMediaMetadata(getApplicationContext()));
                     });
@@ -911,7 +911,7 @@ public class MusicService extends Service implements
                 .setContentText(rowSong.getArtist())
                 .setSubText(rowSong.getAlbum())
                 .setSmallIcon(R.drawable.ic_stat_music_note) // R.drawable.ic_notification
-                .setLargeIcon(rows.getCurrSong().getAlbumBmp(getApplicationContext()))
+                .setLargeIcon(new AlbumArtLoader(getApplicationContext(), rows.getCurrSong()).load())
                 .setContentIntent(PendingIntent.getActivity(this, 0, openApp,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                 .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(getApplicationContext(),

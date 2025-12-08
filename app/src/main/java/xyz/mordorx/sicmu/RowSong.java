@@ -20,25 +20,16 @@ package xyz.mordorx.sicmu;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
-import android.util.Pair;
-import android.util.Size;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
@@ -48,9 +39,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 public class RowSong extends Row {
     private final long id;
@@ -119,12 +107,16 @@ public class RowSong extends Row {
     public int getYear(){return year;}
     public String getMime(){return mime;}
     public String getArtist(){return artist;}
+    /// If no album metadata is set, this will return the top level folder name of this song
     public String getAlbum(){return album;}
     public long getDurationMs(){return durationMs;}
     public int getTrack(){return track;}
+    /// For Example: "/storage/emulated/0/Music/_/Unterhaltung/HintShot - Welcome to Team Fortress.opus"
     public String getPath(){return path;}
+    /// For Example: "_/Unterhaltung"
     public String getFolder(){return folder;}
     public long getAlbumId(){return albumId;}
+    /// For example: "HintShot - Welcome to Team Fortress.opus"
     public String getFilename() {return filename;}
 
     public void setView(RowViewHolder holder, Main main, int position) {
@@ -232,13 +224,6 @@ public class RowSong extends Row {
             return true;
         }
         return false;
-    }
-
-    private int getScreenWidth() {
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;//displayMetrics.widthPixels;
-        if (width < 512)
-            width = 512;
-        return width;
     }
 
     public int getRating() {
@@ -448,154 +433,6 @@ public class RowSong extends Row {
         return  drawable;
     }
 
-    public interface AlbumBmpCallbackInterface {
-        void albumBmpCallback(long rowSongId, int imageNum, Bitmap bitmap) ;
-    }
-
-    // async method : can be start from UI thread
-    public void getAlbumBmpAsync(Context context, int imageNum,
-                                 AlbumBmpCallbackInterface albumBmpCallbackInterface)
-    {
-        if (imageNum == 0 && cachedAlbumBmpID == albumId) {
-            Log.d("RowSong", "getAlbumBmpAsync cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
-            albumBmpCallbackInterface.albumBmpCallback(id, imageNum, cachedAlbumBmp);
-        }
-        else {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    Log.d("RowSong", "getAlbumBmpAsync rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
-                    Bitmap bitmap = getAlbumBmp(context, imageNum);
-                    albumBmpCallbackInterface.albumBmpCallback(id, imageNum, bitmap);
-                }
-            };
-            thread.start();
-        }
-    }
-
-    // implement simple cache: cache is discard as soon as song changes
-    private static long cachedAlbumBmpID = -1;
-    private static Bitmap cachedAlbumBmp = null;
-
-    // ! sync method: should avoid to call it from UI thread
-    public Bitmap getAlbumBmp(Context context) {
-        return getAlbumBmp(context, 0);
-    }
-
-    private static int getCommonPrefix(String a, String b) {
-        var commonPrefix = 0;
-        while (true) {
-            if (commonPrefix >= a.length() || commonPrefix >= b.length())
-                break;
-
-            if (a.charAt(commonPrefix) == b.charAt(commonPrefix))
-                commonPrefix++;
-            else
-                break;
-        }
-
-        return commonPrefix;
-    }
-
-    /** if imageNum > 0: try to get Nth bitmap from same folder
-     * @return null if bitmap not found
-     * ! sync method: should avoid to call it from UI thread
-     */
-    public synchronized Bitmap getAlbumBmp(Context context, int imageNum) {
-        if (imageNum == 0 && cachedAlbumBmpID == albumId) {
-            Log.d("RowSong", "getAlbumBmp cached rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
-            return cachedAlbumBmp;
-        }
-        Log.d("RowSong", "getAlbumBmp rowSongId=" + id + " albumId=" + albumId + " imageNum=" + imageNum);
-
-        Bitmap bmp = null;
-
-        // Search in the file metadata for an image
-        if (imageNum == 0) {
-            try {
-                final int thumb_size = getScreenWidth();
-                // Android 10 "Quince Tart"
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    // try with loadThumbnail
-                    Size size = new Size(thumb_size, thumb_size);
-                    bmp = context.getContentResolver().loadThumbnail(getExternalContentUri(), size, null);
-
-                    // try with createAudioThumbnail
-                    bmp = ThumbnailUtils.createAudioThumbnail(
-                            new File(path),
-                            new Size(thumb_size, thumb_size),
-                            null);
-                }
-            } catch (Exception ignored) { }
-
-            // try with MediaMetadataRetriever
-            if (bmp == null) {
-                try (MediaMetadataRetriever mmr = new MediaMetadataRetriever()){
-                    mmr.setDataSource(path);
-                    byte[] img_byte = mmr.getEmbeddedPicture();
-                    if (img_byte != null)
-                        bmp = BitmapFactory.decodeByteArray(img_byte, 0, img_byte.length,
-                                new BitmapFactory.Options());
-                } catch (Exception ignored) { }
-            }
-
-            // try with media store ?
-            if (bmp == null) {
-                try (Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                        new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                        MediaStore.Audio.Albums._ID + "=?",
-                        new String[]{String.valueOf(albumId)},
-                        null)) {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
-                        String path = cursor.getString(Math.max(colIdx, 0));
-                        bmp = BitmapFactory.decodeFile(path);
-                    }
-                } catch (Exception ignored) { }
-            }
-        }
-
-        // Fallback: Search for image files in the same directory, prefer files with the closest file name or album name match
-        if (path != null && bmp == null) {
-            File dir = new File(path).getParentFile();
-            if (dir != null && dir.exists() && dir.isDirectory() && dir.listFiles() != null) {
-                //noinspection DataFlowIssue (Android Studio might warn that listFiles() may be null, but it can't be)
-                var imageFiles = Arrays.stream(dir.listFiles())
-                        .filter(f -> Path.filenameIsImage(f.getName()))
-                        .map(f -> {
-                            var imgName = f.getName().toLowerCase().trim();
-                            var songFileName = this.getFilename().toLowerCase().trim();
-                            var albumName = this.getAlbum().toLowerCase().trim();
-
-                            // Try to match album names (either in metadata or as file name prefix)
-                            var commonPrefix = getCommonPrefix(imgName, songFileName);
-                            if (!albumName.isEmpty()) {
-                                commonPrefix += getCommonPrefix(imgName, albumName);
-                            }
-
-                            return Pair.create(f, commonPrefix);
-                        })
-                        .sorted(Comparator.comparing(pair -> pair.second))
-                        //.peek(pair -> Log.d("RowSong", "Got pair:" + pair.first.getName() + ", Common prefix len: " + pair.second))
-                        .collect(Collectors.toList());
-
-                if (!imageFiles.isEmpty()) {
-                    var lastImage = imageFiles.get(imageFiles.size() - 1).first;
-                    bmp = BitmapFactory.decodeFile(lastImage.getAbsolutePath());
-                }
-            }
-        }
-
-        // (Implicit) fallback: return null, this will cause the SicMu album placeholder image to be shown.
-
-        if (imageNum == 0) {
-            cachedAlbumBmpID = albumId;
-            cachedAlbumBmp = bmp; // cache even if bmp is null so that we do not search again
-        }
-
-        return bmp;
-    }
-
     public Uri getExternalContentUri() {
         return ContentUris.withAppendedId(
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
@@ -611,7 +448,7 @@ public class RowSong extends Row {
         builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs);
         builder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, track);
         builder.putLong(MediaMetadataCompat.METADATA_KEY_YEAR, year);
-        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, getAlbumBmp(context)); // todo: optimize
+        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, new AlbumArtLoader(context, this).load()); // todo: optimize
         //builder.putLong(MediaMetadataCompat.METADATA_KEY_RATING, Integer.valueOf(convertToRating0to255(getRating())));
         return builder.build();
     }

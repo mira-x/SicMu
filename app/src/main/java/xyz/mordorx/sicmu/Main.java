@@ -250,23 +250,6 @@ public class Main extends AppCompatActivity {
                     toggleDetails(null);
             }
 
-            public void onSwipeRight() {
-                if (coverArtNum > 0) {
-                    coverArtNum--;
-                    setDetails();
-                }
-            }
-
-            public void onSwipeLeft() {
-                RowSong rowSong = rows.getCurrSong();
-                if (rowSong != null)
-                    rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum + 1,
-                            (rowSongId, imageNum, bitmap) -> {
-                                coverArtNum++;
-                                setCoverArt(rowSongId, imageNum, bitmap);
-                            });
-            }
-
             public void onSwipeBottom() {
                 detailsBigCoverArt = true;
                 applyBiggerCoverArt();
@@ -835,9 +818,9 @@ public class Main extends AppCompatActivity {
         detailsToggledFollowAuto = hasCoverArt == detailsOpened;
     }
 
-    private void setCoverArt(long rowSongId, int imageNum, Bitmap bitmap) {
+    private void setCoverArt(long rowSongId, Bitmap bitmap) {
         runOnUiThread(() -> {
-            Log.d("Main", "setCoverArt rowSongId=" + rowSongId + " imageNum=" + imageNum);
+            Log.d("Main", "setCoverArt rowSongId=" + rowSongId);
             // todo: check id and imageNum ?
             if (bitmap != null) {
                 albumImage.setImageBitmap(bitmap);
@@ -866,7 +849,7 @@ public class Main extends AppCompatActivity {
 
             songMime.setText(rowSong.getMime());
 
-            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum, this::setCoverArt);
+            new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(this::setCoverArt);
 
             setRatingDetails();
         }
@@ -903,32 +886,34 @@ public class Main extends AppCompatActivity {
     }
 
     public void autoOpenCloseDetails() {
-        if (!serviceBound)
+        if (!serviceBound) {
             return;
-        RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null) {
-            rowSong.getAlbumBmpAsync(getApplicationContext(), coverArtNum,
-                    (rowSongId, imageNum, bitmap) -> {
-                        hasCoverArt = bitmap != null;
-                        // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
-                        //   - auto mode is enable if details view state (opened or closed) is the same has
-                        //     auto mode would have done.
-                        if (detailsToggledFollowAuto)
-                            runOnUiThread(() -> openDetails(hasCoverArt));
-
-                        if (detailsToggledFollowAuto && !hasCoverArt) {
-                            // set details later in order to not disturb details layouts close animation
-                            timer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    runOnUiThread(() -> setDetails());
-                                }
-                            }, 500);
-                        } else {
-                            runOnUiThread(this::setDetails);
-                        }
-                    });
         }
+        RowSong rowSong = rows.getCurrSong();
+        if (rowSong == null) {
+            return;
+        }
+        new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(
+            (rowSongId, bitmap) -> {
+                hasCoverArt = bitmap != null;
+                // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
+                //   - auto mode is enable if details view state (opened or closed) is the same has
+                //     auto mode would have done.
+                if (detailsToggledFollowAuto)
+                    runOnUiThread(() -> openDetails(hasCoverArt));
+
+                if (detailsToggledFollowAuto && !hasCoverArt) {
+                    // set details later in order to not disturb details layouts close animation
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(() -> setDetails());
+                        }
+                    }, 500);
+                } else {
+                    runOnUiThread(this::setDetails);
+                }
+            });
     }
 
 
