@@ -612,7 +612,7 @@ public class MusicService extends Service implements
             var dur = getRows().getCurrSong().getDurationMs();
             var startTime = 0L;
 
-            if (params.getShuffle() == ShuffleMode.RADIO) {
+            if (params.getShuffle().startMidSong() && oldState != PlayerState.PlaybackCompleted) {
                 // If a song is started for the first time, i.e. this is not the automatic follow up
                 // to a previously played song, and we are in radio FM mode, we want to start playback at a
                 // random point in time.
@@ -819,8 +819,7 @@ public class MusicService extends Service implements
     }
 
     public void playPrev() {
-        var mode = params.getShuffle();
-        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
+        if (params.getShuffle().randomSongOrder())
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevSong();
@@ -829,8 +828,7 @@ public class MusicService extends Service implements
     }
 
     public void playNext() {
-        var mode = params.getShuffle();
-        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
+        if (params.getShuffle().randomSongOrder())
             rows.moveToRandomSong();
         else
             rows.moveToNextSong();
@@ -839,8 +837,7 @@ public class MusicService extends Service implements
     }
 
     public void playPrevGroup() {
-        var mode = params.getShuffle();
-        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
+        if (params.getShuffle().randomSongOrder())
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevGroup();
@@ -849,8 +846,7 @@ public class MusicService extends Service implements
     }
 
     public void playNextGroup() {
-        var mode = params.getShuffle();
-        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO)
+        if (params.getShuffle().randomSongOrder())
             rows.moveToRandomSong();
         else
             rows.moveToNextGroup();

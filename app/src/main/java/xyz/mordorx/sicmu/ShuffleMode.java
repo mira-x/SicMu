@@ -8,7 +8,7 @@ import android.widget.Toast;
 public enum ShuffleMode {
     SEQUENTIAL(0),
     RANDOM(1),
-    RADIO(2); // Radio is basically random selection (above) plus random song start time when playing the first song
+    RADIO(2); /// Radio is basically random selection (above) plus random song start time when playing the first song
 
     public final int num;
     ShuffleMode(int num) {
@@ -22,8 +22,12 @@ public enum ShuffleMode {
         return ShuffleMode.valueOf(next);
     }
 
-    /// Returns true for such modes that are meant to play music in random order
-    public boolean isRandomish() {
+    /// Whether to start playback mid-song. This applies to RADIO.
+    public boolean startMidSong() {
+        return (this == RADIO);
+    }
+
+    public boolean randomSongOrder() {
         return (this == RANDOM || this == RADIO);
     }
 

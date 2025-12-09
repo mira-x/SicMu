@@ -471,8 +471,7 @@ public class Main extends AppCompatActivity {
 
         coverArtNum = 0;
         var offset = 0;
-        var mode = params.getShuffle();
-        if (mode == ShuffleMode.RANDOM || mode == ShuffleMode.RADIO) {
+        if (params.getShuffle().randomSongOrder()) {
             offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
         }
 
