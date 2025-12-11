@@ -158,6 +158,7 @@ public class AlbumArtLoader {
         return width;
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private static boolean bitmapsAreSame(Optional<Bitmap> b1, Optional<Bitmap> b2) {
         if (b1.isEmpty() && b2.isEmpty()) return true;
 
