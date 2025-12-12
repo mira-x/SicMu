@@ -76,6 +76,8 @@ import androidx.media3.common.util.UnstableApi;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.widget.Toast.LENGTH_LONG;
 
+import org.woheller69.freeDroidWarn.FreeDroidWarn;
+
 @UnstableApi
 public class Main extends AppCompatActivity {
     private Rows rows;
@@ -132,6 +134,8 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Main", "onCreate");
+
+        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
 
         params = new Parameters(this);
 
