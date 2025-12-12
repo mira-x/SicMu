@@ -307,8 +307,8 @@
                 android:summary="@string/settings_author"/>
 
             <Preference
-                android:title="@string/settings_version_title"
-                android:summary="@string/settings_version"/>
+                android:key="SEMANTIC_VERSION"
+                android:title="@string/settings_version_title"/>
 
             <Preference
                 android:key="CHANGELOGS"

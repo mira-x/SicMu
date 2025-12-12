@@ -125,6 +125,9 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         Preference sleepTimer = findPreference(START_SLEEP_TIMER_KEY);
         sleepTimer.setOnPreferenceClickListener(this);
 
+        String SEMANTIC_VERSION_KEY = "SEMANTIC_VERSION";
+        findPreference(SEMANTIC_VERSION_KEY).setSummary(BuildConfig.VERSION_NAME);
+
         setUnfoldSubgroup();
         setUnfoldThresholdSummary();
 

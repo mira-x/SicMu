@@ -1,0 +1,4 @@
+Version 2.4.2
+* Fix a bug with the radio shuffle mode
+* Reworked album art caching
+* Added FreeDroidWarn
