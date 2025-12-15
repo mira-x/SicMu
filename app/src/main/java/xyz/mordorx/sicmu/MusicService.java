@@ -65,7 +65,7 @@ public class MusicService extends Service implements
         AudioManager.OnAudioFocusChangeListener, SensorEventListener
 {
     // drive app from hardware key (from MediaButtonIntentReceiver)
-    public static final String SERVICECMD = "souch.smp.musicservicecommand";
+    public static final String SERVICECMD = "xyz.mordorx.sicmu.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
     public static final String CMDSTOP = "stop";
@@ -75,10 +75,10 @@ public class MusicService extends Service implements
     public static final String CMDNEXT = "next";
 
     // drive the app from another app
-    public static final String TOGGLEPAUSE_ACTION = "souch.smp.musicservicecommand.togglepause";
-    public static final String PAUSE_ACTION       = "souch.smp.musicservicecommand.pause";
-    public static final String PREVIOUS_ACTION    = "souch.smp.musicservicecommand.previous";
-    public static final String NEXT_ACTION        = "souch.smp.musicservicecommand.next";
+    public static final String TOGGLEPAUSE_ACTION = "xyz.mordorx.sicmu.musicservicecommand.togglepause";
+    public static final String PAUSE_ACTION       = "xyz.mordorx.sicmu.musicservicecommand.pause";
+    public static final String PREVIOUS_ACTION    = "xyz.mordorx.sicmu.musicservicecommand.previous";
+    public static final String NEXT_ACTION        = "xyz.mordorx.sicmu.musicservicecommand.next";
 
     private Parameters params;
     private ExoPlayer player;
@@ -87,7 +87,7 @@ public class MusicService extends Service implements
 
     //private MediaNotificationManager mediaNotificationManager;
     private MediaSessionCompat mediaSession;
-    public static final String MediaSessionTag = "SMP_MediaSessionTag";
+    public static final String MediaSessionTag = "SicMuNeo_MediaSessionTag";
 
     private Rows rows;
 
@@ -291,9 +291,9 @@ public class MusicService extends Service implements
                 database);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "souch.smp:MusicService");
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "xyz.mordorx.sicmu:MusicService");
 
-        // try sync if sth failed in the previous SMP session
+        // try sync if sth failed in the previous SicMu session
         synchronizeFailedRatings();
 
         restore();
@@ -946,13 +946,13 @@ public class MusicService extends Service implements
         foreground = false;
     }
 
-    public static final String channel_id = "smp_channelid";
+    public static final String channel_id = "SicMuNeo_channelid";
     private void createNotificationChannel()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "SMP Channel";
-            String description = "SicmuPlayer channel";
-            int importance = NotificationManager.IMPORTANCE_LOW;
+            CharSequence name = "SicMuNeo Channel";
+            String description = "SicMuNeo Channel";
+            var importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel = new NotificationChannel(channel_id, name, importance);
             mChannel.setDescription(description);
             mChannel.enableLights(true); // todo: useful ?

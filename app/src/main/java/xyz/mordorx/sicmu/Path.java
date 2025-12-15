@@ -206,7 +206,7 @@ public class Path {
         dirsToScan.add(Environment.getExternalStorageDirectory());
 
         // hack. Don't know if it work well on other devices!
-        String userPathToRemove = "Android/data/souch.smp/files";
+        String userPathToRemove = "Android/data/xyz.mordorx.sicmu/files";
         File[] files = context.getExternalFilesDirs(null);
         if (files != null)
             for (File dir : files) {

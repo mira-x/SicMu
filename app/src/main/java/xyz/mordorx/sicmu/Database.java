@@ -38,7 +38,7 @@ public class Database {
     public Database(Context context) {
         this.context = context;
         SongDatabase db = Room.databaseBuilder(context,
-                SongDatabase.class, "database-SMP")
+                SongDatabase.class, "database-SicMuNeo")
                 .addMigrations(MIGRATION_1_2)
                 //.allowMainThreadQueries()
                 .build();
