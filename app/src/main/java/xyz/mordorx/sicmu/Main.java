@@ -98,7 +98,7 @@ public class Main extends AppCompatActivity {
     private TextView duration;
     private TextView currDuration;
 
-    private ImageButton posButton;
+    private ImageButton posButton, toggleDetailsButton;
 
     // true if you want to keep the current song played visible
     private boolean followSong;
@@ -164,6 +164,7 @@ public class Main extends AppCompatActivity {
         gotoButton.setOnLongClickListener(gotoSongLongListener);
 
         posButton = findViewById(R.id.toggle_seek_buttons);
+        toggleDetailsButton = findViewById(R.id.toggle_details_button);
         seekButtonsOpened = false;
         posButton.setImageDrawable(null);
         seekButtonsLayout = findViewById(R.id.seek_buttons_layout);
@@ -809,9 +810,10 @@ public class Main extends AppCompatActivity {
     private void openDetails(boolean open) {
         detailsOpened = open;
         if (open) {
+            toggleDetailsButton.setImageResource(R.drawable.ic_action_close_pos);
             detailsLayout.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
+            toggleDetailsButton.setImageResource(R.drawable.ic_action_open_pos);
             detailsLayout.setVisibility(View.GONE);
         }
     }

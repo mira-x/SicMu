@@ -34,15 +34,35 @@
         android:paddingBottom="3dp"
         android:paddingTop="3dp">
 
-        <ImageButton
-            android:id="@+id/app_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:onClick="toggleDetails"
-            android:scaleType="fitXY" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="2dp"
+            android:orientation="vertical"
+            android:paddingRight="5dp">
+
+            <ImageButton
+                android:id="@+id/app_button"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_actionbar_launcher_anim"
+                android:onClick="toggleDetails"
+                android:scaleType="fitXY" />
+
+            <ImageButton
+                android:id="@+id/toggle_details_button"
+                style="@style/BottomButton"
+                android:layout_width="40dp"
+                android:layout_height="9dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_open_pos" />
+
+        </FrameLayout>
 
         <!--style="@style/BottomButton"
         android:src="@drawable/ic_actionbar_launcher"-->
@@ -242,7 +262,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_default_coverart" />
 
         <LinearLayout
             android:layout_width="match_parent"
