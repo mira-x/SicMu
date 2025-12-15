@@ -86,8 +86,8 @@
     <string name="settings_accelerometer_threshold">Stärke des Schüttelns</string>
     <string name="settings_no_accelerometer">Dein Gerät hat keinen Beschleunigungsmesser! Schüttelfunktion nicht verfügbar.</string>
 
-    <string name="settings_rating">Leistungspriorität</string>
-    <string name="settings_rating_summary">CPU immer mit voller Leistung nutzen.</string>
+    <string name="settings_rating">Liedbewertung aktivieren</string>
+    <string name="settings_rating_summary">Erhöht die Belastung des Prozessors</string>
 
     <string name="settings_help">Hilfe</string>
     <string name="settings_help_summary">Eine Bedienungsanleitung</string>

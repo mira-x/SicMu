@@ -187,7 +187,7 @@
     <string name="settings_no_accelerometer">Your device has no accelerometer. Shake functionality is disabled.</string>
 
     <string name="settings_rating">Enable rating</string>
-    <string name="settings_rating_summary">Lower a bit CPU consumption if disabled</string>
+    <string name="settings_rating_summary">This increases processor usage</string>
 
     <string name="settings_help">Help</string>
     <string name="settings_help_summary">If you are a bit lost or if you want to discover hidden SicMu Player features</string>
