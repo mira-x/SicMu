@@ -124,13 +124,13 @@
     <string name="settings_misc">Verschiedenes</string>
 
     <string name="settings_about">Über</string>
-    <string name="settings_about_summary">Informationen über die App und ihren Autor.</string>
+    <string name="settings_about_summary">Informationen über die App und ihre Autoren</string>
 
     <string name="settings_version_title">Version</string>
     <string name="settings_author_title">Autor</string>
     <string name="settings_source_title">Quellen</string>
     <string name="settings_licence_title">Lizenz</string>
-    <string name="donate_title">Spenden</string>
+    <string name="donate_souchaud_title">Spenden</string>
 
     <string name="changelogs_header">Was ist neu:</string>
     <string name="settings_thanks">Danksagungen</string>
@@ -180,8 +180,7 @@
     <string name="popup_song_year">Jahr: %d</string>
     <string name="popup_song_rating">Bewertung: %d</string>
     <string name="popup_song_mime">MIME-Typ: %s</string>
-    <string name="settings_theme_title_free">Farbschema (nur für Pro-Nutzer)</string>
-    <string name="settings_theme_title">Farbschema (dunkel spart Akku)</string>
+    <string name="settings_theme_title">Farbschema</string>
     <string-array name="settings_theme_entries">
         <item>Dunkel, rote Akzente</item>
         <item>Dunkel, weiße Akzente</item>
@@ -196,7 +195,7 @@
     <string name="settings_ratings_not_written">Ungespeicherte Bewertungen anzeigen</string>
     <string name="help_donate">Spenden</string>
     <string name="help_context_menu">Kontextmenü</string>
-    <string name="donate_summary">Spenden sind immer willkommen!</string>
+    <string name="donate_souchaud_summary">Falls dir die App gefällt, kannst du hier an Mathieu Souchaud spenden</string>
     <string name="close">Schließen</string>
     <string name="changelogs_title">Änderungen in dieser Version</string>
     <string name="settings_show_filename">Dateiname anzeigen</string>
@@ -212,4 +211,6 @@
     <string name="settings_shuffle_explainer_random">Shuffle an</string>
     <string name="settings_stereo_on">Stereo</string>
     <string name="settings_toggle_font_size">Schriftgröße</string>
+    <string name="settings_author_new_title">Autor*in von SicMu Neo</string>
+    <string name="settings_author_old_title">Autor von SicMu</string>
 </resources>

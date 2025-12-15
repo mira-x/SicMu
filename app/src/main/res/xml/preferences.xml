@@ -19,12 +19,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference
-        android:key="DONATE"
-        android:title="@string/donate_title"
-        android:icon="@drawable/coins"
-        android:summary="@string/donate_summary"/>
-
     <PreferenceScreen
         android:key="button_help"
         android:title="@string/settings_help"
@@ -91,13 +85,6 @@
         <Preference
             android:title="@string/help_stop"
             android:summary="@string/help_stop_summary"/>
-
-        <Preference
-            android:title="@string/donate_title"
-            android:icon="@drawable/coins"
-            android:summary="@string/help_donate"/>
-
-
     </PreferenceScreen>
 
     <ListPreference
@@ -109,12 +96,176 @@
         android:defaultValue="0"
         />
 
-    <CheckBoxPreference
-        android:key="ENABLE_RATING"
-        android:title="@string/settings_rating"
-        android:summary="@string/settings_rating_summary"
-        android:icon="@drawable/ic_star_3_highlight"
-        android:defaultValue="true"/>
+    <PreferenceScreen
+        android:key="button_about"
+        android:title="@string/settings_about"
+        android:summary="@string/settings_about_summary"
+        android:icon="@drawable/ic_info"
+        android:persistent="false">
+
+        <PreferenceCategory android:title="@string/settings_about">
+            <Preference
+                android:title="@string/settings_author_old_title"
+                android:summary="@string/settings_author_old"/>
+
+            <Preference
+                android:title="@string/settings_author_new_title"
+                android:summary="@string/settings_author_new"/>
+
+            <Preference
+                android:key="SEMANTIC_VERSION"
+                android:title="@string/settings_version_title"/>
+
+            <Preference
+                android:key="CHANGELOGS"
+                android:title="@string/changelogs_title"/>
+
+            <Preference
+                android:key="GITHUB_SOURCE_URL"
+                android:title="@string/settings_source_title"
+                android:summary="@string/settings_source"/>
+
+            <Preference
+                android:title="@string/settings_licence_title"
+                android:summary="@string/settings_licence"/>
+
+        </PreferenceCategory>
+
+        <Preference
+            android:key="DONATE_SOUCHAUD"
+            android:title="@string/donate_souchaud_title"
+            android:icon="@drawable/coins"
+            android:summary="@string/donate_souchaud_summary"/>
+
+        <PreferenceCategory android:title="@string/settings_thanks">
+
+            <Preference
+                android:title="@string/settings_thanks_icons"
+                android:summary="@string/settings_thanks_icons_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_doc"
+                android:summary="@string/settings_thanks_doc_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_i15n"
+                android:summary="@string/settings_thanks_i15n_summary">
+            </Preference>
+
+        </PreferenceCategory>
+
+    </PreferenceScreen>
+
+    <PreferenceCategory android:title="@string/settings_song_view">
+
+        <CheckBoxPreference
+            android:key="SHOW_FILENAME"
+            android:title="@string/settings_show_filename"
+            android:summary="@string/settings_show_filename_summary"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="SHOW_REMAINING_TIME"
+            android:title="@string/settings_show_remaining_time"
+            android:summary="@string/settings_show_remaining_time_summary"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="SHOW_GROUP_TOTAL_TIME"
+            android:title="@string/settings_show_group_total_time"
+            android:summary="@string/settings_show_group_total_time_summary"
+            android:defaultValue="false"/>
+
+        <ListPreference
+            android:key="DEFAULT_FOLD"
+            android:title="@string/settings_fold_title"
+            android:entryValues="@array/settings_fold_values"
+            android:entries="@array/settings_fold_entries"
+            android:defaultValue="0"
+            />
+
+        <CheckBoxPreference
+            android:key="UNFOLD_SUBGROUP"
+            android:title="@string/settings_unfold_subgroup"
+            android:summary="@string/settings_unfold_subgroup_summary"
+            android:defaultValue="false"
+            />
+
+        <EditTextPreference
+            android:key="UNFOLD_SUBGROUP_THRESHOLD"
+            android:title="@string/settings_unfold_subgroup_threshold"
+            android:inputType="number"
+            android:defaultValue="@string/settings_unfold_subgroup_threshold_default"
+            />
+
+        <CheckBoxPreference
+            android:key="FOLLOW_SONG"
+            android:title="@string/settings_autoscroll"
+            android:summary="@string/settings_autoscroll_summary"
+            android:defaultValue="true"
+            />
+
+        <EditTextPreference
+            android:key="ROOT_FOLDERS"
+            android:title="@string/settings_root_folder"
+            />
+
+        <ListPreference
+            android:key="UNINITIALIZED_DEFAULT_RATING"
+            android:title="@string/uninitialized_default_rating"
+            android:entryValues="@array/uninitialized_default_rating_values"
+            android:entries="@array/uninitialized_default_rating_entries"
+            android:defaultValue="3"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_misc">
+        <CheckBoxPreference
+            android:key="HIDE_NAVIGATION_BAR"
+            android:title="@string/settings_hide_navigation_bar"
+            android:summary="@string/settings_hide_navigation_bar_summary"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="SAVE_SONG_POS"
+            android:title="@string/settings_songpos_title"
+            android:summary="@string/settings_songpos"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="VIBRATE"
+            android:title="@string/settings_vibrate_title"
+            android:summary="@string/settings_vibrate"
+            android:icon="@drawable/ic_menu_vibration"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="SCROBBLE"
+            android:title="@string/settings_scrobble_title"
+            android:summary="@string/settings_scrobble"
+            android:defaultValue="false"/>
+
+        <Preference
+            android:key="RESCAN"
+            android:title="@string/settings_rescan_title"
+            android:summary="@string/settings_rescan"/>
+
+        <Preference
+            android:key="RATINGS_NOT_WRITTEN_KEY"
+            android:title="@string/settings_ratings_not_written_title"
+            android:summary="@string/settings_ratings_not_written"/>
+
+        <CheckBoxPreference
+            android:key="ENABLE_RATING"
+            android:title="@string/settings_rating"
+            android:summary="@string/settings_rating_summary"
+            android:icon="@drawable/ic_star_3_highlight"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_sleep_timer">
         <EditTextPreference
@@ -182,169 +333,6 @@
             android:defaultValue="@string/settings_default_shake_threshold"/>
 
     </PreferenceCategory>
-
-
-    <PreferenceCategory android:title="@string/settings_song_view">
-
-        <CheckBoxPreference
-            android:key="SHOW_FILENAME"
-            android:title="@string/settings_show_filename"
-            android:summary="@string/settings_show_filename_summary"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="SHOW_REMAINING_TIME"
-            android:title="@string/settings_show_remaining_time"
-            android:summary="@string/settings_show_remaining_time_summary"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="SHOW_GROUP_TOTAL_TIME"
-            android:title="@string/settings_show_group_total_time"
-            android:summary="@string/settings_show_group_total_time_summary"
-            android:defaultValue="false"/>
-
-        <ListPreference
-            android:key="DEFAULT_FOLD"
-            android:title="@string/settings_fold_title"
-            android:entryValues="@array/settings_fold_values"
-            android:entries="@array/settings_fold_entries"
-            android:defaultValue="0"
-            />
-
-        <CheckBoxPreference
-            android:key="UNFOLD_SUBGROUP"
-            android:title="@string/settings_unfold_subgroup"
-            android:summary="@string/settings_unfold_subgroup_summary"
-            android:defaultValue="false"
-            />
-
-        <EditTextPreference
-            android:key="UNFOLD_SUBGROUP_THRESHOLD"
-            android:title="@string/settings_unfold_subgroup_threshold"
-            android:inputType="number"
-            android:defaultValue="@string/settings_unfold_subgroup_threshold_default"
-            />
-
-        <CheckBoxPreference
-            android:key="FOLLOW_SONG"
-            android:title="@string/settings_autoscroll"
-            android:summary="@string/settings_autoscroll_summary"
-            android:defaultValue="true"
-            />
-
-        <EditTextPreference
-            android:key="ROOT_FOLDERS"
-            android:title="@string/settings_root_folder"
-            />
-
-        <ListPreference
-            android:key="UNINITIALIZED_DEFAULT_RATING"
-            android:title="@string/uninitialized_default_rating"
-            android:entryValues="@array/uninitialized_default_rating_values"
-            android:entries="@array/uninitialized_default_rating_entries"
-            android:defaultValue="3"
-            />
-
-    </PreferenceCategory>
-
-
-    <PreferenceCategory android:title="@string/settings_misc">
-        <CheckBoxPreference
-            android:key="HIDE_NAVIGATION_BAR"
-            android:title="@string/settings_hide_navigation_bar"
-            android:summary="@string/settings_hide_navigation_bar_summary"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="SAVE_SONG_POS"
-            android:title="@string/settings_songpos_title"
-            android:summary="@string/settings_songpos"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="VIBRATE"
-            android:title="@string/settings_vibrate_title"
-            android:summary="@string/settings_vibrate"
-            android:icon="@drawable/ic_menu_vibration"
-            android:defaultValue="true"/>
-
-        <CheckBoxPreference
-            android:key="SCROBBLE"
-            android:title="@string/settings_scrobble_title"
-            android:summary="@string/settings_scrobble"
-            android:defaultValue="false"/>
-
-        <Preference
-            android:key="RESCAN"
-            android:title="@string/settings_rescan_title"
-            android:summary="@string/settings_rescan"/>
-
-        <Preference
-            android:key="RATINGS_NOT_WRITTEN_KEY"
-            android:title="@string/settings_ratings_not_written_title"
-            android:summary="@string/settings_ratings_not_written"/>
-
-        <CheckBoxPreference
-            android:key="MEDIA_BUTTON_START_APP"
-            android:title="@string/settings_media_button_start_app_title"
-            android:summary="@string/settings_media_button_start_app"
-            android:defaultValue="true"/>
-
-    </PreferenceCategory>
-
-    <PreferenceScreen
-        android:key="button_about"
-        android:title="@string/settings_about"
-        android:summary="@string/settings_about_summary"
-        android:icon="@drawable/ic_info"
-        android:persistent="false">
-
-        <PreferenceCategory android:title="@string/settings_about">
-
-            <Preference
-                android:title="@string/settings_author_title"
-                android:summary="@string/settings_author"/>
-
-            <Preference
-                android:key="SEMANTIC_VERSION"
-                android:title="@string/settings_version_title"/>
-
-            <Preference
-                android:key="CHANGELOGS"
-                android:title="@string/changelogs_title"/>
-
-            <Preference
-                android:key="GITHUB_SOURCE_URL"
-                android:title="@string/settings_source_title"
-                android:summary="@string/settings_source"/>
-
-            <Preference
-                android:title="@string/settings_licence_title"
-                android:summary="@string/settings_licence"/>
-
-        </PreferenceCategory>
-
-        <PreferenceCategory android:title="@string/settings_thanks">
-
-            <Preference
-                android:title="@string/settings_thanks_icons"
-                android:summary="@string/settings_thanks_icons_summary">
-            </Preference>
-
-            <Preference
-                android:title="@string/settings_thanks_doc"
-                android:summary="@string/settings_thanks_doc_summary">
-            </Preference>
-
-            <Preference
-                android:title="@string/settings_thanks_i15n"
-                android:summary="@string/settings_thanks_i15n_summary">
-            </Preference>
-
-        </PreferenceCategory>
-
-    </PreferenceScreen>
 
 </PreferenceScreen>
 

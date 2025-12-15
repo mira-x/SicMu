@@ -88,7 +88,6 @@
 
     <string name="settings_title">Paramètres</string>
 
-    <string name="settings_theme_title_free">Thème (en version pro uniquement)</string>
     <string name="settings_theme_title">Thème</string>
     <string-array name="settings_theme_entries">
         <item>Rouge sang</item>
@@ -218,13 +217,10 @@
     <string name="settings_misc">Divers</string>
 
     <string name="settings_about">À propos</string>
-    <string name="settings_about_summary">Quelques informations sur l\'application et l\'auteur.</string>
 
     <string name="settings_version_title">Numéro de version</string>
     <string name="settings_author_title">Auteur</string>
 
-    <string name="donate_title">Donation</string>
-    <string name="donate_summary">Si vous aimez l\'application, merci de faire un don pour récompenser mon dur labeur !</string>
     <string name="close">Fermer</string>
 
     <string name="changelogs_title">Notes de version</string>

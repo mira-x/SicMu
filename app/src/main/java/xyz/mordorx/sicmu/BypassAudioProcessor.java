@@ -11,6 +11,12 @@ import androidx.media3.common.util.UnstableApi;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/** This can be used to either:
+ * - Bypass audio (data coming in goes out unchanged)
+ * - Modify audio by overriding handleBuffer
+ *
+ * @author LoliBall (<a href="https://github.com/WhichWho">...</a>) on 2023-01-17
+ */
 @UnstableApi
 public class BypassAudioProcessor extends BaseAudioProcessor {
     boolean support = false;

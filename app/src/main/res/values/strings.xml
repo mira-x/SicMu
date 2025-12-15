@@ -96,8 +96,7 @@
 
     <string name="settings_title">Settings</string>
 
-    <string name="settings_theme_title_free">Theme (only available on pro version)</string>
-    <string name="settings_theme_title">Theme (dark themes save battery)</string>
+    <string name="settings_theme_title">Theme</string>
     <string-array name="settings_theme_entries">
         <item>Dark blood</item>
         <item>Dark night</item>
@@ -187,7 +186,7 @@
     <string name="settings_no_accelerometer">Your device has no accelerometer. Shake functionality is disabled.</string>
 
     <string name="settings_rating">Enable rating</string>
-    <string name="settings_rating_summary">This increases processor usage</string>
+    <string name="settings_rating_summary">This increases CPU load</string>
 
     <string name="settings_help">Help</string>
     <string name="settings_help_summary">If you are a bit lost or if you want to discover hidden SicMu Player features</string>
@@ -226,17 +225,19 @@
     <string name="settings_misc">Miscellaneous</string>
 
     <string name="settings_about">About</string>
-    <string name="settings_about_summary">Some info on app and author.</string>
+    <string name="settings_about_summary">Information about the app and its authors</string>
 
     <string name="settings_version_title">Version number</string>
-    <string name="settings_author_title">Author</string>
-    <string name="settings_author" translatable="false">Mathieu Souchaud, Mira Alpmann</string>
+    <string name="settings_author_new_title">Author of SicMu Neo</string>
+    <string name="settings_author_new" translatable="false">Mira Alpmann</string>
+    <string name="settings_author_old_title">Author of SicMu</string>
+    <string name="settings_author_old" translatable="false">Mathieu Souchaud</string>
     <string name="settings_source_title">Sources</string>
     <string name="settings_source" translatable="false">https://github.com/mira-x/SicMu</string>
     <string name="settings_licence_title">License</string>
     <string name="settings_licence" translatable="false">GPLv3-only</string>
-    <string name="donate_title">Donate</string>
-    <string name="donate_summary">If you like the app, donate to reward me for the hard work !</string>
+    <string name="donate_souchaud_title">Donate to Souchaud</string>
+    <string name="donate_souchaud_summary">If you like the app, you can donate to the original author Mathieu Souchaud here</string>
     <string name="close">Close</string>
 
     <string name="changelogs_title">Changelogs</string>

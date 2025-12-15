@@ -4,6 +4,10 @@ import androidx.media3.common.util.UnstableApi;
 
 import java.nio.ByteBuffer;
 
+/** This can downmix stereo into mono in real-time.
+ *
+ * @author LoliBall (<a href="https://github.com/WhichWho">...</a>) on 2022-12-22
+ */
 @UnstableApi
 public class MergeAudioProcessor extends BypassAudioProcessor {
     private boolean stereo = true;

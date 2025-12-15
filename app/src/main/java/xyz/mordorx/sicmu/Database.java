@@ -63,66 +63,6 @@ public class Database {
         return config;
     }
 
-    public interface DoesDonateMustBeShownInterface {
-        void donateMustBeShown(boolean mustBeShown) ;
-    }
-    public void doesDonateMustBeShownAsync(DoesDonateMustBeShownInterface intf) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                intf.donateMustBeShown(doesDonateMustBeShown());
-            }
-        };
-        thread.start();
-    }
-
-    public void disableShowDonate() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                ConfigurationORM config = getConfigurationORM();
-                config.lastShowDonateMs = -1;
-            }
-        };
-        thread.start();
-    }
-
-    /*
-     * return whether donate view must be shown (donate view should be shown sometimes)
-     *
-     * @return if return true, lastShowDonateMs is reset to now
-     *   if lastShowDonateMs is set to -1 in DB, doesDonateMustBeShown will always return false
-     */
-    private boolean doesDonateMustBeShown() {
-        boolean mustBeShown = false;
-
-        ConfigurationORM config = getConfigurationORM();
-        boolean showDonateDisabled = config.lastShowDonateMs < 0;
-        if (showDonateDisabled) {
-            Log.d("Database", "Show donate disabled");
-        }
-        else {
-            final long appOpenedOften = 100;
-            config.nbTimeAppStartedSinceShowDonate++;
-            final long donatePeriodInDay = 31*12;
-            long nowMs = (new Date()).getTime();
-            if ((config.nbTimeAppStartedSinceShowDonate > appOpenedOften) &&
-                (nowMs - config.lastShowDonateMs) > donatePeriodInDay*24*3600*1000)
-            {
-                config.lastShowDonateMs = nowMs;
-                config.nbTimeAppStartedSinceShowDonate = 0;
-                mustBeShown = true;
-            }
-            else {
-                Log.d("Database", "Show donate not useful : app used " +
-                        config.nbTimeAppStartedSinceShowDonate + " times or already shown the " +
-                        new Date(config.lastShowDonateMs));
-            }
-            configurationDAO.update(config);
-        }
-        return mustBeShown;
-    }
-
     public interface DoesChangelogsMustBeShownInterface {
         void changelogsMustBeShown(boolean mustBeShown) ;
     }

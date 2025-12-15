@@ -107,13 +107,11 @@
     <string name="settings_misc">Miscelânea</string>
 
     <string name="settings_about">Sobre</string>
-    <string name="settings_about_summary">Alguma informação sobre o app e o autor.</string>
 
     <string name="settings_version_title">Versão</string>
     <string name="settings_author_title">Autor</string>
     <string name="settings_source_title">Código fonte</string>
     <string name="settings_licence_title">Licença</string>
-    <string name="donate_title">Doar</string>
 
     <string name="settings_thanks">Agradecimentos espciais</string>
     <string name="settings_thanks_icons">Ícones</string>
