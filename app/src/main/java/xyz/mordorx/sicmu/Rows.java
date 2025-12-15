@@ -1460,4 +1460,11 @@ public class Rows {
 
         return succeed;
     }
+
+    public ArrayList<Row> getRowsFolded() {
+        return rows;
+    }
+    public ArrayList<Row> getRowsUnfolded() {
+        return rowsUnfolded;
+    }
 }

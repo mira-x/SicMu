@@ -1,18 +1,28 @@
 package xyz.mordorx.sicmu;
 
+import static androidx.compose.runtime.SnapshotStateKt.mutableStateOf;
+import static androidx.compose.runtime.SnapshotStateKt.referentialEqualityPolicy;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 
 import androidx.annotation.Nullable;
+import androidx.compose.runtime.MutableState;
+import androidx.compose.ui.graphics.ImageBitmap;
+import androidx.compose.ui.graphics.*;
+import androidx.compose.ui.graphics.painter.BitmapPainter;
+import androidx.core.graphics.BitmapKt;
 
 import com.google.common.cache.CacheBuilderSpec;
 
@@ -45,7 +55,12 @@ public class AlbumArtLoader {
     public AlbumArtLoader(Context ctx, RowSong song) {
         this.ctx = ctx;
         this.song = song;
+
+        if (fallback == null) {
+            fallback = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_default_coverart);
+        }
     }
+    private static Bitmap fallback = null;
 
     /// This spins up a thread to load an album image, if it's not cached currently. If it is,
     /// the callback is called instantly, in sync.
@@ -54,12 +69,30 @@ public class AlbumArtLoader {
         var cachedBmp = cache.getIfPresent(song.getID());
         //noinspection OptionalAssignedToNull We compare the optional against null on purpose.
         if (cachedBmp != null) {
-            Log.d("AlbumArtLoader", "Cache Hit. RowSongID=" + song.getID() + " SongPath=" + song.getPath() + " Bitmap=" + cachedBmp.orElse(null));
-            albumBmpCallback.callback(song.getID(), cachedBmp.orElse(null));
+            Log.d("AlbumArtLoader", "Cache Hit. RowSongID=" + song.getID() + " SongPath=" + song.getPath() + " Bitmap=" + cachedBmp.orElse(fallback));
+            albumBmpCallback.callback(song.getID(), cachedBmp.orElse(fallback));
             return;
         }
 
         new Thread(() -> albumBmpCallback.callback(song.getID(), load())).start();
+    }
+
+    public MutableState<ImageBitmap> loadAsync() {
+        var empty = BitmapKt.createBitmap(1, 1, Bitmap.Config.ALPHA_8);
+        empty.setPixel(0, 0, 0x00000000);
+        var emptyImg = AndroidImageBitmap_androidKt.asImageBitmap(empty);
+
+        MutableState<ImageBitmap> out = mutableStateOf(emptyImg, referentialEqualityPolicy());
+
+        loadAsync((rowSongID, bmp) -> {
+            if (bmp == null) {
+                return;
+            }
+            var bmpImg = AndroidImageBitmap_androidKt.asImageBitmap(bmp);
+            out.setValue(bmpImg);
+        });
+
+        return out;
     }
 
     @Nullable
@@ -147,8 +180,12 @@ public class AlbumArtLoader {
         Log.d("AlbumArtLoader", "Cache Miss. RowSongID=" + song.getID() + " SongPath=" + song.getPath() + " Bitmap=" + bmp);
         cache.put(song.getID(), Optional.ofNullable(bmp));
 
-        // (Implicit) fallback: return null, this will cause the SicMu album placeholder image to be shown.
-        return bmp;
+        // Fallback: load generic placeholder image (which also might be null)
+        if (bmp == null) {
+            return fallback;
+        } else {
+            return bmp;
+        }
     }
 
     private int getScreenWidth() {

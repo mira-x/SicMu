@@ -314,7 +314,7 @@ public class MusicService extends Service implements
     }
 
     public class MusicBinder extends Binder {
-        MusicService getService() {
+        public MusicService getService() {
             return MusicService.this;
         }
     }
