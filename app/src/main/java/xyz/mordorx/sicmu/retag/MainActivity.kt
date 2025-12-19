@@ -29,9 +29,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
@@ -55,7 +61,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import xyz.mordorx.sicmu.AlbumArtLoader
 import xyz.mordorx.sicmu.MusicService
+import xyz.mordorx.sicmu.Path
 import xyz.mordorx.sicmu.RowSong
+import java.io.File
 import java.util.Optional
 import kotlin.math.sqrt
 
@@ -83,35 +91,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             if (musicService.value != null) {
-                val decs = remember { MoveArticleDecision.Factory.generateDecisions(musicService.value!!.rows) }
+                var decs by remember { mutableStateOf(MoveArticleDecision.Factory.generateDecisions(musicService.value!!.rows)) }
+                fun invalidate (files: List<File>) {
+                    decs = decs.filter { decision -> decision.isValid(files) }
+                    files.mapNotNull { f -> f.parentFile }
+                        .forEach { dir -> Path.rescanDir(this, dir) }
+                }
 
                 HorizontalUncontainedCarousel(
                     state = rememberCarouselState(0) { decs.size },
                     itemWidth = widthDp,
                     itemSpacing = 30.dp
                 ) { i ->
-                    decs[i].display { a ->
-                        Log.d("MIRAX", "MoveDecision is positive. Invalidated files:" + a.joinToString(", "))
-                    }
-/*                    val song = rows[i]
-                    val pathElems = song.path.split('/', ' ', '.')
-                    val bmp by remember { AlbumArtLoader(applicationContext, song).loadAsync() }
-                    var newPath by remember { mutableStateOf(Optional.empty<String>()) }
-                    Surface(Modifier
-                        .fillMaxSize()
-                        .padding(25.dp, 50.dp)) {
-                        Column(Modifier.fillMaxSize()) {
-                            Image(painter = BitmapPainter(bmp), song.filename, Modifier.height(250.dp))
-                            if (newPath.isPresent) {
-                                Text("Selected new Path: " + newPath.get())
-                            } else {
-                                DuolingoSelector(pathElems) { res ->
-                                    newPath = Optional.of(res.joinToString("/"))
-                                }
-                            }
-                            Spacer(Modifier.height(25.dp))
-                        }
-                    }*/
+                    decs[i].display(
+                        okCallback = {files -> invalidate(files)},
+                        hideCallback = {decs = decs.filterIndexed { index, _ -> index != i }}
+                    )
                 }
             }
         }
@@ -142,9 +137,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun SelectorPreview() {
-    DuolingoSelector("home".split(' ', ',', '.', '!'), { l ->
-        l.forEach { s -> Log.d("Selecktor", "Received: " + s) }
-    })
+    DuolingoPathSelector("/home/root/Musik/Zombie Nation/Kernkraft 400.opus") {
+        l -> l.forEach { s -> Log.d("Selecktor", "Received: " + s) }
+    }
+}
+
+@Composable
+fun DuolingoPathSelector(path: String, submitCallback: (List<String>) -> Unit) {
+    val opts = path.split(' ', '.', ',', '!', '/')
+    DuolingoSelector(opts, submitCallback)
 }
 
 @Composable
@@ -182,18 +183,24 @@ fun DuolingoSelector(options: List<String>, submitCallback: (List<String>) -> Un
             horizontalArrangement = Arrangement.Start) {
             // We add unselected elements invisibly so this FlowRow always takes up the same
             // amount of space and has no layout shifts when (de)selecting options.
-            // Also, in order to avoid gaps between selected options, we sort by selectedness.
+            // Also, in order to avoid gaps between selected options, we add selected ones first.
+            selected
+                .forEach { optionIndex ->
+                    Button(onClick = {callbackDeselect(optionIndex)},
+                        modifier=btnMod,
+                        shape=btnShape) {
+                        Text(options[optionIndex])
+                    }
+                }
             options
                 .withIndex()
-                .sortedBy { !selected.contains(it.index) } // Selected ones at the beginning
-                .forEach {
-                    val isSelected = selected.contains(it.index)
-                    val mod = btnMod.alpha(if (isSelected) 1f else 0f)
-                    Button(onClick={callbackDeselect(it.index)},
-                        modifier=mod,
+                .filter { (index, text) -> !selected.contains(index) }
+                .forEach { (index, text) ->
+                    Button(onClick = {},
+                        modifier=btnMod.alpha(0.0f),
                         shape=btnShape,
-                        enabled=isSelected) {
-                        Text(it.value)
+                        enabled = false) {
+                        Text(text)
                     }
                 }
         }
@@ -215,14 +222,7 @@ fun DuolingoSelector(options: List<String>, submitCallback: (List<String>) -> Un
         }
         HorizontalDivider()
         // Submit Button
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Button(onClick=callbackSubmitInternal,
-                    enabled = selected.isNotEmpty(),
-                    modifier = btnMod,
-                    shape = btnShape) {
-                Text(stringResource(android.R.string.ok))
-            }
-        }
+        AcceptDenyButtons(acceptEnabled = selected.isNotEmpty())
     }
 }
 

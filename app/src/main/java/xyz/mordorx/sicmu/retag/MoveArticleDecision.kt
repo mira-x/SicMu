@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +24,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import xyz.mordorx.sicmu.AlbumArtLoader
+import xyz.mordorx.sicmu.Path
 import xyz.mordorx.sicmu.RowSong
 import xyz.mordorx.sicmu.Rows
 import java.io.File
@@ -42,7 +55,7 @@ data class MoveArticleDecision(
     ) : Decision() {
 
     companion object Factory {
-        private val articles = listOf("The", "Die") // English + German (genderless plural)
+        private val articles = listOf("The", "Die", "Los", "Las") // English + German (genderless plural) + Spanish
 
         fun generateDecisions(rows: Rows): List<Decision> {
             return rows
@@ -85,6 +98,10 @@ data class MoveArticleDecision(
         }
     }
 
+    override fun isValid(invalidatedFiles: List<File>): Boolean {
+        return !invalidatedFiles.any { f -> f.absolutePath.equals(originalPath.absolutePath) || f.absolutePath.equals(newPath.absolutePath)}
+    }
+
     @Composable
     private fun ColumnScope.Center(content: @Composable RowScope.() -> Unit) {
         Row(modifier= Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.Center, content=content)
@@ -101,9 +118,11 @@ data class MoveArticleDecision(
 
     @OptIn(InternalComposeApi::class)
     @Composable
-    public override fun display(okCallback: (List<File>) -> Unit) {
+    public override fun display(okCallback: (List<File>) -> Unit, hideCallback: () -> Unit) {
         val context = LocalContext.current
         val bmp by remember(context, song) { AlbumArtLoader(context, song).loadAsync() }
+        val pathOrig = originalPath.toString()
+        val pathNew = newPath.toString()
 
         DecisionSurface {
             Column() {
@@ -112,25 +131,36 @@ data class MoveArticleDecision(
                 }
 
                 Center {
-                    Text("Move Artist Article", fontSize = 7.em)
-                }
-
-                Center {
-                    Text("From:")
-                    Text(originalPath.toString())
-                }
-
-                Center {
-                    Text("To:")
-                    Text(newPath.toString())
-
-                }
-
-                End {
-                    Button({ okCallback(listOf(originalPath, newPath)) }) {
-                        Text("Accept")
+                    Column {
+                        Text("Move Artist Article", fontSize = 7.em, modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Text("Rename the audio file", fontSize = 4.em, modifier = Modifier.align(Alignment.CenterHorizontally))
                     }
                 }
+
+                Center {
+                    Column {
+                        Column {
+                            Text("From: ", fontWeight = FontWeight.Bold)
+                            Text(buildWordDiff(pathOrig, pathNew, true))
+                        }
+                        Column {
+                            Text("To: ", fontWeight = FontWeight.Bold)
+                            Text(buildWordDiff(pathOrig, pathNew, false))
+                        }
+                    }
+                }
+
+                Center { /* Padding */ }
+
+                AcceptDenyButtons(denyCallback = {
+                    hideCallback()
+                }, acceptCallback = {
+                    val success = originalPath.renameTo(newPath)
+                    if (success) {
+                        okCallback(listOf(originalPath, newPath))
+                    }
+                    hideCallback()
+                })
             }
         }
     }
