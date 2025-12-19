@@ -418,7 +418,8 @@
         android:fastScrollEnabled="false"
         android:hapticFeedbackEnabled="false"
         android:scrollbarThumbVertical="@drawable/scrollbar"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical">
+    </ListView>
 
     <LinearLayout
         android:id="@+id/more_buttons"

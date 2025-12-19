@@ -1,9 +1,9 @@
 package xyz.mordorx.sicmu;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
 import android.view.View;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 public enum ShuffleMode {
     SEQUENTIAL(0),
@@ -31,7 +31,7 @@ public enum ShuffleMode {
         return (this == RANDOM || this == RADIO);
     }
 
-    public void showExplainToast(View v) {
+    public void showExplainSnackbar(View v) {
         var ctx = v.getContext();
         var txt = "";
         switch (this) {
@@ -45,7 +45,8 @@ public enum ShuffleMode {
                 txt = ctx.getString(R.string.settings_shuffle_explainer_radio);
                 break;
         }
-        Toast.makeText(ctx, txt, LENGTH_SHORT).show();
+
+        Snackbar.make(v, txt, BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
     public static ShuffleMode valueOf(int a) {

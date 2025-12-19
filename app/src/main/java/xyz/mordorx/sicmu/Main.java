@@ -76,10 +76,12 @@ import androidx.media3.common.util.UnstableApi;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.widget.Toast.LENGTH_LONG;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
 import xyz.mordorx.sicmu.retag.MainActivity;
-import xyz.mordorx.sicmu.retag.MainActivityKt;
 
 @UnstableApi
 public class Main extends AppCompatActivity {
@@ -1387,32 +1389,31 @@ public class Main extends AppCompatActivity {
             prefs.edit().putString("search_query", query).apply();
 
             Row row = rows.getNextSongByKeyword(query);
-            if(row == null) {
-                // Nothing found!
-                Toast.makeText(ctx, R.string.search_unsuccessful, LENGTH_LONG).show();
-            } else {
-                // clickOnRow(...) only works using folded indexes, so we have
-                // to unfold the parent groups first, and then play the song itself
+            if (row == null) {
+                Snackbar.make(view, R.string.search_unsuccessful, BaseTransientBottomBar.LENGTH_LONG).show();
+                return;
+            }
 
-                // Collect parent elements, then unfold them in reverse order
-                // (topmost group/folder -> deepest group/folder)
-                ArrayList<RowGroup> parents = new ArrayList<>();
-                for(RowGroup group = (RowGroup)row.getParent();
-                        group != null;
-                        group = (RowGroup)group.getParent()) {
-                    parents.add(group);
-                }
-                for(int i = parents.size() - 1; i >= 0; i--) {
-                    RowGroup parent = parents.get(i);
-                    if(parent.isFolded())
-                        clickOnRow(rows.getFoldedIndex(parent));
-                }
+            // clickOnRow(...) only works using folded indexes, so we have
+            // to unfold the parent groups first, and then play the song itself
 
-                // Don't click (=close) unfolded groups! Just scroll to them.
-                if(row instanceof RowGroup && !((RowGroup) row).isFolded())
-                        scrollToSong(rows.getFoldedIndex(row));
-                else // Click it! (=open a group or play a song)
-                        clickOnRow(rows.getFoldedIndex(row));
+            // Collect parent elements, then unfold them in reverse order
+            // (topmost group/folder -> deepest group/folder)
+            ArrayList<RowGroup> parents = new ArrayList<>();
+            for(RowGroup group = (RowGroup)row.getParent(); group != null; group = (RowGroup)group.getParent()) {
+                parents.add(group);
+            }
+            for(int i = parents.size() - 1; i >= 0; i--) {
+                RowGroup parent = parents.get(i);
+                if(parent.isFolded())
+                    clickOnRow(rows.getFoldedIndex(parent));
+            }
+
+            // Don't click (=close) unfolded groups! Just scroll to them.
+            if(row instanceof RowGroup && !((RowGroup) row).isFolded()) {
+                scrollToSong(rows.getFoldedIndex(row));
+            } else { // Click it! (i.e. open a group or play a song)
+                clickOnRow(rows.getFoldedIndex(row));
             }
         });
 
@@ -1814,7 +1815,7 @@ public class Main extends AppCompatActivity {
         var mode = params.getShuffle().next();
         params.setShuffle(mode);
         setShuffleButton();
-        mode.showExplainToast(view);
+        mode.showExplainSnackbar(view);
         startCloseMoreButtonsTimer();
     }
 
@@ -1822,19 +1823,19 @@ public class Main extends AppCompatActivity {
         var stereo = !params.getStereo();
         params.setStereo(stereo);
         setStereoButton();
-        showStereoToast(view.getContext());
+        showStereoSnackbar(view);
         applyStereo();
     }
 
-    /// Shows a toast showing "Stereo" or "Mono"
-    public void showStereoToast(Context ctx) {
+    /// Shows a Snackbar showing "Stereo" or "Mono"
+    public void showStereoSnackbar(View v) {
         int toastText;
         if (params.getStereo()) {
             toastText = R.string.settings_stereo_on;
         } else {
             toastText = R.string.settings_stereo_off;
         }
-        Toast.makeText(ctx, getText(toastText), Toast.LENGTH_SHORT).show();
+        Snackbar.make(v, toastText, BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
 /*
