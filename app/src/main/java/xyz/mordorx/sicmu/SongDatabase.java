@@ -23,7 +23,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {SongORM.class, ConfigurationORM.class}, version = 2)
+@Database(entities = {SongORM.class}, version = 3)
 public abstract class SongDatabase extends RoomDatabase {
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -32,8 +32,13 @@ public abstract class SongDatabase extends RoomDatabase {
                     + " ADD COLUMN ratingSynchronized INTEGER DEFAULT 1 NOT NULL");
         }
     };
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase db) {
+            db.execSQL("DROP TABLE IF EXISTS configuration");
+        }
+    };
     public abstract SongDAO getSongDAO();
-    public abstract ConfigurationDAO getConfigurationDAO();
 }
 
 

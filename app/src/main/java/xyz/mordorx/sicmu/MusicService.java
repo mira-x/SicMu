@@ -286,7 +286,6 @@ public class MusicService extends Service implements
 
         params = new Preferences(this);
         database = new Database(getApplicationContext());
-        database.cleanupSongsDB();
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
                 database);
 

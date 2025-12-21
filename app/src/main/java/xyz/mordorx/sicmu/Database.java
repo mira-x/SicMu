@@ -29,10 +29,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import static xyz.mordorx.sicmu.SongDatabase.MIGRATION_1_2;
+import static xyz.mordorx.sicmu.SongDatabase.MIGRATION_2_3;
 
 public class Database {
     private SongDAO songDAO;
-    private ConfigurationDAO configurationDAO;
     private Context context;
 
     public Database(Context context) {
@@ -40,93 +40,14 @@ public class Database {
         SongDatabase db = Room.databaseBuilder(context,
                 SongDatabase.class, "database-SicMuNeo")
                 .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_2_3)
                 //.allowMainThreadQueries()
                 .build();
         songDAO = db.getSongDAO();
-        configurationDAO = db.getConfigurationDAO();
     }
 
     public SongDAO getSongDAO() {
         return songDAO;
-    }
-
-    public synchronized ConfigurationORM getConfigurationORM() {
-        ConfigurationORM config = configurationDAO.getConfiguration();
-        if (config == null) {
-            config = new ConfigurationORM();
-            config.lastSongsCleanupMs = (new Date()).getTime();
-            config.lastShowDonateMs = config.lastSongsCleanupMs;
-            config.nbTimeAppStartedSinceShowDonate = 0;
-            config.lastVersionCodeStarted = 0;
-            configurationDAO.insert(config);
-        }
-        return config;
-    }
-
-    public interface DoesChangelogsMustBeShownInterface {
-        void changelogsMustBeShown(boolean mustBeShown) ;
-    }
-    public void doesChangelogsMustBeShownAsync(DoesChangelogsMustBeShownInterface intf) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                intf.changelogsMustBeShown(doesChangelogsMustBeShown());
-            }
-        };
-        thread.start();
-    }
-
-    private boolean doesChangelogsMustBeShown() {
-        boolean mustBeShown = false;
-        ConfigurationORM config = getConfigurationORM();
-        if (BuildConfig.VERSION_CODE != config.lastVersionCodeStarted) {
-            if (config.lastVersionCodeStarted != 0)
-                mustBeShown = true;
-            config.lastVersionCodeStarted = BuildConfig.VERSION_CODE;
-            configurationDAO.update(config);
-        }
-        return mustBeShown;
-    }
-
-    // tell whether wy should start a DB cleanup (if return true : set last cleanup date to today)
-    private boolean songsDBNeedCleanup() {
-        ConfigurationORM config = getConfigurationORM();
-        long nowMs = (new Date()).getTime();
-        final long cleanupPeriodInDay = 31;
-        if ((nowMs - config.lastSongsCleanupMs) > cleanupPeriodInDay*24*3600*1000) {
-            config.lastSongsCleanupMs = nowMs;
-            configurationDAO.update(config);
-            return true;
-        }
-        else {
-            Log.d("Database", "Cleanup DB not useful, already done the " +
-                    new Date(config.lastSongsCleanupMs));
-        }
-        return false;
-    }
-
-    public void cleanupSongsDB() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                if (songsDBNeedCleanup()) {
-                    Date beg = new Date();
-                    List<SongORM> songORMs = songDAO.getAll();
-                    int nbDelete = 0;
-                    for (SongORM songORM : songORMs) {
-                        if (!(new File(songORM.path).exists())) {
-                            Log.d("Database", "Delete songORM for path=" + songORM.path);
-                            songDAO.delete(songORM);
-                            nbDelete++;
-                        }
-                    }
-                    Date end = new Date();
-                    Log.i("Database", "Cleanup DB: " + nbDelete + "/" + songORMs.size() +
-                            " songORM deleted in " + (end.getTime() - beg.getTime()) + "ms");
-                }
-            }
-        };
-        thread.start();
     }
 
     public interface SyncronizeRatingsCallbackInterface {

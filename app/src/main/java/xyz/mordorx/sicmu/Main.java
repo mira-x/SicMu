@@ -378,6 +378,20 @@ public class Main extends AppCompatActivity {
         return ContextCompat.getColor(this, typedValue.resourceId);
     }
 
+    /** If the user has not seen the changelogs for this version yet, they will pop up and saved as seen */
+    private void showChangelogsIfNeccessary() {
+        var pref = new Preferences(getApplicationContext());
+        var lastSeenVersion = pref.getLastSeenChangelogsVersion();
+        var currentVersion = BuildConfig.VERSION_CODE;
+        if (lastSeenVersion < currentVersion) {
+            pref.setLastSeenChangelogsVersion(currentVersion);
+            runOnUiThread(() -> {
+                Intent intent = new Intent(this, ChangelogsActivity.class);
+                startActivity(intent);
+            });
+        }
+    }
+
     // connect to the service
     private final ServiceConnection musicConnection = new ServiceConnection() {
 
@@ -388,12 +402,7 @@ public class Main extends AppCompatActivity {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicSrv = binder.getService();
 
-            Database database = musicSrv.getDatabase();
-            database.doesChangelogsMustBeShownAsync((mustBeShown) -> {
-                if (mustBeShown) {
-                    runOnUiThread(() -> showChangelogs());
-                }
-            });
+            showChangelogsIfNeccessary();
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
@@ -590,11 +599,6 @@ public class Main extends AppCompatActivity {
     }
     private void hideWarning() {
         warningLayout.setVisibility(View.GONE);
-    }
-
-    private void showChangelogs() {
-        Intent intent = new Intent(this, ChangelogsActivity.class);
-        startActivity(intent);
     }
 
     private final SeekBar.OnSeekBarChangeListener seekBarChangeListener

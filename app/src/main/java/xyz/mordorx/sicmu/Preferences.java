@@ -18,6 +18,8 @@
 
 package xyz.mordorx.sicmu;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -29,142 +31,144 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Preferences {
+    private final SharedPreferences prefs;
     private final Context context;
     public Preferences(Context context) {
+        var name = PreferenceManager.getDefaultSharedPreferencesName(context);
+        this.prefs = context.getSharedPreferences(name, MODE_PRIVATE);
         this.context = context;
     }
 
-    private SharedPreferences getPref() {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+    public int getLastSeenChangelogsVersion() {
+        return prefs.getInt(PrefKeys.LAST_SEEN_CHANGELOGS_VERSION.name(), 0);
     }
-    private SharedPreferences.Editor getEditor() {
-        return getPref().edit();
+    public void setLastSeenChangelogsVersion(int x) {
+        prefs.edit().putInt(PrefKeys.LAST_SEEN_CHANGELOGS_VERSION.name(), x).apply();
     }
-
+    
     public boolean getFollowSong() {
-        return getPref().getBoolean(PrefKeys.FOLLOW_SONG.name(), true);
+        return prefs.getBoolean(PrefKeys.FOLLOW_SONG.name(), true);
     }
 
     public void setChooseTextSize(boolean big) {
-        getEditor().putBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(), big).commit();
+        prefs.edit().putBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(), big).apply();
     }
     public boolean getChoosedTextSize() {
-        return getPref().getBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(),
-                Boolean.valueOf(context.getString(R.string.settings_text_size_choosed_default)));
+        return prefs.getBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(),
+                Boolean.parseBoolean(context.getString(R.string.settings_text_size_choosed_default)));
     }
     public int getBigTextSize() {
-        return Integer.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_BIG.name(),
+        return Integer.parseInt(prefs.getString(PrefKeys.TEXT_SIZE_BIG.name(),
                 context.getString(R.string.settings_text_size_big_default)));
     }
     public int getNormalTextSize() {
-        return Integer.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_NORMAL.name(),
+        return Integer.parseInt(prefs.getString(PrefKeys.TEXT_SIZE_NORMAL.name(),
                 context.getString(R.string.settings_text_size_regular_default)));
     }
     public float getTextSizeRatio() {
-        return Float.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_RATIO.name(),
+        return Float.parseFloat(prefs.getString(PrefKeys.TEXT_SIZE_RATIO.name(),
                 context.getString(R.string.settings_text_size_ratio_default)));
     }
 
-
     public long getSongID() {
-        return getPref().getLong(PrefKeys.SONG_ID.name(), -1);
+        return prefs.getLong(PrefKeys.SONG_ID.name(), -1);
     }
     public void setSongID(long songID) {
-        getEditor().putLong(PrefKeys.SONG_ID.name(), songID).commit();
+        prefs.edit().putLong(PrefKeys.SONG_ID.name(), songID).apply();
     }
 
     public boolean getSaveSongPos() {
-        return getPref().getBoolean(PrefKeys.SAVE_SONG_POS.name(), false);
+        return prefs.getBoolean(PrefKeys.SAVE_SONG_POS.name(), false);
     }
 
     public long getSongPos() {
-        return getPref().getLong(PrefKeys.SONG_POS.name(), -1);
+        return prefs.getLong(PrefKeys.SONG_POS.name(), -1);
     }
     public void setSongPos(long songPos) {
-        getEditor().putLong(PrefKeys.SONG_POS.name(), songPos).commit();
+        prefs.edit().putLong(PrefKeys.SONG_POS.name(), songPos).apply();
     }
     public long getSongPosId() {
-        return getPref().getLong(PrefKeys.SONG_POS_ID.name(), -1);
+        return prefs.getLong(PrefKeys.SONG_POS_ID.name(), -1);
     }
     public void setSongPosId(long songPos) {
-        getEditor().putLong(PrefKeys.SONG_POS_ID.name(), songPos).commit();
+        prefs.edit().putLong(PrefKeys.SONG_POS_ID.name(), songPos).apply();
     }
 
     public Filter getFilter() {
-        return Filter.valueOf(getPref().getString(PrefKeys.FILTER.name(), Filter.TREE.name()));
+        return Filter.valueOf(prefs.getString(PrefKeys.FILTER.name(), Filter.TREE.name()));
     }
     public void setFilter(Filter filter) {
-        getEditor().putString(PrefKeys.FILTER.name(), filter.name()).commit();
+        prefs.edit().putString(PrefKeys.FILTER.name(), filter.name()).apply();
     }
 
     public RepeatMode getRepeatMode() {
-        return RepeatMode.valueOf(getPref().getString(PrefKeys.REPEAT_MODE.name(), RepeatMode.REPEAT_ALL.name()));
+        return RepeatMode.valueOf(prefs.getString(PrefKeys.REPEAT_MODE.name(), RepeatMode.REPEAT_ALL.name()));
     }
     public void setRepeatMode(RepeatMode repeatMode) {
-        getEditor().putString(PrefKeys.REPEAT_MODE.name(), repeatMode.name()).commit();
+        prefs.edit().putString(PrefKeys.REPEAT_MODE.name(), repeatMode.name()).apply();
     }
 
     public String getRootFolders() {
-        return getPref().getString(PrefKeys.ROOT_FOLDERS.name(), Path.getMusicStoragesStr(context));
+        return prefs.getString(PrefKeys.ROOT_FOLDERS.name(), Path.getMusicStoragesStr(context));
     }
 
 
     public int getDefaultFold() {
-        return Integer.valueOf(getPref().getString(PrefKeys.DEFAULT_FOLD.name(), "0"));
+        return Integer.parseInt(prefs.getString(PrefKeys.DEFAULT_FOLD.name(), "0"));
     }
 
     public boolean getUnfoldSubGroup() {
-        return getPref().getBoolean(PrefKeys.UNFOLD_SUBGROUP.name(), false);
+        return prefs.getBoolean(PrefKeys.UNFOLD_SUBGROUP.name(), false);
     }
 
     public int getUnfoldSubGroupThreshold() {
-        return Integer.valueOf(getPref().getString(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name(),
+        return Integer.parseInt(prefs.getString(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name(),
                 context.getString(R.string.settings_unfold_subgroup_threshold_default)));
     }
 
     public boolean getEnableShake() {
-        return getPref().getBoolean(PrefKeys.ENABLE_SHAKE.name(), false);
+        return prefs.getBoolean(PrefKeys.ENABLE_SHAKE.name(), false);
     }
 
     public void setEnableShake(boolean shakeEnabled) {
-        getEditor().putBoolean(PrefKeys.ENABLE_SHAKE.name(), shakeEnabled).commit();
+        prefs.edit().putBoolean(PrefKeys.ENABLE_SHAKE.name(), shakeEnabled).apply();
     }
 
     public boolean getEnableRating() {
-        return getPref().getBoolean(PrefKeys.ENABLE_RATING.name(), true);
+        return prefs.getBoolean(PrefKeys.ENABLE_RATING.name(), true);
     }
 
     public void setEnableRating(boolean ratingEnabled) {
-        getEditor().putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).commit();
+        prefs.edit().putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).apply();
     }
 
     public int getMinRating() {
-        return getPref().getInt(PrefKeys.MIN_RATING.name(),1);
+        return prefs.getInt(PrefKeys.MIN_RATING.name(),1);
     }
 
     public void setMinRating(int rating) {
-        getEditor().putInt(PrefKeys.MIN_RATING.name(), rating).commit();
+        prefs.edit().putInt(PrefKeys.MIN_RATING.name(), rating).apply();
     }
 
     public float getShakeThreshold() {
-        return Float.valueOf(getPref().getString(PrefKeys.SHAKE_THRESHOLD.name(),
+        return Float.parseFloat(prefs.getString(PrefKeys.SHAKE_THRESHOLD.name(),
                 context.getString(R.string.settings_default_shake_threshold)));
     }
 
     public boolean getMediaButtonStartAppShake() {
-        return getPref().getBoolean(PrefKeys.MEDIA_BUTTON_START_APP.name(), true);
+        return prefs.getBoolean(PrefKeys.MEDIA_BUTTON_START_APP.name(), true);
     }
 
     public boolean getVibrate() {
-        return getPref().getBoolean(PrefKeys.VIBRATE.name(), true);
+        return prefs.getBoolean(PrefKeys.VIBRATE.name(), true);
     }
 
     public ShuffleMode getShuffle() {
-        return ShuffleMode.valueOf(getPref().getInt(PrefKeys.SHUFFLE_V2.name(), ShuffleMode.SEQUENTIAL.num));
+        return ShuffleMode.valueOf(prefs.getInt(PrefKeys.SHUFFLE_V2.name(), ShuffleMode.SEQUENTIAL.num));
     }
 
     public void setShuffle(ShuffleMode shuffle) {
-        getEditor().putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).commit();
+        prefs.edit().putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).apply();
     }
 
     private static String PairFirst(Pair<String, String> p) {
@@ -190,44 +194,44 @@ public class Preferences {
     /// The stereo/mono setting is unique to each device.
     public boolean getStereo() {
         var key = PrefKeys.STEREO.name() + getAudioHardwareId();
-        return getPref().getBoolean(key, true);
+        return prefs.getBoolean(key, true);
     }
 
     /// The stereo/mono setting is unique to each device.
     public void setStereo(boolean stereo) {
         var key = PrefKeys.STEREO.name() + getAudioHardwareId();
-        getEditor().putBoolean(key, stereo).commit();
+        prefs.edit().putBoolean(key, stereo).apply();
     }
 
     public boolean getScrobble() {
-        return getPref().getBoolean(PrefKeys.SCROBBLE.name(), false);
+        return prefs.getBoolean(PrefKeys.SCROBBLE.name(), false);
     }
 
     public int getSleepDelayM() {
-        return Integer.parseInt(getPref().getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
+        return Integer.parseInt(prefs.getString(PrefKeys.SLEEP_DELAY_M.name(), "60"));
     }
 
     public boolean getShowFilename() {
-        return getPref().getBoolean(PrefKeys.SHOW_FILENAME.name(), false);
+        return prefs.getBoolean(PrefKeys.SHOW_FILENAME.name(), false);
     }
 
     public boolean getShowRemainingTime() {
-        return getPref().getBoolean(PrefKeys.SHOW_REMAINING_TIME.name(), false);
+        return prefs.getBoolean(PrefKeys.SHOW_REMAINING_TIME.name(), false);
     }
 
     public Integer getTheme() {
-        return Integer.valueOf(getPref().getString(PrefKeys.THEME.name(), "0"));
+        return Integer.valueOf(prefs.getString(PrefKeys.THEME.name(), "0"));
     }
 
     public int getUninitializedDefaultRating() {
-        return Integer.parseInt(getPref().getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
+        return Integer.parseInt(prefs.getString(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name(), "3"));
     }
 
     public boolean getHideNavigationBar() {
-        return getPref().getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), false);
+        return prefs.getBoolean(PrefKeys.HIDE_NAVIGATION_BAR.name(), false);
     }
 
     public boolean getShowGroupTotalTime() {
-        return getPref().getBoolean(PrefKeys.SHOW_GROUP_TOTAL_TIME.name(), false);
+        return prefs.getBoolean(PrefKeys.SHOW_GROUP_TOTAL_TIME.name(), false);
     }
 }
