@@ -113,7 +113,7 @@ public class Main extends AppCompatActivity {
     private boolean detailsToggledFollowAuto;
     private boolean hasCoverArt;
 
-    private Parameters params;
+    private Preferences params;
 
     private Vibrator vibrator;
 
@@ -142,7 +142,7 @@ public class Main extends AppCompatActivity {
 
         FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
 
-        params = new Parameters(this);
+        params = new Preferences(this);
 
         hideSystemBars();
 

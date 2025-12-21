@@ -37,7 +37,7 @@ public class RowGroup extends Row {
     private long totalDurationMs = 0;
     public static Filter rowType;
     protected static int textSize = 18;
-    private Parameters params;
+    private Preferences params;
 
     // must be set outside before calling setText
     public static int normalTextColor;
@@ -45,7 +45,7 @@ public class RowGroup extends Row {
     public static int backgroundOverrideColor;
 
     public RowGroup(int pos, int level, String name, String path, int typeface,
-                    boolean overrideBackgroundColor, Parameters params) {
+                    boolean overrideBackgroundColor, Preferences params) {
         super(pos, level, typeface);
         this.name = name;
         setPath(path);

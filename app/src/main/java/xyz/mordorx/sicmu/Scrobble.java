@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class Scrobble {
     private final Rows rows;
-    private final Parameters params;
+    private final Preferences params;
     private final Context context;
 
     // from API spcecification
@@ -40,7 +40,7 @@ public class Scrobble {
     private long durationMs;
 
 
-    public Scrobble(Rows rows, Parameters params, Context ctx) {
+    public Scrobble(Rows rows, Preferences params, Context ctx) {
         this.rows = rows;
         this.params = params;
         this.context = ctx;

@@ -80,7 +80,7 @@ public class MusicService extends Service implements
     public static final String PREVIOUS_ACTION    = "xyz.mordorx.sicmu.musicservicecommand.previous";
     public static final String NEXT_ACTION        = "xyz.mordorx.sicmu.musicservicecommand.next";
 
-    private Parameters params;
+    private Preferences params;
     private ExoPlayer player;
     private PowerManager.WakeLock wakeLock;
     private MergeAudioProcessor mergeAudioProcessor;
@@ -284,7 +284,7 @@ public class MusicService extends Service implements
         remoteControlResponder = null;
         audioManager = null;
 
-        params = new Parameters(this);
+        params = new Preferences(this);
         database = new Database(getApplicationContext());
         database.cleanupSongsDB();
         rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),

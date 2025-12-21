@@ -28,9 +28,9 @@ import androidx.core.util.Pair;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Parameters {
+public class Preferences {
     private final Context context;
-    public Parameters(Context context) {
+    public Preferences(Context context) {
         this.context = context;
     }
 
@@ -182,7 +182,7 @@ public class Parameters {
         Arrays.stream(outs)
                 .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
                 .distinct()
-                .sorted(Comparator.comparing(Parameters::PairFirst).thenComparing(Parameters::PairSecond))
+                .sorted(Comparator.comparing(Preferences::PairFirst).thenComparing(Preferences::PairSecond))
                 .forEach(dev -> {s.append(dev.first); s.append(dev.second);});
         return s.toString().hashCode();
     }
