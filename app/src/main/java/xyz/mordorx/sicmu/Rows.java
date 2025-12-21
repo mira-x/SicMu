@@ -48,7 +48,7 @@ public class Rows {
     private ArrayList<Integer> shuffleSavedPos;
 
     private ContentResolver musicResolver;
-    private Preferences params;
+    private Settings params;
 
     private Filter filter;
 
@@ -72,7 +72,7 @@ public class Rows {
 
     private boolean fileToOpenFound = false;
 
-    public Rows(Context context, ContentResolver resolver, Preferences params, Resources resources,
+    public Rows(Context context, ContentResolver resolver, Settings params, Resources resources,
                 Database database) {
         this.context = context;
         this.params = params;

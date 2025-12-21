@@ -30,10 +30,10 @@ import androidx.core.util.Pair;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Preferences {
+public class Settings {
     private final SharedPreferences prefs;
     private final Context context;
-    public Preferences(Context context) {
+    public Settings(Context context) {
         var name = PreferenceManager.getDefaultSharedPreferencesName(context);
         this.prefs = context.getSharedPreferences(name, MODE_PRIVATE);
         this.context = context;
@@ -186,7 +186,7 @@ public class Preferences {
         Arrays.stream(outs)
                 .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
                 .distinct()
-                .sorted(Comparator.comparing(Preferences::PairFirst).thenComparing(Preferences::PairSecond))
+                .sorted(Comparator.comparing(Settings::PairFirst).thenComparing(Settings::PairSecond))
                 .forEach(dev -> {s.append(dev.first); s.append(dev.second);});
         return s.toString().hashCode();
     }

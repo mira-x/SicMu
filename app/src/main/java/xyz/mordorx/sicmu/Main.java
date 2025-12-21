@@ -113,7 +113,7 @@ public class Main extends AppCompatActivity {
     private boolean detailsToggledFollowAuto;
     private boolean hasCoverArt;
 
-    private Preferences params;
+    private Settings params;
 
     private Vibrator vibrator;
 
@@ -142,7 +142,7 @@ public class Main extends AppCompatActivity {
 
         FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
 
-        params = new Preferences(this);
+        params = new Settings(this);
 
         hideSystemBars();
 
@@ -380,7 +380,7 @@ public class Main extends AppCompatActivity {
 
     /** If the user has not seen the changelogs for this version yet, they will pop up and saved as seen */
     private void showChangelogsIfNeccessary() {
-        var pref = new Preferences(getApplicationContext());
+        var pref = new Settings(getApplicationContext());
         var lastSeenVersion = pref.getLastSeenChangelogsVersion();
         var currentVersion = BuildConfig.VERSION_CODE;
         if (lastSeenVersion < currentVersion) {

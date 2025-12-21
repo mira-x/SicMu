@@ -43,7 +43,7 @@ import java.util.Formatter;
 public class SettingsPreferenceFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceClickListener {
-    private Preferences params;
+    private Settings params;
     private MusicService musicSrv;
     private boolean serviceBound = false;
     private final String RESCAN_KEY = "RESCAN";
@@ -62,7 +62,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        params = new Preferences(getActivity().getApplicationContext());
+        params = new Settings(getActivity().getApplicationContext());
         switch (params.getTheme()) {
             case 0:
                 getActivity().setTheme(R.style.AppTheme);

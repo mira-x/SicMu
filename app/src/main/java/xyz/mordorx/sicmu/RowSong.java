@@ -65,7 +65,7 @@ public class RowSong extends Row {
 
     private final SongDAO songDAO;
 
-    private final Preferences params;
+    private final Settings params;
 
     protected static int textSize = 15;
 
@@ -75,7 +75,7 @@ public class RowSong extends Row {
     public static int backgroundSongColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
-                   long durationMs, int songTrack, String songPath, long albumId, int year, String mime, Preferences params) {
+                   long durationMs, int songTrack, String songPath, long albumId, int year, String mime, Settings params) {
         super(pos, level, Typeface.NORMAL);
         this.songDAO = songDAO;
         id = songID;
