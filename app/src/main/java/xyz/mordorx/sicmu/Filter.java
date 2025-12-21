@@ -19,5 +19,7 @@
 package xyz.mordorx.sicmu;
 
 public enum Filter {
-    ARTIST, FOLDER, TREE, GENRE
+    ARTIST,
+    FOLDER,
+    TREE
 }

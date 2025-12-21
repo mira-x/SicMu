@@ -831,7 +831,7 @@ public class Rows {
                 initByArtist(musicCursor);
                 break;
             case FOLDER:
-                initByPath(musicCursor);
+                initByFolder(musicCursor);
                 break;
             case TREE:
                 initByTree(musicCursor);
@@ -1041,7 +1041,7 @@ public class Rows {
     }
 
 
-    private void initByPath(Cursor musicCursor) {
+    private void initByFolder(Cursor musicCursor) {
         RowGroup.rowType = Filter.FOLDER;
         if (musicCursor != null && musicCursor.moveToFirst()) {
             int titleCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
