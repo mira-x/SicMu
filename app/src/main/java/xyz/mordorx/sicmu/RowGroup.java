@@ -18,6 +18,7 @@
 
 package xyz.mordorx.sicmu;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.TypedValue;
@@ -58,7 +59,8 @@ public class RowGroup extends Row {
     public String getName() { return name; }
     public String getPath() { return path; }
 
-    private void setPath(String path) {
+    @Override
+    protected void setPath(String path) {
         this.path = "";
         if (path != null) {
             File f = new File(path);
@@ -109,6 +111,20 @@ public class RowGroup extends Row {
         else {
             setBackgroundColor(holder, backgroundColor);
         }
+    }
+
+    @Override
+    public boolean rename(Context ctx, File newPath) {
+        var oldPath = new File(getPath());
+        if(!oldPath.renameTo(newPath)) {
+            return false;
+        }
+        name = newPath.getName();
+        path = newPath.getPath();
+        Path.rescanFile(ctx, oldPath);
+        Path.rescanFile(ctx, newPath);
+
+        return true;
     }
 
     private void setText(TextView text) {
@@ -162,8 +178,7 @@ public class RowGroup extends Row {
                 duration.setText(msToTime(totalDurationMs) + " |" + rightSpace);
             else
                 duration.setText(nbRowSong + " |" + rightSpace);
-        }
-        else {
+        } else {
             duration.setText("/" + rightSpace);
             duration.setTextColor(normalTextColor);
         }

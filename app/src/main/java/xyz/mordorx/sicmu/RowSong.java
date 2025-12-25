@@ -18,6 +18,7 @@
 
 package xyz.mordorx.sicmu;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -58,10 +59,10 @@ public class RowSong extends Row {
     public static final int RATING_UNKNOWN = -1;
     private int rating;
     // full filename
-    private final String path;
-    private final String filename;
+    private String path;
+    private String filename;
     // folder of the path (i.e. last folder containing the file's song)
-    private final String folder;
+    private String folder;
 
     private final SongDAO songDAO;
 
@@ -213,6 +214,22 @@ public class RowSong extends Row {
 
     static public String msToMinutesStripSecondIfLongDuration(long durationMs){
         return msToMinutes(durationMs, durationMs < 100*60*1000);
+    }
+
+    @Override
+    public boolean rename(Context ctx, File newPath) {
+        var oldPath = new File(getPath());
+        if(!oldPath.renameTo(newPath)) {
+            return false;
+        }
+
+        this.path = newPath.getPath();
+        this.filename = newPath.getName();
+        this.folder = Path.getFolder(path);
+        Path.rescanFile(ctx, oldPath);
+        Path.rescanFile(ctx, newPath);
+        
+        return true;
     }
 
     public boolean deleteFile(Context context) {

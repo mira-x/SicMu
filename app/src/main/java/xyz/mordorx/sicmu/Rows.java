@@ -37,6 +37,8 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import androidx.annotation.NonNull;
 
@@ -1436,29 +1438,46 @@ public class Rows {
         }
     }
 
-    private void deleteSongFromList(@NonNull RowSong song) {
-        for (int i = 0; i < rowsUnfolded.size(); i++) {
-            Row row = rowsUnfolded.get(i);
-            if (row == song) {
-                rowsUnfolded.remove(i);
-                break;
-            }
-        }
-        for (int i = 0; i < rows.size(); i++) {
-            Row row = rows.get(i);
-            if (row == song) {
-                rows.remove(i);
-                break;
-            }
-        }
+    void unlistPath(@NonNull File path) {
+        Predicate<Row> filter = row -> row.getPath().equals(path.getPath());
+
+        rowsUnfolded = rowsUnfolded.stream().filter(filter).collect(Collectors.toCollection(ArrayList::new));
+        rows = rows.stream().filter(filter).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /** This deletes the row from the list, but does not remove it from the filesystem. */
+    void unlistRow(@NonNull Row r) {
+        Predicate<Row> filter = other -> {
+            if (other == r) return false;
+            return other.getParent() != r;
+        };
+
+        rowsUnfolded = rowsUnfolded.stream().filter(filter).collect(Collectors.toCollection(ArrayList::new));
+        rows = rows.stream().filter(filter).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /** Delete RowSong from list and from the filesystem */
     public boolean deleteSongFile(@NonNull RowSong song) {
         boolean succeed = song.deleteFile(context);
         if (succeed && song != getCurrSong())
-            deleteSongFromList(song);
+            unlistRow(song);
 
         return succeed;
+    }
+
+    /** Delete RowGroup from list and from the filesystem */
+    public boolean deleteSongFolder(@NonNull RowGroup group) {
+        var f = new File(group.getPath());
+        var parent = f.getParentFile();
+        if (parent == null) {
+            return false;
+        }
+        if (!f.delete()) {
+            return false;
+        }
+        unlistRow(group);
+
+        return true;
     }
 
     public ArrayList<Row> getRowsFolded() {

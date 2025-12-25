@@ -18,11 +18,18 @@
 
 package xyz.mordorx.sicmu;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
 
+import androidx.annotation.Nullable;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import kotlin.NotImplementedError;
 
 public class Row {
     // level from the left
@@ -32,6 +39,8 @@ public class Row {
     protected int typeface;
     // null if no parent
     protected Row parent;
+    protected String name;
+    protected String path;
 
     // must be set outside before calling setText
     public static int backgroundColor;
@@ -46,17 +55,18 @@ public class Row {
 
     public void setGenuinePos(int position) { genuinePos = position; }
     public int getGenuinePos() { return genuinePos; }
-
     public Row getParent() { return parent; }
     public void setParent(Row parent) { this.parent = parent; }
-
     public int getLevel() {
         return level;
     }
-
     public void setLevel(int level) {
         this.level = level;
     }
+    public String getPath() { return path; }
+    protected void setPath(String path) { this.path = path; }
+    public String getName() { return name; }
+    protected void setName(String name) { this.name = name; }
 
     public void setView(RowViewHolder holder, Main main, int position) {
         holder.text.setTypeface(null, typeface);
@@ -92,5 +102,25 @@ public class Row {
             converted.put(dp, px);
         }
         return px;
+    }
+
+    public boolean rename(Context ctx, File newPath) {
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!o.getClass().equals(getClass())) return false;
+        if (o instanceof RowGroup) {
+            var thisGroup = (RowGroup)this;
+            var otherGroup = (RowGroup)o;
+            return otherGroup.getPath().equals(thisGroup.getPath());
+        } else if (o instanceof RowSong) {
+            var thisSong = (RowSong)this;
+            var otherSong = (RowSong)o;
+            return otherSong.getPath().equals(thisSong.getPath()) && otherSong.getID() == thisSong.getID();
+        } else {
+            return o.equals(this);
+        }
     }
 }

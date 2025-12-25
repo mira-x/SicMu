@@ -20,6 +20,7 @@ package xyz.mordorx.sicmu;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,6 +39,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.DocumentsContract;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
@@ -57,9 +59,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,6 +85,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
+import kotlin.text.Regex;
 import xyz.mordorx.sicmu.retag.MainActivity;
 
 @UnstableApi
@@ -406,6 +411,7 @@ public class Main extends AppCompatActivity {
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
+            Path.newDataCallback = () -> { songAdt.notifyDataSetChanged(); };
             songView.setAdapter(songAdt);
             songView.setOnItemClickListener(
                     (AdapterView<?> parent, View view, int position, long id) -> {
@@ -1014,80 +1020,69 @@ public class Main extends AppCompatActivity {
         songAdt.notifyDataSetChanged();
     }
 
-//    public void openSongFolder(View view) {
-//        final RowSong song = rows.getCurrSong();
-//        if (song == null)
-//            return;
-//
-//        Uri uri = Uri.fromFile(new File(song.getPath()));
-//        Toast.makeText(getApplicationContext(),
-//                "Opening file " + uri, Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(uri, "resource/folder");
-//
-//        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-//            startActivity(intent);
-//        }
-//        else {
-//            intent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intent.addCategory(Intent.CATEGORY_OPENABLE);
-//            intent.setDataAndType(uri, "*/*");
-//            try {
-//                startActivity(intent);
-//            }
-//            catch (android.content.ActivityNotFoundException ex) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Please install a File Manager.", Toast.LENGTH_LONG).show();
-//            }
-//        }
-////        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
-////            found = true;
-////        if (!found) {
-////            intent = new Intent(Intent.ACTION_GET_CONTENT);
-////            intent.setDataAndType(selectedUri, "*/*");
-////            List<ResolveInfo> apps =
-////                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-////            if (apps.size() > 0)
-////                found = true;
-////        }
-////
-////        if (found) {
-////            startActivity(Intent.createChooser(intent, "Open folder"));
-////            //startActivity(intent);
-////        }
-//    }
+    public static String extractAlbumName(String folderName) {
+        return folderName
+                // "1983 - Album" → "Album"
+                .replaceAll("^\\d{4}\\s*-\\s*", "")
+                // "Album - 1983" → "Album"
+                .replaceAll("\\s*-\\s*\\d{4}$", "")
+                // "Album (1983)" → "Album"
+                .replaceAll("\\s*\\(\\d{4}\\)$", "")
+                // "Album [1983]" → "Album"
+                .replaceAll("\\s*\\[\\d{4}]$", "")
+                .trim();
+    }
 
     private void openEditGroupMenu(int position, @NonNull RowGroup row) {
-        AlertDialog.Builder altBld = new AlertDialog.Builder(this);
-        altBld.setIcon(R.drawable.ic_action_edit);
-        altBld.setTitle(getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName())));
-        final CharSequence[] items = {
-                getString(R.string.action_play),
-                getString(R.string.action_rate_group),
-                getString(R.string.action_rate_group_overwrite),
-                getString(R.string.action_rescan),
-        };
+        if (musicSrv == null) {
+            return;
+        }
 
-        altBld.setItems(items, (DialogInterface dialog, int item) -> {
-            if (musicSrv != null) {
-                switch (item) {
-                    case 0:
-                        startGroupPlayback(row, position);
-                        break;
-                    case 1:
-                        openRateRowMenu(row.getName(), position, false);
-                        break;
-                    case 2:
-                        openRateRowMenu(row.getName(), position, true);
-                        break;
-                    case 3:
-                        rescan(row);
-                        break;
+        var title = getString(R.string.ic_action_edit_folder, cutLongStringAndDots(row.getName()));
+        var menuBuilder = new DialogBuilder(this, R.drawable.ic_action_edit, title);
+
+        menuBuilder.addOption(R.string.action_play, () -> { startGroupPlayback(row, position); });
+        menuBuilder.addOption(R.string.action_rate_group, () -> { openRateRowMenu(row.getName(), position, false); });
+        menuBuilder.addOption(R.string.action_rate_group_overwrite, () -> { openRateRowMenu(row.getName(), position, true); });
+        menuBuilder.addOption(R.string.action_rescan, () -> { rescan(row); });
+
+        /*var children = rows
+                .getRowsUnfolded()
+                .stream()
+                .filter(r -> r instanceof RowSong)
+                .filter(r -> r.getParent().equals(row));
+        if (children.allMatch(r -> {
+            return !r.getName().contains(" ") && r.getName().contains("_") && r.
+        }))*/
+        var albumName = extractAlbumName(row.getName());
+        var label = String.format("Unpack to '%s - <song>'", albumName);
+        menuBuilder.addOption(label, () -> {
+            var folder = new File(row.getPath());
+            var files = folder.listFiles();
+            var superFolder = folder.getParentFile();
+            if (files == null || superFolder == null) {
+                return;
+            }
+            var anyFailure = false;
+            for (File file : files) {
+                var newName = String.format("%s - %s", albumName, file.getName().trim());
+                var newPath = new File(superFolder, newName);
+
+                if (!file.renameTo(newPath)) {
+                    Log.e("FolderUnpacking", "Could not move " + file.toString() + " to " + newPath.toString());
+                    anyFailure = true;
+                } else {
+                    rows.unlistPath(file);
                 }
             }
+            if (!anyFailure) {
+                rows.deleteSongFolder(row);
+            }
+            Path.rescanDir(this, superFolder);
+            songAdt.notifyDataSetChanged();
         });
-        AlertDialog alert = altBld.create();
-        alert.show();
+
+        menuBuilder.build().show();
     }
 
     private String cutLongStringAndDots(String str) {

@@ -43,6 +43,7 @@ import androidx.annotation.Nullable;
 public class Path {
     public final static char separatorChar = System.getProperty("file.separator", "/").charAt(0);
     public static String rootFolders = "";
+    public static Runnable newDataCallback = () -> {};
 
     /**
      @example
@@ -240,6 +241,10 @@ public class Path {
         scanMediaFiles(context);
     }
 
+    public static void rescanFile(Context ctx, File dir) {
+        Log.d("Settings", "fileToScan: " + dir.getAbsolutePath());
+        scanMediaFile(ctx, dir.getPath(), null);
+    }
 
     public static boolean rescanDir(Context context, File dir) {
         if (!dir.exists())
