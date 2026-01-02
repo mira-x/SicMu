@@ -22,7 +22,7 @@ allprojects {
     // increase compilation log level
     tasks.withType(JavaCompile).tap {
         configureEach {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+            //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
 }

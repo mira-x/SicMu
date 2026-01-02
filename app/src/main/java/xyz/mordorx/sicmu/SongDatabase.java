@@ -23,7 +23,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {SongORM.class, ConfigurationORM.class}, version = 2)
+@Database(entities = {SongORM.class, ConfigurationORM.class}, version = 2, exportSchema = false)
 public abstract class SongDatabase extends RoomDatabase {
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
