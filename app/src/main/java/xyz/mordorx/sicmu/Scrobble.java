@@ -27,7 +27,7 @@ public class Scrobble {
     private final Parameters params;
     private final Context context;
 
-    // from API spcecification
+    // from API specification
     public static final int SCROBBLE_START = 0;
     public static final int SCROBBLE_RESUME = 1;
     public static final int SCROBBLE_PAUSE = 2;
@@ -75,22 +75,19 @@ public class Scrobble {
         }
 
         // from https://github.com/tgwizard/sls/blob/master/Developer%27s%20API.md
-        // do not enable Simple Last.FM Droid broadcast as Simple Last.FM Droid handles Scrobble Droid broadcast
-        /*
-        bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
+        var bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
         bCast.putExtra("state", scrobbleState);
         bCast.putExtra("app-name", context.getResources().getString(R.string.app_name));
         bCast.putExtra("app-package", context.getPackageName());
         bCast.putExtra("artist", artist);
         bCast.putExtra("album", album);
         bCast.putExtra("track", track);
-        bCast.putExtra("duration", duration);
+        bCast.putExtra("duration", durationMs / 1000);
         bCast.putExtra("source", "P");
         context.sendBroadcast(bCast);
-        */
 
-        // from https://code.google.com/p/scrobbledroid/wiki/DeveloperAPI
-        var bCast = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
+        // from https://github.com/JJC1138/scrobbledroid/wiki/Developer-API
+        bCast = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
         bCast.putExtra("playing", scrobbleState == SCROBBLE_START || scrobbleState == SCROBBLE_RESUME);
         bCast.putExtra("artist", artist);
         bCast.putExtra("album", album);
