@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -43,10 +41,6 @@ android {
     }
     buildFeatures {
         buildConfig = true
-        compose true
-    }
-    kotlinOptions {
-        jvmTarget = '11'
     }
 //    lintOptions {
 //        baseline file("lint-baseline.xml")
@@ -55,50 +49,34 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.core:core-ktx:1.17.0'
-    implementation 'androidx.compose.runtime:runtime:1.10.0'
-    implementation 'androidx.compose.animation:animation-core:1.10.0'
-    implementation 'androidx.compose.foundation:foundation:1.10.0'
-    implementation 'androidx.compose.ui:ui:1.10.0'
-    implementation 'androidx.compose.ui:ui-graphics:1.10.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.10.0'
-    implementation libs.material
-    implementation 'androidx.compose.material:material-icons-core'
-    debugImplementation 'androidx.compose.ui:ui-tooling:1.10.0'
-    implementation 'androidx.compose.ui:ui-tooling-preview:1.10.0'
-    implementation 'androidx.compose.material3:material3:1.4.0'
-    //androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.2.1'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'androidx.test:core:1.7.0'
-    testImplementation 'com.google.android:android-test:4.1.1.4'
+
+    // AndroidX Core
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.core:core:1.17.0'
+
+    // Media
     implementation 'androidx.media:media:1.7.1'
     implementation "androidx.media3:media3-exoplayer:1.8.0"
     implementation "androidx.media3:media3-exoplayer-hls:1.8.0"
     implementation "androidx.media3:media3-session:1.8.0"
     implementation "androidx.media3:media3-datasource:1.8.0"
-    //implementation 'androidx.preference:preference:1.1.0'
-    implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
-    implementation 'com.github.woheller69:FreeDroidWarn:V1.6'
+
+    // Database
     def room_version = "2.8.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.unit)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    // Misc.
+    implementation 'com.google.android.material:material:1.13.0'
+
+    // Misc. external
+    implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
+    implementation 'com.github.woheller69:FreeDroidWarn:V1.6'
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.test:core:1.7.0'
+    testImplementation 'com.google.android:android-test:4.1.1.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }

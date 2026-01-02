@@ -1,28 +1,18 @@
 package xyz.mordorx.sicmu;
 
-import static androidx.compose.runtime.SnapshotStateKt.mutableStateOf;
-import static androidx.compose.runtime.SnapshotStateKt.referentialEqualityPolicy;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 
 import androidx.annotation.Nullable;
-import androidx.compose.runtime.MutableState;
-import androidx.compose.ui.graphics.ImageBitmap;
-import androidx.compose.ui.graphics.*;
-import androidx.compose.ui.graphics.painter.BitmapPainter;
-import androidx.core.graphics.BitmapKt;
 
 import com.google.common.cache.CacheBuilderSpec;
 
@@ -75,24 +65,6 @@ public class AlbumArtLoader {
         }
 
         new Thread(() -> albumBmpCallback.callback(song.getID(), load())).start();
-    }
-
-    public MutableState<ImageBitmap> loadAsync() {
-        var empty = BitmapKt.createBitmap(1, 1, Bitmap.Config.ALPHA_8);
-        empty.setPixel(0, 0, 0x00000000);
-        var emptyImg = AndroidImageBitmap_androidKt.asImageBitmap(empty);
-
-        MutableState<ImageBitmap> out = mutableStateOf(emptyImg, referentialEqualityPolicy());
-
-        loadAsync((rowSongID, bmp) -> {
-            if (bmp == null) {
-                return;
-            }
-            var bmpImg = AndroidImageBitmap_androidKt.asImageBitmap(bmp);
-            out.setValue(bmpImg);
-        });
-
-        return out;
     }
 
     @Nullable

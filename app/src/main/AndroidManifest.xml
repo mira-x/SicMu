@@ -79,9 +79,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".retag.MainActivity" />
-
         <service
             android:name=".MusicService"
             android:foregroundServiceType="mediaPlayback"

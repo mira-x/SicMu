@@ -81,8 +81,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
-import xyz.mordorx.sicmu.retag.MainActivity;
-
 @UnstableApi
 public class Main extends AppCompatActivity {
     private Rows rows;
@@ -1749,11 +1747,7 @@ public class Main extends AppCompatActivity {
     };
 
     public void gotoCurrSong(View view) {
-        // TODO: CHange this!!!!
         unfoldAndscrollToCurrSong();
-
-        var i = new Intent(this, MainActivity.class);
-        startActivity(i);
     }
 
     public void toggleMoreButtons(View view) {
