@@ -213,4 +213,5 @@
     <string name="settings_toggle_font_size">Schriftgröße</string>
     <string name="settings_author_new_title">Autor*in von SicMu Neo</string>
     <string name="settings_author_old_title">Autor von SicMu</string>
+    <string name="detail_metadata_hint_label">Tippe auf das Albumcover, um alle Metadaten anzuzeigen</string>
 </resources>

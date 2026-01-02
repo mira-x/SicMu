@@ -253,7 +253,7 @@
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:layout_below="@id/warning_layout"
-        android:gravity="left"
+        android:gravity="start"
         android:orientation="horizontal">
 
         <ImageButton
@@ -285,7 +285,7 @@
                 android:id="@+id/detail_album"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="2"
                 android:text=""
@@ -295,7 +295,7 @@
                 android:id="@+id/detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="3"
                 android:text="" />
@@ -304,50 +304,16 @@
                 android:id="@+id/detail_mime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="3"
                 android:text="" />
 
-            <!--
-            <LinearLayout
-           android:id="@+id/details_buttons_layout"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_gravity="bottom"
-           android:layout_weight="2"
-           android:baselineAligned="false"
-           android:gravity="bottom"
-           android:orientation="vertical">
-
-           <ImageButton
-               android:id="@+id/delete_button"
-               android:layout_width="fill_parent"
-               android:layout_height="40dp"
-               android:paddingBottom="4dp"
-               android:paddingTop="4dp"
-               android:layout_marginBottom="4dp"
-               android:layout_weight="1"
-               android:onClick="deleteSong"
-               android:scaleType="fitCenter"
-               android:src="@drawable/ic_trash" />
-
-           <ImageButton
-               android:id="@+id/folder_button"
-               android:layout_width="fill_parent"
-               android:layout_height="40dp"
-               android:layout_marginBottom="4dp"
-               android:layout_weight="1"
-               android:onClick="openSongFolder"
-               android:scaleType="fitCenter"
-               android:src="@drawable/ic_menu_folder" />
--->
             <LinearLayout
                 android:id="@+id/details_rating"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_gravity="bottom"
-                android:layout_weight="0"
                 android:gravity="bottom"
                 android:orientation="horizontal">
                 <ImageButton
@@ -403,17 +369,56 @@
             </LinearLayout>
 
         </LinearLayout>
-
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/metadata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/details_layout"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <EditText
+            android:id="@+id/metadata_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:hint="COMMENT"
+            android:autoLink="all"
+            />
+
+        <TableLayout
+            android:id="@+id/metadata_tags_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:padding="0dp"
+            >
+            <TableRow android:layout_width="match_parent">
+                <TextView
+                    android:text="key"
+                    android:paddingEnd="16dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    />
+                <EditText
+                    android:text="kaka!"
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/song_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/more_buttons"
-        android:layout_below="@+id/details_layout"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/metadata"
+        android:layout_alignParentStart="true"
         android:choiceMode="singleChoice"
         android:fastScrollEnabled="false"
         android:hapticFeedbackEnabled="false"
@@ -598,8 +603,3 @@
     </LinearLayout>
 
 </RelativeLayout>
-
-        <!--
-
-    -->
-

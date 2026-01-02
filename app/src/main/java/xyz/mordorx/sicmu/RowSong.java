@@ -118,6 +118,7 @@ public class RowSong extends Row {
     public long getAlbumId(){return albumId;}
     /// For example: "HintShot - Welcome to Team Fortress.opus"
     public String getFilename() {return filename;}
+    private Tag metadata = null;
 
     public void setView(RowViewHolder holder, Main main, int position) {
         super.setView(holder, main, position);
@@ -238,26 +239,48 @@ public class RowSong extends Row {
     }
 
     public interface LoadRatingCallbackInterface {
-        // @param someRatingChanged set to true if loadRating brings new RowSong's rating
-        // i.e. set to false if RowSong's rating did not change
+        /** @param ratingChanged set to true if loadRating brings new RowSong's rating
+         * i.e. set to false if RowSong's rating did not change
+         */
         void ratingCallback(int rating, boolean ratingChanged);
+    }
+
+    public interface LoadMetadataCallbackInterface {
+        void callback(Tag tags);
     }
 
     public synchronized void loadRatingAsync(LoadRatingCallbackInterface ratingCallbackInterface) {
         if (rating != RowSong.RATING_NOT_INITIALIZED) {
             ratingCallbackInterface.ratingCallback(rating, false);
+            return;
         }
-        else {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    Log.d("RowSong", "loadRating");
-                    boolean someRatingChanged = (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0);
-                    ratingCallbackInterface.ratingCallback(rating, someRatingChanged);
+
+        new Thread(() -> {
+            Log.d("RowSong", "loadRating");
+            boolean someRatingChanged = (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0);
+            ratingCallbackInterface.ratingCallback(rating, someRatingChanged);
+        }).start();
+    }
+
+    public synchronized void loadMetadataAsync(LoadMetadataCallbackInterface callback) {
+        if (metadata != null) {
+            callback.callback(metadata);
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                var f = new File(path);
+                var file = AudioFileIO.read(f);
+                metadata = file.getTag();
+                if (metadata == null) {
+                    throw new RuntimeException("AudioFileIO.getTag() returned null");
                 }
-            };
-            thread.start();
-        }
+                callback.callback(metadata);
+            } catch (Exception e) {
+                Log.e("RowSong", "Could not load metadata tags:", e);
+            }
+        }).start();
     }
 
     private void updateOrInsertSongOrm(SongORM songORM) {

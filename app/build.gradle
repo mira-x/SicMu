@@ -69,7 +69,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.13.0'
 
     // Misc. external
-    implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
     implementation 'com.github.woheller69:FreeDroidWarn:V1.6'
 
     // Testing

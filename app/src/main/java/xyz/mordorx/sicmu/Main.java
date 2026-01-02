@@ -39,6 +39,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.text.InputType;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -54,6 +55,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +65,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,7 +82,10 @@ import static android.widget.Toast.LENGTH_LONG;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
 @UnstableApi
@@ -118,6 +125,8 @@ public class Main extends AppCompatActivity {
     private AnimationDrawable appAnimation;
 
     private LinearLayout detailsLayout;
+    private LinearLayout metadataLayout;
+    private TableLayout metadataTableLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
     private LinearLayout warningLayout;
@@ -130,7 +139,6 @@ public class Main extends AppCompatActivity {
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private boolean detailsBigCoverArt;
-    private int coverArtNum = 0;
     private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
 
     @Override
@@ -177,6 +185,9 @@ public class Main extends AppCompatActivity {
         warningLayout.setOnClickListener(view -> hideWarning());
         detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
+        metadataTableLayout = findViewById(R.id.metadata_tags_table);
+        metadataLayout = findViewById(R.id.metadata);
+        metadataLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
@@ -451,7 +462,6 @@ public class Main extends AppCompatActivity {
     };
 
     private void clickOnRow(int position) {
-        coverArtNum = 0;
         Row row = rows.get(position);
         if (row != null) {
             if (row.getClass() == RowGroup.class) {
@@ -477,7 +487,6 @@ public class Main extends AppCompatActivity {
     private void startGroupPlayback(@NonNull RowGroup row, int position) {
         vibrate();
 
-        coverArtNum = 0;
         var offset = 0;
         if (params.getShuffle().randomSongOrder()) {
             offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
@@ -818,6 +827,7 @@ public class Main extends AppCompatActivity {
         } else {
             toggleDetailsButton.setImageResource(R.drawable.ic_action_open_pos);
             detailsLayout.setVisibility(View.GONE);
+            metadataLayout.setVisibility(View.GONE);
         }
     }
 
@@ -841,26 +851,76 @@ public class Main extends AppCompatActivity {
 
     public void setDetails() {
         RowSong rowSong = rows.getCurrSong();
-        if (rowSong != null) {
-            String title = rowSong.getTitle();
-            int trackNum = rowSong.getTrack();
-            if (trackNum > 0)
-                title = trackNum + ". " + title;
-            songTitle.setText(title);
-
-            songArtist.setText(rowSong.getArtist());
-
-            String album = rowSong.getAlbum();
-            if (rowSong.getYear() > 1000)
-                album = rowSong.getYear() + " - " + album;
-            songAlbum.setText(album);
-
-            songMime.setText(rowSong.getMime());
-
-            new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(this::setCoverArt);
-
-            setRatingDetails();
+        if (rowSong == null) {
+            return;
         }
+        String title = rowSong.getTitle();
+        int trackNum = rowSong.getTrack();
+        if (trackNum > 0)
+            title = trackNum + ". " + title;
+        songTitle.setText(title);
+
+        songArtist.setText(rowSong.getArtist());
+
+        String album = rowSong.getAlbum();
+        if (rowSong.getYear() > 1000)
+            album = rowSong.getYear() + " - " + album;
+        songAlbum.setText(album);
+
+        songMime.setText(rowSong.getMime());
+
+        new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(this::setCoverArt);
+
+        setRatingDetails();
+        metadataTableLayout.removeAllViewsInLayout();
+
+        rowSong.loadMetadataAsync(t -> showMetadataTable(rowSong, t));
+    }
+
+    private void showMetadataTable(RowSong song, Tag tags) {
+        var l = metadataTableLayout;
+        l.removeAllViewsInLayout();
+        var comments = new AtomicReference<String>("");;
+        tags.getFields().forEachRemaining(f -> {
+            if(f.getId().equals("COMMENT")) {
+                comments.getAndUpdate(s -> s + f.toString() + "\n");
+            }
+            if (!f.isCommon()) {
+                return;
+            }
+            runOnUiThread(() -> {
+                // TableRow erstellen
+                TableRow row = new TableRow(this);
+                row.setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT
+                ));
+
+                // TextView für den Feldnamen (links)
+                TextView fieldNameView = new TextView(this);
+                fieldNameView.setGravity(Gravity.CENTER);
+                fieldNameView.setText(f.getId());
+                fieldNameView.setPadding(0, 0, 48, 0); // 16dp * 3 = 48px (ca.)
+
+                // EditText für den Feldwert (rechts, editierbar)
+                EditText fieldValueEdit = new EditText(this);
+                fieldValueEdit.setText(f.toString());
+                fieldValueEdit.setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT
+                ));
+
+                // Views zur TableRow hinzufügen
+                row.addView(fieldNameView);
+                row.addView(fieldValueEdit);
+
+                // TableRow zum TableLayout hinzufügen
+                l.addView(row);
+            });
+        });
+        comments.getAndUpdate(String::trim);
+        var c = (EditText)findViewById(R.id.metadata_comment);
+        c.setText(comments.get());
     }
 
     private void setRatingDetails() {
@@ -931,6 +991,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void applyBiggerCoverArt() {
+        metadataLayout.setVisibility(detailsBigCoverArt ? View.VISIBLE : View.GONE);
         ViewGroup.LayoutParams params = detailsLayout.getLayoutParams();
         if (detailsBigCoverArt) {
             // increase cover art size
@@ -1552,7 +1613,6 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
         disableTrackLooper();
@@ -1564,7 +1624,6 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
         disableTrackLooper();
@@ -1659,7 +1718,6 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
-            coverArtNum = 0;
             musicSrv.playNextGroup();
             updatePlayButton();
             disableTrackLooper();
@@ -1676,7 +1734,6 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
-            coverArtNum = 0;
             musicSrv.playPrevGroup();
             updatePlayButton();
             disableTrackLooper();
