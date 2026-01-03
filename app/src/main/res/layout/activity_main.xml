@@ -377,6 +377,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/details_layout"
+        android:layout_above="@+id/more_buttons"
         >
 
         <LinearLayout
