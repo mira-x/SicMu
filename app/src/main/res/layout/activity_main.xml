@@ -398,13 +398,13 @@
             >
             <TableRow android:layout_width="match_parent">
                 <TextView
-                    android:text="key"
+                    android:text="key!"
                     android:paddingEnd="16dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     />
                 <EditText
-                    android:text="kaka!"
+                    android:text="value!"
                     android:layout_height="40dp"
                     android:layout_width="match_parent"
                     />
