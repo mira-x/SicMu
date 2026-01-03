@@ -883,39 +883,38 @@ public class Main extends AppCompatActivity {
         l.removeAllViewsInLayout();
         var comments = new AtomicReference<String>("");;
         tags.getFields().forEachRemaining(f -> {
-            if(f.getId().equals("COMMENT")) {
-                comments.getAndUpdate(s -> s + f.toString() + "\n");
+            final var key = f.getId().trim();
+            final var value = f.toString().trim();
+            if(key.equals("COMMENT")) {
+                comments.getAndUpdate(s -> s + value + "\n");
+                return;
             }
             if (!f.isCommon()) {
                 return;
             }
             runOnUiThread(() -> {
-                // TableRow erstellen
                 TableRow row = new TableRow(this);
                 row.setLayoutParams(new TableRow.LayoutParams(
                         TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.WRAP_CONTENT
                 ));
 
-                // TextView für den Feldnamen (links)
+                // Key
                 TextView fieldNameView = new TextView(this);
                 fieldNameView.setGravity(Gravity.CENTER);
-                fieldNameView.setText(f.getId());
+                fieldNameView.setText(key);
                 fieldNameView.setPadding(0, 0, 48, 0); // 16dp * 3 = 48px (ca.)
 
-                // EditText für den Feldwert (rechts, editierbar)
+                // Value
                 EditText fieldValueEdit = new EditText(this);
-                fieldValueEdit.setText(f.toString());
+                fieldValueEdit.setText(value);
                 fieldValueEdit.setLayoutParams(new TableRow.LayoutParams(
                         TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.WRAP_CONTENT
                 ));
 
-                // Views zur TableRow hinzufügen
                 row.addView(fieldNameView);
                 row.addView(fieldValueEdit);
-
-                // TableRow zum TableLayout hinzufügen
                 l.addView(row);
             });
         });
