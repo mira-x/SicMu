@@ -374,7 +374,7 @@
 
     <ScrollView
         android:id="@+id/metadata"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/details_layout"
         android:layout_above="@+id/more_buttons"
@@ -417,6 +417,16 @@
                         />
                 </TableRow>
             </TableLayout>
+
+            <Button
+                android:id="@+id/metadata_tags_save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="@color/LightGrey"
+                android:background="@color/LightBlack"
+                android:enabled="false"/>
+
         </LinearLayout>
 
     </ScrollView>

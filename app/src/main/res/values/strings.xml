@@ -270,5 +270,7 @@
     <string name="action_repeat_not">Stop at the end of folder</string>
     <string name="action_stop_at_end_of_track">Stop at the end of track</string>
     <string name="detail_metadata_hint_label">Tap on the album art to see all metadata tags</string>
+    <string name="metadata_saving_success">Metadata was saved successfully.</string>
+    <string name="metadata_saving_failure">Error saving metadata: %s</string>
 
 </resources>

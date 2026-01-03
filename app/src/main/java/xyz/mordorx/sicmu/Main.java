@@ -19,6 +19,7 @@
 package xyz.mordorx.sicmu;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -38,10 +39,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -49,6 +53,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -62,9 +67,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
@@ -86,6 +93,9 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
@@ -129,6 +139,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout detailsLayout;
     private ScrollView metadataLayout;
     private TableLayout metadataTableLayout;
+    private Button metadataSaveButton;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
     private LinearLayout warningLayout;
@@ -190,6 +201,7 @@ public class Main extends AppCompatActivity {
         metadataTableLayout = findViewById(R.id.metadata_tags_table);
         metadataLayout = findViewById(R.id.metadata);
         metadataLayout.setVisibility(View.GONE);
+        metadataSaveButton = findViewById(R.id.metadata_tags_save_button);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
@@ -876,6 +888,9 @@ public class Main extends AppCompatActivity {
 
         setRatingDetails();
         metadataTableLayout.removeAllViewsInLayout();
+        metadataSaveButton.setEnabled(false);
+        metadataSaveButton.setTextColor(getResources().getColor(R.color.LightGrey));
+        metadataSaveButton.setOnClickListener(x -> {});
 
         rowSong.loadMetadataAsync(t -> showMetadataTable(rowSong, t));
     }
@@ -883,10 +898,43 @@ public class Main extends AppCompatActivity {
     private void showMetadataTable(RowSong song, Tag tags) {
         var l = metadataTableLayout;
         l.removeAllViewsInLayout();
-        var comments = new AtomicReference<String>("");;
+        var comments = new AtomicReference<String>("");
+        var originalHash = new AtomicReference<Integer>(Tag.hash(tags));
+
+        Runnable updateSaveButton = () -> {
+            var hash = Tag.hash(tags);
+            var edited = hash != originalHash.get();
+            // Log.d("MainActivity", "updateSaveButton! edited: " + edited + " original: " + originalHash.get() + " now: " + hash);
+            metadataSaveButton.setEnabled(edited);
+            var darkBlood = getResources().getColor(R.color.DarkBlood);
+            var lightGrey = getResources().getColor(R.color.LightGrey);
+            metadataSaveButton.setTextColor(edited ? darkBlood : lightGrey);
+        };
+
+        metadataSaveButton.setOnClickListener(x -> {
+            Exception e = null;
+            try {
+                var f = AudioFileIO.read(new File(song.getPath()));
+                f.setTag(tags);
+                AudioFileIO.write(f);
+                originalHash.set(Tag.hash(tags));
+            } catch (Exception ex) {
+                e = ex;
+                Log.e("MainActivity", "metadataSaveButton callback for file: " + song.getPath(), e);
+            }
+
+            var snackText = (e == null) ? getResources().getText(R.string.metadata_saving_success) : String.format(getResources().getText(R.string.metadata_saving_failure).toString(), e.getClass().getName().toString());
+            var snackDuration = (e == null) ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG;
+
+            updateSaveButton.run();
+            var snack = Snackbar.make(metadataLayout, snackText, snackDuration);
+            snack.show();
+        });
+
+
         tags.getFields().forEachRemaining(f -> {
-            final var key = f.getId().trim();
-            final var value = f.toString().trim();
+            final var key = f.getId();
+            final var value = f.toString();
             if(key.equals("COMMENT")) {
                 comments.getAndUpdate(s -> s + value + "\n");
                 return;
@@ -910,10 +958,23 @@ public class Main extends AppCompatActivity {
                 // Value
                 EditText fieldValueEdit = new EditText(this);
                 fieldValueEdit.setText(value);
-                fieldValueEdit.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT
-                ));
+                fieldValueEdit.setSingleLine(false);
+                fieldValueEdit.setMaxLines(5);
+                fieldValueEdit.setEnabled(FieldKey.isExistant(key));
+                fieldValueEdit.addTextChangedListener(new TextWatcher() {
+                    @Override public void afterTextChanged(Editable s) { }
+                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        try {
+                            tags.setField(FieldKey.get(key), s.toString());
+                            updateSaveButton.run();
+                        } catch (Exception e) {
+                            Log.e("MainActivity", "Metadata Table fieldValueEdit(key=" + key + ").onTextChanged", e);
+                        }
+                    }
+                });
 
                 row.addView(fieldNameView);
                 row.addView(fieldValueEdit);
@@ -924,6 +985,21 @@ public class Main extends AppCompatActivity {
         var c = (EditText)findViewById(R.id.metadata_comment);
         c.setText(comments.get());
         c.setMovementMethod(LinkMovementMethod.getInstance());
+        c.addTextChangedListener(new TextWatcher() {
+            @Override public void afterTextChanged(Editable s) { }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    tags.setField(FieldKey.COMMENT, s.toString().split("\n"));
+                    comments.set(s.toString());
+                    updateSaveButton.run();
+                } catch (Exception e) {
+                    Log.e("MainActivity", "Metadata Table comment .onTextChanged", e);
+                }
+            }
+        });
     }
 
     private void setRatingDetails() {

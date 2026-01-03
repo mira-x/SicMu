@@ -162,4 +162,22 @@ public enum FieldKey {
   WORK_TYPE,
   YEAR,
   ;
+
+  public static FieldKey get(String label) {
+      for(var v : FieldKey.values()) {
+          if (v.name().equalsIgnoreCase(label)) {
+              return v;
+          }
+      }
+      throw new KeyNotFoundException();
+  }
+
+  public static boolean isExistant(String key) {
+      try {
+          get(key);
+          return true;
+      } catch (Exception e) {
+          return false;
+      }
+  }
 }

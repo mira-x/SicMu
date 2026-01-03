@@ -18,11 +18,14 @@
  */
 package org.jaudiotagger.tag;
 
+import android.util.Log;
+
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This interface represents the basic data structure for the default
@@ -331,4 +334,19 @@ public interface Tag {
    */
   TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException;
 
+    /**
+     * This hashes the Tag object based on its key-value pair data
+     *
+     * Use this function instead of Tag.hashCode() as it does not work, i.e. when changing the values
+     * of some keys, the hash code does not change!
+     *
+     * @return A hash code that enables comparing Tag objects per value
+     */
+  public static int hash(Tag tags) {
+      var s = new AtomicReference<String>("");
+      tags.getFields().forEachRemaining(t -> {
+          s.getAndUpdate(x -> x + (t.getId() + "=" + t.toString()) + " ");
+      });
+      return s.get().hashCode();
+  }
 }
