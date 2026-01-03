@@ -54,6 +54,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -125,7 +126,7 @@ public class Main extends AppCompatActivity {
     private AnimationDrawable appAnimation;
 
     private LinearLayout detailsLayout;
-    private LinearLayout metadataLayout;
+    private ScrollView metadataLayout;
     private TableLayout metadataTableLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
