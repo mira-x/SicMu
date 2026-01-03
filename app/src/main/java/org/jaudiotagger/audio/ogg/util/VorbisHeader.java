@@ -1,21 +1,20 @@
 package org.jaudiotagger.audio.ogg.util;
 
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.nio.charset.Charset;
+
 /**
  * Defines variables common to all vorbis headers
  */
 public interface VorbisHeader {
-  //Capture pattern at start of header
-  public static final String CAPTURE_PATTERN = "vorbis";
+    //Capture pattern at start of header
+    String CAPTURE_PATTERN = "vorbis";
+    byte[] CAPTURE_PATTERN_AS_BYTES = CAPTURE_PATTERN.getBytes(Charset.forName(TextEncoding.CHARSET_ISO_8859_1));
 
-  public static final byte[] CAPTURE_PATTERN_AS_BYTES = {'v', 'o', 'r', 'b', 'i', 's'};
+    int FIELD_PACKET_TYPE_POS = 0;
+    int FIELD_CAPTURE_PATTERN_POS = 1;
 
-  public static final int FIELD_PACKET_TYPE_POS = 0;
-  public static final int FIELD_CAPTURE_PATTERN_POS = 1;
-
-  public static final int FIELD_PACKET_TYPE_LENGTH = 1;
-  public static final int FIELD_CAPTURE_PATTERN_LENGTH = 6;
-
-  //Vorbis uses UTF-8 for all text
-  public static final String CHARSET_UTF_8 = "UTF-8";
-
+    int FIELD_PACKET_TYPE_LENGTH = 1;
+    int FIELD_CAPTURE_PATTERN_LENGTH = CAPTURE_PATTERN_AS_BYTES.length;
 }

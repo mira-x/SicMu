@@ -22,7 +22,6 @@
  */
 package org.jaudiotagger.tag.id3.valuepair;
 
-import org.jaudiotagger.StandardCharsets;
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
 import java.nio.charset.Charset;
@@ -34,71 +33,76 @@ import java.util.Map;
  * Text Encoding supported by ID3v24, the id is recognised by ID3
  * whereas the value maps to a java java.nio.charset.Charset, all the
  * charsets defined below are guaranteed on every Java platform.
- * <p>
+ *
  * Note in ID3 UTF_16 can be implemented as either UTF16BE or UTF16LE with byte ordering
  * marks, in JAudioTagger we always implement it as UTF16LE because only this order
  * is understood in Windows, OSX seem to understand both.
  */
 public class TextEncoding extends AbstractIntStringValuePair {
 
-  //Supported ID3 charset ids
-  public static final byte ISO_8859_1 = 0;
-  public static final byte UTF_16 = 1;               //We use UTF-16 with LE byte-ordering and byte order mark by default
-  //but can also use BOM with BE byte ordering
-  public static final byte UTF_16BE = 2;
-  public static final byte UTF_8 = 3;
+    //Supported Java charsets
+    public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+    public static final String CHARSET_UTF_16 = "UTF-16";        //Want to use x-UTF-16LE-BOM but not always available
+    public static final String CHARSET_UTF_16BE = "UTF-16BE";
+    public static final String CHARSET_UTF_8 = "UTF-8";
+    public static final String CHARSET_US_ASCII = "US-ASCII";
 
-  /**
-   * The number of bytes used to hold the text encoding field size.
-   */
-  public static final int TEXT_ENCODING_FIELD_SIZE = 1;
+    //Supported ID3 charset ids
+    public static final byte ISO_8859_1 = 0;
+    public static final byte UTF_16 = 1;               //We use UTF-16 with LE byte-ordering and byte order mark by default
+    //but can also use BOM with BE byte ordering
+    public static final byte UTF_16BE = 2;
+    public static final byte UTF_8 = 3;
 
-  private static TextEncoding textEncodings;
+    /** The number of bytes used to hold the text encoding field size. */
+    public static final int TEXT_ENCODING_FIELD_SIZE = 1;
 
-  private final Map<Integer, Charset> idToCharset = new HashMap<Integer, Charset>();
+    private static TextEncoding textEncodings;
 
-  private TextEncoding() {
-    idToCharset.put((int) ISO_8859_1, StandardCharsets.ISO_8859_1);
-    idToCharset.put((int) UTF_16, StandardCharsets.UTF_16);
-    idToCharset.put((int) UTF_16BE, StandardCharsets.UTF_16BE);
-    idToCharset.put((int) UTF_8, StandardCharsets.UTF_8);
+    private final Map<Integer, Charset> idToCharset = new HashMap<>();
 
-    for (final Map.Entry<Integer, Charset> e : idToCharset.entrySet()) {
-      idToValue.put(e.getKey(), e.getValue().name());
+    /**
+     * Get singleton for this class.
+     *
+     * @return singleton
+     */
+    public static synchronized TextEncoding getInstanceOf() {
+        if (textEncodings == null) {
+            textEncodings = new TextEncoding();
+        }
+        return textEncodings;
     }
 
-    createMaps();
-  }
+    private TextEncoding() {
+        idToCharset.put((int) ISO_8859_1, Charset.forName(CHARSET_ISO_8859_1));
+        idToCharset.put((int) UTF_16, Charset.forName(CHARSET_UTF_16));
+        idToCharset.put((int) UTF_16BE, Charset.forName(CHARSET_UTF_16BE));
+        idToCharset.put((int) UTF_8, Charset.forName(CHARSET_UTF_8));
 
-  /**
-   * Get singleton for this class.
-   *
-   * @return singleton
-   */
-  public static synchronized TextEncoding getInstanceOf() {
-    if (textEncodings == null) {
-      textEncodings = new TextEncoding();
+        for (final Map.Entry<Integer, Charset> e : idToCharset.entrySet()) {
+            idToValue.put(e.getKey(), e.getValue().name());
+        }
+
+        createMaps();
     }
-    return textEncodings;
-  }
 
-  /**
-   * Allows to lookup id directly via the {@link Charset} instance.
-   *
-   * @param charset charset
-   * @return id, e.g. {@link #ISO_8859_1}, or {@code null}, if not found
-   */
-  public Integer getIdForCharset(final Charset charset) {
-    return valueToId.get(charset.name());
-  }
+    /**
+     * Allows to lookup id directly via the {@link Charset} instance.
+     *
+     * @param charset charset
+     * @return id, e.g. {@link #ISO_8859_1}, or {@code null}, if not found
+     */
+    public Integer getIdForCharset(final Charset charset) {
+        return valueToId.get(charset.name());
+    }
 
-  /**
-   * Allows direct lookup of the {@link Charset} instance via an id.
-   *
-   * @param id id, e.g. {@link #ISO_8859_1}
-   * @return charset or {@code null}, if not found
-   */
-  public Charset getCharsetForId(final int id) {
-    return idToCharset.get(id);
-  }
+    /**
+     * Allows direct lookup of the {@link Charset} instance via an id.
+     *
+     * @param id id, e.g. {@link #ISO_8859_1}
+     * @return charset or {@code null}, if not found
+     */
+    public Charset getCharsetForId(final int id) {
+        return idToCharset.get(id);
+    }
 }
