@@ -43,6 +43,7 @@ import org.jaudiotagger.audio.mp4.Mp4FileWriter;
 import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.ogg.OggFileWriter;
 import org.jaudiotagger.audio.opus.OpusFileReader;
+import org.jaudiotagger.audio.opus.OpusFileWriter;
 import org.jaudiotagger.audio.real.RealFileReader;
 import org.jaudiotagger.audio.wav.WavFileReader;
 import org.jaudiotagger.audio.wav.WavFileWriter;
@@ -298,6 +299,7 @@ public class AudioFileIO {
     readers.put(SupportedFileFormat.RM.getFileSuffix(), realReader);
 
     // Tag Writers
+    writers.put(SupportedFileFormat.OPUS.getFileSuffix(), new OpusFileWriter());
     writers.put(SupportedFileFormat.OGG.getFileSuffix(), new OggFileWriter());
     writers.put(SupportedFileFormat.FLAC.getFileSuffix(), new FlacFileWriter());
     writers.put(SupportedFileFormat.MP3.getFileSuffix(), new MP3FileWriter());
