@@ -393,6 +393,7 @@
                 android:minLines="2"
                 android:hint="COMMENT"
                 android:autoLink="all"
+                android:linksClickable="true"
                 />
 
             <TableLayout

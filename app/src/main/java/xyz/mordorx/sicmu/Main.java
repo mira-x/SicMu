@@ -39,6 +39,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.text.InputType;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -921,6 +922,7 @@ public class Main extends AppCompatActivity {
         comments.getAndUpdate(String::trim);
         var c = (EditText)findViewById(R.id.metadata_comment);
         c.setText(comments.get());
+        c.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void setRatingDetails() {
