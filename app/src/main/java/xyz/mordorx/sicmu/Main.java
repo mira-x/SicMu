@@ -826,6 +826,7 @@ public class Main extends AppCompatActivity {
         if (open) {
             toggleDetailsButton.setImageResource(R.drawable.ic_action_close_pos);
             detailsLayout.setVisibility(View.VISIBLE);
+            metadataLayout.setVisibility(detailsBigCoverArt ? View.VISIBLE : View.GONE);
         } else {
             toggleDetailsButton.setImageResource(R.drawable.ic_action_open_pos);
             detailsLayout.setVisibility(View.GONE);
