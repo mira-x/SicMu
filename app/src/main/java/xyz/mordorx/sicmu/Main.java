@@ -135,7 +135,6 @@ public class Main extends AppCompatActivity {
     private AnimationDrawable appAnimation;
 
     private LinearLayout detailsLayout;
-    private ScrollView metadataLayout;
     private TableLayout metadataTableLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
@@ -196,8 +195,6 @@ public class Main extends AppCompatActivity {
         detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
         metadataTableLayout = findViewById(R.id.metadata_tags_table);
-        metadataLayout = findViewById(R.id.metadata);
-        metadataLayout.setVisibility(View.GONE);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
@@ -834,11 +831,9 @@ public class Main extends AppCompatActivity {
         if (open) {
             toggleDetailsButton.setImageResource(R.drawable.ic_action_close_pos);
             detailsLayout.setVisibility(View.VISIBLE);
-            metadataLayout.setVisibility(detailsBigCoverArt ? View.VISIBLE : View.GONE);
         } else {
             toggleDetailsButton.setImageResource(R.drawable.ic_action_open_pos);
             detailsLayout.setVisibility(View.GONE);
-            metadataLayout.setVisibility(View.GONE);
         }
     }
 
@@ -895,7 +890,6 @@ public class Main extends AppCompatActivity {
     }
 
     private void showMetadataTable(Tag tags) {
-        clearMetadataTable();
         var l = metadataTableLayout;
         l.removeAllViewsInLayout();
 
@@ -1016,7 +1010,6 @@ public class Main extends AppCompatActivity {
     }
 
     public void applyBiggerCoverArt() {
-        metadataLayout.setVisibility(detailsBigCoverArt ? View.VISIBLE : View.GONE);
         ViewGroup.LayoutParams params = detailsLayout.getLayoutParams();
         if (detailsBigCoverArt) {
             // increase cover art size
