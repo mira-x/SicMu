@@ -924,6 +924,13 @@ public class Main extends AppCompatActivity {
                 TextView fieldValueView = new TextView(this);
                 fieldValueView.setText(values.toString());
                 fieldValueView.setGravity(Gravity.START);
+                fieldValueView.setSingleLine(false);
+                fieldValueView.setMaxLines(Integer.MAX_VALUE);
+                fieldValueView.setLayoutParams(new TableRow.LayoutParams(
+                        0,
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        1f
+                ));
 
                 row.addView(fieldNameView);
                 row.addView(fieldValueView);
