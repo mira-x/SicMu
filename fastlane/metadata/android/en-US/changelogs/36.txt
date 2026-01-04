@@ -1,0 +1,4 @@
+Version 2.4.3
+* Added comment metadata decoding
+* Fixed Scrobble bug
+* UI refinements
