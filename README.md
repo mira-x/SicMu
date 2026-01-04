@@ -1,6 +1,6 @@
 # SicMu Neo
 
-This is a fork of [Mathieu Souchaud's SicMu alias SMP](https://gitlab.com/souch/SMP).
+This is an inactive fork of [Mathieu Souchaud's SicMu alias SMP](https://gitlab.com/souch/SMP). A from-scratch reimplementation is being developed [here](https://github.com/mira-x/FLACblaster).
 
 SicMu Neo is a file-based music player with a very basic UI. You can use your folder hierarchy to group and organize music, or you can use the audio file metadata to group the music by artist and album. It supports a wide range of playback options, and includes support for Last.FM scrobbling via third-party apps.
 
@@ -16,6 +16,7 @@ This fork retains the spirit of the original app and adds these features:
 - Radio shuffle mode (Random song order, starts first song selected at random point in the song)
 - "Search on genius.com" button when long-pressing on audio file
 - Changed the audio backend to the modern ExoPlayer, causing less RAM usage (220MB prior vs 135MB now)
+- Ability to read comment metadata fields
 
 The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 7.0.
 
