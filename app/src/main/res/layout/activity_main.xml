@@ -386,12 +386,12 @@
             android:orientation="vertical"
             android:padding="4dp">
 
-            <EditText
+            <TextView
                 android:id="@+id/metadata_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minLines="2"
-                android:hint="COMMENT"
+                android:hint="No comment available"
                 android:autoLink="all"
                 android:linksClickable="true"
                 />
@@ -408,24 +408,16 @@
                         android:text="key!"
                         android:paddingEnd="16dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="end"
                         />
-                    <EditText
+                    <TextView
                         android:text="value!"
-                        android:layout_height="40dp"
-                        android:layout_width="match_parent"
+                        android:paddingEnd="16dp"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
                         />
                 </TableRow>
             </TableLayout>
-
-            <Button
-                android:id="@+id/metadata_tags_save_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:textColor="@color/LightGrey"
-                android:background="@color/LightBlack"
-                android:enabled="false"/>
 
         </LinearLayout>
 

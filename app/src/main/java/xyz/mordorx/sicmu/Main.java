@@ -39,9 +39,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -67,7 +65,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -95,8 +92,6 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
@@ -142,7 +137,6 @@ public class Main extends AppCompatActivity {
     private LinearLayout detailsLayout;
     private ScrollView metadataLayout;
     private TableLayout metadataTableLayout;
-    private Button metadataSaveButton;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
     private LinearLayout warningLayout;
@@ -204,7 +198,6 @@ public class Main extends AppCompatActivity {
         metadataTableLayout = findViewById(R.id.metadata_tags_table);
         metadataLayout = findViewById(R.id.metadata);
         metadataLayout.setVisibility(View.GONE);
-        metadataSaveButton = findViewById(R.id.metadata_tags_save_button);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
@@ -892,55 +885,19 @@ public class Main extends AppCompatActivity {
         setRatingDetails();
 
         clearMetadataTable();
-        rowSong.loadMetadataAsync(t -> showMetadataTable(rowSong, t));
+        rowSong.loadMetadataAsync(this::showMetadataTable);
     }
 
     private void clearMetadataTable() {
         metadataTableLayout.removeAllViewsInLayout();
-        metadataSaveButton.setEnabled(false);
-        metadataSaveButton.setTextColor(getResources().getColor(R.color.LightGrey));
-        metadataSaveButton.setOnClickListener(x -> {});
-        var c = ((EditText)findViewById(R.id.metadata_comment));
-        c.setEnabled(false);
+        var c = ((TextView)findViewById(R.id.metadata_comment));
         c.setText("");
     }
 
-    private void showMetadataTable(RowSong song, Tag tags) {
+    private void showMetadataTable(Tag tags) {
         clearMetadataTable();
         var l = metadataTableLayout;
         l.removeAllViewsInLayout();
-        var originalHash = new AtomicReference<>(Tag.hash(tags));
-
-        // Save button behaviour
-        Runnable updateSaveButton = () -> {
-            var hash = Tag.hash(tags);
-            var edited = hash != originalHash.get();
-            Log.d("MainActivity", "updateSaveButton! edited: " + edited + " original: " + originalHash.get() + " now: " + hash);
-            metadataSaveButton.setEnabled(edited);
-            var darkBlood = getResources().getColor(R.color.DarkBlood);
-            var lightGrey = getResources().getColor(R.color.LightGrey);
-            metadataSaveButton.setTextColor(edited ? darkBlood : lightGrey);
-        };
-
-        metadataSaveButton.setOnClickListener(x -> {
-            Exception e = null;
-            try {
-                var f = AudioFileIO.read(new File(song.getPath()));
-                f.setTag(tags);
-                AudioFileIO.write(f);
-                originalHash.set(Tag.hash(tags));
-            } catch (Exception ex) {
-                e = ex;
-                Log.e("MainActivity", "metadataSaveButton callback for file: " + song.getPath(), e);
-            }
-
-            var snackText = (e == null) ? getResources().getText(R.string.metadata_saving_success) : String.format(getResources().getText(R.string.metadata_saving_failure).toString(), e.getClass().getName().toString());
-            var snackDuration = (e == null) ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG;
-
-            updateSaveButton.run();
-            var snack = Snackbar.make(metadataLayout, snackText, snackDuration);
-            snack.show();
-        });
 
         // List all metadata keys
         Arrays.stream(FieldKey.values()).forEach(key -> {
@@ -965,31 +922,17 @@ public class Main extends AppCompatActivity {
 
                 // Key
                 TextView fieldNameView = new TextView(this);
-                fieldNameView.setGravity(Gravity.CENTER);
+                fieldNameView.setGravity(Gravity.END);
                 fieldNameView.setText(key.name());
                 fieldNameView.setPadding(0, 0, 48, 0);
 
-                // Value
-                EditText fieldValueEdit = new EditText(this);
-                fieldValueEdit.setText(values.toString());
-                fieldValueEdit.setSingleLine(false);
-                fieldValueEdit.addTextChangedListener(new TextWatcher() {
-                    @Override public void afterTextChanged(Editable s) { }
-                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        try {
-                            tags.setField(key, s.toString());
-                            updateSaveButton.run();
-                        } catch (Exception e) {
-                            Log.e("MainActivity", "Metadata Table fieldValueEdit(key=" + key + ").onTextChanged", e);
-                        }
-                    }
-                });
+                // Value (read-only)
+                TextView fieldValueView = new TextView(this);
+                fieldValueView.setText(values.toString());
+                fieldValueView.setGravity(Gravity.START);
 
                 row.addView(fieldNameView);
-                row.addView(fieldValueEdit);
+                row.addView(fieldValueView);
                 l.addView(row);
             });
         });
@@ -1000,29 +943,9 @@ public class Main extends AppCompatActivity {
             tags.getFields(FieldKey.COMMENT).forEach(line -> comments.getAndUpdate(c -> c + line + "\n"));
         } catch (Exception ignored) { }
 
-        var c = (EditText)findViewById(R.id.metadata_comment);
+        var c = (TextView)findViewById(R.id.metadata_comment);
         c.setText(comments.get());
         c.setMovementMethod(LinkMovementMethod.getInstance());
-        c.setEnabled(true);
-        c.addTextChangedListener(new TextWatcher() {
-            @Override public void afterTextChanged(Editable s) { }
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    Log.d("MainActivity", "User put in comment: '" + s.toString() + "'");
-
-                    // Some formats store each line as separate comment, but this leads to parsing errors, so we save it all as a single multiline string comment
-                    tags.deleteField(FieldKey.COMMENT);
-                    tags.setField(FieldKey.COMMENT, s.toString());
-                    comments.set(s.toString());
-                    updateSaveButton.run();
-                } catch (Exception e) {
-                    Log.e("MainActivity", "Metadata Table comment .onTextChanged", e);
-                }
-            }
-        });
     }
 
     private void setRatingDetails() {
