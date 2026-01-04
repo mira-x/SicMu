@@ -133,7 +133,9 @@ public class AlbumArtLoader {
                 var sorter = Comparator
                         .comparing(AlbumImageCandidate::getSignificantFilenamePrefixMatch)
                         .thenComparing(AlbumImageCandidate::getSignificantAlbumPrefixMatch)
-                        .thenComparing(AlbumImageCandidate::isGenericAlbumArtName);
+                        .thenComparing(AlbumImageCandidate::isGenericAlbumArtName)
+                        .thenComparing(AlbumImageCandidate::getInsignificantFilenamePrefixMatch)
+                        .thenComparing(AlbumImageCandidate::getInsignificantAlbumPrefixMatch);
 
                 //noinspection DataFlowIssue (listFiles() will not be null)
                 var albumArt = Arrays.stream(dir.listFiles())
@@ -204,7 +206,7 @@ public class AlbumArtLoader {
         /// Returns whether the image file contains a valid image file extension like PNG or JPEG
         public boolean isValidImageFile() {
             var f = imgPath.getName().trim().toLowerCase();
-            final var extensions = new String[]{"jpg", "jpeg", "png", "webp", "gif", "bmp", "avif", "heif"};
+            final var extensions = new String[]{"jpg", "jpeg", "png", "webp", "gif", "bmp", "avif", "heif", "jxl", "bmp"};
             return Arrays.stream(extensions).anyMatch(f::endsWith);
         }
 
@@ -232,6 +234,12 @@ public class AlbumArtLoader {
             return getSignificantCommonPrefix(img, song);
         }
 
+        public int getInsignificantFilenamePrefixMatch() {
+            var img = imgPath.getName().trim().toLowerCase();
+            var song = songPath.getName().trim().toLowerCase();
+            return getCommonPrefix(img, song);
+        }
+
         /// If no album is specified, the folder name is used instead.
         public int getSignificantAlbumPrefixMatch() {
             var song = songPath.getName().trim().toLowerCase();
@@ -240,6 +248,16 @@ public class AlbumArtLoader {
                 return getSignificantCommonPrefix(folder, song);
             } else {
                 return getSignificantCommonPrefix(albumName, song);
+            }
+        }
+
+        public int getInsignificantAlbumPrefixMatch() {
+            var song = songPath.getName().trim().toLowerCase();
+            if (albumName.isBlank() || albumName.equals("<unknown>")) {
+                var folder = Optional.ofNullable(imgPath.getParent()).orElse("").trim().toLowerCase();
+                return getCommonPrefix(folder, song);
+            } else {
+                return getCommonPrefix(albumName, song);
             }
         }
 
