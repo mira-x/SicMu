@@ -254,7 +254,7 @@ public class VorbisCommentTag extends AbstractTag {
      */
     @Override
     public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey == null) {
+        if (genericKey == null || !tagFieldToOggField.containsKey(genericKey)) {
             throw new KeyNotFoundException();
         }
 
@@ -382,7 +382,7 @@ public class VorbisCommentTag extends AbstractTag {
      * @param genericKey
      */
     public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
+        if (genericKey == null || !tagFieldToOggField.containsKey(genericKey)) {
             throw new KeyNotFoundException();
         }
 
@@ -476,7 +476,7 @@ public class VorbisCommentTag extends AbstractTag {
     }
 
     public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
+        if (genericKey == null || !tagFieldToOggField.containsKey(genericKey)) {
             throw new KeyNotFoundException();
         }
         return getFirstField(tagFieldToOggField.get(genericKey).getFieldName());

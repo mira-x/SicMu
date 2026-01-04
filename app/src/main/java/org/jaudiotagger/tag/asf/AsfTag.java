@@ -407,7 +407,7 @@ public final class AsfTag extends AbstractTag {
     if (values == null || values[0] == null) {
       throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
     }
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToAsfField.containsKey(genericKey)) {
       throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
     }
     final AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
@@ -539,7 +539,7 @@ public final class AsfTag extends AbstractTag {
    * {@inheritDoc}
    */
   public String getValue(final FieldKey genericKey, int index) throws KeyNotFoundException {
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToAsfField.containsKey(genericKey)) {
       throw new KeyNotFoundException();
     }
     return super.getItem(tagFieldToAsfField.get(genericKey).getFieldName(), index);
@@ -559,7 +559,7 @@ public final class AsfTag extends AbstractTag {
    */
   @Override
   public AsfTagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToAsfField.containsKey(genericKey)) {
       throw new KeyNotFoundException();
     }
     return (AsfTagField) super.getFirstField(tagFieldToAsfField.get(genericKey).getFieldName());

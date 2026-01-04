@@ -269,7 +269,7 @@ public class Mp4Tag extends AbstractTag {
    */
   @SuppressWarnings({"JavaDoc"})
   public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToMp4Field.containsKey(genericKey)) {
       throw new KeyNotFoundException();
     }
     Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
@@ -423,7 +423,7 @@ public class Mp4Tag extends AbstractTag {
    * @param genericKey
    */
   public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToMp4Field.containsKey(genericKey)) {
       throw new KeyNotFoundException();
     }
 
@@ -552,7 +552,7 @@ public class Mp4Tag extends AbstractTag {
     if (values == null) {
       throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
     }
-    if (genericKey == null) {
+    if (genericKey == null || !tagFieldToMp4Field.containsKey(genericKey)) {
       throw new KeyNotFoundException();
     }
 

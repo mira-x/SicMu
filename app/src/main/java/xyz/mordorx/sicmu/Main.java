@@ -71,6 +71,8 @@ import java.io.File;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,6 +98,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
@@ -887,24 +890,32 @@ public class Main extends AppCompatActivity {
         new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(this::setCoverArt);
 
         setRatingDetails();
+
+        clearMetadataTable();
+        rowSong.loadMetadataAsync(t -> showMetadataTable(rowSong, t));
+    }
+
+    private void clearMetadataTable() {
         metadataTableLayout.removeAllViewsInLayout();
         metadataSaveButton.setEnabled(false);
         metadataSaveButton.setTextColor(getResources().getColor(R.color.LightGrey));
         metadataSaveButton.setOnClickListener(x -> {});
-
-        rowSong.loadMetadataAsync(t -> showMetadataTable(rowSong, t));
+        var c = ((EditText)findViewById(R.id.metadata_comment));
+        c.setEnabled(false);
+        c.setText("");
     }
 
     private void showMetadataTable(RowSong song, Tag tags) {
+        clearMetadataTable();
         var l = metadataTableLayout;
         l.removeAllViewsInLayout();
-        var comments = new AtomicReference<String>("");
-        var originalHash = new AtomicReference<Integer>(Tag.hash(tags));
+        var originalHash = new AtomicReference<>(Tag.hash(tags));
 
+        // Save button behaviour
         Runnable updateSaveButton = () -> {
             var hash = Tag.hash(tags);
             var edited = hash != originalHash.get();
-            // Log.d("MainActivity", "updateSaveButton! edited: " + edited + " original: " + originalHash.get() + " now: " + hash);
+            Log.d("MainActivity", "updateSaveButton! edited: " + edited + " original: " + originalHash.get() + " now: " + hash);
             metadataSaveButton.setEnabled(edited);
             var darkBlood = getResources().getColor(R.color.DarkBlood);
             var lightGrey = getResources().getColor(R.color.LightGrey);
@@ -931,18 +942,21 @@ public class Main extends AppCompatActivity {
             snack.show();
         });
 
-
-        tags.getFields().forEachRemaining(f -> {
-            final var key = f.getId();
-            final var value = f.toString();
-            if(key.equals("COMMENT")) {
-                comments.getAndUpdate(s -> s + value + "\n");
-                return;
-            }
-            if (!f.isCommon()) {
-                return;
-            }
+        // List all metadata keys
+        Arrays.stream(FieldKey.values()).forEach(key -> {
             runOnUiThread(() -> {
+                if (key == FieldKey.COMMENT) {
+                    return;
+                }
+                TagField values = null;
+                try {
+                    values = tags.getFirstField(key);
+                } catch (KeyNotFoundException ignored) {
+                }
+                if (values == null || values.isEmpty()) {
+                    return;
+                }
+
                 TableRow row = new TableRow(this);
                 row.setLayoutParams(new TableRow.LayoutParams(
                         TableRow.LayoutParams.MATCH_PARENT,
@@ -952,15 +966,13 @@ public class Main extends AppCompatActivity {
                 // Key
                 TextView fieldNameView = new TextView(this);
                 fieldNameView.setGravity(Gravity.CENTER);
-                fieldNameView.setText(key);
-                fieldNameView.setPadding(0, 0, 48, 0); // 16dp * 3 = 48px (ca.)
+                fieldNameView.setText(key.name());
+                fieldNameView.setPadding(0, 0, 48, 0);
 
                 // Value
                 EditText fieldValueEdit = new EditText(this);
-                fieldValueEdit.setText(value);
+                fieldValueEdit.setText(values.toString());
                 fieldValueEdit.setSingleLine(false);
-                fieldValueEdit.setMaxLines(5);
-                fieldValueEdit.setEnabled(FieldKey.isExistant(key));
                 fieldValueEdit.addTextChangedListener(new TextWatcher() {
                     @Override public void afterTextChanged(Editable s) { }
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -968,7 +980,7 @@ public class Main extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         try {
-                            tags.setField(FieldKey.get(key), s.toString());
+                            tags.setField(key, s.toString());
                             updateSaveButton.run();
                         } catch (Exception e) {
                             Log.e("MainActivity", "Metadata Table fieldValueEdit(key=" + key + ").onTextChanged", e);
@@ -981,10 +993,17 @@ public class Main extends AppCompatActivity {
                 l.addView(row);
             });
         });
-        comments.getAndUpdate(String::trim);
+
+        // Comments
+        var comments = new AtomicReference<String>("");
+        try {
+            tags.getFields(FieldKey.COMMENT).forEach(line -> comments.getAndUpdate(c -> c + line + "\n"));
+        } catch (Exception ignored) { }
+
         var c = (EditText)findViewById(R.id.metadata_comment);
         c.setText(comments.get());
         c.setMovementMethod(LinkMovementMethod.getInstance());
+        c.setEnabled(true);
         c.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) { }
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -992,7 +1011,11 @@ public class Main extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    tags.setField(FieldKey.COMMENT, s.toString().split("\n"));
+                    Log.d("MainActivity", "User put in comment: '" + s.toString() + "'");
+
+                    // Some formats store each line as separate comment, but this leads to parsing errors, so we save it all as a single multiline string comment
+                    tags.deleteField(FieldKey.COMMENT);
+                    tags.setField(FieldKey.COMMENT, s.toString());
                     comments.set(s.toString());
                     updateSaveButton.run();
                 } catch (Exception e) {
