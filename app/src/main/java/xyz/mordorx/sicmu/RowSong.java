@@ -262,6 +262,7 @@ public class RowSong extends Row {
         }).start();
     }
 
+    /** Make sure to use runOnUiThread() if your callback mutates the UI state! */
     public synchronized void loadMetadataAsync(LoadMetadataCallbackInterface callback) {
         if (metadata != null) {
             callback.callback(metadata);

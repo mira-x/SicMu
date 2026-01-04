@@ -135,7 +135,6 @@ public class Main extends AppCompatActivity {
     private AnimationDrawable appAnimation;
 
     private LinearLayout detailsLayout;
-    private TableLayout metadataTableLayout;
     private LinearLayout seekButtonsLayout;
     private TextView playbackSpeedText;
     private LinearLayout warningLayout;
@@ -148,6 +147,7 @@ public class Main extends AppCompatActivity {
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private boolean detailsBigCoverArt;
+    private int coverArtNum = 0;
     private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
 
     @Override
@@ -194,7 +194,6 @@ public class Main extends AppCompatActivity {
         warningLayout.setOnClickListener(view -> hideWarning());
         detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.GONE);
-        metadataTableLayout = findViewById(R.id.metadata_tags_table);
         detailsToggledFollowAuto = true;
 
         final int repeatDelta = 260;
@@ -455,7 +454,7 @@ public class Main extends AppCompatActivity {
                 Log.d("Main", "Receiving intent with uri: " + uri + ", mime: " + mimeType);
                 rows = musicSrv.getRows();
                 if (rows.setCurrPosFromUri(getApplicationContext(), uri)) {
-                     playAlreadySelectedSong();
+                    playAlreadySelectedSong();
                 }
             }
             setPlaybackSpeedText();
@@ -469,6 +468,7 @@ public class Main extends AppCompatActivity {
     };
 
     private void clickOnRow(int position) {
+        coverArtNum = 0;
         Row row = rows.get(position);
         if (row != null) {
             if (row.getClass() == RowGroup.class) {
@@ -494,6 +494,7 @@ public class Main extends AppCompatActivity {
     private void startGroupPlayback(@NonNull RowGroup row, int position) {
         vibrate();
 
+        coverArtNum = 0;
         var offset = 0;
         if (params.getShuffle().randomSongOrder()) {
             offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
@@ -884,69 +885,22 @@ public class Main extends AppCompatActivity {
     }
 
     private void clearMetadataTable() {
-        metadataTableLayout.removeAllViewsInLayout();
         var c = ((TextView)findViewById(R.id.metadata_comment));
         c.setText("");
     }
 
     private void showMetadataTable(Tag tags) {
-        var l = metadataTableLayout;
-        l.removeAllViewsInLayout();
+        runOnUiThread(() -> {
+            // Comments
+            var comments = new AtomicReference<String>("");
+            try {
+                tags.getFields(FieldKey.COMMENT).forEach(line -> comments.getAndUpdate(c -> c + line + "\n"));
+            } catch (Exception ignored) { }
 
-        // List all metadata keys
-        Arrays.stream(FieldKey.values()).forEach(key -> {
-            runOnUiThread(() -> {
-                if (key == FieldKey.COMMENT) {
-                    return;
-                }
-                TagField values = null;
-                try {
-                    values = tags.getFirstField(key);
-                } catch (KeyNotFoundException ignored) {
-                }
-                if (values == null || values.isEmpty()) {
-                    return;
-                }
-
-                TableRow row = new TableRow(this);
-                row.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT
-                ));
-
-                // Key
-                TextView fieldNameView = new TextView(this);
-                fieldNameView.setGravity(Gravity.END);
-                fieldNameView.setText(key.name());
-                fieldNameView.setPadding(0, 0, 48, 0);
-
-                // Value (read-only)
-                TextView fieldValueView = new TextView(this);
-                fieldValueView.setText(values.toString());
-                fieldValueView.setGravity(Gravity.START);
-                fieldValueView.setSingleLine(false);
-                fieldValueView.setMaxLines(Integer.MAX_VALUE);
-                fieldValueView.setLayoutParams(new TableRow.LayoutParams(
-                        0,
-                        TableRow.LayoutParams.WRAP_CONTENT,
-                        1f
-                ));
-
-                row.addView(fieldNameView);
-                row.addView(fieldValueView);
-                l.addView(row);
-            });
+            var c = (TextView)findViewById(R.id.metadata_comment);
+            c.setText(comments.get());
+            c.setMovementMethod(LinkMovementMethod.getInstance());
         });
-
-        // Comments
-        var comments = new AtomicReference<String>("");
-        try {
-            tags.getFields(FieldKey.COMMENT).forEach(line -> comments.getAndUpdate(c -> c + line + "\n"));
-        } catch (Exception ignored) { }
-
-        var c = (TextView)findViewById(R.id.metadata_comment);
-        c.setText(comments.get());
-        c.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void setRatingDetails() {
@@ -968,14 +922,14 @@ public class Main extends AppCompatActivity {
 //        if (rating <= 0) {
 //            details_rating_layout.setVisibility(View.INVISIBLE);
 //        } else {
-            if (rating < 0)
-                rating = 0;
-            details_rating_layout.setVisibility(View.VISIBLE);
-            for (int i = 0; i < ratingButtons.size(); i++) {
-                int star0 = highlight ? R.drawable.ic_star_0_highlight : R.drawable.ic_star_0;
-                int star5 = highlight ? R.drawable.ic_star_5_highlight : R.drawable.ic_star_5;
-                ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
-            }
+        if (rating < 0)
+            rating = 0;
+        details_rating_layout.setVisibility(View.VISIBLE);
+        for (int i = 0; i < ratingButtons.size(); i++) {
+            int star0 = highlight ? R.drawable.ic_star_0_highlight : R.drawable.ic_star_0;
+            int star5 = highlight ? R.drawable.ic_star_5_highlight : R.drawable.ic_star_5;
+            ratingButtons.get(i).setImageResource(i < rating ? star5 : star0);
+        }
 //        }
     }
 
@@ -988,26 +942,26 @@ public class Main extends AppCompatActivity {
             return;
         }
         new AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(
-            (rowSongId, bitmap) -> {
-                hasCoverArt = bitmap != null;
-                // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
-                //   - auto mode is enable if details view state (opened or closed) is the same has
-                //     auto mode would have done.
-                if (detailsToggledFollowAuto)
-                    runOnUiThread(() -> openDetails(hasCoverArt));
+                (rowSongId, bitmap) -> {
+                    hasCoverArt = bitmap != null;
+                    // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
+                    //   - auto mode is enable if details view state (opened or closed) is the same has
+                    //     auto mode would have done.
+                    if (detailsToggledFollowAuto)
+                        runOnUiThread(() -> openDetails(hasCoverArt));
 
-                if (detailsToggledFollowAuto && !hasCoverArt) {
-                    // set details later in order to not disturb details layouts close animation
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            runOnUiThread(() -> setDetails());
-                        }
-                    }, 500);
-                } else {
-                    runOnUiThread(this::setDetails);
-                }
-            });
+                    if (detailsToggledFollowAuto && !hasCoverArt) {
+                        // set details later in order to not disturb details layouts close animation
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(() -> setDetails());
+                            }
+                        }, 500);
+                    } else {
+                        runOnUiThread(this::setDetails);
+                    }
+                });
     }
 
 
@@ -1065,7 +1019,7 @@ public class Main extends AppCompatActivity {
                                 getString(R.string.action_delete_song_nok, songTitle),
                                 LENGTH_LONG).show();
                     }
-                    })
+                })
                 .setNegativeButton(android.R.string.cancel, null).show();
     }
 
@@ -1120,21 +1074,21 @@ public class Main extends AppCompatActivity {
 //                        "Please install a File Manager.", Toast.LENGTH_LONG).show();
 //            }
 //        }
-////        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
-////            found = true;
-////        if (!found) {
-////            intent = new Intent(Intent.ACTION_GET_CONTENT);
-////            intent.setDataAndType(selectedUri, "*/*");
-////            List<ResolveInfo> apps =
-////                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-////            if (apps.size() > 0)
-////                found = true;
-////        }
-////
-////        if (found) {
-////            startActivity(Intent.createChooser(intent, "Open folder"));
-////            //startActivity(intent);
-////        }
+    ////        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
+    ////            found = true;
+    ////        if (!found) {
+    ////            intent = new Intent(Intent.ACTION_GET_CONTENT);
+    ////            intent.setDataAndType(selectedUri, "*/*");
+    ////            List<ResolveInfo> apps =
+    ////                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+    ////            if (apps.size() > 0)
+    ////                found = true;
+    ////        }
+    ////
+    ////        if (found) {
+    ////            startActivity(Intent.createChooser(intent, "Open folder"));
+    ////            //startActivity(intent);
+    ////        }
 //    }
 
     private void openEditGroupMenu(int position, @NonNull RowGroup row) {
@@ -1309,9 +1263,9 @@ public class Main extends AppCompatActivity {
         ((TextView) popupView.findViewById(R.id.detail_path)).setText(
                 getString(R.string.popup_song_path, rowSong.getPath()));
         popupView.setOnTouchListener((view,  event) -> {
-                popupWindow.dismiss();
-                return true;
-            });
+            popupWindow.dismiss();
+            return true;
+        });
     }
 
     private void rescan(@NonNull RowGroup rowGroup) {
@@ -1319,7 +1273,7 @@ public class Main extends AppCompatActivity {
                 getString(R.string.start_rescan) + rowGroup.getPath(),
                 Toast.LENGTH_SHORT).show();
         Path.scanMediaFolder(getApplicationContext(), rowGroup.getPath(), (String path, Uri uri) ->
-            runOnUiThread(() -> {
+                runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, LENGTH_LONG).show();
                     if (rows != null)
                         rows.reinit();
@@ -1437,12 +1391,12 @@ public class Main extends AppCompatActivity {
 
         altBld.setSingleChoiceItems(items, musicSrv.getMinRating() - 1,
                 (DialogInterface dialog, int item) -> {
-            if (musicSrv != null) {
-                musicSrv.setMinRating(item + 1);
-                setMinRatingButton();
-                dialog.dismiss(); // dismiss the alertbox after chose option
-            }
-        });
+                    if (musicSrv != null) {
+                        musicSrv.setMinRating(item + 1);
+                        setMinRatingButton();
+                        dialog.dismiss(); // dismiss the alertbox after chose option
+                    }
+                });
         AlertDialog alert = altBld.create();
         alert.show();
     }
@@ -1638,6 +1592,7 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
+        coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
         disableTrackLooper();
@@ -1649,6 +1604,7 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
+        coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
         disableTrackLooper();
@@ -1700,7 +1656,7 @@ public class Main extends AppCompatActivity {
             disableTrackLooper();
         }
     }
-    
+
     public void disableTrackLooper()
     {
         trackLooperAPosMs = trackLooperDisabledVal;
@@ -1743,6 +1699,7 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
+            coverArtNum = 0;
             musicSrv.playNextGroup();
             updatePlayButton();
             disableTrackLooper();
@@ -1759,6 +1716,7 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
+            coverArtNum = 0;
             musicSrv.playPrevGroup();
             updatePlayButton();
             disableTrackLooper();
@@ -1770,63 +1728,63 @@ public class Main extends AppCompatActivity {
     };
 
     private final RepeatingImageButton.RepeatListener rewindListener =
-        new RepeatingImageButton.RepeatListener() {
-            /**
-             * This method will be called repeatedly at roughly the interval
-             * specified in setRepeatListener(), for as long as the button
-             * is pressed.
-             *
-             * @param view           The button as a View.
-             * @param duration    The number of milliseconds the button has been pressed so far.
-             * @param repeatcount The number of previous calls in this sequence.
-             *                    If this is going to be the last call in this sequence (i.e. the user
-             *                    just stopped pressing the button), the value will be -1.
-             */
-            public void onRepeat(View view, long duration, int repeatcount) {
-                Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
-                if (repeatcount <= 0)
-                    return;
+            new RepeatingImageButton.RepeatListener() {
+                /**
+                 * This method will be called repeatedly at roughly the interval
+                 * specified in setRepeatListener(), for as long as the button
+                 * is pressed.
+                 *
+                 * @param view           The button as a View.
+                 * @param duration    The number of milliseconds the button has been pressed so far.
+                 * @param repeatcount The number of previous calls in this sequence.
+                 *                    If this is going to be the last call in this sequence (i.e. the user
+                 *                    just stopped pressing the button), the value will be -1.
+                 */
+                public void onRepeat(View view, long duration, int repeatcount) {
+                    Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
+                    if (repeatcount <= 0)
+                        return;
 
-                long newPosMs = musicSrv.getCurrentPositionMs() - getSeekOffsetSec(view, duration);
-                Log.d("Main", "<-- currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
-                newPosMs = newPosMs < 0 ? 0 : newPosMs;
-                musicSrv.seekTo(newPosMs);
-            }
-        };
-
-        private long getSeekOffsetSec(View view, long duration) {
-            long offsetMs = 0;
-            var id = view.getId();
-            if (id == R.id.m5_button || id == R.id.p5_button) {
-                offsetMs = 5000;
-            } else if (id == R.id.m20_button || id == R.id.m20_text || id == R.id.p20_button || id == R.id.p20_text) {
-                if (duration < 5000) {
-                    // seek at 10x speed for the first 5 seconds
-                    offsetMs = duration * 10;
-                } else {
-                    // seek at 40x after that
-                    offsetMs = 50000 + (duration - 5000) * 40;
+                    long newPosMs = musicSrv.getCurrentPositionMs() - getSeekOffsetSec(view, duration);
+                    Log.d("Main", "<-- currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
+                    newPosMs = newPosMs < 0 ? 0 : newPosMs;
+                    musicSrv.seekTo(newPosMs);
                 }
+            };
+
+    private long getSeekOffsetSec(View view, long duration) {
+        long offsetMs = 0;
+        var id = view.getId();
+        if (id == R.id.m5_button || id == R.id.p5_button) {
+            offsetMs = 5000;
+        } else if (id == R.id.m20_button || id == R.id.m20_text || id == R.id.p20_button || id == R.id.p20_text) {
+            if (duration < 5000) {
+                // seek at 10x speed for the first 5 seconds
+                offsetMs = duration * 10;
+            } else {
+                // seek at 40x after that
+                offsetMs = 50000 + (duration - 5000) * 40;
             }
-            return offsetMs;
         }
+        return offsetMs;
+    }
 
     private final RepeatingImageButton.RepeatListener forwardListener =
-        new RepeatingImageButton.RepeatListener() {
-            public void onRepeat(View view, long duration, int repeatcount) {
-                Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
+            new RepeatingImageButton.RepeatListener() {
+                public void onRepeat(View view, long duration, int repeatcount) {
+                    Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
 
-                if (repeatcount <= 0)
-                    return;
+                    if (repeatcount <= 0)
+                        return;
 
-                long newPosMs = musicSrv.getCurrentPositionMs() + getSeekOffsetSec(view, duration);
-                Log.d("Main", "--> currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
-                if (newPosMs >= musicSrv.getDurationMs())
-                    playNext(null);
-                else
-                    musicSrv.seekTo(newPosMs);
-        }
-    };
+                    long newPosMs = musicSrv.getCurrentPositionMs() + getSeekOffsetSec(view, duration);
+                    Log.d("Main", "--> currpos: " + musicSrv.getCurrentPositionMs() + " seekto: " + newPosMs);
+                    if (newPosMs >= musicSrv.getDurationMs())
+                        playNext(null);
+                    else
+                        musicSrv.seekTo(newPosMs);
+                }
+            };
 
     public void gotoCurrSong(View view) {
         unfoldAndscrollToCurrSong();
@@ -1914,22 +1872,22 @@ public class Main extends AppCompatActivity {
         Snackbar.make(v, toastText, BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
-/*
-    public void openTextSize(View view) {
-        params.setChooseTextSize(!params.getChoosedTextSize());
-        ImageButton img = findViewById(R.id.text_size_button);
-        if (params.getChoosedTextSize()) {
-            img.setImageResource(R.drawable.ic_menu_text_big);
+    /*
+        public void openTextSize(View view) {
+            params.setChooseTextSize(!params.getChoosedTextSize());
+            ImageButton img = findViewById(R.id.text_size_button);
+            if (params.getChoosedTextSize()) {
+                img.setImageResource(R.drawable.ic_menu_text_big);
+            }
+            else {
+                img.setImageResource(R.drawable.ic_menu_text_regular);
+            }
+            applyTextSize();
+            songAdt.notifyDataSetChanged();
+            setTextSizeButton();
+            startCloseMoreButtonsTimer();
         }
-        else {
-            img.setImageResource(R.drawable.ic_menu_text_regular);
-        }
-        applyTextSize();
-        songAdt.notifyDataSetChanged();
-        setTextSizeButton();
-        startCloseMoreButtonsTimer();
-    }
-*/
+    */
     public void openMinRating(View view) {
         openRatingMenu();
         startCloseMoreButtonsTimer();
@@ -2054,5 +2012,4 @@ public class Main extends AppCompatActivity {
         }
     };
 }
-
 

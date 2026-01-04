@@ -18,7 +18,6 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,7 +28,7 @@
         android:id="@+id/actions_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:paddingBottom="3dp"
@@ -41,7 +40,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"
             android:orientation="vertical"
-            android:paddingEnd="5dp">
+            android:paddingRight="5dp">
 
             <ImageButton
                 android:id="@+id/app_button"
@@ -80,7 +79,7 @@
         <SeekBar
             android:id="@+id/seek_bar"
             style="@style/SeekBarAppTheme"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="2dp"
@@ -97,7 +96,7 @@
             android:layout_marginBottom="2dp"
             android:onClick="toggleSeekButtons"
             android:orientation="vertical"
-            android:paddingEnd="5dp">
+            android:paddingRight="5dp">
 
             <TextView
                 android:id="@+id/duration"
@@ -106,8 +105,7 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:text="00:00"
                 android:textSize="18sp"
-                android:visibility="invisible"
-                tools:ignore="HardcodedText" />
+                android:visibility="invisible" />
 
 
             <ImageButton
@@ -134,10 +132,10 @@
             android:id="@+id/playBackSpeed"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="50"
+            android:layout_weight="51"
+            android:inputType="numberDecimal"
             android:textColor="?attr/colorActionBtn"
             android:gravity="center"
-            tools:ignore="HardcodedText"
             android:text="1.0x"/>
 
         <xyz.mordorx.sicmu.RepeatingImageButton
@@ -160,8 +158,7 @@
             android:clickable="true"
             android:onClick="seek"
             android:text="20s"
-            android:textColor="?attr/colorActionBtn"
-            tools:ignore="HardcodedText" />
+            android:textColor="?attr/colorActionBtn" />
 
         <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/m5_button"
@@ -181,9 +178,7 @@
             android:layout_gravity="center"
             android:clickable="false"
             android:text="5s"
-            android:textColor="?attr/colorActionBtn"
-            tools:ignore="HardcodedText"
-            />
+            android:textColor="?attr/colorActionBtn" />
 
         <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/p5_button"
@@ -205,8 +200,7 @@
             android:clickable="true"
             android:onClick="seek"
             android:text="20s"
-            android:textColor="?attr/colorActionBtn"
-            tools:ignore="HardcodedText" />
+            android:textColor="?attr/colorActionBtn" />
 
         <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/p20_button"
@@ -257,9 +251,9 @@
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="175dp"
         android:layout_below="@id/warning_layout"
-        android:gravity="start"
+        android:gravity="left"
         android:orientation="horizontal">
 
         <ImageButton
@@ -291,7 +285,7 @@
                 android:id="@+id/detail_album"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="2"
                 android:text=""
@@ -301,7 +295,7 @@
                 android:id="@+id/detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="3"
                 android:text="" />
@@ -310,16 +304,31 @@
                 android:id="@+id/detail_mime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
                 android:maxHeight="40dp"
                 android:maxLines="3"
                 android:text="" />
 
+            <TextView
+                android:id="@+id/metadata_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="4"
+                android:background="@color/cardview_dark_background"
+                android:hint=""
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:layout_marginVertical="2dp"
+                android:layout_weight="10"
+                />
+
             <LinearLayout
                 android:id="@+id/details_rating"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_weight="0"
                 android:gravity="bottom"
                 android:orientation="horizontal">
                 <ImageButton
@@ -374,62 +383,10 @@
                     app:srcCompat="@drawable/ic_star_0"/>
             </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp">
-
-                <TextView
-                    android:id="@+id/metadata_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minLines="2"
-                    android:background="@color/cardview_dark_background"
-                    android:hint="No comment available"
-                    android:autoLink="all"
-                    android:linksClickable="true"
-                    />
-
-                <TableLayout
-                    android:id="@+id/metadata_tags_table"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="1"
-                    android:padding="0dp"
-                    >
-                    <TableRow android:layout_width="match_parent">
-                        <TextView
-                            android:text="key!"
-                            android:paddingEnd="16dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end"
-                            tools:ignore="HardcodedText" />
-                        <TextView
-                            android:text="value!"
-                            android:paddingEnd="16dp"
-                            android:layout_height="match_parent"
-                            android:gravity="start"
-                            tools:ignore="HardcodedText" />
-                    </TableRow>
-                </TableLayout>
-
-            </LinearLayout>
-
         </LinearLayout>
+
     </LinearLayout>
 
-<!--
-    <ScrollView
-        android:id="@+id/metadata"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/details_layout"
-        android:layout_above="@+id/more_buttons"
-        >
-
-    </ScrollView>-->
 
     <ListView
         android:id="@+id/song_list"
@@ -437,7 +394,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/more_buttons"
         android:layout_below="@+id/details_layout"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:choiceMode="singleChoice"
         android:fastScrollEnabled="false"
         android:hapticFeedbackEnabled="false"
@@ -451,8 +408,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_button"
         android:orientation="horizontal"
-        android:weightSum="350"
-        >
+        android:weightSum="350">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
@@ -545,7 +501,7 @@
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="50"
+            android:layout_weight="49"
             android:onClick="openSettings"
             android:src="@drawable/ic_menu_settings" />
 
@@ -623,3 +579,7 @@
     </LinearLayout>
 
 </RelativeLayout>
+
+    <!--
+
+-->
