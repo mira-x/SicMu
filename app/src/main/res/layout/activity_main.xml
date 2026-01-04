@@ -425,6 +425,7 @@
             android:longClickable="true"
             android:onClick="openSort"
             android:padding="12dp"
+            android:contentDescription="Change display mode"
             android:scaleType="centerInside"
             android:src="@drawable/ic_menu_tree" />
 
@@ -448,6 +449,7 @@
             android:layout_height="60dp"
             android:layout_weight="50"
             android:onClick="toggleStereo"
+            android:contentDescription="Toggle stereo / mono"
             android:scaleType="center"
             android:src="@drawable/ic_stereo" />
 
@@ -457,6 +459,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
+            android:contentDescription="Change loop mode"
             android:longClickable="true"
             android:onClick="openRepeat"
             android:scaleType="fitCenter"
@@ -469,6 +472,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:longClickable="true"
+            android:contentDescription="Change playback order"
             android:onClick="changeShuffle"
             android:padding="14dp"
             android:scaleType="fitCenter"
@@ -482,6 +486,7 @@
             android:layout_weight="50"
             android:longClickable="true"
             android:onClick="openMinRating"
+            android:contentDescription="Filter songs by star rating"
             android:padding="14dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_star_5_highlight" />
@@ -495,14 +500,16 @@
             android:onClick="openSearchDialog"
             android:padding="14dp"
             android:scaleType="centerInside"
+            android:contentDescription="Search for song"
             app:srcCompat="@drawable/ic_action_search" />
 
         <ImageButton
             style="@style/BottomButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="49"
+            android:layout_weight="50"
             android:onClick="openSettings"
+            android:contentDescription="Open settings menu"
             android:src="@drawable/ic_menu_settings" />
 
     </LinearLayout>
@@ -527,6 +534,7 @@
             android:layout_height="60dp"
             android:layout_weight="48"
             android:onClick="playOrPause"
+            android:contentDescription="Start playback"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:scaleType="fitCenter"
@@ -540,6 +548,7 @@
             android:layout_weight="51"
             android:longClickable="true"
             android:onClick="playPrev"
+            android:contentDescription="Go to previous song"
             android:scaleType="fitCenter"
             android:src="@drawable/action_prev" />
 
@@ -550,6 +559,7 @@
             android:layout_height="match_parent"
             android:layout_weight="51"
             android:longClickable="true"
+            android:contentDescription="Go to next song"
             android:onClick="playNext"
             android:scaleType="fitCenter"
             android:src="@drawable/action_next" />
@@ -563,6 +573,7 @@
             android:longClickable="true"
             android:onClick="gotoCurrSong"
             android:paddingTop="15dp"
+            android:contentDescription="Scroll to selected item"
             android:paddingBottom="15dp"
             android:scaleType="fitCenter"
             android:src="@drawable/action_goto_play" />
@@ -573,6 +584,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:longClickable="true"
+            android:contentDescription="Show more options"
             android:onClick="toggleMoreButtons"
             app:srcCompat="@drawable/ic_option" />
 
