@@ -123,20 +123,18 @@
         android:id="@+id/seek_buttons_layout"
         android:layout_below="@+id/actions_bar"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
 
-        <TextView
+        <NumberPicker
             android:id="@+id/playBackSpeed"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="51"
-            android:inputType="numberDecimal"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
             android:textColor="?attr/colorActionBtn"
-            android:gravity="center"
-            android:text="1.0x"/>
+            />
 
         <xyz.mordorx.sicmu.RepeatingImageButton
             android:id="@+id/m20_button"
@@ -251,7 +249,7 @@
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="200dp"
         android:layout_below="@id/warning_layout"
         android:gravity="left"
         android:orientation="horizontal">

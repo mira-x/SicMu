@@ -19,7 +19,6 @@
 package xyz.mordorx.sicmu;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -41,9 +40,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,26 +48,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
@@ -90,12 +81,9 @@ import static android.widget.Toast.LENGTH_LONG;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
 @UnstableApi
@@ -136,7 +124,7 @@ public class Main extends AppCompatActivity {
 
     private LinearLayout detailsLayout;
     private LinearLayout seekButtonsLayout;
-    private TextView playbackSpeedText;
+    private NumberPicker playbackSpeedText;
     private LinearLayout warningLayout;
 
     private LinearLayout moreButtonsLayout;
@@ -300,26 +288,15 @@ public class Main extends AppCompatActivity {
         setStereoButton();
 
         playbackSpeedText = findViewById(R.id.playBackSpeed);
-        playbackSpeedText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
-            public void onSwipeTop() {
-                changePlaybackSpeed(0.1f);
-            }
-
-            public void onSwipeRight() {
-                changePlaybackSpeed(0.2f);
-            }
-
-            public void onSwipeLeft() {
-                changePlaybackSpeed(-0.2f);
-            }
-
-            public void onSwipeBottom() {
-                changePlaybackSpeed(-0.1f);
-            }
-
-            public void performClick() {
-                Toast.makeText(getApplicationContext(), R.string.explain_playback_speed, LENGTH_LONG).show();
-            }
+        playbackSpeedText.setMinValue(1);
+        playbackSpeedText.setValue(100);
+        DecimalFormat decimalFormat = new DecimalFormat("#0.0x");
+        decimalFormat.setDecimalSeparatorAlwaysShown(true);
+        playbackSpeedText.setFormatter(v -> String.format("%3d%%", v));
+        playbackSpeedText.setMaxValue(200);
+        playbackSpeedText.setTextColor(getResources().getColor(R.color.Blood, getTheme()));
+        playbackSpeedText.setOnValueChangedListener((a, b, c) -> {
+            setPlaybackSpeed(a.getValue() / 100.0f);
         });
     }
 
@@ -1684,17 +1661,14 @@ public class Main extends AppCompatActivity {
         trackLooperBtn.setImageResource(R.drawable.ic_track_looper);
     }
 
-    private void changePlaybackSpeed(float step) {
+    private void setPlaybackSpeed(float v) {
         if (serviceBound) {
-            musicSrv.changePlaybackSpeed(step);
-            setPlaybackSpeedText();
+            musicSrv.setPlaybackSpeed(v);
         }
     }
     private void setPlaybackSpeedText() {
         if (serviceBound) {
-            DecimalFormat decimalFormat = new DecimalFormat("#0.0x");
-            decimalFormat.setDecimalSeparatorAlwaysShown(true);
-            playbackSpeedText.setText(decimalFormat.format(musicSrv.getPlaybackSpeed()));
+            playbackSpeedText.setValue((int)(musicSrv.getPlaybackSpeed() * 100f));
         }
     }
 

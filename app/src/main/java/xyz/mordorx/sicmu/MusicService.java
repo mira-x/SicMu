@@ -1074,6 +1074,16 @@ public class MusicService extends Service implements
             applyPlaybackSpeed(playbackSpeed);
     }
 
+    public void setPlaybackSpeed(float v) {
+        if (v <= 0) {
+            return;
+        }
+        playbackSpeed = v;
+        updateMediaPlaybackState();
+        if (player != null && playingLaunched())
+            applyPlaybackSpeed(playbackSpeed);
+    }
+
     public float getPlaybackSpeed() {
         return playbackSpeed;
     }
