@@ -17,6 +17,8 @@
  */
 package org.jaudiotagger.audio.generic;
 
+import android.util.Log;
+
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
@@ -76,9 +78,11 @@ public abstract class AbstractTag implements Tag {
       if (field.isCommon()) {
         commonNumber++;
       }
+      Log.d("AbstractTag", "addField: NEW key='" + field.getId() + "' value='" + field.toString() + "' (list size now: 1)");
     } else {
       // We append to existing list
       list.add(field);
+      Log.d("AbstractTag", "addField: APPEND to key='" + field.getId() + "' value='" + field.toString() + "' (list size now: " + list.size() + ")");
     }
   }
 
@@ -90,13 +94,26 @@ public abstract class AbstractTag implements Tag {
    */
   @Override
   public List<TagField> getFields(String id) {
-    List<TagField> list = fields.get(id);
+    // SICMU FIX: Always merge case-insensitive matches for Vorbis Comments spec compliance
+    // Vorbis Comment spec says field names are case-insensitive, but some tools
+    // (like PMEDIA) write UPPERCASE while others write lowercase, causing duplicates.
+    // We must merge ALL case variants (COMMENT + comment + Comment) into one result.
+    List<TagField> mergedList = new ArrayList<TagField>();
+    boolean foundAny = false;
 
-    if (list == null) {
-      return new ArrayList<TagField>();
+    for (Map.Entry<String, List<TagField>> entry : fields.entrySet()) {
+      if (entry.getKey().equalsIgnoreCase(id)) {
+        mergedList.addAll(entry.getValue());
+        foundAny = true;
+        Log.d("AbstractTag", "getFields('" + id + "'): merging case variant '" + entry.getKey() + "' with " + entry.getValue().size() + " fields");
+      }
     }
 
-    return list;
+    if (foundAny) {
+      return mergedList;
+    }
+
+    return new ArrayList<TagField>();
   }
 
 

@@ -308,6 +308,17 @@ public class VorbisCommentTag extends AbstractTag {
         if (vorbisCommentFieldKey == null) {
             throw new KeyNotFoundException();
         }
+
+        // SICMU FIX: For COMMENT field, also include DESCRIPTION field
+        // According to Vorbis spec, DESCRIPTION is an alternative comment field
+        // This fixes files where some tools write COMMENT and others write DESCRIPTION
+        if (genericKey == FieldKey.COMMENT) {
+            List<TagField> allComments = new ArrayList<TagField>();
+            allComments.addAll(super.getFields(VorbisCommentFieldKey.COMMENT.getFieldName()));
+            allComments.addAll(super.getFields(VorbisCommentFieldKey.DESCRIPTION.getFieldName()));
+            return allComments;
+        }
+
         return super.getFields(vorbisCommentFieldKey.getFieldName());
     }
 

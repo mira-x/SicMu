@@ -19,6 +19,8 @@
  */
 package org.jaudiotagger.tag.vorbiscomment;
 
+import android.util.Log;
+
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
@@ -117,6 +119,7 @@ public class VorbisCommentReader {
 
         VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
         logger.config("Adding:" + fieldComment.getId());
+        Log.d("VorbisCommentReader", "Read field[" + i + "]: id='" + fieldComment.getId() + "' content='" + fieldComment.getContent() + "'");
         tag.addField(fieldComment);
       }
     }

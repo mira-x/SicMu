@@ -78,7 +78,10 @@ public class VorbisCommentTagField implements TagTextField {
       this.id = ERRONEOUS_ID;
       this.content = field;
     } else {
-      this.id = field.substring(0, i).toUpperCase();
+      // SICMU FIX: Preserve original casing instead of forcing uppercase
+      // Vorbis spec says field names are case-insensitive, but we should preserve
+      // the original casing to avoid merging "COMMENT" and "comment" during reading
+      this.id = field.substring(0, i);
       if (field.length() > i) {
         this.content = field.substring(i + 1);
       } else {
@@ -96,7 +99,8 @@ public class VorbisCommentTagField implements TagTextField {
    * @param fieldContent Content of the field.
    */
   public VorbisCommentTagField(String fieldId, String fieldContent) {
-    this.id = fieldId.toUpperCase();
+    // SICMU FIX: Preserve original casing
+    this.id = fieldId;
     this.content = fieldContent;
     checkCommon();
   }
@@ -107,9 +111,11 @@ public class VorbisCommentTagField implements TagTextField {
    * <br>
    */
   private void checkCommon() {
-    this.common = id.equals(TITLE.getFieldName()) || id.equals(ALBUM.getFieldName()) || id.equals(ARTIST.getFieldName())
-      || id.equals(GENRE.getFieldName()) || id.equals(TRACKNUMBER.getFieldName()) || id.equals(DATE.getFieldName())
-      || id.equals(DESCRIPTION.getFieldName()) || id.equals(COMMENT.getFieldName());
+    // SICMU FIX: Case-insensitive comparison since we preserve original casing
+    this.common = id.equalsIgnoreCase(TITLE.getFieldName()) || id.equalsIgnoreCase(ALBUM.getFieldName())
+      || id.equalsIgnoreCase(ARTIST.getFieldName()) || id.equalsIgnoreCase(GENRE.getFieldName())
+      || id.equalsIgnoreCase(TRACKNUMBER.getFieldName()) || id.equalsIgnoreCase(DATE.getFieldName())
+      || id.equalsIgnoreCase(DESCRIPTION.getFieldName()) || id.equalsIgnoreCase(COMMENT.getFieldName());
 
   }
 
