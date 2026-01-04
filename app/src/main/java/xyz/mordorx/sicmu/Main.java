@@ -1217,18 +1217,35 @@ public class Main extends AppCompatActivity {
     }
 
     private void openGeniusLyrics(RowSong song) {
-        var filename = song.getFilename();
-        // remove extension
-        if (filename.contains(".")) {
-            filename = filename.substring(0, filename.lastIndexOf('.'));
+        var searchTerm = "";
+        if (song.getTitle().isBlank() || song.getTitle().equals("<unknown>") || song.getArtist().isBlank() || song.getArtist().equals("<unknown>")) {
+            searchTerm = song.getFilename();
+            // remove extension (any dot that is in the last 5 characters)
+            if (searchTerm.contains(".") && searchTerm.lastIndexOf('.') >= searchTerm.length() - 5) {
+                searchTerm = searchTerm.substring(0, searchTerm.lastIndexOf('.'));
+            }
+        } else {
+            searchTerm = song.getArtist() + " " + song.getTitle();
+            Log.d("SearchTerm", searchTerm);
         }
-        // Remove dashes and hierarchy
-        filename = filename.replaceAll(" - ", " ");
+
+
+        // Remove dashes
+        searchTerm = searchTerm.replaceAll(" - ", " ");
         // Remove remixes, like "Simply Red - Something got me started (Hourleys House Remix)"
-        filename = filename.replaceAll("\\(([^)]+)\\)", "");
+        // We only delete those at the end of the string, for instance, to keep this song title intact:
+        // "(This song is just) six words long.mp3" (A song from 'Weird Al' Yankovic)
+        searchTerm = searchTerm.replaceAll("\\(([^)]+)\\)$", "");
+        // Remove leading numbers (01. some song, 2. some song)
+        searchTerm = searchTerm.replaceAll("^(\\d+).", "");
+        // Remove braces, Genius will cut off the string beginning at the first brace
+        searchTerm = searchTerm.replaceAll("\\(", "");
+        searchTerm = searchTerm.replaceAll("\\)", "");
+
+        searchTerm = URLEncoder.encode(searchTerm);
 
         try {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + URLEncoder.encode(filename)));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + searchTerm));
             startActivity(browserIntent);
         } catch (Exception e) {
             Log.e("sicmu", "Error while creating genius.com URL: " + e);
