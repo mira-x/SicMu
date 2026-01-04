@@ -36,3 +36,4 @@ SicMu Player is licensed under the GPLv3 only. See file [LICENSE](LICENSE) for m
 - Icons from Daniele De Santis / iconfinder.com (Creative Commons Attribution 3.0 Unported)
 - Icons from Google Material Symbols (Apache 2.0)
 - Seekbar style by [Jérôme Van Der Linden](https://android-holo-colors.com)
+- JAudioTagger hard-forked, copied from various sources, released under LGPL 2.1 [[1]](https://github.com/Shabinder/jaudiotaggerAndroid) [[2]](https://github.com/Kaned1as/jaudiotagger) [[3]](https://www.jthink.net/jaudiotagger/)
