@@ -251,7 +251,7 @@
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="190dp"
         android:layout_below="@id/warning_layout"
         android:gravity="left"
         android:orientation="horizontal">
