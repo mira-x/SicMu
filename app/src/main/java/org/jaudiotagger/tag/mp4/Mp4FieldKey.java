@@ -20,9 +20,9 @@ import org.jaudiotagger.tag.reference.Tagger;
  * we list it here with an additional Tagger field to indicate where the field was originally designed.
  * <p>
  * From:
- * http://www.hydrogenaudio.org/forums/index.php?showtopic=29120&st=0&p=251686&#entry251686
- * http://wiki.musicbrainz.org/PicardQt/TagMapping
- * http://atomicparsley.sourceforge.net/mpeg-4files.html
+ * <a href="http://www.hydrogenaudio.org/forums/index.php?showtopic=29120&st=0&p=251686&#entry251686">...</a>
+ * <a href="http://wiki.musicbrainz.org/PicardQt/TagMapping">...</a>
+ * <a href="http://atomicparsley.sourceforge.net/mpeg-4files.html">...</a>
  */
 public enum Mp4FieldKey {
 

@@ -67,7 +67,6 @@ import java.util.Vector;
  * the same version of Swing.  As of 1.4, support for long term storage
  * of all JavaBeans<sup><font size="-2">TM</font></sup>
  * has been added to the <code>java.beans</code> package.
- * Please see {@link java.beans.XMLEncoder}.
  *
  * @author Rob Davis
  * @version 1.25 03/23/10
@@ -1292,7 +1291,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
       userObject = tValues[1];
   }
 
-  final class PreorderEnumeration implements Enumeration<TreeNode> {
+  static final class PreorderEnumeration implements Enumeration<TreeNode> {
     protected Stack stack;
 
     public PreorderEnumeration(TreeNode rootNode) {
@@ -1325,7 +1324,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
   }  // End of class PreorderEnumeration
 
 
-  final class PostorderEnumeration implements Enumeration<TreeNode> {
+  static final class PostorderEnumeration implements Enumeration<TreeNode> {
     protected TreeNode root;
     protected Enumeration<TreeNode> children;
     protected Enumeration<TreeNode> subtree;
@@ -1348,7 +1347,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
         retval = subtree.nextElement();
       } else if (children.hasMoreElements()) {
         subtree = new PostorderEnumeration(
-          (TreeNode) children.nextElement());
+                children.nextElement());
         retval = subtree.nextElement();
       } else {
         retval = root;
@@ -1361,7 +1360,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
   }  // End of class PostorderEnumeration
 
 
-  final class BreadthFirstEnumeration implements Enumeration<TreeNode> {
+  static final class BreadthFirstEnumeration implements Enumeration<TreeNode> {
     protected Queue queue;
 
     public BreadthFirstEnumeration(TreeNode rootNode) {
@@ -1449,7 +1448,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
   }  // End of class BreadthFirstEnumeration
 
 
-  final class PathBetweenNodesEnumeration implements Enumeration<TreeNode> {
+  static final class PathBetweenNodesEnumeration implements Enumeration<TreeNode> {
     protected Stack<TreeNode> stack;
 
     public PathBetweenNodesEnumeration(TreeNode ancestor,

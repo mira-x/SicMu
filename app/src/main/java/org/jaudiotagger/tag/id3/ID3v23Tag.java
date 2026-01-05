@@ -205,6 +205,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    * @throws TagException
    * @deprecated use {@link #ID3v23Tag(ByteBuffer, String)} instead
    */
+  @Deprecated
   public ID3v23Tag(ByteBuffer buffer) throws TagException {
     this(buffer, "");
   }
@@ -301,18 +302,18 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
       tmpBody.findMatchingMaskAndExtractV3Values();
       ID3v23Frame newFrame;
-      if (!tmpBody.getYear().equals("")) {
+      if (!tmpBody.getYear().isEmpty()) {
         newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TYER);
         ((FrameBodyTYER) newFrame.getBody()).setText(tmpBody.getYear());
         frames.add(newFrame);
       }
-      if (!tmpBody.getDate().equals("")) {
+      if (!tmpBody.getDate().isEmpty()) {
         newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TDAT);
         ((FrameBodyTDAT) newFrame.getBody()).setText(tmpBody.getDate());
         ((FrameBodyTDAT) newFrame.getBody()).setMonthOnly(tmpBody.isMonthOnly());
         frames.add(newFrame);
       }
-      if (!tmpBody.getTime().equals("")) {
+      if (!tmpBody.getTime().isEmpty()) {
         newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TIME);
         ((FrameBodyTIME) newFrame.getBody()).setText(tmpBody.getTime());
         ((FrameBodyTIME) newFrame.getBody()).setHoursOnly(tmpBody.isHoursOnly());
@@ -526,7 +527,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     }
 
     readFrames(bufferWithoutHeader, size);
-    logger.config(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
+    logger.config(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.size());
 
   }
 
@@ -591,7 +592,6 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       catch (InvalidDataTypeException idete) {
         logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
         this.invalidFrames++;
-        continue;
       }
     }
   }
@@ -736,7 +736,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
 
     int padding = 0;
     if (currentTagSize > 0) {
-      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, currentTagSize);
       padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
       logger.config(getLoggingFilename() + ":Padding:" + padding);
     }

@@ -68,7 +68,7 @@ public class Path {
                     if (path.length() > rootFolderSize && path.charAt(rootFolderSize) == separatorChar)
                         rootFolderSize++;
 
-                    folder = path.substring(rootFolderSize, path.length());
+                    folder = path.substring(rootFolderSize);
                 }
             }
         }
@@ -83,7 +83,7 @@ public class Path {
         folder = folder.substring(0, index);
 
         // no folder get the name "."
-        if (folder.equals(""))
+        if (folder.isEmpty())
             folder = ".";
 
         return folder;
@@ -109,7 +109,7 @@ public class Path {
         }
         // path do not finish by /
         if (folderFound) {
-            folders.add(path.substring(beg, path.length()));
+            folders.add(path.substring(beg));
         }
 
         return folders;
@@ -124,7 +124,7 @@ public class Path {
         int i = 0;
         while (i < down.length() && i < up.length() && up.charAt(i) == down.charAt(i))
             i++;
-        return up.substring(i, up.length());
+        return up.substring(i);
     }
 
 
@@ -149,7 +149,7 @@ public class Path {
      */
     public static int compareToIgnoreCaseShorterFolderLast(String string1, String string2) {
         int o1 = 0, o2 = 0, result;
-        int end = (string1.length() < string2.length() ? string1.length() : string2.length());
+        int end = (Math.min(string1.length(), string2.length()));
         char c1, c2;
         while (o1 < end) {
             if ((c1 = string1.charAt(o1++)) == (c2 = string2.charAt(o2++))) {
@@ -179,24 +179,22 @@ public class Path {
 
 
     public static String getMusicStoragesStr(Context context) {
-        String dirsStr = new String();
+        StringBuilder dirsStr = new StringBuilder();
         Collection<File> dirs = getMusicStorages(context);
-        if (dirs != null)
-            for (File dir : dirs) {
-                dirsStr += dir.getAbsolutePath() + ";";
-            }
-        if (dirsStr.endsWith(";"))
-            dirsStr = dirsStr.substring(0, dirsStr.length() - 1);
-        return dirsStr;
+        for (File dir : dirs) {
+            dirsStr.append(dir.getAbsolutePath()).append(";");
+        }
+        if (dirsStr.toString().endsWith(";"))
+            dirsStr = new StringBuilder(dirsStr.substring(0, dirsStr.length() - 1));
+        return dirsStr.toString();
     }
 
     public static Collection<File> getMusicStorages(Context context) {
         ArrayList<File> musicDirs = new ArrayList<>();
         Collection<File> dirs = getStorages(context);
-        if (dirs != null)
-            for (File dir : dirs) {
-                musicDirs.add(new File(dir, "Music/"));
-            }
+        for (File dir : dirs) {
+            musicDirs.add(new File(dir, "Music/"));
+        }
         return musicDirs;
     }
 
@@ -260,7 +258,7 @@ public class Path {
         for (int r = 0; r < cursor.getCount(); r++, cursor.moveToNext()) {
             int id = cursor.getInt(0);
             String filePath = cursor.getString(1);
-            Boolean delIt = true;
+            boolean delIt = true;
             if (filePath.length() > 0) {
                 File file = new File(filePath);
                 if (file.exists())

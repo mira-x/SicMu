@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * except the framing bit is only present when used within Ogg Vorbis
  *
  * <pre>
- * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
+ * From the <a href="http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment">...</a>
  * Read decodes the packet data using the following algorithm:
  *  [vendor_length] = read an unsigned integer of 32 bits
  *  [vendor_string] = read a UTF-8 vector as [vendor_length] octets

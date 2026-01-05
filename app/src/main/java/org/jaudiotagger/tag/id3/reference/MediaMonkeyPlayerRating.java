@@ -78,7 +78,7 @@ public class MediaMonkeyPlayerRating extends ID3Rating {
     int newValue = 0;
     if (value <= 0) {
       newValue = 0;
-    } else if (value <= 1) {
+    } else if (value == 1) {
       newValue = 1;
     } else if (value <= 8) {
       newValue = 0;
@@ -92,7 +92,7 @@ public class MediaMonkeyPlayerRating extends ID3Rating {
       newValue = 1;
     } else if (value <= 28) {
       newValue = 1;
-    } else if (value <= 29) {
+    } else if (value == 29) {
       newValue = 2;
     } else if (value <= 39) {
       newValue = 1;

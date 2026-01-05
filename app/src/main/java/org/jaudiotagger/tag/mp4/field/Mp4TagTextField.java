@@ -129,7 +129,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField {
 
   @Override
   public boolean isEmpty() {
-    return this.content.trim().equals("");
+    return this.content.trim().isEmpty();
   }
 
   @Override

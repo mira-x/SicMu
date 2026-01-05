@@ -16,7 +16,6 @@ package org.jaudiotagger.utils.tree;
  * @author Scott Violet
  * @version 1.13 03/23/10
  * @see DefaultMutableTreeNode
- * @see javax.swing.JTree
  */
 
 public interface MutableTreeNode extends TreeNode {

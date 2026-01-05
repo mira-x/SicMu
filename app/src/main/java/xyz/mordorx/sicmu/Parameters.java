@@ -21,6 +21,7 @@ package xyz.mordorx.sicmu;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import androidx.core.util.Pair;
@@ -179,11 +180,13 @@ public class Parameters {
         var aman = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         var outs = aman.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS);
         var s = new StringBuilder();
-        Arrays.stream(outs)
-                .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
-                .distinct()
-                .sorted(Comparator.comparing(Parameters::PairFirst).thenComparing(Parameters::PairSecond))
-                .forEach(dev -> {s.append(dev.first); s.append(dev.second);});
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Arrays.stream(outs)
+                    .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
+                    .distinct()
+                    .sorted(Comparator.comparing(Parameters::PairFirst).thenComparing(Parameters::PairSecond))
+                    .forEach(dev -> {s.append(dev.first); s.append(dev.second);});
+        }
         return s.toString().hashCode();
     }
 

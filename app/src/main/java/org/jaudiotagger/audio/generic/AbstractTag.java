@@ -162,9 +162,7 @@ public abstract class AbstractTag implements Tag {
   public List<TagField> getAll() {
     List<TagField> fieldList = new ArrayList<TagField>();
     for (List<TagField> listOfFields : fields.values()) {
-      for (TagField next : listOfFields) {
-        fieldList.add(next);
-      }
+        fieldList.addAll(listOfFields);
     }
     return fieldList;
   }
@@ -338,7 +336,6 @@ public abstract class AbstractTag implements Tag {
   /**
    * Set or add encoding
    *
-   * @see Tag#setEncoding(String)
    */
   public boolean setEncoding(final Charset enc) {
     if (!isAllowedEncoding(enc)) {

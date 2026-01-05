@@ -435,41 +435,33 @@ public class Mp4Tag extends AbstractTag {
       String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
       if (trackTotal.length() == 0) {
         super.deleteField(mp4FieldName);
-        return;
       } else {
         Mp4TrackField field = (Mp4TrackField) this.getFirstField(FieldKey.TRACK_TOTAL);
         field.setTrackNo(0);
-        return;
       }
     } else if (genericKey == FieldKey.TRACK_TOTAL) {
       String track = this.getFirst(FieldKey.TRACK);
       if (track.length() == 0) {
         super.deleteField(mp4FieldName);
-        return;
       } else {
         Mp4TrackField field = (Mp4TrackField) this.getFirstField(FieldKey.TRACK);
         field.setTrackTotal(0);
-        return;
       }
     } else if (genericKey == FieldKey.DISC_NO) {
       String discTotal = this.getFirst(FieldKey.DISC_TOTAL);
       if (discTotal.length() == 0) {
         super.deleteField(mp4FieldName);
-        return;
       } else {
         Mp4DiscNoField field = (Mp4DiscNoField) this.getFirstField(FieldKey.DISC_TOTAL);
         field.setDiscNo(0);
-        return;
       }
     } else if (genericKey == FieldKey.DISC_TOTAL) {
       String discno = this.getFirst(FieldKey.DISC_NO);
       if (discno.length() == 0) {
         super.deleteField(mp4FieldName);
-        return;
       } else {
         Mp4DiscNoField field = (Mp4DiscNoField) this.getFirstField(FieldKey.DISC_NO);
         field.setDiscTotal(0);
-        return;
       }
     } else if (genericKey == FieldKey.GENRE) {
       super.deleteField(Mp4FieldKey.GENRE.getFieldName());

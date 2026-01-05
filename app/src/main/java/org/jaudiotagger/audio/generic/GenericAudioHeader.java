@@ -180,7 +180,7 @@ public class GenericAudioHeader implements AudioHeader {
     return bitsPerSample;
   }
 
-  /*
+  /**
    * Sets the Bits per Sample <br>
    *
    * @params bitsPerSample Bits Per Sample
@@ -262,43 +262,43 @@ public class GenericAudioHeader implements AudioHeader {
     StringBuilder out = new StringBuilder();
     out.append("Audio Header content:\n");
     if (audioDataLength != null) {
-      out.append("\taudioDataLength:" + audioDataLength + "\n");
+      out.append("\taudioDataLength:").append(audioDataLength).append("\n");
     }
     if (audioDataStartPosition != null) {
-      out.append("\taudioDataStartPosition:" + audioDataStartPosition + "\n");
+      out.append("\taudioDataStartPosition:").append(audioDataStartPosition).append("\n");
     }
     if (audioDataEndPosition != null) {
-      out.append("\taudioDataEndPosition:" + audioDataEndPosition + "\n");
+      out.append("\taudioDataEndPosition:").append(audioDataEndPosition).append("\n");
     }
     if (byteRate != null) {
-      out.append("\tbyteRate:" + byteRate + "\n");
+      out.append("\tbyteRate:").append(byteRate).append("\n");
     }
     if (bitRate != null) {
-      out.append("\tbitRate:" + bitRate + "\n");
+      out.append("\tbitRate:").append(bitRate).append("\n");
     }
     if (samplingRate != null) {
-      out.append("\tsamplingRate:" + samplingRate + "\n");
+      out.append("\tsamplingRate:").append(samplingRate).append("\n");
     }
     if (bitsPerSample != null) {
-      out.append("\tbitsPerSample:" + bitsPerSample + "\n");
+      out.append("\tbitsPerSample:").append(bitsPerSample).append("\n");
     }
     if (noOfSamples != null) {
-      out.append("\ttotalNoSamples:" + noOfSamples + "\n");
+      out.append("\ttotalNoSamples:").append(noOfSamples).append("\n");
     }
     if (noOfChannels != null) {
-      out.append("\tnumberOfChannels:" + noOfChannels + "\n");
+      out.append("\tnumberOfChannels:").append(noOfChannels).append("\n");
     }
     if (encodingType != null) {
-      out.append("\tencodingType:" + encodingType + "\n");
+      out.append("\tencodingType:").append(encodingType).append("\n");
     }
     if (isVbr != null) {
-      out.append("\tisVbr:" + isVbr + "\n");
+      out.append("\tisVbr:").append(isVbr).append("\n");
     }
     if (isLossless != null) {
-      out.append("\tisLossless:" + isLossless + "\n");
+      out.append("\tisLossless:").append(isLossless).append("\n");
     }
     if (trackLength != null) {
-      out.append("\ttrackDuration:" + trackLength + "\n");
+      out.append("\ttrackDuration:").append(trackLength).append("\n");
     }
     return out.toString();
   }
@@ -315,7 +315,7 @@ public class GenericAudioHeader implements AudioHeader {
     return byteRate;
   }
 
-  /*
+  /**
    * Sets the ByteRate (per second)
    *
    * @params ByteRate

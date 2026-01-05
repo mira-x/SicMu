@@ -217,7 +217,7 @@ public class VorbisCommentTagField implements TagTextField {
 
   @Override
   public boolean isEmpty() {
-    return this.content.equals("");
+    return this.content.isEmpty();
   }
 
   @Override

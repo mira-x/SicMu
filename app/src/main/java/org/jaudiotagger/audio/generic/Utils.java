@@ -261,7 +261,7 @@ public class Utils {
     public static String getString(final ByteBuffer buffer, final Charset encoding) {
         final byte[] b = new byte[buffer.remaining()];
         buffer.get(b);
-        return new String(b, 0, b.length, encoding);
+        return new String(b, encoding);
     }
 
     /**

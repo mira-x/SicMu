@@ -159,35 +159,35 @@ public class AiffAudioHeader extends GenericAudioHeader {
     StringBuilder sb = new StringBuilder("\n");
 
     if (name != null && !name.isEmpty()) {
-      sb.append("\tName:" + name + "\n");
+      sb.append("\tName:").append(name).append("\n");
     }
 
     if (author != null && !author.isEmpty()) {
-      sb.append("\tAuthor:" + author + "\n");
+      sb.append("\tAuthor:").append(author).append("\n");
     }
 
     if (copyright != null && !copyright.isEmpty()) {
-      sb.append("\tCopyright:" + copyright + "\n");
+      sb.append("\tCopyright:").append(copyright).append("\n");
     }
 
     if (comments.size() > 0) {
       sb.append("Comments:\n");
       for (String next : comments) {
-        sb.append("\t" + next + "\n");
+        sb.append("\t").append(next).append("\n");
       }
     }
 
     if (applicationIdentifiers.size() > 0) {
       sb.append("ApplicationIds:\n");
       for (String next : applicationIdentifiers) {
-        sb.append("\t" + next + "\n");
+        sb.append("\t").append(next).append("\n");
       }
     }
 
     if (annotations.size() > 0) {
       sb.append("Annotations:\n");
       for (String next : annotations) {
-        sb.append("\t" + next + "\n");
+        sb.append("\t").append(next).append("\n");
       }
     }
     return super.toString() + sb.toString();

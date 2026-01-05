@@ -196,7 +196,6 @@ public final class AsfHeader extends ChunkContainer {
    */
   @Override
   public String prettyPrint(final String prefix) {
-    final StringBuilder result = new StringBuilder(super.prettyPrint(prefix, prefix + "  | : Contains: \"" + getChunkCount() + "\" chunks" + Utils.LINE_SEPARATOR));
-    return result.toString();
+      return super.prettyPrint(prefix, prefix + "  | : Contains: \"" + getChunkCount() + "\" chunks" + Utils.LINE_SEPARATOR);
   }
 }

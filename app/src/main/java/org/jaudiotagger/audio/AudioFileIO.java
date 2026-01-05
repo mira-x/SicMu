@@ -266,12 +266,12 @@ public class AudioFileIO {
   public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException {
     String ext = Utils.getExtension(f.getFile());
 
-    Object afw = writers.get(ext);
+    AudioFileWriter afw = writers.get(ext);
     if (afw == null) {
       throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
     }
 
-    ((AudioFileWriter) afw).delete(f);
+    afw.delete(f);
   }
 
   /**

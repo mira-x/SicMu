@@ -14,7 +14,7 @@ import java.util.Arrays;
  * this library is details allowing us to determine the bitrate of a Variable Bit Rate VBR file without having
  * to process the whole file.
  * <p>
- * From http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo
+ * From <a href="http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo">...</a>
  * <p>
  * This header is only used by MPEG audio files encoded with the Fraunhofer Encoder as far as I know. It is different from the XING header. You find it exactly
  * 32 bytes after the end of the first MPEG audio header in the file. (Note that the position is zero-based; position, length and example are each in byte-format.)

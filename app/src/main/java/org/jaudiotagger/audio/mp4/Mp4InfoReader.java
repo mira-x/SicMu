@@ -276,7 +276,7 @@ public class Mp4InfoReader {
     if (boxHeader != null) {
       Mp4StcoBox stco = new Mp4StcoBox(boxHeader, mvhdBuffer);
       info.setAudioDataStartPosition((long) stco.getFirstOffSet());
-      info.setAudioDataEndPosition((long) fc.size());
+      info.setAudioDataEndPosition(fc.size());
       info.setAudioDataLength(fc.size() - stco.getFirstOffSet());
     }
 
@@ -296,7 +296,7 @@ public class Mp4InfoReader {
     }
 
     //This is the most likely option if cant find a match
-    if (info.getEncodingType().equals("")) {
+    if (info.getEncodingType().isEmpty()) {
       info.setEncodingType(EncoderType.AAC.getDescription());
     }
 

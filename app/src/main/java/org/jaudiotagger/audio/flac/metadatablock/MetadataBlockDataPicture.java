@@ -231,7 +231,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField {
    */
   public String getImageUrl() {
     if (isImageUrl()) {
-      return new String(getImageData(), 0, getImageData().length, StandardCharsets.ISO_8859_1);
+      return new String(getImageData(), StandardCharsets.ISO_8859_1);
     } else {
       return "";
     }
@@ -301,6 +301,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField {
    * @deprecated As for now is of no use. Implementations should use another
    * way of setting this property.
    */
+  @Deprecated
   public void isBinary(boolean b) {
     //Do nothing, always true
   }

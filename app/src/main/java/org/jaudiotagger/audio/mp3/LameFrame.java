@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
  * The first frame can sometimes contain a LAME frame at the end of the Xing frame
  *
  * <p>This useful to the library because it allows the encoder to be identified, full specification
- * can be found at http://gabriel.mp3-tech.org/mp3infotag.html
+ * can be found at <a href="http://gabriel.mp3-tech.org/mp3infotag.html">...</a>
  * <p>
  * Summarized here:
  * 4 bytes:LAME

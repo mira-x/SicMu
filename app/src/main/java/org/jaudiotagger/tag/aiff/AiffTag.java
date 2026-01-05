@@ -281,7 +281,7 @@ public class AiffTag implements Tag, Id3SupportingTag {
     StringBuilder sb = new StringBuilder();
 
     for (ChunkSummary cs : chunkSummaryList) {
-      sb.append(cs.toString() + "\n");
+      sb.append(cs.toString()).append("\n");
     }
     if (id3Tag != null) {
       sb.append("Aiff ID3 Tag:\n");
@@ -289,10 +289,10 @@ public class AiffTag implements Tag, Id3SupportingTag {
         if (isIncorrectlyAlignedTag) {
           sb.append("\tincorrectly starts as odd byte\n");
         }
-        sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
-        sb.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
+        sb.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFileOfId3Chunk())).append("\n");
+        sb.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFileOfId3Chunk())).append("\n");
       }
-      sb.append(id3Tag.toString() + "\n");
+      sb.append(id3Tag.toString()).append("\n");
       return sb.toString();
     } else {
       return "tag:empty";

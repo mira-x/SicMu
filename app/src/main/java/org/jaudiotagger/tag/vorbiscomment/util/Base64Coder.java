@@ -2,6 +2,8 @@ package org.jaudiotagger.tag.vorbiscomment.util;
 
 import org.jaudiotagger.StandardCharsets;
 
+import java.util.Arrays;
+
 /**
  * Base64Coder
  */
@@ -27,9 +29,7 @@ public class Base64Coder {
   }
 
   static {
-    for (int i = 0; i < map2.length; i++) {
-      map2[i] = -1;
-    }
+      Arrays.fill(map2, (byte) -1);
     for (int i = 0; i < 64; i++) {
       map2[map1[i]] = (byte) i;
     }

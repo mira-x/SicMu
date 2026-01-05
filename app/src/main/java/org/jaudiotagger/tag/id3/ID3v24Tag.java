@@ -350,7 +350,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
           frameMap.put(newFrame.getIdentifier(), newFrame);
         }
         if (((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0) && ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED)) {
-          Integer genreId = id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED;
+          int genreId = id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED;
           String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValueForId(genreId);
 
           newBody = new FrameBodyTCON((byte) 0, genre);
@@ -416,6 +416,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
    * @throws TagException
    * @deprecated use {@link #ID3v24Tag(ByteBuffer, String)} instead
    */
+  @Deprecated
   public ID3v24Tag(ByteBuffer buffer) throws TagException {
     this(buffer, "");
   }
@@ -836,7 +837,6 @@ public class ID3v24Tag extends AbstractID3v2Tag {
       catch (InvalidDataTypeException idete) {
         logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
         this.invalidFrames++;
-        continue;
       }
     }
   }
@@ -1001,7 +1001,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
 
     int padding = 0;
     if (currentTagSize > 0) {
-      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, currentTagSize);
       padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
     }
     ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);

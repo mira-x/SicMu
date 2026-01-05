@@ -115,7 +115,6 @@ public class XingFrame {
    *
    * @param bb
    * @param mpegFrameHeader
-   * @return true if this is a Xing frame
    */
   public static ByteBuffer isXingFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader) {
     //We store this so can return here after scanning through buffer

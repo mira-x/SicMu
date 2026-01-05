@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 /**
  * $Id$
  * <p>
- * reference:http://xiph.org/ogg/doc/framing.html
+ * reference:<a href="http://xiph.org/ogg/doc/framing.html">...</a>
  *
  * @author Raphael Slinckx (KiKiDonK)
  * @version 16 december 2003
@@ -366,18 +366,18 @@ public class OggPageHeader {
     }
 
     public String toString() {
-        String out = "Ogg Page Header { isValid: " + isValid +
-                                        ", type: " + headerTypeFlag +
-                                        ", oggPageHeaderLength: " + rawHeaderData.length +
-                                        ", length: " + pageLength +
-                                        ", seqNo: " + getPageSequence() +
-                                        ", packetIncomplete: " + isLastPacketIncomplete() +
-                                        ", serNum: " + this.getSerialNumber() + " } ";
+        StringBuilder out = new StringBuilder("Ogg Page Header { isValid: " + isValid +
+                ", type: " + headerTypeFlag +
+                ", oggPageHeaderLength: " + rawHeaderData.length +
+                ", length: " + pageLength +
+                ", seqNo: " + getPageSequence() +
+                ", packetIncomplete: " + isLastPacketIncomplete() +
+                ", serNum: " + this.getSerialNumber() + " } ");
 
         for (PacketStartAndLength packet : getPacketList()) {
-            out += packet.toString();
+            out.append(packet.toString());
         }
-        return out;
+        return out.toString();
     }
 
     /**

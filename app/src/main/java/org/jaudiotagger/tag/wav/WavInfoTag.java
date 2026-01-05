@@ -69,16 +69,16 @@ public class WavInfoTag extends GenericTag {
   public String toString() {
     StringBuilder output = new StringBuilder("Wav Info Tag:\n");
     if (getStartLocationInFile() != null) {
-      output.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFile()) + "\n");
+      output.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFile())).append("\n");
     }
     if (getEndLocationInFile() != null) {
-      output.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFile()) + "\n");
+      output.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFile())).append("\n");
     }
     output.append(super.toString());
     if (unrecognisedFields.size() > 0) {
       output.append("\nUnrecognized Tags:\n");
       for (TagTextField next : unrecognisedFields) {
-        output.append("\t" + next.getId() + ":" + next.getContent() + "\n");
+        output.append("\t").append(next.getId()).append(":").append(next.getContent()).append("\n");
       }
     }
     return output.toString();

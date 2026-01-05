@@ -18,7 +18,7 @@ import java.util.logging.Level;
  * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader {
-  /*
+  /**
    * Reads the given file, and return an AudioFile object containing the Tag
    * and the encoding infos present in the file. If the file has no tag, an
    * empty one is returned. If the encodinginfo is not valid , an exception is thrown.

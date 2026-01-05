@@ -30,7 +30,7 @@ import java.nio.channels.FileChannel;
 /**
  * Processes the Wav Header
  * <p>
- * This is simply the first 12 bytes of the file http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+ * This is simply the first 12 bytes of the file <a href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html">...</a>
  */
 public class WavRIFFHeader {
   public static final String RIFF_SIGNATURE = "RIFF";

@@ -158,6 +158,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
    * @throws TagException
    * @deprecated use {@link #ID3v22Tag(ByteBuffer, String)} instead
    */
+  @Deprecated
   public ID3v22Tag(ByteBuffer buffer) throws TagException {
     this(buffer, "");
   }
@@ -347,7 +348,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
       bufferWithoutHeader = ID3Unsynchronization.synchronize(bufferWithoutHeader);
     }
     readFrames(bufferWithoutHeader, size);
-    logger.config(getLoggingFilename() + ":" + "Loaded Frames,there are:" + frameMap.keySet().size());
+    logger.config(getLoggingFilename() + ":" + "Loaded Frames,there are:" + frameMap.size());
   }
 
   /**
@@ -405,7 +406,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
       catch (InvalidDataTypeException idete) {
         logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
         this.invalidFrames++;
-        continue;
       }
     }
   }
@@ -522,7 +522,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
 
     int padding = 0;
     if (currentTagSize > 0) {
-      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+      int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, currentTagSize);
       padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
     }
     ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);

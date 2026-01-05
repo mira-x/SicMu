@@ -25,11 +25,11 @@ import android.widget.TextView;
 
 public class RowViewHolder {
     public RowViewHolder(View view) {
-        layout = (RelativeLayout) view.findViewById(R.id.song_layout);
-        text = (TextView) view.findViewById(R.id.song_title);
-        image = (ImageView) view.findViewById(R.id.curr_play);
-        duration = (TextView) view.findViewById(R.id.song_duration);
-        ratingStar = (ImageView) view.findViewById(R.id.rating_star);
+        layout = view.findViewById(R.id.song_layout);
+        text = view.findViewById(R.id.song_title);
+        image = view.findViewById(R.id.curr_play);
+        duration = view.findViewById(R.id.song_duration);
+        ratingStar = view.findViewById(R.id.rating_star);
     }
 
     public RelativeLayout layout;

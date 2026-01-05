@@ -260,6 +260,7 @@ public class ID3v23Frame extends AbstractID3v2Frame {
    * @throws org.jaudiotagger.tag.InvalidFrameException
    * @deprecated use {@link #ID3v23Frame(ByteBuffer, String)} instead
    */
+  @Deprecated
   public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
     this(byteBuffer, "");
   }
@@ -390,7 +391,7 @@ public class ID3v23Frame extends AbstractID3v2Frame {
 
     if (((EncodingFlags) encodingFlags).isNonStandardFlags()) {
       //Probably corrupt so treat as a standard frame
-      logger.severe(getLoggingFilename() + ":InvalidEncodingFlags:" + Hex.asHex(((EncodingFlags) encodingFlags).getFlags()));
+      logger.severe(getLoggingFilename() + ":InvalidEncodingFlags:" + Hex.asHex(encodingFlags.getFlags()));
     }
 
     if (((EncodingFlags) encodingFlags).isCompression()) {

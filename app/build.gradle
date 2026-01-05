@@ -11,7 +11,7 @@ android {
     compileSdkVersion 36
     defaultConfig {
         applicationId "xyz.mordorx.sicmu"
-        minSdkVersion 24 // Android 7.0
+        minSdkVersion 26 // Android 8.0
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         versionCode 36
@@ -42,9 +42,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
-//    lintOptions {
-//        baseline file("lint-baseline.xml")
-//    }
+    lintOptions {
+        baseline file("lint-baseline.xml")
+    }
 }
 
 dependencies {

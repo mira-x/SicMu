@@ -63,16 +63,16 @@ public class Mp4FtypBox extends AbstractMp4Box {
 
   public String toString() {
 
-    String info = "Major Brand:" + majorBrand + "Version:" + majorBrandVersion;
+    StringBuilder info = new StringBuilder("Major Brand:" + majorBrand + "Version:" + majorBrandVersion);
     if (compatibleBrands.size() > 0) {
-      info += "Compatible:";
+      info.append("Compatible:");
       for (String brand : compatibleBrands) {
-        info += brand;
-        info += ",";
+        info.append(brand);
+        info.append(",");
       }
       return info.substring(0, info.length() - 1);
     }
-    return info;
+    return info.toString();
   }
 
   public String getMajorBrand() {

@@ -18,7 +18,7 @@ This fork retains the spirit of the original app and adds these features:
 - Changed the audio backend to the modern ExoPlayer, causing less RAM usage (220MB prior vs 135MB now)
 - Ability to read comment metadata fields
 
-The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 7.0.
+The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 8.0.
 
 <!--
 ### Installation

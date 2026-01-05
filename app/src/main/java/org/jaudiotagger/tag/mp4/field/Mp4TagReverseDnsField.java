@@ -226,7 +226,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
 
   @Override
   public boolean isEmpty() {
-    return "".equals(this.content.trim());
+    return this.content.trim().isEmpty();
   }
 
   @Override

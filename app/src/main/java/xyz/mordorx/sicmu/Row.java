@@ -72,11 +72,12 @@ public class Row {
     }
 
     protected String getStringOffset() {
-        String offset = "", s = " ";
+        StringBuilder offset = new StringBuilder();
+        String s = " ";
         for(int i = level ; i > 0 ; i--) {
-            offset += s;
+            offset.append(s);
         }
-        return offset;
+        return offset.toString();
     }
 
     // cache result

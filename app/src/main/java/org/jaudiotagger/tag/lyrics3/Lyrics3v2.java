@@ -298,14 +298,14 @@ public class Lyrics3v2 extends AbstractLyrics3 {
   public String toString() {
     Iterator<Lyrics3v2Field> iterator = fieldMap.values().iterator();
     Lyrics3v2Field field;
-    String str = getIdentifier() + " " + this.getSize() + "\n";
+    StringBuilder str = new StringBuilder(getIdentifier() + " " + this.getSize() + "\n");
 
     while (iterator.hasNext()) {
       field = iterator.next();
-      str += (field.toString() + "\n");
+      str.append(field.toString()).append("\n");
     }
 
-    return str;
+    return str.toString();
   }
 
   /**

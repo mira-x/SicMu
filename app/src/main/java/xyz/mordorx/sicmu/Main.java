@@ -294,7 +294,9 @@ public class Main extends AppCompatActivity {
         decimalFormat.setDecimalSeparatorAlwaysShown(true);
         playbackSpeedText.setFormatter(v -> String.format("%3d%%", v));
         playbackSpeedText.setMaxValue(200);
-        playbackSpeedText.setTextColor(getResources().getColor(R.color.Blood, getTheme()));
+        if (SDK_INT >= Build.VERSION_CODES.Q) {
+            playbackSpeedText.setTextColor(getResources().getColor(R.color.Blood, getTheme()));
+        }
         playbackSpeedText.setOnValueChangedListener((a, b, c) -> {
             setPlaybackSpeed(a.getValue() / 100.0f);
         });
@@ -1168,7 +1170,7 @@ public class Main extends AppCompatActivity {
         if (row != rows.getCurrSong())
             list.add(getString(R.string.action_delete_song));
 
-        altBld.setItems(list.toArray(new CharSequence[list.size()]), (DialogInterface dialog, int item) -> {
+        altBld.setItems(list.toArray(new CharSequence[0]), (DialogInterface dialog, int item) -> {
             if (musicSrv != null) {
                 switch (item) {
                     case 0:

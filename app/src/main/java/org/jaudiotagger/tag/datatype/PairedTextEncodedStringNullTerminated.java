@@ -224,7 +224,7 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
     public String toString() {
       StringBuffer sb = new StringBuffer();
       for (Pair next : mapping) {
-        sb.append(next.getKey() + ':' + next.getValue() + ',');
+        sb.append(next.getKey()).append(':').append(next.getValue()).append(',');
       }
       if (sb.length() > 0) {
         sb.setLength(sb.length() - 1);

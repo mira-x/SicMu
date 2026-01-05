@@ -265,7 +265,7 @@ public class PartOfSet extends AbstractString {
         sb.append("0");
       }
       if (rawTotal != null) {
-        sb.append(SEPARATOR + rawTotal);
+        sb.append(SEPARATOR).append(rawTotal);
       }
       if (extra != null) {
         sb.append(extra);

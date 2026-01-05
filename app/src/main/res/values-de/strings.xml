@@ -127,7 +127,6 @@
     <string name="settings_about_summary">Informationen über die App und ihre Autoren</string>
 
     <string name="settings_version_title">Version</string>
-    <string name="settings_author_title">Autor</string>
     <string name="settings_source_title">Quellen</string>
     <string name="settings_licence_title">Lizenz</string>
     <string name="donate_souchaud_title">Spenden</string>

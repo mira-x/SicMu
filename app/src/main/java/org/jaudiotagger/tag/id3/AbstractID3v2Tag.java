@@ -327,8 +327,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
     encryptedFrameMap = new LinkedHashMap<String, Object>();
 
     //Copy Frames that are a valid 2.4 type
-    for (Object o1 : copyObject.frameMap.keySet()) {
-      String id = (String) o1;
+    for (String o1 : copyObject.frameMap.keySet()) {
+      String id = o1;
       Object o = copyObject.frameMap.get(id);
       //SingleFrames
       if (o instanceof AbstractID3v2Frame) {
@@ -590,7 +590,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
     if (newBody.getTotal() != null && newBody.getTotal() > 0) {
       oldBody.setTotal(newBody.getTotalAsText());
     }
-    return;
   }
 
   /**
@@ -894,9 +893,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
       if (key.startsWith(identifier)) {
         Object o = frameMap.get(key);
         if (o instanceof List) {
-          for (Object next : (List) o) {
-            result.add(next);
-          }
+            result.addAll((List) o);
         } else {
           result.add(o);
         }
@@ -986,8 +983,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
   public void removeFrameOfType(String identifier) {
     //First fine matching keys
     HashSet<String> result = new HashSet<String>();
-    for (Object match : frameMap.keySet()) {
-      String key = (String) match;
+    for (String match : frameMap.keySet()) {
+      String key = match;
       if (key.startsWith(identifier)) {
         result.add(key);
       }
@@ -1744,7 +1741,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
             List<TagField> l = (List<TagField>) e.getValue();
             //If list is empty (which it shouldn't be) we skip over this entry
             if (l.size() == 0) {
-              continue;
             } else {
               fieldsIt = l.iterator();
               break;
@@ -2187,23 +2183,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
       String total = this.getFirst(totalFieldKey);
       if (total.length() == 0) {
         doDeleteTagField(formatKey);
-        return;
       } else {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
         AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal) frame.getBody();
         frameBody.setNumber(0);
-        return;
       }
     } else {
       String number = this.getFirst(numberFieldKey);
       if (number.length() == 0) {
         doDeleteTagField(formatKey);
-        return;
       } else {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
         AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal) frame.getBody();
         frameBody.setTotal(0);
-        return;
       }
     }
   }
@@ -2526,7 +2518,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
    * cannot be sub classed. We want to use enums instead of regular classes because they are
    * much easier for end users to  to use.
    */
-  class FrameAndSubId {
+  static class FrameAndSubId {
     private FieldKey genericKey;
     private String frameId;
     private String subId;

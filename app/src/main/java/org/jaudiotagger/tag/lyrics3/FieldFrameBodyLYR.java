@@ -127,8 +127,8 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody {
     int size = 0;
     Lyrics3Line line;
 
-    for (Object line1 : lines) {
-      line = (Lyrics3Line) line1;
+    for (Lyrics3Line line1 : lines) {
+      line = line1;
       size += (line.getSize() + 2);
     }
 
@@ -220,8 +220,8 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody {
   public boolean hasTimeStamp() {
     boolean present = false;
 
-    for (Object line : lines) {
-      if (((Lyrics3Line) line).hasTimeStamp()) {
+    for (Lyrics3Line line : lines) {
+      if (line.hasTimeStamp()) {
         present = true;
       }
     }
@@ -265,13 +265,13 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody {
    * @return
    */
   public String toString() {
-    String str = getIdentifier() + " : ";
+    StringBuilder str = new StringBuilder(getIdentifier() + " : ");
 
     for (Object line : lines) {
-      str += line.toString();
+      str.append(line.toString());
     }
 
-    return str;
+    return str.toString();
   }
 
   /**
@@ -346,14 +346,14 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody {
    */
   private String writeString() {
     Lyrics3Line line;
-    String str = "";
+    StringBuilder str = new StringBuilder();
 
-    for (Object line1 : lines) {
-      line = (Lyrics3Line) line1;
-      str += (line.writeString() + Lyrics3v2Fields.CRLF);
+    for (Lyrics3Line line1 : lines) {
+      line = line1;
+      str.append(line.writeString()).append(Lyrics3v2Fields.CRLF);
     }
 
-    return str;
+    return str.toString();
 
     //return str.substring(0,str.length()-2); // cut off the last CRLF pair
   }

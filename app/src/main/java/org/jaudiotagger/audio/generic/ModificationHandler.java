@@ -102,9 +102,7 @@ public class ModificationHandler implements AudioFileModificationListener {
    * @param l Listener to remove.
    */
   public void removeAudioFileModificationListener(AudioFileModificationListener l) {
-    if (this.listeners.contains(l)) {
       this.listeners.remove(l);
-    }
   }
 
   /**

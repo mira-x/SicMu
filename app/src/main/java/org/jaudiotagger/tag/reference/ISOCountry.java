@@ -11,7 +11,7 @@ import java.util.Map;
  * <p>
  * Contains an enum  of countries, their two letter code and description
  * with additional method to allow an enum to be found by its two letter code or its description.
- * More details at http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c
+ * More details at <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c">...</a>
  */
 public class ISOCountry {
   private static Map<String, Country> codeMap;

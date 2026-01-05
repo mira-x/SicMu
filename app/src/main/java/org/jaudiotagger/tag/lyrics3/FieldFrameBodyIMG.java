@@ -97,8 +97,8 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody {
     int size = 0;
     Lyrics3Image image;
 
-    for (Object image1 : images) {
-      image = (Lyrics3Image) image1;
+    for (Lyrics3Image image1 : images) {
+      image = image1;
       size += (image.getSize() + 2); // addField CRLF pair
     }
 
@@ -195,13 +195,13 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody {
    * @return
    */
   public String toString() {
-    String str = getIdentifier() + " : ";
+    StringBuilder str = new StringBuilder(getIdentifier() + " : ");
 
     for (Object image : images) {
-      str += (image.toString() + " ; ");
+      str.append(image.toString()).append(" ; ");
     }
 
-    return str;
+    return str.toString();
   }
 
   /**
@@ -275,19 +275,19 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody {
    * @return
    */
   private String writeString() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     Lyrics3Image image;
 
-    for (Object image1 : images) {
-      image = (Lyrics3Image) image1;
-      str += (image.writeString() + Lyrics3v2Fields.CRLF);
+    for (Lyrics3Image image1 : images) {
+      image = image1;
+      str.append(image.writeString()).append(Lyrics3v2Fields.CRLF);
     }
 
     if (str.length() > 2) {
       return str.substring(0, str.length() - 2);
     }
 
-    return str;
+    return str.toString();
   }
 
 

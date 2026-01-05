@@ -80,8 +80,8 @@ public class Lyrics3Line extends AbstractDataType {
    */
   public int getSize() {
     int size = 0;
-    for (Object aTimeStamp : timeStamp) {
-      size += ((Lyrics3TimeStamp) aTimeStamp).getSize();
+    for (Lyrics3TimeStamp aTimeStamp : timeStamp) {
+      size += aTimeStamp.getSize();
     }
     return size + lyric.length();
   }
@@ -169,9 +169,9 @@ public class Lyrics3Line extends AbstractDataType {
    * @return
    */
   public String toString() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     for (Object aTimeStamp : timeStamp) {
-      str += aTimeStamp.toString();
+      str.append(aTimeStamp.toString());
     }
     return "timeStamp = " + str + ", lyric = " + lyric + "\n";
   }
@@ -180,11 +180,11 @@ public class Lyrics3Line extends AbstractDataType {
    * @return
    */
   public String writeString() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     Lyrics3TimeStamp time;
-    for (Object aTimeStamp : timeStamp) {
-      time = (Lyrics3TimeStamp) aTimeStamp;
-      str += time.writeString();
+    for (Lyrics3TimeStamp aTimeStamp : timeStamp) {
+      time = aTimeStamp;
+      str.append(time.writeString());
     }
     return str + lyric;
   }

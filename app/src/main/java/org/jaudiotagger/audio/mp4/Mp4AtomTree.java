@@ -191,9 +191,9 @@ public class Mp4AtomTree {
       nextNode = e.nextElement();
       Mp4BoxHeader header = (Mp4BoxHeader) nextNode.getUserObject();
       if (header != null) {
-        String tabbing = "";
+        StringBuilder tabbing = new StringBuilder();
         for (int i = 1; i < nextNode.getLevel(); i++) {
-          tabbing += "\t";
+          tabbing.append("\t");
         }
 
         if (header instanceof NullPadding) {

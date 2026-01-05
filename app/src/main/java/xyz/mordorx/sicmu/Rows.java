@@ -245,7 +245,7 @@ public class Rows {
     }
 
     public void moveToRandomSong() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         if(false) {
@@ -344,7 +344,7 @@ public class Rows {
 
     // go back to previous random song done
     public void moveToRandomSongBack() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         boolean backOk = false;
@@ -372,7 +372,7 @@ public class Rows {
     }
 
     private void moveToNextSongRatingEnabled() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -431,7 +431,7 @@ public class Rows {
     }
 
     private void moveToNextSongNoRating() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -512,7 +512,7 @@ public class Rows {
     }
 
     public void moveToPrevSong() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -540,7 +540,7 @@ public class Rows {
     }
 
     public void moveToPrevGroup() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         setGroupSelectedState(currPos, false);
@@ -566,7 +566,7 @@ public class Rows {
     }
 
     public void moveToNextGroup() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         setGroupSelectedState(currPos, false);
@@ -593,7 +593,7 @@ public class Rows {
 
     // fold everything
     public void fold() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         // todo: better to recopy first level from unfolded?
@@ -606,7 +606,7 @@ public class Rows {
 
     // unfold everything
     public void unfold() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         rows = (ArrayList<Row>) rowsUnfolded.clone();
@@ -616,7 +616,7 @@ public class Rows {
     }
 
     public void invertFold(int pos) {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return;
 
         if (pos < 0 || pos >= rows.size()) {
@@ -652,7 +652,7 @@ public class Rows {
     //
     // @return true if at least one group has been unfold
     public boolean unfoldCurrPos() {
-        if (rowsUnfolded.size() <= 0)
+        if (rowsUnfolded.size() == 0)
             return false;
 
         boolean changed = false;
@@ -949,7 +949,7 @@ public class Rows {
         Date beg = new Date();
         int nbLoaded = 0;
         // preload from the currpos so that next songs are loaded earlier
-        int startPos = currPos < 0 ? 0 : currPos;
+        int startPos = Math.max(currPos, 0);
         for (int i = startPos; i < rowsUnfolded.size(); i++) {
             Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {

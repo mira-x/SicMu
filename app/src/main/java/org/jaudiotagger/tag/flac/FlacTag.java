@@ -64,9 +64,7 @@ public class FlacTag implements Tag {
   public List<TagField> getFields(String id) {
     if (id.equals(FieldKey.COVER_ART.name())) {
       List<TagField> castImages = new ArrayList<TagField>();
-      for (MetadataBlockDataPicture image : images) {
-        castImages.add(image);
-      }
+        castImages.addAll(images);
       return castImages;
     } else {
       return tag.getFields(id);
@@ -143,7 +141,6 @@ public class FlacTag implements Tag {
           setField(tagfield1);
           TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
           setField(tagfield2);
-          return;
         }
 
       }
@@ -197,7 +194,6 @@ public class FlacTag implements Tag {
           addField(tagfield1);
           TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
           addField(tagfield2);
-          return;
         }
 
       }
@@ -377,9 +373,7 @@ public class FlacTag implements Tag {
   public List<TagField> getFields(FieldKey id) throws KeyNotFoundException {
     if (id.equals(FieldKey.COVER_ART)) {
       List<TagField> castImages = new ArrayList<TagField>();
-      for (MetadataBlockDataPicture image : images) {
-        castImages.add(image);
-      }
+        castImages.addAll(images);
       return castImages;
     } else {
       return tag.getFields(id);

@@ -11,9 +11,9 @@ import java.util.EnumSet;
  * <p>
  * This partial list is derived fom the following sources:
  * <ul>
- * <li>http://xiph.org/vorbis/doc/v-comment.html</li>
- * <li>http://wiki.musicbrainz.org/PicardQt/TagMapping</li>
- * <li>http://legroom.net/2009/05/09/ogg-vorbis-and-flac-comment-field-recommendations</li>
+ * <li><a href="http://xiph.org/vorbis/doc/v-comment.html">...</a></li>
+ * <li><a href="http://wiki.musicbrainz.org/PicardQt/TagMapping">...</a></li>
+ * <li><a href="http://legroom.net/2009/05/09/ogg-vorbis-and-flac-comment-field-recommendations">...</a></li>
  * </ul>
  */
 public enum VorbisCommentFieldKey {

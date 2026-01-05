@@ -111,7 +111,7 @@ public class NumberVariableLength extends AbstractDataType {
         temp >>= MAXIMUM_NO_OF_DIGITS;
       }
 
-      return (minLength > size) ? minLength : size;
+      return Math.max(minLength, size);
     }
   }
 

@@ -61,7 +61,7 @@ public class MediaPlayerRating extends ID3Rating {
     int newValue = 0;
     if (value <= 0) {
       newValue = 0;
-    } else if (value <= 1) {
+    } else if (value == 1) {
       newValue = 1;
     } else if (value <= 64) {
       newValue = 2;

@@ -130,7 +130,7 @@ public abstract class GenericTag extends AbstractTag {
    *
    * @author Raphaël Slinckx
    */
-  protected class GenericTagTextField implements TagTextField {
+  protected static class GenericTagTextField implements TagTextField {
 
     /**
      * Stores the identifier.

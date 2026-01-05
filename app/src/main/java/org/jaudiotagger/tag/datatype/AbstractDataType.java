@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 /**
  * Represents a field/data type that can be held within a frames body, these map loosely onto
- * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
+ * Section 4. ID3v2 frame overview at <a href="http://www.id3.org/id3v2.4.0-structure.txt">...</a>
  */
 public abstract class AbstractDataType {
   protected static final String TYPE_ELEMENT = "element";

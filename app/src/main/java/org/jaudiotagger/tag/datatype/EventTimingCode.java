@@ -128,7 +128,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable {
 
   @Override
   public String toString() {
-    return "" + getType() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getType()) + "\"), " + getTimestamp();
+    return getType() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getType()) + "\"), " + getTimestamp();
   }
 
   @Override

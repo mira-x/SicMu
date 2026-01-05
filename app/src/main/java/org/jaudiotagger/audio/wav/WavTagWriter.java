@@ -894,7 +894,7 @@ public class WavTagWriter {
     }
   }
 
-  class InfoFieldWriterOrderComparator implements Comparator<TagField> {
+  static class InfoFieldWriterOrderComparator implements Comparator<TagField> {
     public int compare(TagField field1, TagField field2) {
       WavInfoIdentifier code1 = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(field1.getId()));
       WavInfoIdentifier code2 = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(field2.getId()));
@@ -913,7 +913,7 @@ public class WavTagWriter {
   /**
    * Used when writing both tags to work out the best way to do it
    */
-  class BothTagsFileStructure {
+  static class BothTagsFileStructure {
     boolean isInfoTagFirst = false;
     boolean isContiguous = false;
     boolean isAtEnd = false;

@@ -121,7 +121,7 @@ public class ImageFormats {
    * @param data
    * @return true if binary data matches expected header for a jpg
    * <p>
-   * Some details http://www.obrador.com/essentialjpeg/headerinfo.htm
+   * Some details <a href="http://www.obrador.com/essentialjpeg/headerinfo.htm">...</a>
    */
   public static boolean binaryDataIsJpgFormat(byte[] data) {
     if (data.length < 4) {
@@ -165,7 +165,7 @@ public class ImageFormats {
   /**
    * Is this binary data a pdf image
    * <p>
-   * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+   * Details at <a href="http://en.wikipedia.org/wiki/Magic_number_%28programming%29">...</a>
    *
    * @param data
    * @return true if binary data matches expected header for a pdf
@@ -181,7 +181,7 @@ public class ImageFormats {
   /**
    * is this binary data a tiff image
    * <p>
-   * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+   * Details at <a href="http://en.wikipedia.org/wiki/Magic_number_%28programming%29">...</a>
    *
    * @param data
    * @return true if binary data matches expected header for a tiff

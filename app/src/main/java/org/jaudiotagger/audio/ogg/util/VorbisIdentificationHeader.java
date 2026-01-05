@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 /**
  * Vorbis Identification header
  * <p>
- * From http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710
+ * From <a href="http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710">...</a>
  * <p>
  * The identification header is a short header of only a few fields used to declare the stream definitively as Vorbis,
  * and provide a few externally relevant pieces of information about the audio stream. The identification header is

@@ -43,7 +43,7 @@ public class ChangelogsActivity extends AppCompatActivity {
 
         setContentView(R.layout.changelogs);
 
-        ImageView appButton = (ImageView) findViewById(R.id.app_button);
+        ImageView appButton = findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);
         findViewById(R.id.actions_bar).setOnClickListener(view -> {
             finish();
@@ -60,7 +60,7 @@ public class ChangelogsActivity extends AppCompatActivity {
     }
 
     public String getChangelogsHTMLText() {
-        String logText = "";
+        StringBuilder logText = new StringBuilder();
 
         Log.d("Changelogs", "loading logs");
         AssetManager assetManager = getAssets();
@@ -80,14 +80,14 @@ public class ChangelogsActivity extends AppCompatActivity {
                 String mLine;
                 while ((mLine = reader.readLine()) != null) {
                     if (firstLine)
-                        logText += "<b>" + mLine + "</b>";
+                        logText.append("<b>").append(mLine).append("</b>");
                     else
-                        logText += mLine;
-                    logText += "<br />";
+                        logText.append(mLine);
+                    logText.append("<br />");
                     firstLine = false;
                     // <small>yo</small>
                 }
-                logText += "<br />";
+                logText.append("<br />");
             }
         }
         catch (IOException ioe) {
@@ -102,6 +102,6 @@ public class ChangelogsActivity extends AppCompatActivity {
                 }
             }
         }
-        return logText;
+        return logText.toString();
     }
 }

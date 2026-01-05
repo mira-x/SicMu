@@ -169,6 +169,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @throws IOException
    * @deprecated use {@link #ID3v1Tag(RandomAccessFile, String)} instead
    */
+  @Deprecated
   public ID3v1Tag(RandomAccessFile file) throws TagNotFoundException, IOException {
     this(file, "");
   }
@@ -349,7 +350,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return genre or empty string if not valid
    */
   public String getFirstGenre() {
-    Integer genreId = genre & BYTE_TO_UNSIGNED;
+    int genreId = genre & BYTE_TO_UNSIGNED;
     String genreValue = GenreTypes.getInstanceOf().getValueForId(genreId);
     if (genreValue == null) {
       return "";

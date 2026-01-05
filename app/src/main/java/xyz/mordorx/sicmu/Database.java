@@ -138,7 +138,7 @@ public class Database {
             @Override
             public void run() {
                 boolean succeed = true;
-                String retMsg = "";
+                StringBuilder retMsg = new StringBuilder();
                 List<SongORM> songORMs = songDAO.getAll();
                 int nbSyncSucceed = 0;
                 int nbSyncTried = 0;
@@ -159,7 +159,7 @@ public class Database {
                             msg += " failed !\n\n";
 //                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
                         }
-                        retMsg += msg;
+                        retMsg.append(msg);
                         Log.d("Database", msg);
                         nbSyncTried++;
                     }
@@ -167,10 +167,10 @@ public class Database {
                 String msg = "Synchronized rating " + nbSyncSucceed + "/" + nbSyncTried + " succeed";
 //                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 Log.d("Database", msg);
-                retMsg += msg;
+                retMsg.append(msg);
                 if (nbSyncTried == 0)
-                    retMsg = "";
-                callback.ratingCallback(succeed, retMsg);
+                    retMsg = new StringBuilder();
+                callback.ratingCallback(succeed, retMsg.toString());
             }
         };
         thread.start();
@@ -183,14 +183,14 @@ public class Database {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                String msg = "";
+                StringBuilder msg = new StringBuilder();
                 List<SongORM> songORMs = songDAO.getAll();
                 for (SongORM songORM : songORMs) {
                     if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
-                        msg += songORM.rating + " -> " + songORM.path + "\n";
+                        msg.append(songORM.rating).append(" -> ").append(songORM.path).append("\n");
                     }
                 }
-                callback.ratingCallback(msg);
+                callback.ratingCallback(msg.toString());
             }
         };
         thread.start();

@@ -75,7 +75,6 @@ import java.util.EventListener;
  * the same version of Swing.  As of 1.4, support for long term storage
  * of all JavaBeans<sup><font size="-2">TM</font></sup>
  * has been added to the <code>java.beans</code> package.
- * Please see {@link java.beans.XMLEncoder}.
  *
  * @author Georges Saab
  * @author Hans Muller
@@ -149,7 +148,7 @@ public class EventListenerList implements Serializable {
   private int getListenerCount(Object[] list, Class t) {
     int count = 0;
     for (int i = 0; i < list.length; i += 2) {
-      if (t == (Class) list[i])
+      if (t == list[i])
         count++;
     }
     return count;
@@ -267,12 +266,12 @@ public class EventListenerList implements Serializable {
    */
   public String toString() {
     Object[] lList = listenerList;
-    String s = "EventListenerList: ";
-    s += lList.length / 2 + " listeners: ";
+    StringBuilder s = new StringBuilder("EventListenerList: ");
+    s.append(lList.length / 2).append(" listeners: ");
     for (int i = 0; i <= lList.length - 2; i += 2) {
-      s += " type " + ((Class) lList[i]).getName();
-      s += " listener " + lList[i + 1];
+      s.append(" type ").append(((Class) lList[i]).getName());
+      s.append(" listener ").append(lList[i + 1]);
     }
-    return s;
+    return s.toString();
   }
 }

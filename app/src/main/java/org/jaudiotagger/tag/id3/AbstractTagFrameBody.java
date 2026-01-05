@@ -122,13 +122,13 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
    * @return brief description string
    */
   public String getBriefDescription() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     for (AbstractDataType object : objectList) {
       if ((object.toString() != null) && (object.toString().length() > 0)) {
-        str += (object.getIdentifier() + "=\"" + object.toString() + "\"; ");
+        str.append(object.getIdentifier()).append("=\"").append(object.toString()).append("\"; ");
       }
     }
-    return str;
+    return str.toString();
   }
 
 
@@ -140,13 +140,13 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
    * @return formatted description string
    */
   public final String getLongDescription() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     for (AbstractDataType object : objectList) {
       if ((object.toString() != null) && (object.toString().length() > 0)) {
-        str += (object.getIdentifier() + " = " + object.toString() + "\n");
+        str.append(object.getIdentifier()).append(" = ").append(object.toString()).append("\n");
       }
     }
-    return str;
+    return str.toString();
   }
 
   /**

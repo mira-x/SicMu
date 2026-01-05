@@ -25,7 +25,6 @@ import java.util.EventObject;
  * the same version of Swing.  As of 1.4, support for long term storage
  * of all JavaBeans<sup><font size="-2">TM</font></sup>
  * has been added to the <code>java.beans</code> package.
- * Please see {@link java.beans.XMLEncoder}.
  *
  * @author Rob Davis
  * @author Ray Ryan
@@ -277,20 +276,19 @@ public class TreeModelEvent extends EventObject {
   public String toString() {
     StringBuffer retBuffer = new StringBuffer();
 
-    retBuffer.append(getClass().getName() + " " +
-      Integer.toString(hashCode()));
+    retBuffer.append(getClass().getName()).append(" ").append(Integer.toString(hashCode()));
     if (path != null)
-      retBuffer.append(" path " + path);
+      retBuffer.append(" path ").append(path);
     if (childIndices != null) {
       retBuffer.append(" indices [ ");
       for (int counter = 0; counter < childIndices.length; counter++)
-        retBuffer.append(Integer.toString(childIndices[counter]) + " ");
+        retBuffer.append(Integer.toString(childIndices[counter])).append(" ");
       retBuffer.append("]");
     }
     if (children != null) {
       retBuffer.append(" children [ ");
       for (int counter = 0; counter < children.length; counter++)
-        retBuffer.append(children[counter] + " ");
+        retBuffer.append(children[counter]).append(" ");
       retBuffer.append("]");
     }
     return retBuffer.toString();

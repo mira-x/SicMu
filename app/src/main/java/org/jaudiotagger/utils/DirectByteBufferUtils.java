@@ -13,10 +13,10 @@ import java.util.logging.Logger;
  * <p/>
  * The release method was taken from research in the following places:
  * <ul>
- * <li>http://bugs.java.com/view_bug.do?bug_id=4724038</li>
- * <li>http://stackoverflow.com/questions/2972986/how-to-unmap-a-file-from-memory-mapped-using-filechannel-in-java</li>
- * <li>https://bitbucket.org/vladimir.dolzhenko/gflogger/src/366fd4ee0689/core/src/main/java/org/gflogger/util/DirectBufferUtils.java</li>
- * <li>https://sourceforge.net/p/tuer/code/HEAD/tree/pre_beta/src/main/java/engine/misc/DeallocationHelper.java</li>
+ * <li><a href="http://bugs.java.com/view_bug.do?bug_id=4724038">...</a></li>
+ * <li><a href="http://stackoverflow.com/questions/2972986/how-to-unmap-a-file-from-memory-mapped-using-filechannel-in-java">...</a></li>
+ * <li><a href="https://bitbucket.org/vladimir.dolzhenko/gflogger/src/366fd4ee0689/core/src/main/java/org/gflogger/util/DirectBufferUtils.java">...</a></li>
+ * <li><a href="https://sourceforge.net/p/tuer/code/HEAD/tree/pre_beta/src/main/java/engine/misc/DeallocationHelper.java">...</a></li>
  * </ul>
  *
  * @author gravelld

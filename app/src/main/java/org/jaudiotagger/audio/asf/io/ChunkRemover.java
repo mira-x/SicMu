@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.asf.util.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,9 +30,7 @@ public class ChunkRemover implements ChunkModifier {
    */
   public ChunkRemover(final GUID... guids) {
     this.toRemove = new HashSet<GUID>();
-    for (final GUID current : guids) {
-      this.toRemove.add(current);
-    }
+      this.toRemove.addAll(Arrays.asList(guids));
   }
 
   /**

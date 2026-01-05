@@ -478,7 +478,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     return TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
   }
 
-  public class StatusFlags {
+  public static class StatusFlags {
     protected static final String TYPE_FLAGS = "statusFlags";
 
     protected byte originalFlags;
@@ -525,7 +525,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     }
   }
 
-  class EncodingFlags {
+  static class EncodingFlags {
     protected static final String TYPE_FLAGS = "encodingFlags";
 
     protected byte flags;
