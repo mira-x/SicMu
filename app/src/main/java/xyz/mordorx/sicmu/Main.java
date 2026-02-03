@@ -47,6 +47,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -64,7 +66,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import androidx.annotation.NonNull;
@@ -1465,7 +1466,25 @@ public class Main extends AppCompatActivity {
 
         // Set up text box
         final EditText input = new EditText(this);
+        Runnable showKeyboard = () -> {
+            input.requestFocus();
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+        };
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setFocusable(true);
+        input.setFocusableInTouchMode(true);
+        input.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_close, 0);
+        input.setOnTouchListener((v, event) -> {
+            showKeyboard.run();
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (input.getRight() - input.getCompoundDrawables()[2].getBounds().width())) {
+                    input.setText("");
+                    return true;
+                }
+            }
+            return false;
+        });
         input.setText(prefs.getString("search_query", ""));
         altBld.setView(input);
 
@@ -1506,7 +1525,13 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        altBld.show();
+        var dialog = altBld.create();
+        var win = dialog.getWindow();
+        if (win != null) {
+            win.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+        dialog.setOnShowListener(e -> showKeyboard.run());
+        dialog.show();
     }
 
     private int getRepeatResId() {
