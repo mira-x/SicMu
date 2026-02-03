@@ -146,7 +146,7 @@
     <string name="action_repeat_one">Lied</string>
     <string name="action_repeat_group">Gruppe</string>
     <string name="action_set_rating_song_failed">Bewerten fehlgeschlagen</string>
-    <string name="action_genius_lyrics">Auf genius.com suchen</string>
+    <string name="action_genius_lyrics">Suchen auf genius.com</string>
     <string name="ic_action_edit_folder">Ordner: %s</string>
     <string name="ic_action_edit_song">Lied: %s</string>
     <string name="action_rate_group">Jedes Lied bewerten (behalten)</string>
@@ -213,4 +213,6 @@
     <string name="settings_author_new_title">Autor*in von SicMu Neo</string>
     <string name="settings_author_old_title">Autor von SicMu</string>
     <string name="detail_metadata_hint_label">Tippe auf das Albumcover, um alle Metadaten anzuzeigen</string>
+    <string name="action_youtube_search">Suchen bei YouTube</string>
+    <string name="action_youtube_open">Öffne YouTube video</string>
 </resources>

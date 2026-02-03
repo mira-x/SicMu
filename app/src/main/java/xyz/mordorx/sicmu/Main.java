@@ -64,6 +64,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import androidx.annotation.NonNull;
@@ -1156,78 +1157,132 @@ public class Main extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Extracts a YouTube URL from arbitrary text.
+     * Supports various YouTube URL formats.
+     *
+     * @param text The text to search
+     * @return The found YouTube URL or an empty string
+     * @author Claude Sonnet 4.5
+     */
+    private static String extractYouTubeUrl(String text) {
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+
+        // Regex pattern for various YouTube URL formats:
+        // - https://www.youtube.com/watch?v=VIDEO_ID
+        // - https://youtu.be/VIDEO_ID
+        // - https://m.youtube.com/watch?v=VIDEO_ID
+        // - http variants
+        String pattern = "(?:https?://)?(?:www\\.|m\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{11})(?:[&?][^\\s]*)?";
+
+        java.util.regex.Pattern regexPattern = java.util.regex.Pattern.compile(pattern);
+        java.util.regex.Matcher matcher = regexPattern.matcher(text);
+
+        if (matcher.find()) {
+            // Returns the complete found URL
+            return matcher.group(0);
+        }
+
+        return "";
+    }
+
     private void openEditSongMenu(int position, @NonNull RowSong row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
         altBld.setIcon(R.drawable.ic_action_edit);
         altBld.setTitle(getString(R.string.ic_action_edit_song,
                 cutLongStringAndDots(row.getTitle())));
+        final var alert = new AtomicReference<AlertDialog>(null);
         ArrayList<String> list = new ArrayList<>();
-        list.add(getString(R.string.action_play));
-        list.add(getString(R.string.action_rate_song));
-        list.add(getString(R.string.show_song_details));
-        list.add(getString(R.string.action_genius_lyrics));
-        //getString(R.string.add_to_playlist),
-        if (row != rows.getCurrSong())
-            list.add(getString(R.string.action_delete_song));
+        var comment = new AtomicReference<>("");
 
-        altBld.setItems(list.toArray(new CharSequence[0]), (DialogInterface dialog, int item) -> {
-            if (musicSrv != null) {
-                switch (item) {
-                    case 0:
-                        clickOnRow(position);
-                        break;
-                    case 1:
-                        openRateRowMenu(row.getTitle(), position, true);
-                        break;
-                    case 2:
-                        showPopupSongInfo(row);
-                        break;
-                    case 3:
-                        openGeniusLyrics(row);
-                        break;
-                    case 4:
-                        deleteSongFile(row);
-                        break;
-                }
+        Runnable updateAndShowItems = () -> {
+            var youtubeVideoURL = extractYouTubeUrl(comment.get());
+            list.clear();
+            list.add(getString(R.string.action_play));
+            list.add(getString(R.string.action_rate_song));
+            list.add(getString(R.string.show_song_details));
+            list.add(getString(R.string.action_genius_lyrics));
+            if(youtubeVideoURL.isEmpty()) {
+                list.add(getString(R.string.action_youtube_search));
+            } else {
+                list.add(getString(R.string.action_youtube_open));
             }
+
+            //getString(R.string.add_to_playlist),
+            if (row != rows.getCurrSong())
+                list.add(getString(R.string.action_delete_song));
+
+            altBld.setItems(list.toArray(new CharSequence[0]), (DialogInterface dialog, int item) -> {
+                if (musicSrv != null) {
+                    switch (item) {
+                        case 0:
+                            clickOnRow(position);
+                            break;
+                        case 1:
+                            openRateRowMenu(row.getTitle(), position, true);
+                            break;
+                        case 2:
+                            showPopupSongInfo(row);
+                            break;
+                        case 3:
+                            openGeniusLyrics(row);
+                            break;
+                        case 4:
+                            if (youtubeVideoURL.isEmpty()) {
+                                openYouTubeSearch(row);
+                            } else {
+                                try {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeVideoURL));
+                                    startActivity(browserIntent);
+                                } catch (Exception e) {
+                                    Log.e("sicmu", "Error while parsing user-provided metadata youtube video URL: " + e);
+                                }
+                            }
+                            break;
+                        case 5:
+                            deleteSongFile(row);
+                            break;
+                    }
+                }
+            });
+
+            if(alert.get() != null) {
+                alert.get().hide();
+            }
+            var newAlert = altBld.create();
+            newAlert.show();
+            alert.set(newAlert);
+        };
+
+        row.loadMetadataAsync(t -> {
+            t.getFields(FieldKey.COMMENT).forEach(line -> comment.getAndUpdate(c -> c + line + "\n"));
+            updateAndShowItems.run();
         });
-        AlertDialog alert = altBld.create();
-        alert.show();
+
+        updateAndShowItems.run();
     }
 
     private void openGeniusLyrics(RowSong song) {
-        var searchTerm = "";
-        if (song.getTitle().isBlank() || song.getTitle().equals("<unknown>") || song.getArtist().isBlank() || song.getArtist().equals("<unknown>")) {
-            searchTerm = song.getFilename();
-            // remove extension (any dot that is in the last 5 characters)
-            if (searchTerm.contains(".") && searchTerm.lastIndexOf('.') >= searchTerm.length() - 5) {
-                searchTerm = searchTerm.substring(0, searchTerm.lastIndexOf('.'));
-            }
-        } else {
-            searchTerm = song.getArtist() + " " + song.getTitle();
-            Log.d("SearchTerm", searchTerm);
-        }
-
-
-        // Remove dashes
-        searchTerm = searchTerm.replaceAll(" - ", " ");
-        // Remove remixes, like "Simply Red - Something got me started (Hourleys House Remix)"
-        // We only delete those at the end of the string, for instance, to keep this song title intact:
-        // "(This song is just) six words long.mp3" (A song from 'Weird Al' Yankovic)
-        searchTerm = searchTerm.replaceAll("\\(([^)]+)\\)$", "");
-        // Remove leading numbers (01. some song, 2. some song)
-        searchTerm = searchTerm.replaceAll("^(\\d+).", "");
-        // Remove braces, Genius will cut off the string beginning at the first brace
-        searchTerm = searchTerm.replaceAll("\\(", "");
-        searchTerm = searchTerm.replaceAll("\\)", "");
-
-        searchTerm = URLEncoder.encode(searchTerm);
+        var searchTerm = URLEncoder.encode(song.getSearchTerm());
 
         try {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://genius.com/search?q=" + searchTerm));
             startActivity(browserIntent);
         } catch (Exception e) {
             Log.e("sicmu", "Error while creating genius.com URL: " + e);
+        }
+    }
+
+    private void openYouTubeSearch(RowSong song) {
+        var searchTerm = URLEncoder.encode(song.getSearchTerm());
+
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + searchTerm));
+            startActivity(browserIntent);
+        } catch (Exception e) {
+            Log.e("sicmu", "Error while creating youtube.com search URL: " + e);
         }
     }
 

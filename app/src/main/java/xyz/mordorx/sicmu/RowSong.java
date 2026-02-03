@@ -476,4 +476,39 @@ public class RowSong extends Row {
         //builder.putLong(MediaMetadataCompat.METADATA_KEY_RATING, Integer.valueOf(convertToRating0to255(getRating())));
         return builder.build();
     }
+
+    /**
+     * Returns a list of keywords extracted from file path and metadata. This also removes disturbing things like punctuation marks or things in parenthesis. This is meant to be used in search engines like Google, Genius.com or YouTube.
+     *
+     * @return A list of keywords in no particular order or form.
+     */
+    public String getSearchTerm() {
+        var searchTerm = "";
+        if (this.getTitle().isBlank() || this.getTitle().equals("<unknown>") || this.getArtist().isBlank() || this.getArtist().equals("<unknown>")) {
+            searchTerm = this.getFilename();
+            // remove extension (any dot that is in the last 5 characters)
+            if (searchTerm.contains(".") && searchTerm.lastIndexOf('.') >= searchTerm.length() - 5) {
+                searchTerm = searchTerm.substring(0, searchTerm.lastIndexOf('.'));
+            }
+        } else {
+            searchTerm = this.getArtist() + " " + this.getTitle();
+        }
+
+
+        // Remove dashes
+        searchTerm = searchTerm.replaceAll(" - ", " ");
+        // Remove remixes, like "Simply Red - Something got me started (Hourleys House Remix)"
+        // We only delete those at the end of the string, for instance, to keep this song title intact:
+        // "(This song is just) six words long.mp3" (A song from 'Weird Al' Yankovic)
+        searchTerm = searchTerm.replaceAll("\\(([^)]+)\\)$", "");
+        // Remove leading numbers (01. some song, 2. some song)
+        searchTerm = searchTerm.replaceAll("^(\\d+).", "");
+        // Remove braces, Genius will cut off the string beginning at the first brace
+        searchTerm = searchTerm.replaceAll("\\(", "");
+        searchTerm = searchTerm.replaceAll("\\)", "");
+
+        Log.d("SearchTerm", String.format("Search term is '%s' for file %s", searchTerm, getPath()));
+
+        return searchTerm;
+    }
 }

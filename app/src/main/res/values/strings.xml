@@ -272,5 +272,7 @@
     <string name="detail_metadata_hint_label">Tap on the album art to see all metadata tags</string>
     <string name="metadata_saving_success">Metadata was saved successfully.</string>
     <string name="metadata_saving_failure">Error saving metadata: %s</string>
+    <string name="action_youtube_search">Search on YouTube</string>
+    <string name="action_youtube_open">Open YouTube video</string>
 
 </resources>
