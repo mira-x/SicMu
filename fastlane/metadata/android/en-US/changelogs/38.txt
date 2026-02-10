@@ -1,0 +1,5 @@
+Version 2.4.5
+* Add "Search on YouTube" button
+* Add ability to disable pitch compensation for Nightcore/Daycore music
+* Complete and add translations for various languages (de, es, eo, fr, pt, tr, sr)
+* Complete UI accessibility

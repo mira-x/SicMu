@@ -20,8 +20,7 @@ New in this fork:
 * Search function
 * Multiple sources for album art (metadata, fallback to longest filename prefix match for .jpg and .png files in the same folder)
 * Per-device mono/stereo settings
-* "Search on genius.com" button when long pressing on a song
-
-
+* More options in long press menu, e.g. search on Genius.com or YouTube.com
+* More translations (most notably Spanish), basic support for screen readers
 
 

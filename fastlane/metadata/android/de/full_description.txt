@@ -19,4 +19,5 @@ Neu in diesem Fork:
 * Suchfunktion
 * Mehrere Quellen für Albumcover (Metadaten, Rückfall auf einzelne Bilddateien mit der größten Namensähnlichkeit im Ordner)
 * Mono/Stereo Einstellung für jedes Ausgabegerät
-* "Auf genius.com suchen" Knopf durch langes Drücken auf ein Lied
+* Lied-Detailansicht bietet mehr Funktionen, z.B. Suche auf Genius.com oder YouTube.com
+* Ausführlichere Übersetzungen und grundlegende Barrierfreiheit

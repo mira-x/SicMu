@@ -14,8 +14,8 @@ android {
         minSdkVersion 26 // Android 8.0
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
-        versionCode 37
-        versionName '2.4.4'
+        versionCode 38
+        versionName '2.4.5'
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
