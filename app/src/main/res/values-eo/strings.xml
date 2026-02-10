@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SicMu Player - Lightweight music player for Android
+  Copyright (C) 2015  Mathieu Souchaud
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string name="permission_needed">Ĉi tiu aplikaĵo bezonas legan permeson por la memoro
+    por trovi, montri kaj ludi kantojn.
+    Bonvolu permesi aliron al fotoj kaj aŭdvidaĵoj kiam la sistemo petas.</string>
+
+    <string name="action_sort_folder">dosierujo</string>
+    <string name="action_sort_artist">artisto</string>
+    <string name="action_sort_tree">dosieruja arbo</string>
+    <string name="action_sort">Ordigi kantojn laŭ:</string>
+
+    <string name="ic_action_edit_folder">Dosierujo: %s</string>
+    <string name="ic_action_edit_song">Kanto: %s</string>
+
+    <string name="action_rate_group">Taksi ĉiujn kantojn (konservi)</string>
+    <string name="action_rate_group_overwrite">Taksi ĉiujn kantojn (anstataŭigi)</string>
+    <string name="action_rate_song">Taksi kanton</string>
+
+    <string name="action_rescan">Reskani</string>
+    <string name="start_rescan">Skanas:</string>
+    <string name="rescanned">Reskanita:</string>
+
+    <string name="action_delete_song">Forigi kanton</string>
+    <string name="action_ask_delete_song">Ĉu vi certe volas forigi \'%s\'?</string>
+    <string name="action_delete_song_ok">\'%s\' sukcese forigita.</string>
+    <string name="action_delete_song_nok">Eraro dum forigo de \'%s\'!</string>
+
+    <string name="action_min_rating">Ludi kantojn kun takso >=</string>
+    <string name="action_set_rating_folder">Taksi dosierujon: %s</string>
+    <string name="action_set_rating_song">Taksi kanton: %s</string>
+    <string name="action_set_rating_song_failed">Taksado malsukcesis</string>
+
+    <string name="action_genius_lyrics">Serĉi ĉe genius.com</string>
+
+    <string name="action_search">Serĉi</string>
+    <string name="search_unsuccessful">Nenio trovita!</string>
+
+    <string name="songs_have_been_rated">%d kantoj taksitaj</string>
+    <string name="current_rating_idx">Aktuala takso</string>
+
+    <string name="action_play">Ludi</string>
+    <string name="action_pause">Paŭzigi</string>
+    <string name="action_next">Sekva</string>
+    <string name="action_prev">Antaŭa</string>
+
+    <string name="show_song_details">Detaloj</string>
+    <string name="popup_song_info_title">Kantdetaloj:</string>
+    <string name="popup_song_artist">Artisto: %s</string>
+    <string name="popup_song_album">Albumo: %s</string>
+    <string name="popup_song_title">Titolo: %s</string>
+    <string name="popup_song_track">Trako: %d</string>
+    <string name="popup_song_year">Jaro: %d</string>
+    <string name="popup_song_rating">Takso: %d</string>
+    <string name="popup_song_mime">MIME-tipo: %s</string>
+    <string name="popup_song_path">Vojo: %s</string>
+
+    <string name="explain_playback_speed">Ŝovu supren/malsupren aŭ maldekstren/dekstren por pliigi/malpliigi la ludrapidecon.</string>
+
+    <string name="focus_error">Ne eblis aliri la aŭdion! Bonvolu restartigi la aplikaĵon.</string>
+
+    <string name="settings_title">Agordoj</string>
+
+    <string name="settings_theme_title">Etoso</string>
+    <string-array name="settings_theme_entries">
+        <item>Malhela, ruĝaj akcentoj</item>
+        <item>Malhela, blankaj akcentoj</item>
+        <item>Hela, nigraj akcentoj</item>
+    </string-array>
+
+    <string name="settings_song_view">Kantvido</string>
+    <string name="settings_fold_title">Komenca faldostato</string>
+    <string-array name="settings_fold_entries">
+        <item>Faldita</item>
+        <item>Malfaldita</item>
+    </string-array>
+    <string name="settings_unfold_subgroup">Malfaldu subgrupojn</string>
+    <string name="settings_unfold_subgroup_summary">Se aktivigita, tuŝo sur grupo malfaldas ĉiujn subgrupojn kaj kantojn.</string>
+    <string name="settings_unfold_subgroup_threshold">Malfaldu subgrupojn</string>
+    <string name="settings_unfold_subgroup_threshold_summary">se ili enhavas malpli ol %d kantojn.</string>
+
+    <string name="settings_sleep_timer">Dormotempigilo</string>
+    <string name="settings_sleep_timer_start">Ekigi</string>
+    <string name="settings_sleep_timer_stop">Halti</string>
+    <string name="settings_sleep_timer_delay">Daŭro (min)</string>
+    <string name="settings_sleep_timer_remaining">Ludado haltos je %s</string>
+    <string name="settings_sleep_timer_delay_wrong">La daŭro devas esti pozitiva!</string>
+
+    <string name="settings_toggle_font_size">Tipargrandeco</string>
+    <string name="settings_toggle_font_size_label">Tuŝu por ŝanĝi inter granda kaj malgranda tiparo.</string>
+    <string name="settings_song_view_font">Tiparo por kantvido</string>
+    <string name="settings_text_size_regular">Malgranda tipargrandeco</string>
+    <string name="settings_text_size_big">Granda tipargrandeco</string>
+    <string name="settings_text_size_ratio">Proporcio grupo/kanto</string>
+
+    <string name="settings_ratings_not_written_title">Montri taksojn</string>
+    <string name="settings_ratings_not_written">Montri nekonservitajn taksojn</string>
+    <string name="settings_ratings_are_in_sync">Ĉiuj taksoj estas konservitaj.</string>
+
+    <string name="settings_rescan_title">Reskani</string>
+    <string name="settings_rescan">Reskani aŭdvidajn dosierojn.</string>
+    <string name="settings_rescan_triggered">Skanas aŭdvidajn dosierojn…</string>
+    <string name="settings_rescan_storage">Skanas memoron %s</string>
+    <string name="settings_rescan_finished">Skanado finita. Eble daŭros iom antaŭ ol novaj dosieroj aperos (eble necesas restartigi SicMu Player).</string>
+    <string name="settings_rescan_purge">La skanilo trovis enskribojn (%s) kiuj ne plu ekzistas. La enskriboj estis forigitaj el la listo.</string>
+
+    <string name="settings_media_button_start_app_title">Aŭtomata starto per aŭdvidbutonoj</string>
+    <string name="settings_media_button_start_app">Aŭdvidbutonoj startas la aplikaĵon se ĝi ne funkcias.</string>
+
+    <string name="settings_autoscroll">Ludata kanto</string>
+    <string name="settings_autoscroll_summary">Rulumi al kanto kiam ĝi estas ludata</string>
+
+    <string name="settings_songpos_title">Konservi ludpozicion</string>
+    <string name="settings_songpos">Daŭrigi kanton de la lasta konservita pozicio.</string>
+
+    <string name="settings_shuffle_explainer_sequential">Hazarda ordo malaktivigita</string>
+    <string name="settings_shuffle_explainer_random">Hazarda ordo aktivigita</string>
+    <string name="settings_shuffle_explainer_radio">Hazarda ordo + Komenci kantojn hazarde</string>
+
+    <string name="settings_stereo_on">Stereo</string>
+    <string name="settings_stereo_off">Mono</string>
+
+    <string name="settings_scrobble_title">Scrobble</string>
+    <string name="settings_scrobble">Sendi informojn pri ludataj kantoj al Last.FM aŭ Libre.FM (bezonas Scrobble Droid aŭ Simple Last.fm Scrobbler instalita)</string>
+
+    <string name="settings_vibrate_title">Vibri ĉe tuŝo</string>
+    <string name="settings_vibrate">Mallonge vibri kiam oni tuŝas butonojn aŭ la kantliston.</string>
+
+    <string name="settings_root_folder">Radikaj dosierujoj</string>
+    <string name="settings_root_folder_summary">La vojo %s ne ekzistas sur la aparato!</string>
+
+    <string name="settings_accelerometer">Skui</string>
+    <string name="settings_accelerometer_summary">Iri al sekva kanto kiam la aparato estas skuata.</string>
+    <string name="settings_accelerometer_threshold">Skuintenseco</string>
+    <string name="settings_no_accelerometer">Via aparato ne havas akcelometron! La skuofunkcio ne disponeblas.</string>
+
+    <string name="settings_rating">Aktivigi taksadon</string>
+    <string name="settings_rating_summary">Pliigas procesoruzon</string>
+
+    <string name="settings_help">Helpo</string>
+    <string name="settings_help_summary">Uzgvidilo</string>
+
+    <string name="help_start_song">Ludi kanton</string>
+    <string name="help_start_song_summary">Tuŝu kanton por ludi ĝin.</string>
+    <string name="help_start_group">Ludi el grupo</string>
+    <string name="help_start_group_summary">Longe tuŝu grupon por ludi la unuan kanton de la grupo.</string>
+    <string name="help_next_group">Longe tuŝi \"Sekva\"</string>
+    <string name="help_next_group_summary">Longe tuŝi \"Sekva\" ludas la unuan kanton de la sekva grupo (same por \"Antaŭa\" por la antaŭa grupo)</string>
+    <string name="help_unfold_group">Faldi/malfaldu grupon</string>
+    <string name="help_unfold_group_summary">Tuŝu grupon por faldi aŭ malfaldu ĝin.</string>
+    <string name="help_scroll">Montri aktualan kanton en la listo</string>
+    <string name="help_scroll_summary">Premu la butonon dekstre de \"Sekva\" por iri al la ludata kanto. Longa tuŝo faldas ĉiujn grupojn krom la aktuala kanto.</string>
+    <string name="help_root_folders">Radikaj dosierujoj</string>
+    <string name="help_root_folders_summary">Radikaj dosierujoj estas agorditaj en la altnivela agordoj: ili estas uzataj nur por kaŝi la unuan parton de la vojo kiam kantoj estas ordigitaj laŭ dosierujo. Por aldoni plurajn radikajn dosierujojn, apartigu ilin per punktokomo.</string>
+    <string name="help_background">Fono</string>
+    <string name="help_background_summary">Dum muziko ludas, premi la Hejmo- aŭ Reen-butonon tenas la aplikaĵon en la fono.</string>
+    <string name="help_quit">Eliri</string>
+    <string name="help_quit_summary">La aplikaĵo fermiĝos tuj se neniu muziko ludas kaj la Reen-butono estas premita. Android povas fermi la aplikaĵon kiam ĝi bezonas sistemajn rimedojn.</string>
+    <string name="help_stop">Teni en memoro</string>
+    <string name="help_stop_summary">La aplikaĵo restas en memoro eĉ se neniu muziko ludas kaj la Hejmo-butono estas premita. Android povas fermi la aplikaĵon kiam ĝi bezonas sistemajn rimedojn.</string>
+    <string name="help_mediabutton">Aŭdvidbutonoj</string>
+    <string name="help_mediabutton_summary">Aŭdvidbutonoj (kiel en Bluetooth-aŭskultiloj) povas kontroli la aplikaĵon (Sekva, Antaŭa, Paŭzigi/Ludi).</string>
+    <string name="help_mediabutton_autostart">Aŭtomata starto per aŭdvidbutonoj</string>
+    <string name="help_mediabutton_autostart_summary">Se la aplikaĵo estas fermita, premi aŭdvidbutonjn startos ĝin. Por malaktivigi tion, malmarku \"Aŭtomata starto per aŭdvidbutonoj\" en la agordoj.</string>
+    <string name="help_details_menu">Kantinformoj (kovrilbildo, …)</string>
+    <string name="help_details_menu_summary">Tuŝu la SicMu-ikonon por vidi informojn pri la ludata kanto (kovrilbildo, …)</string>
+    <string name="help_seek_menu">Saltmenuo</string>
+    <string name="help_seek_menu_summary">Tuŝu supre dekstre en la menubreto por malfermi/fermi la saltmenuon. Longe tuŝi \"Sekva\"/\"Antaŭa\" rapide antaŭen-/retroiras.</string>
+    <string name="help_donate">Donaci</string>
+    <string name="help_context_menu">Kunteksta menuo</string>
+    <string name="help_context_menu_summary">Longe tuŝu kanton por montri menuon kun pliaj opcioj kiel taksi aŭ forigi</string>
+
+    <string name="settings_misc">Diversaĵoj</string>
+
+    <string name="settings_about">Pri</string>
+    <string name="settings_about_summary">Informoj pri la aplikaĵo kaj ĝiaj aŭtoroj</string>
+
+    <string name="settings_version_title">Versio</string>
+    <string name="settings_author_new_title">Aŭtoro de SicMu Neo</string>
+    <string name="settings_author_old_title">Aŭtoro de SicMu</string>
+    <string name="settings_source_title">Fontkodo</string>
+    <string name="settings_licence_title">Licenco</string>
+    <string name="donate_souchaud_title">Donaci</string>
+    <string name="donate_souchaud_summary">Se vi ŝatas la aplikaĵon, vi povas donaci al Mathieu Souchaud ĉi tie</string>
+    <string name="close">Fermi</string>
+
+    <string name="changelogs_title">Ŝanĝoj en ĉi tiu versio</string>
+    <string name="changelogs_header">Novaĵoj:</string>
+
+    <string name="settings_thanks">Dankoj</string>
+    <string name="settings_thanks_icons">Ikonoj</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (ikonoj de iconfinder.com), Google Material Symbols</string>
+    <string name="settings_thanks_doc">Lernilo</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (lernilo pri krei muzikludanton por Android)</string>
+    <string name="settings_thanks_i15n">Traduko</string>
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (serba), Jerônimo Cordoni Pellegrini (portugala), Mehmet Gülmen (turka), Martin Scherbaum (germana)</string>
+
+    <string name="settings_show_filename">Montri dosiernomon</string>
+    <string name="settings_show_filename_summary">Montri dosiernomon anstataŭ kantan titolon</string>
+
+    <string name="settings_show_remaining_time">Montri restantan tempon</string>
+    <string name="settings_show_remaining_time_summary">Montri restantan tempon anstataŭ totalan tempon</string>
+
+    <string name="settings_hide_navigation_bar">Kaŝi navigadbreton</string>
+    <string name="settings_hide_navigation_bar_summary">Aŭtomate kaŝi la navigadbreton</string>
+
+    <string name="settings_show_group_total_time">Montri totalan daŭron</string>
+    <string name="settings_show_group_total_time_summary">Montri la totalan daŭron de la grupo anstataŭ la nombro de kantoj</string>
+
+    <string name="action_repeat_title">Ripeti</string>
+    <string name="action_repeat_all">Ĉiujn</string>
+    <string name="action_repeat_one">Kanton</string>
+    <string name="action_repeat_group">Grupon</string>
+    <string name="action_repeat_not">Halti ĉe la fino de la dosierujo</string>
+    <string name="action_stop_at_end_of_track">Halti post la kanto</string>
+
+    <string name="detail_metadata_hint_label">Tuŝu la albumkovrilon por vidi ĉiujn metadatenojn</string>
+    <string name="action_youtube_search">Serĉi ĉe YouTube</string>
+    <string name="action_youtube_open">Malfermi YouTube-videon</string>
+
+    <string name="settings_disable_pitch_compensation_title">Tonalteca kompenso (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">Ne kompensi tonaltecajn ŝanĝojn kiam plirapidigo de ludado, t.e. pliigi tempon kaj tonaltecon.</string>
+
+</resources>
