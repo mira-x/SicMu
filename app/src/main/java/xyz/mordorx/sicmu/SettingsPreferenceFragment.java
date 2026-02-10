@@ -35,11 +35,15 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
 
+@OptIn(markerClass = UnstableApi.class)
 public class SettingsPreferenceFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceClickListener {
@@ -103,6 +107,9 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(params.getNormalTextSize()));
         findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(params.getBigTextSize()));
         findPreference(PrefKeys.TEXT_SIZE_RATIO.name()).setSummary(String.valueOf(params.getTextSizeRatio()));
+
+        var disablePitchCompensation = (CheckBoxPreference)findPreference(PrefKeys.DISABLE_PITCH_COMPENSATION.name());
+        disablePitchCompensation.setChecked(params.getDisablePitchCompensation());
 
         Preference rescan = findPreference(RESCAN_KEY);
         rescan.setOnPreferenceClickListener(this);
@@ -209,6 +216,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             musicSrv.setChanged();
         } else if (key.equals(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name())) {
             setUninitializedDefaultRatingSummary();
+        } else if (key.equals(PrefKeys.DISABLE_PITCH_COMPENSATION.name())) {
+            musicSrv.applyPlaybackSpeed();
         }
     }
 

@@ -215,4 +215,6 @@
     <string name="detail_metadata_hint_label">Tippe auf das Albumcover, um alle Metadaten anzuzeigen</string>
     <string name="action_youtube_search">Suchen bei YouTube</string>
     <string name="action_youtube_open">Öffne YouTube video</string>
+    <string name="settings_disable_pitch_compensation">Die Tonhöhe nicht gleichbleiben, wenn die Geschwindigkeit geändert wird</string>
+    <string name="settings_disable_pitch_compensation_title">Tonhöhenkompensation (Nightcore)</string>
 </resources>

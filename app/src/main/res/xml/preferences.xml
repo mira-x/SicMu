@@ -19,9 +19,8 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceScreen
+    <PreferenceScreen android:title="@string/settings_help"
         android:key="button_help"
-        android:title="@string/settings_help"
         android:summary="@string/settings_help_summary"
         android:icon="@drawable/ic_menu_help"
         android:persistent="false">
@@ -87,18 +86,16 @@
             android:summary="@string/help_stop_summary"/>
     </PreferenceScreen>
 
-    <ListPreference
+    <ListPreference android:title="@string/settings_theme_title"
         android:key="THEME"
-        android:title="@string/settings_theme_title"
         android:icon="@drawable/ic_palette"
         android:entryValues="@array/settings_theme_values"
         android:entries="@array/settings_theme_entries"
         android:defaultValue="0"
         />
 
-    <PreferenceScreen
+    <PreferenceScreen android:title="@string/settings_about"
         android:key="button_about"
-        android:title="@string/settings_about"
         android:summary="@string/settings_about_summary"
         android:icon="@drawable/ic_info"
         android:persistent="false">
@@ -207,22 +204,6 @@
             android:defaultValue="true"
             />
 
-        <EditTextPreference
-            android:key="ROOT_FOLDERS"
-            android:title="@string/settings_root_folder"
-            />
-
-        <ListPreference
-            android:key="UNINITIALIZED_DEFAULT_RATING"
-            android:title="@string/uninitialized_default_rating"
-            android:entryValues="@array/uninitialized_default_rating_values"
-            android:entries="@array/uninitialized_default_rating_entries"
-            android:defaultValue="3"
-            />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/settings_misc">
         <CheckBoxPreference
             android:key="HIDE_NAVIGATION_BAR"
             android:title="@string/settings_hide_navigation_bar"
@@ -242,6 +223,25 @@
             android:icon="@drawable/ic_menu_vibration"
             android:defaultValue="true"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_misc">
+        <EditTextPreference
+            android:key="ROOT_FOLDERS"
+            android:title="@string/settings_root_folder"
+            />
+
+        <Preference
+            android:key="RESCAN"
+            android:title="@string/settings_rescan_title"
+            android:summary="@string/settings_rescan"/>
+
+        <CheckBoxPreference
+            android:key="DISABLE_PITCH_COMPENSATION"
+            android:title="@string/settings_disable_pitch_compensation_title"
+            android:summary="@string/settings_disable_pitch_compensation"
+            android:defaultValue="false"/>
+
         <CheckBoxPreference
             android:key="SCROBBLE"
             android:title="@string/settings_scrobble_title"
@@ -249,14 +249,17 @@
             android:defaultValue="false"/>
 
         <Preference
-            android:key="RESCAN"
-            android:title="@string/settings_rescan_title"
-            android:summary="@string/settings_rescan"/>
-
-        <Preference
             android:key="RATINGS_NOT_WRITTEN_KEY"
             android:title="@string/settings_ratings_not_written_title"
             android:summary="@string/settings_ratings_not_written"/>
+
+        <ListPreference
+            android:key="UNINITIALIZED_DEFAULT_RATING"
+            android:title="@string/uninitialized_default_rating"
+            android:entryValues="@array/uninitialized_default_rating_values"
+            android:entries="@array/uninitialized_default_rating_entries"
+            android:defaultValue="3"
+            />
 
         <CheckBoxPreference
             android:key="ENABLE_RATING"

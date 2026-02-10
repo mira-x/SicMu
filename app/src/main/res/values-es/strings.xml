@@ -234,4 +234,7 @@
     <string name="action_youtube_search">Buscar en YouTube</string>
     <string name="action_youtube_open">Abrir vídeo de YouTube</string>
 
+    <string name="settings_disable_pitch_compensation_title">Compensación de tono (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">No compensar los cambios de tono al aumentar la velocidad de reproducción, es decir, aumentar tempo y tono.</string>
+
 </resources>

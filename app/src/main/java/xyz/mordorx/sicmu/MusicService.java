@@ -698,14 +698,24 @@ public class MusicService extends Service implements
         scrobble.send(Scrobble.SCROBBLE_START);
     }
 
-    private boolean applyPlaybackSpeed(float speed) {
+    /** This re-loads the currently selected playback speed. This is used for real time reload of the
+     *  "Disable pitch compensation" setting
+     */
+    public void applyPlaybackSpeed() {
+        float s = getPlaybackSpeed();
+        applyPlaybackSpeed(s);
+    }
+
+    private void applyPlaybackSpeed(float speed) {
         try {
-            var params = getPlayer().getPlaybackParameters().withSpeed(speed);
-            getPlayer().setPlaybackParameters(params);
-            return true;
+            var playback = getPlayer().getPlaybackParameters().withSpeed(speed).withPitch(1f);
+            if (params.getDisablePitchCompensation()) {
+                playback = playback.withPitch(speed);
+            }
+
+            getPlayer().setPlaybackParameters(playback);
         } catch (Exception e) {
             Log.e("MusicService", "setPlaySpeed: ", e);
-            return false;
         }
     }
 

@@ -51,19 +51,22 @@ public class Parameters {
     }
     public boolean getChoosedTextSize() {
         return getPref().getBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(),
-                Boolean.valueOf(context.getString(R.string.settings_text_size_choosed_default)));
+                Boolean.parseBoolean(context.getString(R.string.settings_text_size_choosed_default)));
     }
     public int getBigTextSize() {
-        return Integer.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_BIG.name(),
+        return Integer.parseInt(getPref().getString(PrefKeys.TEXT_SIZE_BIG.name(),
                 context.getString(R.string.settings_text_size_big_default)));
     }
     public int getNormalTextSize() {
-        return Integer.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_NORMAL.name(),
+        return Integer.parseInt(getPref().getString(PrefKeys.TEXT_SIZE_NORMAL.name(),
                 context.getString(R.string.settings_text_size_regular_default)));
     }
     public float getTextSizeRatio() {
-        return Float.valueOf(getPref().getString(PrefKeys.TEXT_SIZE_RATIO.name(),
+        return Float.parseFloat(getPref().getString(PrefKeys.TEXT_SIZE_RATIO.name(),
                 context.getString(R.string.settings_text_size_ratio_default)));
+    }
+    public boolean getDisablePitchCompensation() {
+        return getPref().getBoolean(PrefKeys.DISABLE_PITCH_COMPENSATION.name(), false);
     }
 
 

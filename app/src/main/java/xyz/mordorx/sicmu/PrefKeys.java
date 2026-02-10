@@ -49,5 +49,6 @@ public enum PrefKeys {
     UNINITIALIZED_DEFAULT_RATING,
     HIDE_NAVIGATION_BAR,
     SHOW_GROUP_TOTAL_TIME,
-    STEREO
+    STEREO,
+    DISABLE_PITCH_COMPENSATION, // Disable pitch compensation when changing playback tempo
 }
