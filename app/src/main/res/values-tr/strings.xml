@@ -17,98 +17,255 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
+    <string name="permission_needed">Bu uygulama şarkıları bulmak, göstermek ve çalmak için
+    depolama okuma iznine ihtiyaç duyar.
+    Lütfen sistem istediğinde fotoğraf ve medya içeriğine erişime izin verin.</string>
 
-    <string name="action_sort_folder">Dizine göre sırala</string>
-    <string name="action_sort_artist">Sanatçıya göre sırala</string>
-    <string name="action_sort_tree">Dizin ağacına göre sırala</string>
+    <string name="action_sort_folder">dizin</string>
+    <string name="action_sort_artist">sanatçı</string>
+    <string name="action_sort_tree">dizin ağacı</string>
+    <string name="action_sort">Şarkıları sırala:</string>
 
-    <string name="focus_error">Ses odağı alınamadı! Uygulamayı tekrar başlat!</string>
+    <string name="ic_action_edit_folder">Dizin: %s</string>
+    <string name="ic_action_edit_song">Şarkı: %s</string>
+
+    <string name="action_rate_group">Tüm şarkıları puanla (koru)</string>
+    <string name="action_rate_group_overwrite">Tüm şarkıları puanla (üzerine yaz)</string>
+    <string name="action_rate_song">Şarkıyı puanla</string>
+
+    <string name="action_rescan">Yeniden tara</string>
+    <string name="start_rescan">Taranıyor:</string>
+    <string name="rescanned">Tarandı:</string>
+
+    <string name="action_delete_song">Şarkıyı sil</string>
+    <string name="action_ask_delete_song">\'%s\' dosyasını silmek istediğinizden emin misiniz?</string>
+    <string name="action_delete_song_ok">\'%s\' başarıyla silindi.</string>
+    <string name="action_delete_song_nok">\'%s\' silinirken hata oluştu!</string>
+
+    <string name="action_min_rating">Puanı >= olan şarkıları çal</string>
+    <string name="action_set_rating_folder">Dizini puanla: %s</string>
+    <string name="action_set_rating_song">Şarkıyı puanla: %s</string>
+    <string name="action_set_rating_song_failed">Puanlama hatası</string>
+
+    <string name="action_genius_lyrics">genius.com\'da ara</string>
+
+    <string name="action_search">Ara</string>
+    <string name="search_unsuccessful">Hiçbir şey bulunamadı!</string>
+
+    <string name="songs_have_been_rated">%d şarkı puanlandı</string>
+    <string name="current_rating_idx">Mevcut puan</string>
+
+    <string name="action_play">Çal</string>
+    <string name="action_pause">Duraklat</string>
+    <string name="action_next">Sonraki</string>
+    <string name="action_prev">Önceki</string>
+
+    <string name="show_song_details">Ayrıntılar</string>
+    <string name="popup_song_info_title">Şarkı ayrıntıları:</string>
+    <string name="popup_song_artist">Sanatçı: %s</string>
+    <string name="popup_song_album">Albüm: %s</string>
+    <string name="popup_song_title">Başlık: %s</string>
+    <string name="popup_song_track">Parça: %d</string>
+    <string name="popup_song_year">Yıl: %d</string>
+    <string name="popup_song_rating">Puan: %d</string>
+    <string name="popup_song_mime">MIME türü: %s</string>
+    <string name="popup_song_path">Yol: %s</string>
+
+    <string name="explain_playback_speed">Çalma hızını artırmak/azaltmak için yukarı/aşağı veya sola/sağa kaydırın.</string>
+
+    <string name="focus_error">Sese erişilemedi! Lütfen uygulamayı yeniden başlatın.</string>
 
     <string name="settings_title">Ayarlar</string>
 
-    <string name="settings_song_view">Şarkı görünümü</string>
-    <string name="settings_fold_title">Başlangıçta dizinleri genişlet ya da daralt</string>
-    <string-array name="settings_fold_entries">
-        <item>Daraltılmış</item>
-        <item>Genişletilmiş</item>
+    <string name="settings_theme_title">Tema</string>
+    <string-array name="settings_theme_entries">
+        <item>Koyu, kırmızı vurgular</item>
+        <item>Koyu, beyaz vurgular</item>
+        <item>Açık, siyah vurgular</item>
     </string-array>
-    <string name="settings_unfold_subgroup">Alt grupları genişlet</string>
-    <string name="settings_unfold_subgroup_summary">Seçiliyse: gruba dokunmak bütün alt grupları ve şarkıları genişletir.</string>
-    <string name="settings_unfold_subgroup_threshold">Eğer altgruplar</string>
-    <string name="settings_unfold_subgroup_threshold_summary">%d şarkıdan daha azını içeriyorsa genişlet</string>
 
+    <string name="settings_song_view">Şarkı görünümü</string>
+    <string name="settings_fold_title">Başlangıç katlanma durumu</string>
+    <string-array name="settings_fold_entries">
+        <item>Katlanmış</item>
+        <item>Açık</item>
+    </string-array>
+    <string name="settings_unfold_subgroup">Alt grupları aç</string>
+    <string name="settings_unfold_subgroup_summary">Etkinse, bir gruba dokunmak tüm alt grupları ve şarkıları açar.</string>
+    <string name="settings_unfold_subgroup_threshold">Alt grupları aç</string>
+    <string name="settings_unfold_subgroup_threshold_summary">%d şarkıdan az içeriyorsa.</string>
 
-    <string name="settings_song_view_font">Şarkı görünümü yazıtipi</string>
-    <string name="settings_text_size_regular">Normal yazıtipi</string>
-    <string name="settings_text_size_big">Büyük yazıtipi</string>
-    <string name="settings_text_size_ratio">Grup/şarkı punto oranı</string>
+    <string name="settings_sleep_timer">Uyku zamanlayıcısı</string>
+    <string name="settings_sleep_timer_start">Başlat</string>
+    <string name="settings_sleep_timer_stop">Durdur</string>
+    <string name="settings_sleep_timer_delay">Süre (dk)</string>
+    <string name="settings_sleep_timer_remaining">Çalma %s\'da duracak</string>
+    <string name="settings_sleep_timer_delay_wrong">Süre pozitif olmalıdır!</string>
 
-    <string name="settings_rescan_title">Tara</string>
-    <string name="settings_rescan">Ortam dosyalarını tekrar tara.</string>
-    <string name="settings_rescan_triggered">Ortam Tarayıcısı Başlatıldı…</string>
+    <string name="settings_toggle_font_size">Yazı tipi boyutu</string>
+    <string name="settings_toggle_font_size_label">Büyük ve küçük yazı tipi arasında geçiş yapmak için dokunun.</string>
+    <string name="settings_song_view_font">Şarkı görünümü yazı tipi</string>
+    <string name="settings_text_size_regular">Küçük yazı tipi boyutu</string>
+    <string name="settings_text_size_big">Büyük yazı tipi boyutu</string>
+    <string name="settings_text_size_ratio">Grup/şarkı boyut oranı</string>
 
-    <string name="settings_media_button_start_app_title">Ortam düğmeleri otomatik başlatsın</string>
-    <string name="settings_media_button_start_app">Eğer zaten açık değilse, ortam düğmeleri uygulamayı açar.</string>
+    <string name="settings_ratings_not_written_title">Puanları göster</string>
+    <string name="settings_ratings_not_written">Kaydedilmemiş puanları göster</string>
+    <string name="settings_ratings_are_in_sync">Tüm puanlar kaydedildi.</string>
 
-    <string name="settings_autoscroll">Çalınan şarkıya kaydır</string>
-    <string name="settings_autoscroll_summary">Şarkı çalmaya başlayınca üzerine gel.</string>
+    <string name="settings_rescan_title">Yeniden tara</string>
+    <string name="settings_rescan">Medya dosyalarını yeniden tara.</string>
+    <string name="settings_rescan_triggered">Medya dosyaları taranıyor…</string>
+    <string name="settings_rescan_storage">Depolama taranıyor %s</string>
+    <string name="settings_rescan_finished">Tarama tamamlandı. Yeni dosyaların görünmesi biraz zaman alabilir (SicMu Player\'ı yeniden başlatmanız gerekebilir).</string>
+    <string name="settings_rescan_purge">Tarayıcı artık var olmayan girdiler (%s) buldu. Girdiler listeden kaldırıldı.</string>
 
-    <string name="settings_songpos_title">Kaldığım yeri hatırla</string>
-    <string name="settings_songpos">Şarkı tekrar çalındığında son kaldığı yerden devam edecek.</string>
+    <string name="settings_media_button_start_app_title">Medya düğmeleriyle otomatik başlat</string>
+    <string name="settings_media_button_start_app">Medya düğmeleri çalışmıyorsa uygulamayı başlatır.</string>
+
+    <string name="settings_autoscroll">Çalan şarkı</string>
+    <string name="settings_autoscroll_summary">Şarkı çaldığında ona kaydır</string>
+
+    <string name="settings_songpos_title">Çalma konumunu kaydet</string>
+    <string name="settings_songpos">Şarkıyı son kaydedilen konumdan devam ettir.</string>
+
+    <string name="settings_shuffle_explainer_sequential">Karışık kapalı</string>
+    <string name="settings_shuffle_explainer_random">Karışık açık</string>
+    <string name="settings_shuffle_explainer_radio">Karışık + Şarkıları rastgele anda başlat</string>
+
+    <string name="settings_stereo_on">Stereo</string>
+    <string name="settings_stereo_off">Mono</string>
 
     <string name="settings_scrobble_title">Scrobble</string>
-    <string name="settings_scrobble">Çalınan şarkıların ayrıntılarını Last.FM veya Libre.FM\'e yolla (Scrobble Droid veya Simple Last.fm Scrobbler kurulmuş olmalı)</string>
+    <string name="settings_scrobble">Çalınan şarkı bilgilerini Last.FM veya Libre.FM\'e gönder (Scrobble Droid veya Simple Last.fm Scrobbler yüklü olmalı)</string>
 
-    <string name="settings_vibrate_title">Dokununca titreş</string>
-    <string name="settings_vibrate">Şarkı listesine ya da butonlara tıklayınca telefon titresin.</string>
+    <string name="settings_vibrate_title">Dokunmada titret</string>
+    <string name="settings_vibrate">Düğmelere veya şarkı listesine dokunulduğunda kısaca titret.</string>
 
-    <string name="settings_root_folder">Kök dizin</string>
-    <string name="settings_root_folder_summary">Belirtilen %s yolu telefonunuzda bulunmuyor!</string>
+    <string name="settings_root_folder">Kök dizinler</string>
+    <string name="settings_root_folder_summary">%s yolu cihazda mevcut değil!</string>
 
-    <string name="settings_accelerometer">Salla ve hızlandır</string>
-    <string name="settings_accelerometer_summary">Telefonu sallayınca sonraki şarkıya geç.</string>
-    <string name="settings_accelerometer_threshold">Sallama kuvveti eşiği</string>
-    <string name="settings_no_accelerometer">Cihazınızda ivmeölçer bulunmuyor. Sallama özelliği devre dışı bırakıldı.</string>
+    <string name="settings_accelerometer">Sallama</string>
+    <string name="settings_accelerometer_summary">Cihazı sallayarak sonraki şarkıya geç.</string>
+    <string name="settings_accelerometer_threshold">Sallama yoğunluğu</string>
+    <string name="settings_no_accelerometer">Cihazınızda ivmeölçer yok! Sallama işlevi kullanılamıyor.</string>
 
+    <string name="settings_rating">Puanlamayı etkinleştir</string>
+    <string name="settings_rating_summary">İşlemci kullanımını artırır</string>
 
     <string name="settings_help">Yardım</string>
-    <string name="settings_help_summary">Eğer yolunuzu kaybettiyseniz.</string>
+    <string name="settings_help_summary">Kullanım kılavuzu</string>
 
-    <string name="help_start_song">Şarkıyı çalmaya başla</string>
-    <string name="help_start_song_summary">Şarkıyı çalmak için dokun.</string>
-    <string name="help_start_group">Bir gruptan çalmaya başla</string>
-    <string name="help_start_group_summary">İçerdiği ilk şarkından çalmaya başlamak için gruba uzun dokunun.</string>
-    <string name="help_unfold_group">Grubu daralt / genişlet</string>
-    <string name="help_unfold_group_summary">Daraltmak veya genişletmek için gruba dokunun.</string>
-    <string name="help_scroll">Şimdi çalan şarkıya kaydır</string>
-    <string name="help_scroll_summary">Listeyi şimdi çalan şarkıya kaydırmak için \'ileri\' düğmesinin sağındaki düğmeye dokunun.</string>
-    <string name="help_root_folders">Kök dizin</string>
-    <string name="help_root_folders_summary">Kök dizin değiştirilebilir: bu seçenek dizine göre sıralama etkin olduğunda daha üstteki dizinlerin gizlenmesi içindir.</string>
-    <string name="help_background">Arkaplanda çalış</string>
-    <string name="help_background_summary">Müzik çalarken başlangıç veya geri düğmesine basın, müzik arkaplanda çalmaya devam edecek.</string>
-    <string name="help_quit">Kapat</string>
-    <string name="help_quit_summary">Eğer çalınan bir şarkı yoksa ve geri düğmesine basıldıysa uygulama tamamen kapatılır. Eğer kapatılmazsa Android bu uygulmayı bellek yetersiz kaldığı zaman otomatik olarak kapatır.</string>
-    <string name="help_stop">Dur</string>
-    <string name="help_stop_summary">Eğer çalınan bir şarkı yoksa ve başlangıç düğmesine basıldıysa uygulama bellekte kalmaya devam eder ancak Android bu uygulmayı bellek yetersiz kaldığı zaman otomatik olarak kapatır. </string>
-    <string name="help_mediabutton">Ortam düğmeleri</string>
-    <string name="help_mediabutton_summary">Ortam düğmeleri (bluetooth kulaklıklar gibi) uygulamayı kontrol edebilir (sonraki, önceki, duraklat / oynat).</string>
-    <string name="help_mediabutton_autostart">Ortam düğmeleri otomatik başlatsın</string>
-    <string name="help_mediabutton_autostart_summary">Eğer uygulama kapalıysa ortam düğmeleri uygulamayı başlatsın. Bu özelliği devre dışı bırakmak için ayarlar->Ortam düğmeleri otomatik başlatsın kutucuğundaki işareti kaldırın.</string>
+    <string name="help_start_song">Şarkı çal</string>
+    <string name="help_start_song_summary">Çalmak için şarkıya dokunun.</string>
+    <string name="help_start_group">Gruptan çal</string>
+    <string name="help_start_group_summary">Grubun ilk şarkısını çalmak için gruba uzun dokunun.</string>
+    <string name="help_next_group">\"Sonraki\"ye uzun dokunma</string>
+    <string name="help_next_group_summary">\"Sonraki\"ye uzun dokunmak sonraki grubun ilk şarkısını çalar (\"Önceki\" için önceki grup için aynı)</string>
+    <string name="help_unfold_group">Grubu aç/kapat</string>
+    <string name="help_unfold_group_summary">Açmak veya kapatmak için gruba dokunun.</string>
+    <string name="help_scroll">Mevcut şarkıyı listede göster</string>
+    <string name="help_scroll_summary">Çalan şarkıya gitmek için \"Sonraki\"nin sağındaki düğmeye basın. Uzun dokunma mevcut şarkı hariç tüm grupları kapatır.</string>
+    <string name="help_root_folders">Kök dizinler</string>
+    <string name="help_root_folders_summary">Kök dizinler gelişmiş ayarlarda yapılandırılır: şarkılar dizine göre sıralandığında yolun ilk kısmını gizlemek için kullanılır. Birden fazla dizin eklemek için noktalı virgülle ayırın.</string>
+    <string name="help_background">Arka plan</string>
+    <string name="help_background_summary">Çalma sırasında Ana Sayfa veya Geri düğmesine basmak uygulamayı arka planda tutar.</string>
+    <string name="help_quit">Çıkış</string>
+    <string name="help_quit_summary">Müzik çalmıyorsa ve Geri düğmesine basarsanız uygulama kapanır. Android, sistem kaynaklarına ihtiyaç duyduğunda uygulamayı kapatabilir.</string>
+    <string name="help_stop">Bellekte tut</string>
+    <string name="help_stop_summary">Müzik çalmasa ve Ana Sayfa düğmesine bassanız bile uygulama bellekte kalır. Android, sistem kaynaklarına ihtiyaç duyduğunda uygulamayı kapatabilir.</string>
+    <string name="help_mediabutton">Medya düğmeleri</string>
+    <string name="help_mediabutton_summary">Medya düğmeleri (Bluetooth kulaklıklardaki gibi) uygulamayı kontrol edebilir (Sonraki, Önceki, Duraklat/Çal).</string>
+    <string name="help_mediabutton_autostart">Medya düğmeleriyle otomatik başlat</string>
+    <string name="help_mediabutton_autostart_summary">Uygulama kapalıysa medya düğmelerine basmak onu başlatır. Devre dışı bırakmak için ayarlarda \"Medya düğmeleriyle otomatik başlat\" seçeneğinin işaretini kaldırın.</string>
+    <string name="help_details_menu">Şarkı bilgileri (kapak, …)</string>
+    <string name="help_details_menu_summary">Çalan şarkının bilgilerini görmek için SicMu simgesine dokunun (kapak, …)</string>
+    <string name="help_seek_menu">Gezinme menüsü</string>
+    <string name="help_seek_menu_summary">Gezinme menüsünü açmak/kapatmak için menü çubuğunun sağ üstüne dokunun. \"Sonraki\"/\"Önceki\"ye uzun dokunma sürekli ileri/geri sarar.</string>
+    <string name="help_donate">Bağış yap</string>
+    <string name="help_context_menu">Bağlam menüsü</string>
+    <string name="help_context_menu_summary">Puanlama veya silme gibi seçenekler içeren bir menü göstermek için şarkıya uzun dokunun</string>
 
     <string name="settings_misc">Çeşitli</string>
 
     <string name="settings_about">Hakkında</string>
+    <string name="settings_about_summary">Uygulama ve yazarları hakkında bilgi</string>
 
-    <string name="settings_version_title">Sürüm numarası</string>
-    <string name="settings_source_title">Kaynak</string>
+    <string name="settings_version_title">Sürüm</string>
+    <string name="settings_author_new_title">SicMu Neo yazarı</string>
+    <string name="settings_author_old_title">SicMu yazarı</string>
+    <string name="settings_source_title">Kaynak kodu</string>
     <string name="settings_licence_title">Lisans</string>
+    <string name="donate_souchaud_title">Bağış yap</string>
+    <string name="donate_souchaud_summary">Uygulamayı beğendiyseniz, Mathieu Souchaud\'a buradan bağış yapabilirsiniz</string>
+    <string name="close">Kapat</string>
+
+    <string name="changelogs_title">Bu sürümdeki değişiklikler</string>
+    <string name="changelogs_header">Yenilikler:</string>
 
     <string name="settings_thanks">Teşekkürler</string>
-    <string name="settings_thanks_icons">İkonlar</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (iconfinder.com\'dan), Google Material Symbols</string>
-    <string name="settings_thanks_doc">Başvuru</string>
-    <string name="settings_thanks_doc_summary">Sue Smith (Android için müzikçalar hazırlama üzerine dersler)</string>
+    <string name="settings_thanks_icons">Simgeler</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (iconfinder.com\'dan simgeler), Google Material Symbols</string>
+    <string name="settings_thanks_doc">Öğretici</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (Android için müzik çalar oluşturma hakkında öğretici)</string>
     <string name="settings_thanks_i15n">Çeviri</string>
-    <string name="settings_thanks_i15n_summary">Mehmet Gülmen (Türkçe), Mladen Pejaković (Sırpça), Jerônimo Cordoni Pellegrini (Português)</string>
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (Sırpça), Jerônimo Cordoni Pellegrini (Portekizce), Mehmet Gülmen (Türkçe), Martin Scherbaum (Almanca)</string>
+
+    <string name="settings_show_filename">Dosya adını göster</string>
+    <string name="settings_show_filename_summary">Şarkı başlığı yerine dosya adını göster</string>
+
+    <string name="settings_show_remaining_time">Kalan süreyi göster</string>
+    <string name="settings_show_remaining_time_summary">Toplam süre yerine kalan süreyi göster</string>
+
+    <string name="settings_hide_navigation_bar">Gezinme çubuğunu gizle</string>
+    <string name="settings_hide_navigation_bar_summary">Gezinme çubuğunu otomatik olarak gizle</string>
+
+    <string name="settings_show_group_total_time">Toplam süreyi göster</string>
+    <string name="settings_show_group_total_time_summary">Şarkı sayısı yerine grubun toplam süresini göster</string>
+
+    <string name="action_repeat_title">Tekrar</string>
+    <string name="action_repeat_all">Tümü</string>
+    <string name="action_repeat_one">Şarkı</string>
+    <string name="action_repeat_group">Grup</string>
+    <string name="action_repeat_not">Dizin sonunda dur</string>
+    <string name="action_stop_at_end_of_track">Şarkıdan sonra dur</string>
+
+    <string name="detail_metadata_hint_label">Tüm meta verileri görmek için albüm kapağına dokunun</string>
+    <string name="action_youtube_search">YouTube\'da ara</string>
+    <string name="action_youtube_open">YouTube videosunu aç</string>
+
+    <string name="settings_disable_pitch_compensation_title">Perde telafisi (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">Çalma hızı artırıldığında perde değişikliklerini telafi etme, yani tempo ve perdeyi artır.</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Şarkı ayrıntılarını göster</string>
+    <string name="a11y_toggle_details">Ayrıntı panelini göster veya gizle</string>
+    <string name="a11y_toggle_seek">Gezinme kontrollerini göster veya gizle</string>
+    <string name="a11y_album_art">Albüm kapağı, meta verileri görmek için dokunun</string>
+    <string name="a11y_seek_bar">Çalma konumu</string>
+    <string name="a11y_seek_back_20">20 saniye geri sar</string>
+    <string name="a11y_seek_back_5">5 saniye geri sar</string>
+    <string name="a11y_seek_forward_5">5 saniye ileri sar</string>
+    <string name="a11y_seek_forward_20">20 saniye ileri sar</string>
+    <string name="a11y_track_looper">Mevcut parça için döngü noktaları ayarla</string>
+    <string name="a11y_rating_1">1 yıldız ver</string>
+    <string name="a11y_rating_2">2 yıldız ver</string>
+    <string name="a11y_rating_3">3 yıldız ver</string>
+    <string name="a11y_rating_4">4 yıldız ver</string>
+    <string name="a11y_rating_5">5 yıldız ver</string>
+    <string name="a11y_now_playing">Şu an çalıyor</string>
+    <string name="a11y_song_rating">Puan: %d yıldız</string>
+    <string name="a11y_sort_button">Görüntüleme modunu değiştir</string>
+    <string name="a11y_stereo_button">Stereo veya mono arasında geçiş yap</string>
+    <string name="a11y_repeat_button">Tekrar modunu değiştir</string>
+    <string name="a11y_shuffle_button">Çalma sırasını değiştir</string>
+    <string name="a11y_rating_filter_button">Şarkıları puana göre filtrele</string>
+    <string name="a11y_search_button">Şarkı ara</string>
+    <string name="a11y_settings_button">Ayarları aç</string>
+    <string name="a11y_play_button">Çal veya duraklat</string>
+    <string name="a11y_prev_button">Önceki şarkı</string>
+    <string name="a11y_next_button">Sonraki şarkı</string>
+    <string name="a11y_goto_button">Mevcut şarkıya git</string>
+    <string name="a11y_more_options_button">Daha fazla seçenek göster</string>
 
 </resources>

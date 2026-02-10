@@ -17,93 +17,255 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
+    <string name="permission_needed">Апликацији је потребна дозвола за читање меморије
+    да би пронашла, приказала и пустила песме.
+    Молимо дозволите приступ фотографијама и мултимедијалним садржајима када систем то затражи.</string>
 
-    <string name="action_sort_folder">Поређај по фасцикли</string>
-    <string name="action_sort_artist">Поређај по извођачу</string>
+    <string name="action_sort_folder">фасцикла</string>
+    <string name="action_sort_artist">извођач</string>
+    <string name="action_sort_tree">стабло директоријума</string>
+    <string name="action_sort">Поређај песме по:</string>
 
-    <string name="focus_error">Не могу да привилегујем звучни излаз! Поново покрените апликацију!</string>
+    <string name="ic_action_edit_folder">Фасцикла: %s</string>
+    <string name="ic_action_edit_song">Песма: %s</string>
 
-    <string name="settings_title">Поставке</string>
+    <string name="action_rate_group">Оцени све песме (задржи)</string>
+    <string name="action_rate_group_overwrite">Оцени све песме (препиши)</string>
+    <string name="action_rate_song">Оцени песму</string>
+
+    <string name="action_rescan">Поново скенирај</string>
+    <string name="start_rescan">Скенирање:</string>
+    <string name="rescanned">Скенирано:</string>
+
+    <string name="action_delete_song">Обриши песму</string>
+    <string name="action_ask_delete_song">Да ли сигурно желите да обришете \'%s\'?</string>
+    <string name="action_delete_song_ok">\'%s\' успешно обрисано.</string>
+    <string name="action_delete_song_nok">Грешка при брисању \'%s\'!</string>
+
+    <string name="action_min_rating">Пусти песме са оценом >=</string>
+    <string name="action_set_rating_folder">Оцени фасциклу: %s</string>
+    <string name="action_set_rating_song">Оцени песму: %s</string>
+    <string name="action_set_rating_song_failed">Грешка при оцењивању</string>
+
+    <string name="action_genius_lyrics">Претражи на genius.com</string>
+
+    <string name="action_search">Претрага</string>
+    <string name="search_unsuccessful">Ништа није пронађено!</string>
+
+    <string name="songs_have_been_rated">%d песама оцењено</string>
+    <string name="current_rating_idx">Тренутна оцена</string>
+
+    <string name="action_play">Пусти</string>
+    <string name="action_pause">Пауза</string>
+    <string name="action_next">Следећа</string>
+    <string name="action_prev">Претходна</string>
+
+    <string name="show_song_details">Детаљи</string>
+    <string name="popup_song_info_title">Детаљи песме:</string>
+    <string name="popup_song_artist">Извођач: %s</string>
+    <string name="popup_song_album">Албум: %s</string>
+    <string name="popup_song_title">Наслов: %s</string>
+    <string name="popup_song_track">Нумера: %d</string>
+    <string name="popup_song_year">Година: %d</string>
+    <string name="popup_song_rating">Оцена: %d</string>
+    <string name="popup_song_mime">MIME тип: %s</string>
+    <string name="popup_song_path">Путања: %s</string>
+
+    <string name="explain_playback_speed">Превуците горе/доле или лево/десно да бисте повећали/смањили брзину репродукције.</string>
+
+    <string name="focus_error">Није могуће приступити звуку! Молимо поново покрените апликацију.</string>
+
+    <string name="settings_title">Подешавања</string>
+
+    <string name="settings_theme_title">Тема</string>
+    <string-array name="settings_theme_entries">
+        <item>Тамна, црвени акценти</item>
+        <item>Тамна, бели акценти</item>
+        <item>Светла, црни акценти</item>
+    </string-array>
 
     <string name="settings_song_view">Приказ песама</string>
-    <string name="settings_fold_title">Стање фасцикли по покретању</string>
+    <string name="settings_fold_title">Почетно стање сажимања</string>
     <string-array name="settings_fold_entries">
-        <item>Сажете</item>
-        <item>Раширене</item>
+        <item>Сажето</item>
+        <item>Раширено</item>
     </string-array>
     <string name="settings_unfold_subgroup">Рашири подгрупе</string>
-    <string name="settings_unfold_subgroup_summary">Омогућено: раширивање групе раширује све подгрупе и песме.</string>
-    <string name="settings_unfold_subgroup_threshold">Рашири подгрупе ако група</string>
-    <string name="settings_unfold_subgroup_threshold_summary">има мање од %d песама</string>
+    <string name="settings_unfold_subgroup_summary">Ако је омогућено, додир на групу раширује све подгрупе и песме.</string>
+    <string name="settings_unfold_subgroup_threshold">Рашири подгрупе</string>
+    <string name="settings_unfold_subgroup_threshold_summary">ако садрже мање од %d песама.</string>
 
+    <string name="settings_sleep_timer">Тајмер за спавање</string>
+    <string name="settings_sleep_timer_start">Покрени</string>
+    <string name="settings_sleep_timer_stop">Заустави</string>
+    <string name="settings_sleep_timer_delay">Трајање (мин)</string>
+    <string name="settings_sleep_timer_remaining">Репродукција ће се зауставити у %s</string>
+    <string name="settings_sleep_timer_delay_wrong">Трајање мора бити позитивно!</string>
 
+    <string name="settings_toggle_font_size">Величина фонта</string>
+    <string name="settings_toggle_font_size_label">Додирните да бисте прешли између великог и малог фонта.</string>
     <string name="settings_song_view_font">Фонт приказа песама</string>
-    <string name="settings_text_size_regular">Нормални фонт</string>
-    <string name="settings_text_size_big">Велики фонт</string>
-    <string name="settings_text_size_ratio">Однос величине текста извођач/песма</string>
+    <string name="settings_text_size_regular">Величина малог фонта</string>
+    <string name="settings_text_size_big">Величина великог фонта</string>
+    <string name="settings_text_size_ratio">Однос величине група/песма</string>
 
+    <string name="settings_ratings_not_written_title">Прикажи оцене</string>
+    <string name="settings_ratings_not_written">Прикажи несачуване оцене</string>
+    <string name="settings_ratings_are_in_sync">Све оцене су сачуване.</string>
 
     <string name="settings_rescan_title">Поново скенирај</string>
-    <string name="settings_rescan">Поновна претрага медија фајлова.</string>
-    <string name="settings_rescan_triggered">Скенирање медија окинуто…</string>
+    <string name="settings_rescan">Поново скенирај мултимедијалне датотеке.</string>
+    <string name="settings_rescan_triggered">Скенирање мултимедијалних датотека…</string>
+    <string name="settings_rescan_storage">Скенирање меморије %s</string>
+    <string name="settings_rescan_finished">Скенирање завршено. Може потрајати док нове датотеке постану видљиве (можда је потребно поново покренути SicMu Player).</string>
+    <string name="settings_rescan_purge">Скенер је пронашао уносе (%s) који више не постоје. Уноси су уклоњени са списка.</string>
 
-    <string name="settings_media_button_start_app_title">Медија тастери аутоматски покрећу</string>
-    <string name="settings_media_button_start_app">Медија тастери покрећу апликацију ако већ није покренута.</string>
+    <string name="settings_media_button_start_app_title">Аутоматско покретање медија тастерима</string>
+    <string name="settings_media_button_start_app">Медија тастери покрећу апликацију ако није покренута.</string>
 
-    <string name="settings_autoscroll">Клизај на нову пуштену песму</string>
-    <string name="settings_autoscroll_summary">Клизај на песму када почне пуштање</string>
+    <string name="settings_autoscroll">Песма која свира</string>
+    <string name="settings_autoscroll_summary">Помери на песму када почне да свира</string>
+
+    <string name="settings_songpos_title">Сачувај позицију репродукције</string>
+    <string name="settings_songpos">Настави песму од последње сачуване позиције.</string>
+
+    <string name="settings_shuffle_explainer_sequential">Насумично искључено</string>
+    <string name="settings_shuffle_explainer_random">Насумично укључено</string>
+    <string name="settings_shuffle_explainer_radio">Насумично + Почни песме у насумичном тренутку</string>
+
+    <string name="settings_stereo_on">Стерео</string>
+    <string name="settings_stereo_off">Моно</string>
+
+    <string name="settings_scrobble_title">Scrobble</string>
+    <string name="settings_scrobble">Шаљи информације о пуштеним песмама на Last.FM или Libre.FM (потребан Scrobble Droid или Simple Last.fm Scrobbler)</string>
 
     <string name="settings_vibrate_title">Вибрирај на додир</string>
-    <string name="settings_vibrate">Завибрирај на кратко по додиру на дугмад или списак песама.</string>
+    <string name="settings_vibrate">Кратко вибрирај при додиру дугмади или списка песама.</string>
 
-    <string name="settings_root_folder">Корена фасцикла</string>
-    <string name="settings_root_folder_summary">Путања %s не постоји!</string>
+    <string name="settings_root_folder">Коренске фасцикле</string>
+    <string name="settings_root_folder_summary">Путања %s не постоји на уређају!</string>
 
     <string name="settings_accelerometer">Протресање</string>
-    <string name="settings_accelerometer_summary">Протресање пушта следећу песму.</string>
-    <string name="settings_accelerometer_threshold">Праг силе протресања</string>
-    <string name="settings_no_accelerometer">Ваш уређај нема акцелерометар. Ова функција је онемогућена.</string>
+    <string name="settings_accelerometer_summary">Пређи на следећу песму при протресању уређаја.</string>
+    <string name="settings_accelerometer_threshold">Интензитет протресања</string>
+    <string name="settings_no_accelerometer">Ваш уређај нема акцелерометар! Функција протресања није доступна.</string>
 
+    <string name="settings_rating">Омогући оцењивање</string>
+    <string name="settings_rating_summary">Повећава употребу процесора</string>
 
     <string name="settings_help">Помоћ</string>
-    <string name="settings_help_summary">Ако сте мало изгубљени.</string>
+    <string name="settings_help_summary">Упутство за коришћење</string>
 
-    <string name="help_start_song">Пуштање песме</string>
-    <string name="help_start_song_summary">Тапните на песму да бисте је пустили.</string>
-    <string name="help_start_group">Пуштање песме из групе</string>
-    <string name="help_start_group_summary">Тапните и држите групу да бисте пустили прву песму.</string>
-    <string name="help_unfold_group">Сажимање/раширивање групе</string>
-    <string name="help_unfold_group_summary">Тапните групу да бисте је сажели/раширили.</string>
-    <string name="help_scroll">Клизање на текућу песму</string>
-    <string name="help_scroll_summary">Притисните дугме десно од дугмета „следећа“ да бисте клизали на песму која се пушта.</string>
-    <string name="help_root_folders">Корена фасцикла</string>
-    <string name="help_root_folders_summary">Можете да прилагодите корену фасциклу: користи се само за скривање првог дела путање фасцикли када су песме поређане по фасцикли.</string>
+    <string name="help_start_song">Пусти песму</string>
+    <string name="help_start_song_summary">Додирните песму да бисте је пустили.</string>
+    <string name="help_start_group">Пусти из групе</string>
+    <string name="help_start_group_summary">Дуги додир на групу пушта прву песму групе.</string>
+    <string name="help_next_group">Дуги додир на \"Следећа\"</string>
+    <string name="help_next_group_summary">Дуги додир на \"Следећа\" пушта прву песму следеће групе (исто за \"Претходна\" за претходну групу)</string>
+    <string name="help_unfold_group">Сажми/рашири групу</string>
+    <string name="help_unfold_group_summary">Додирните групу да бисте је сажели или раширили.</string>
+    <string name="help_scroll">Прикажи тренутну песму у списку</string>
+    <string name="help_scroll_summary">Притисните дугме десно од \"Следећа\" да бисте отишли на песму која свира. Дуги додир сажима све групе осим тренутне песме.</string>
+    <string name="help_root_folders">Коренске фасцикле</string>
+    <string name="help_root_folders_summary">Коренске фасцикле се подешавају у напредним подешавањима: користе се за скривање првог дела путање када су песме поређане по фасцикли. За додавање више фасцикли, одвојите их тачком и зарезом.</string>
     <string name="help_background">Позадина</string>
-    <string name="help_background_summary">У току пуштања музике притисак на почетни тастер или тастер за назад ће да затвори списак песама и настави да пушта музику у позадини.</string>
-    <string name="help_quit">Напуштање</string>
-    <string name="help_quit_summary">Апликација ће да изађе по притиску тастера за назад ако музика није пуштена. Ако не, Андроид ће аутоматски да је затвори ако зафали меморије.</string>
-    <string name="help_stop">Заустављање</string>
-    <string name="help_stop_summary">Апликација ће остати у меморији по притиску на почетни тастер ако музика није пуштена, али Андроид ће аутоматски да је затвори ако зафали меморије.</string>
+    <string name="help_background_summary">Током репродукције, притисак на дугме Почетна или Назад држи апликацију у позадини.</string>
+    <string name="help_quit">Изађи</string>
+    <string name="help_quit_summary">Апликација ће се затворити ако не свира музика и притиснете дугме Назад. Android може затворити апликацију када му требају системски ресурси.</string>
+    <string name="help_stop">Задржи у меморији</string>
+    <string name="help_stop_summary">Апликација остаје у меморији чак и ако не свира музика и притиснете дугме Почетна. Android може затворити апликацију када му требају системски ресурси.</string>
     <string name="help_mediabutton">Медија тастери</string>
-    <string name="help_mediabutton_summary">Медија тастери (нпр. на блутут слушалицама) могу да контролишу апликацију (следећа, претходна, пауза/пуштање).</string>
-    <string name="help_mediabutton_autostart">Медија тастери аутоматски покрећу</string>
-    <string name="help_mediabutton_autostart_summary">Ако је апликација затворена, медија тастер ће да је покрене. Да бисте ово онемогућили искључите опцију „Медија тастери аутоматски покрећу“.</string>
-
+    <string name="help_mediabutton_summary">Медија тастери (као на Bluetooth слушалицама) могу контролисати апликацију (Следећа, Претходна, Пауза/Пусти).</string>
+    <string name="help_mediabutton_autostart">Аутоматско покретање медија тастерима</string>
+    <string name="help_mediabutton_autostart_summary">Ако је апликација затворена, притисак медија тастера ће је покренути. За искључивање, одзначите \"Аутоматско покретање медија тастерима\" у подешавањима.</string>
+    <string name="help_details_menu">Информације о песми (омот, …)</string>
+    <string name="help_details_menu_summary">Додирните икону SicMu да видите информације о песми која свира (омот, …)</string>
+    <string name="help_seek_menu">Мени за навигацију</string>
+    <string name="help_seek_menu_summary">Додирните горе десно у траци менија да отворите/затворите мени за навигацију. Дуги додир на \"Следећа\"/\"Претходна\" непрекидно премотава напред/назад.</string>
+    <string name="help_donate">Донирај</string>
+    <string name="help_context_menu">Контекстни мени</string>
+    <string name="help_context_menu_summary">Дуги додир на песму приказује мени са опцијама као што су оцењивање или брисање</string>
 
     <string name="settings_misc">Разно</string>
 
-    <string name="settings_about">О програму</string>
+    <string name="settings_about">О апликацији</string>
+    <string name="settings_about_summary">Информације о апликацији и њеним ауторима</string>
 
-    <string name="settings_version_title">Издање</string>
-    <string name="settings_source_title">Изворни кôд</string>
+    <string name="settings_version_title">Верзија</string>
+    <string name="settings_author_new_title">Аутор/ка SicMu Neo</string>
+    <string name="settings_author_old_title">Аутор SicMu</string>
+    <string name="settings_source_title">Изворни код</string>
     <string name="settings_licence_title">Лиценца</string>
+    <string name="donate_souchaud_title">Донирај</string>
+    <string name="donate_souchaud_summary">Ако вам се свиђа апликација, можете донирати Mathieu Souchaud овде</string>
+    <string name="close">Затвори</string>
 
-    <string name="settings_thanks">Посебне захвале</string>
+    <string name="changelogs_title">Промене у овој верзији</string>
+    <string name="changelogs_header">Новости:</string>
+
+    <string name="settings_thanks">Захвалнице</string>
     <string name="settings_thanks_icons">Иконе</string>
     <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (иконе са iconfinder.com), Google Material Symbols</string>
-    <string name="settings_thanks_doc">Упутства</string>
-    <string name="settings_thanks_doc_summary">Sue Smith (упутства за прављење музичког плејера за Андроид)</string>
+    <string name="settings_thanks_doc">Туторијал</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (туторијал о прављењу музичког плејера за Android)</string>
     <string name="settings_thanks_i15n">Превод</string>
-    <string name="settings_thanks_i15n_summary">Младен Пејаковић (српски), Mehmet Gülmen (Türkçe), Jerônimo Cordoni Pellegrini (Português)</string>
+    <string name="settings_thanks_i15n_summary">Младен Пејаковић (српски), Jerônimo Cordoni Pellegrini (португалски), Mehmet Gülmen (турски), Martin Scherbaum (немачки)</string>
+
+    <string name="settings_show_filename">Прикажи име датотеке</string>
+    <string name="settings_show_filename_summary">Прикажи име датотеке уместо наслова песме</string>
+
+    <string name="settings_show_remaining_time">Прикажи преостало време</string>
+    <string name="settings_show_remaining_time_summary">Прикажи преостало време уместо укупног времена</string>
+
+    <string name="settings_hide_navigation_bar">Сакриј траку за навигацију</string>
+    <string name="settings_hide_navigation_bar_summary">Аутоматски сакриј траку за навигацију</string>
+
+    <string name="settings_show_group_total_time">Прикажи укупно трајање</string>
+    <string name="settings_show_group_total_time_summary">Прикажи укупно трајање групе уместо броја песама</string>
+
+    <string name="action_repeat_title">Понављање</string>
+    <string name="action_repeat_all">Све</string>
+    <string name="action_repeat_one">Песму</string>
+    <string name="action_repeat_group">Групу</string>
+    <string name="action_repeat_not">Заустави на крају фасцикле</string>
+    <string name="action_stop_at_end_of_track">Заустави после песме</string>
+
+    <string name="detail_metadata_hint_label">Додирните омот албума да видите све метаподатке</string>
+    <string name="action_youtube_search">Претражи на YouTube</string>
+    <string name="action_youtube_open">Отвори YouTube видео</string>
+
+    <string name="settings_disable_pitch_compensation_title">Компензација висине тона (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">Не компензовати промене висине тона при повећању брзине репродукције, тј. повећати темпо и висину тона.</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Прикажи детаље песме</string>
+    <string name="a11y_toggle_details">Прикажи или сакриј панел детаља</string>
+    <string name="a11y_toggle_seek">Прикажи или сакриј контроле навигације</string>
+    <string name="a11y_album_art">Омот албума, додирните за метаподатке</string>
+    <string name="a11y_seek_bar">Позиција репродукције</string>
+    <string name="a11y_seek_back_20">Врати 20 секунди</string>
+    <string name="a11y_seek_back_5">Врати 5 секунди</string>
+    <string name="a11y_seek_forward_5">Напред 5 секунди</string>
+    <string name="a11y_seek_forward_20">Напред 20 секунди</string>
+    <string name="a11y_track_looper">Постави тачке понављања за тренутну нумеру</string>
+    <string name="a11y_rating_1">Оцени са 1 звездицом</string>
+    <string name="a11y_rating_2">Оцени са 2 звездице</string>
+    <string name="a11y_rating_3">Оцени са 3 звездице</string>
+    <string name="a11y_rating_4">Оцени са 4 звездице</string>
+    <string name="a11y_rating_5">Оцени са 5 звездица</string>
+    <string name="a11y_now_playing">Тренутно свира</string>
+    <string name="a11y_song_rating">Оцена: %d звездица</string>
+    <string name="a11y_sort_button">Промени режим приказа</string>
+    <string name="a11y_stereo_button">Пребаци између стерео и моно</string>
+    <string name="a11y_repeat_button">Промени режим понављања</string>
+    <string name="a11y_shuffle_button">Промени редослед репродукције</string>
+    <string name="a11y_rating_filter_button">Филтрирај песме по оцени</string>
+    <string name="a11y_search_button">Претражи песму</string>
+    <string name="a11y_settings_button">Отвори подешавања</string>
+    <string name="a11y_play_button">Пусти или паузирај</string>
+    <string name="a11y_prev_button">Претходна песма</string>
+    <string name="a11y_next_button">Следећа песма</string>
+    <string name="a11y_goto_button">Иди на тренутну песму</string>
+    <string name="a11y_more_options_button">Прикажи више опција</string>
 
 </resources>

@@ -16,244 +16,256 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <string name="permission_needed">L\'application a besoin de la permission de lire le stockage afin
         d\'afficher et jouer les chansons !\n\nQuand il vous le sera demandé, merci de donner l\'accès
-        aux photos et contenus multimédia sur votre appareil Android.
-    </string>
-    <!-- and write storage permissions -->
-
-    <!--  <string name="action_shake_disabled">Shake off</string>
-    <string name="action_shake_enabled">Shake on</string> -->
+        aux photos et contenus multimédia sur votre appareil Android.</string>
 
     <string name="action_sort_folder">dossier</string>
     <string name="action_sort_artist">artiste</string>
     <string name="action_sort_tree">arborescence</string>
     <string name="action_sort">Trier les chansons par :</string>
 
-   <!--  <string name="action_music_mode">Musique</string>
-    <string name="action_edit_mode">Édition</string> -->
+    <string name="ic_action_edit_folder">Dossier : %s</string>
+    <string name="ic_action_edit_song">Chanson : %s</string>
 
-    <string name="ic_action_edit_folder">dossier: %s</string>
-    <string name="ic_action_edit_song">chanson: %s</string>
+    <string name="action_rate_group">Noter chaque chanson (conserver)</string>
+    <string name="action_rate_group_overwrite">Noter chaque chanson (remplacer)</string>
+    <string name="action_rate_song">Noter la chanson</string>
 
-    <string name="action_rate_group">noter chaque chanson (conserver)</string>
-    <string name="action_rate_group_overwrite">noter chaque chanson (remplacer)</string>
+    <string name="action_rescan">Rescanner</string>
+    <string name="start_rescan">Démarrage du scan :</string>
+    <string name="rescanned">Rescanné :</string>
 
-    <string name="action_rate_song">noter</string>
-
-    <string name="action_rescan">rescanner</string>
-    <string name="start_rescan">Démarrage du scan : </string>
-    <string name="rescanned">Rescanné : </string>
-
-    <string name="action_delete_song">supprimer</string>
-    <string name="action_ask_delete_song">Voulez-vous vraiment supprimer %s ?</string>
-    <string name="action_delete_song_ok">Chanson %s supprimée.</string>
-    <string name="action_delete_song_nok">Suppression de la chanson %s échouée !</string>
+    <string name="action_delete_song">Supprimer la chanson</string>
+    <string name="action_ask_delete_song">Voulez-vous vraiment supprimer \'%s\' ?</string>
+    <string name="action_delete_song_ok">\'%s\' supprimé avec succès.</string>
+    <string name="action_delete_song_nok">Échec de la suppression de \'%s\' !</string>
 
     <string name="action_min_rating">Jouer les chansons avec une note >=</string>
     <string name="action_set_rating_folder">Noter le dossier : %s</string>
     <string name="action_set_rating_song">Noter la chanson : %s</string>
-    <string name="action_set_rating_song_failed">Annulation de l\'évaluation : déjà en cours</string>
+    <string name="action_set_rating_song_failed">Échec de la notation</string>
 
-    <string name="songs_have_been_rated">%d notes ont été appliqué</string>
-    <string name="current_rating_idx">note actuelle</string>
+    <string name="action_genius_lyrics">Rechercher sur genius.com</string>
 
-    <!--Below which "min rating" do we play song with rating not initialized (e.g. if 5 we play always song not initiliazed) -->
-    <string name="uninitialized_default_rating">Valeur par défaut des chansons non encore notées</string>
+    <string name="action_search">Rechercher</string>
+    <string name="search_unsuccessful">Aucun résultat !</string>
 
-    <string name="action_play">lecture</string>
-    <string name="action_pause">pause</string>
-    <string name="action_next">suivant</string>
-    <string name="action_prev">précédent</string>
+    <string name="songs_have_been_rated">%d chansons notées</string>
+    <string name="current_rating_idx">Note actuelle</string>
 
-    <string name="show_song_details">détails</string>
+    <string name="action_play">Lecture</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_next">Suivant</string>
+    <string name="action_prev">Précédent</string>
+
+    <string name="show_song_details">Détails</string>
     <string name="popup_song_info_title">Détails de la chanson :</string>
-    <string name="popup_song_artist">artiste : %s</string>
-    <string name="popup_song_album">album : %s</string>
-    <string name="popup_song_title">titre : %s</string>
-    <string name="popup_song_track">piste : %d</string>
-    <string name="popup_song_year">année : %d</string>
-    <string name="popup_song_rating">note : %d</string>
-    <string name="popup_song_mime">mime : %s</string>
-    <string name="popup_song_path">chemin : %s</string>
+    <string name="popup_song_artist">Artiste : %s</string>
+    <string name="popup_song_album">Album : %s</string>
+    <string name="popup_song_title">Titre : %s</string>
+    <string name="popup_song_track">Piste : %d</string>
+    <string name="popup_song_year">Année : %d</string>
+    <string name="popup_song_rating">Note : %d</string>
+    <string name="popup_song_mime">Type MIME : %s</string>
+    <string name="popup_song_path">Chemin : %s</string>
 
-    <!-- <string name="app_playing">SicMu playing</string> -->
+    <string name="explain_playback_speed">Glissez vers le haut/bas ou gauche/droite pour augmenter/diminuer la vitesse de lecture.</string>
 
-    <string name="explain_playback_speed">Glisser verticalement ou horizontalement pour diminuer/augmenter
-        la vitesse de lecture !</string>
-
-    <string name="focus_error">Impossible d\'obtenir le focus audio ! Redémarrez l\'application !</string>
+    <string name="focus_error">Impossible d\'accéder à l\'audio ! Veuillez redémarrer l\'application.</string>
 
     <string name="settings_title">Paramètres</string>
 
     <string name="settings_theme_title">Thème</string>
     <string-array name="settings_theme_entries">
-        <item>Rouge sang</item>
-        <item>Nuit</item>
-        <item>Blanc léger</item>
+        <item>Sombre, accents rouges</item>
+        <item>Sombre, accents blancs</item>
+        <item>Clair, accents noirs</item>
     </string-array>
 
-    <string name="settings_song_view">Vue chanson</string>
+    <string name="settings_song_view">Vue des chansons</string>
     <string name="settings_fold_title">État des dossiers au démarrage</string>
     <string-array name="settings_fold_entries">
         <item>Repliés</item>
         <item>Dépliés</item>
     </string-array>
     <string name="settings_unfold_subgroup">Déplier les sous-dossiers</string>
-    <string name="settings_unfold_subgroup_summary">Si coché : tapoter sur un dossier déplie tous les
-        sous-dossiers et chansons.</string>
-    <string name="settings_unfold_subgroup_threshold">Déplie les sous-dossiers si dossier</string>
-    <string name="settings_unfold_subgroup_threshold_summary">a moins de %d chansons</string>
+    <string name="settings_unfold_subgroup_summary">Si activé, toucher un dossier déplie tous les sous-dossiers et chansons.</string>
+    <string name="settings_unfold_subgroup_threshold">Déplier les sous-dossiers</string>
+    <string name="settings_unfold_subgroup_threshold_summary">s\'ils contiennent moins de %d chansons.</string>
 
+    <string name="settings_sleep_timer">Minuterie de veille</string>
+    <string name="settings_sleep_timer_start">Démarrer</string>
+    <string name="settings_sleep_timer_stop">Arrêter</string>
+    <string name="settings_sleep_timer_delay">Durée (min)</string>
+    <string name="settings_sleep_timer_remaining">La lecture s\'arrêtera à %s</string>
+    <string name="settings_sleep_timer_delay_wrong">La durée doit être positive !</string>
 
-    <string name="settings_sleep_timer">Minuteur d\'extinction</string>
-    <string name="settings_sleep_timer_start">Démarrer le minuteur</string>
-    <string name="settings_sleep_timer_stop">Arrêter le minuteur</string>
-    <string name="settings_sleep_timer_delay">Délai du minuteur d\'extinction, en minutes</string>
-    <string name="settings_sleep_timer_remaining">La lecture s\'arrêtera à : %s</string>
-    <string name="settings_sleep_timer_delay_wrong">Le délai d\'extinction doit être un nombre entier positif</string>
-
-    <string name="settings_song_view_font">Police d\'affichage de la vue chanson</string>
-    <string name="settings_text_size_regular">Taille de la police</string>
-    <string name="settings_text_size_big">Taille de la police grasse</string>
-    <string name="settings_text_size_ratio">Ratio de taille entre le dossier et le titre de la chanson</string>
+    <string name="settings_toggle_font_size">Taille de police</string>
+    <string name="settings_toggle_font_size_label">Touchez pour alterner entre grande et petite police.</string>
+    <string name="settings_song_view_font">Police de la vue des chansons</string>
+    <string name="settings_text_size_regular">Taille de police petite</string>
+    <string name="settings_text_size_big">Taille de police grande</string>
+    <string name="settings_text_size_ratio">Ratio de taille groupe/chanson</string>
 
     <string name="settings_ratings_not_written_title">Afficher les notes</string>
-    <string name="settings_ratings_not_written">Afficher les notes qui n\'ont pas été synchronisé</string>
-    <string name="settings_ratings_are_in_sync">Toutes les notes ont été synchronisé</string>
+    <string name="settings_ratings_not_written">Afficher les notes non sauvegardées</string>
+    <string name="settings_ratings_are_in_sync">Toutes les notes ont été sauvegardées.</string>
 
     <string name="settings_rescan_title">Rescanner</string>
-    <string name="settings_rescan">Rescanner tous les fichiers musique du téléphone.</string>
-    <!-- <string name="settings_rescan_disabled">Rescan broadcast disabled from Android KitKat.</string> -->
-    <string name="settings_rescan_triggered">Scan des fichiers lancé…</string>
-    <string name="settings_rescan_storage">Dossier de scan %s</string>
-    <string name="settings_rescan_finished">Le scan des fichiers est terminé. L\'affichage des nouveaux
-        fichiers peut prendre un certains temps (SicmuPlayer peut avoir besoin d\'être redémarré).</string>
-    <string name="settings_rescan_purge">Le scan a trouvé un fichier (%s) qui n\'est pas présent dans
-        le stockage : doit-on le supprimer de la base ?</string>
+    <string name="settings_rescan">Rescanner les fichiers multimédia.</string>
+    <string name="settings_rescan_triggered">Scan des fichiers en cours…</string>
+    <string name="settings_rescan_storage">Scan du stockage %s</string>
+    <string name="settings_rescan_finished">Scan terminé. Les nouveaux fichiers peuvent mettre un moment à apparaître (un redémarrage de SicMu Player peut être nécessaire).</string>
+    <string name="settings_rescan_purge">Le scan a trouvé des entrées (%s) qui n\'existent plus. Les entrées ont été supprimées de la liste.</string>
 
-    <string name="settings_media_button_start_app_title">Démarrage automatique par les boutons média</string>
-    <string name="settings_media_button_start_app">Les boutons média démarrent l\'application si elle
-        n\'est pas déjà lancée.</string>
+    <string name="settings_media_button_start_app_title">Démarrage auto par boutons média</string>
+    <string name="settings_media_button_start_app">Les boutons média démarrent l\'application si elle n\'est pas lancée.</string>
 
-    <string name="settings_autoscroll">Défiler jusqu\'à la nouvelle chanson jouée</string>
-    <string name="settings_autoscroll_summary">Quand une chanson commence à être jouée, défiler jusqu\'à elle</string>
+    <string name="settings_autoscroll">Chanson en cours</string>
+    <string name="settings_autoscroll_summary">Défiler vers la chanson quand elle est jouée</string>
 
-    <string name="settings_songpos_title">Conserver la position dans la chanson</string>
-    <string name="settings_songpos">Au démarrage, la chanson reprendra où elle s\'était arrêtée précédemment.</string>
+    <string name="settings_songpos_title">Sauvegarder la position de lecture</string>
+    <string name="settings_songpos">Reprendre la chanson depuis la dernière position sauvegardée.</string>
 
-    <string name="settings_scrobble_title">Scrobbler</string>
-    <string name="settings_scrobble">Envoyer les détails des chansons jouées vers Last.FM ou Libre.FM
-        (nécessite d\'avoir installé Scrobble Droid ou Last.fm Scrobbler sur l\'appareil)</string>
+    <string name="settings_shuffle_explainer_sequential">Lecture aléatoire désactivée</string>
+    <string name="settings_shuffle_explainer_random">Lecture aléatoire activée</string>
+    <string name="settings_shuffle_explainer_radio">Aléatoire + Démarrer à un moment aléatoire</string>
 
-    <string name="settings_vibrate_title">Vibrer au touché</string>
-    <string name="settings_vibrate">Vibre légèrement quand on touche aux boutons ou à la liste des chansons.</string>
+    <string name="settings_stereo_on">Stéréo</string>
+    <string name="settings_stereo_off">Mono</string>
+
+    <string name="settings_scrobble_title">Scrobble</string>
+    <string name="settings_scrobble">Envoyer les détails des chansons à Last.FM ou Libre.FM (nécessite Scrobble Droid ou Simple Last.fm Scrobbler)</string>
+
+    <string name="settings_vibrate_title">Vibrer au toucher</string>
+    <string name="settings_vibrate">Vibrer brièvement en touchant les boutons ou la liste des chansons.</string>
 
     <string name="settings_root_folder">Dossiers racine</string>
     <string name="settings_root_folder_summary">Le chemin %s n\'existe pas sur l\'appareil !</string>
 
-    <string name="settings_accelerometer">Accéléromètre</string>
-    <string name="settings_accelerometer_summary">Aller à la chanson suivante quand l\'appareil est secoué.</string>
-    <string name="settings_accelerometer_threshold">Seuil de secouage</string>
-    <string name="settings_no_accelerometer">Votre appareil n\'a pas d\'accéléromètre. Cette fonctionnalité est désactivée.</string>
+    <string name="settings_accelerometer">Secouer</string>
+    <string name="settings_accelerometer_summary">Passer à la chanson suivante en secouant l\'appareil.</string>
+    <string name="settings_accelerometer_threshold">Intensité du secouement</string>
+    <string name="settings_no_accelerometer">Votre appareil n\'a pas d\'accéléromètre ! La fonction de secouement n\'est pas disponible.</string>
 
     <string name="settings_rating">Activer les notes</string>
-    <string name="settings_rating_summary">Utilisera légèrement moins le processeur si désactivé</string>
-
-   <!--  <string name="settings_min_rating">Minimum rating</string> -->
+    <string name="settings_rating_summary">Augmente l\'utilisation du processeur</string>
 
     <string name="settings_help">Aide</string>
-    <string name="settings_help_summary">Si vous êtes un peu perdu ou si vous avez envie de découvrir
-        les fonctionnalités cachées de SicMu Player</string>
+    <string name="settings_help_summary">Manuel d\'utilisation</string>
 
     <string name="help_start_song">Lire une chanson</string>
-    <string name="help_start_song_summary">Appuyez sur une chanson pour lancer la lecture.</string>
-    <string name="help_start_group">Lire un dossier</string>
-    <string name="help_start_group_summary">Appuyez de manière prolongée sur un dossier pour lire la
-        première chanson qu\'il contient.</string>
-    <string name="help_next_group">Appuie long sur suivant</string>
-    <string name="help_next_group_summary">Appuyer longtemps sur le bouton \'suivant\' démarrera la
-        lecture du dossier suivant (idem pour précédent)</string>
-    <string name="help_unfold_group">Plier / déplier un dossier</string>
-    <string name="help_unfold_group_summary">Appuyer sur un dossier pour le plier / déplier.</string>
-    <string name="help_scroll">Défiler jusque la chanson jouée</string>
-    <string name="help_scroll_summary">Appuyer sur le bouton à droite de \'suivant\' pour défiler jusque
-        la piste en cours de lecture. Un appui prolongé replie tout, excepté la chanson en cours de lecture.</string>
-    <!-- <string name="help_lock">Désactiver l\'écran de vérouillage</string>
-    <string name="help_lock_summary">Open the padlock button to disable the lock screen (it prevents
-    locking only when the app is on foreground; does not work on some devices).</string> -->
+    <string name="help_start_song_summary">Touchez une chanson pour la lire.</string>
+    <string name="help_start_group">Lire depuis un groupe</string>
+    <string name="help_start_group_summary">Appui long sur un groupe pour lire la première chanson du groupe.</string>
+    <string name="help_next_group">Appui long sur \"Suivant\"</string>
+    <string name="help_next_group_summary">Appui long sur \"Suivant\" lit la première chanson du groupe suivant (idem pour \"Précédent\" pour le groupe précédent)</string>
+    <string name="help_unfold_group">Plier/déplier un groupe</string>
+    <string name="help_unfold_group_summary">Touchez un groupe pour le plier ou le déplier.</string>
+    <string name="help_scroll">Afficher la chanson actuelle dans la liste</string>
+    <string name="help_scroll_summary">Appuyez sur le bouton à droite de \"Suivant\" pour aller à la chanson en cours. Un appui long replie tous les groupes sauf la chanson actuelle.</string>
     <string name="help_root_folders">Dossiers racine</string>
-    <string name="help_root_folders_summary">Les dossiers racine peuvent être modifiés dans les réglages
-        avancés : ils sont utilisés pour masquer la première partie du chemin des fichiers quand les chansons sont triées par dossier. Pour utiliser plusieurs dossiers, il suffit de les séparer par des points-virgules.</string>
+    <string name="help_root_folders_summary">Les dossiers racine se configurent dans les paramètres avancés : ils servent à masquer la première partie du chemin quand les chansons sont triées par dossier. Pour ajouter plusieurs dossiers, séparez-les par des points-virgules.</string>
     <string name="help_background">Arrière-plan</string>
-    <string name="help_background_summary">Lorsqu\'une chanson est jouée, appuyer sur le bouton d\'accueil
-        ou précédent pour fermer la liste de lecture et continuer d\'écouter la musique en arrière-plan.</string>
+    <string name="help_background_summary">Pendant la lecture, appuyer sur Accueil ou Retour maintient l\'application en arrière-plan.</string>
     <string name="help_quit">Quitter</string>
-    <string name="help_quit_summary">L\'application devrait s\'éteindre si aucune chanson n\'est en
-        cours de lecture ou si le bouton précédent est appuyé. Sinon, Android le fermera automatiquement quand la mémoire est saturée.</string>
-    <string name="help_stop">Stop</string>
-    <string name="help_stop_summary">L\'application devrait rester en mémoire si aucune chanson n\'est
-        jouée et si le bouton d\'accueil est appuyé ; mais Android fermera automatiquement l\'application si la mémoire est saturée.</string>
-    <string name="help_mediabutton">Boutons media</string>
-    <string name="help_mediabutton_summary">Les boutons média (comme sur un casque bluetooth) peuvent
-        contrôler l\'application (suivant, précédent, pause/lecture).</string>
-    <string name="help_mediabutton_autostart">Démarrage automatique par les boutons média</string>
-    <string name="help_mediabutton_autostart_summary">Si l\'application est fermée, appuyer sur un
-        bouton média la démarrera automatiquement. Pour désactiver cela, décocher l\'option Paramètres->Démarrage automatique par les boutons média.</string>
-    <string name="help_details_menu">Détails des chansons (pochette, …)</string>
-    <string name="help_details_menu_summary">Appuyer sur l\'icône de Sicmu pour afficher les détails
-        de la chanson en cours de lecture (couverture de l\'album, …)</string>
-    <string name="help_seek_menu">Menu de lecture</string>
-    <string name="help_seek_menu_summary">Cliquez en haut à droite pour ouvrir le menu de lecture. Un
-        appuie prolongé sur suivant/précédent avancera/reculera la lecture sans cesse.</string>
-    <string name="help_donate">Appuyer trois fois sur le bouton "Donner" et la fenêtre de donation n\'apparaîtera plus jamais.</string>
-
+    <string name="help_quit_summary">L\'application se fermera si aucune musique ne joue et que vous appuyez sur Retour. Android peut fermer l\'application quand il a besoin de ressources système.</string>
+    <string name="help_stop">Garder en mémoire</string>
+    <string name="help_stop_summary">L\'application reste en mémoire même si aucune musique ne joue et que vous appuyez sur Accueil. Android peut fermer l\'application quand il a besoin de ressources système.</string>
+    <string name="help_mediabutton">Boutons média</string>
+    <string name="help_mediabutton_summary">Les boutons média (comme sur les écouteurs Bluetooth) peuvent contrôler l\'application (Suivant, Précédent, Pause/Lecture).</string>
+    <string name="help_mediabutton_autostart">Démarrage auto par boutons média</string>
+    <string name="help_mediabutton_autostart_summary">Si l\'application est fermée, appuyer sur les boutons média la démarrera. Pour désactiver, décochez \"Démarrage auto par boutons média\" dans les paramètres.</string>
+    <string name="help_details_menu">Infos de la chanson (pochette, …)</string>
+    <string name="help_details_menu_summary">Touchez l\'icône SicMu pour voir les infos de la chanson en cours (pochette, …)</string>
+    <string name="help_seek_menu">Menu de navigation</string>
+    <string name="help_seek_menu_summary">Touchez en haut à droite de la barre de menu pour ouvrir/fermer le menu de navigation. Appui long sur \"Suivant\"/\"Précédent\" avance/recule en continu.</string>
+    <string name="help_donate">Faire un don</string>
     <string name="help_context_menu">Menu contextuel</string>
-    <string name="help_context_menu_summary">Un appui long sur une chanson fait apparaitre un menu
-        contextuel où vous pouvez noter la chanson, supprimer le fichier, …</string>
+    <string name="help_context_menu_summary">Appui long sur une chanson pour afficher un menu avec des options comme noter ou supprimer</string>
 
     <string name="settings_misc">Divers</string>
 
     <string name="settings_about">À propos</string>
+    <string name="settings_about_summary">Informations sur l\'application et ses auteurs</string>
 
-    <string name="settings_version_title">Numéro de version</string>
-
+    <string name="settings_version_title">Version</string>
+    <string name="settings_author_new_title">Auteur·e de SicMu Neo</string>
+    <string name="settings_author_old_title">Auteur de SicMu</string>
+    <string name="settings_source_title">Code source</string>
+    <string name="settings_licence_title">Licence</string>
+    <string name="donate_souchaud_title">Faire un don</string>
+    <string name="donate_souchaud_summary">Si vous aimez l\'application, vous pouvez faire un don à Mathieu Souchaud ici</string>
     <string name="close">Fermer</string>
 
-    <string name="changelogs_title">Notes de version</string>
-    <string name="changelogs_header">Quoi de neuf :</string>
+    <string name="changelogs_title">Changements dans cette version</string>
+    <string name="changelogs_header">Nouveautés :</string>
 
-    <string name="settings_thanks">Remerciements particuliers</string>
+    <string name="settings_thanks">Remerciements</string>
     <string name="settings_thanks_icons">Icônes</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (icônes trouvés sur iconfinder.com), Google Material Symbols</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (icônes de iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutoriel</string>
-    <string name="settings_thanks_doc_summary">Sue Smith (tutoriels sur comment créer un lecteur de musique sur Android)</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (tutoriel sur la création d\'un lecteur de musique pour Android)</string>
     <string name="settings_thanks_i15n">Traduction</string>
-    <string name="settings_thanks_i15n_summary">Mladen Pejaković (Serbian), Jerônimo Cordoni Pellegrini
-        (Portuguese), Mehmet Gülmen (Turkish), Romain Hennuyer (French)</string>
-<!--     <string name="settings_locked">Do not prevent lock</string>
-    <string name="settings_unlocked">Prevent lock</string> -->
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (serbe), Jerônimo Cordoni Pellegrini (portugais), Mehmet Gülmen (turc), Martin Scherbaum (allemand), Romain Hennuyer (français)</string>
 
-    <string name="settings_show_filename">Afficher les noms de fichier</string>
-    <string name="settings_show_filename_summary">Afficher le nom de fichier des chansons (exemple :
-        james_brown_01.mp3) plutôt que le titre de la chanson</string>
+    <string name="settings_show_filename">Afficher le nom de fichier</string>
+    <string name="settings_show_filename_summary">Afficher le nom de fichier au lieu du titre de la chanson</string>
 
     <string name="settings_show_remaining_time">Afficher le temps restant</string>
-    <string name="settings_show_remaining_time_summary">Afficher le temps restant plutôt que le temps de lecture écoulé</string>
+    <string name="settings_show_remaining_time_summary">Afficher le temps restant au lieu du temps total</string>
 
-    <string name="settings_hide_navigation_bar">Cache la barre de navigation</string>
-    <string name="settings_hide_navigation_bar_summary">Cache automatiquement la barre de navigation</string>
+    <string name="settings_hide_navigation_bar">Masquer la barre de navigation</string>
+    <string name="settings_hide_navigation_bar_summary">Masquer automatiquement la barre de navigation</string>
 
-    <string name="settings_show_group_total_time">Afficher le temps total des dossiers</string>
-    <string name="settings_show_group_total_time_summary">Afficher le temps total des dossiers plutôt que le nombre de chansons</string>
+    <string name="settings_show_group_total_time">Afficher la durée totale</string>
+    <string name="settings_show_group_total_time_summary">Afficher la durée totale du groupe au lieu du nombre de chansons</string>
 
-    <string name="action_repeat_title">Mode de répétition</string>
-    <string name="action_repeat_all">Répéter toutes les chansons</string>
-    <string name="action_repeat_one">Répéter la même chanson</string>
-    <string name="action_repeat_group">Répéter le même dossier</string>
+    <string name="action_repeat_title">Répétition</string>
+    <string name="action_repeat_all">Toutes</string>
+    <string name="action_repeat_one">Chanson</string>
+    <string name="action_repeat_group">Groupe</string>
     <string name="action_repeat_not">Arrêter à la fin du dossier</string>
-    <string name="action_stop_at_end_of_track">Arrêter à la fin de la chanson</string>
+    <string name="action_stop_at_end_of_track">Arrêter après la chanson</string>
+
+    <string name="detail_metadata_hint_label">Touchez la pochette pour voir tous les métadonnées</string>
+    <string name="action_youtube_search">Rechercher sur YouTube</string>
+    <string name="action_youtube_open">Ouvrir la vidéo YouTube</string>
+
+    <string name="settings_disable_pitch_compensation_title">Compensation de hauteur (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">Ne pas compenser les changements de hauteur lors de l\'augmentation de la vitesse, c\'est-à-dire augmenter le tempo et la hauteur.</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Afficher les détails de la chanson</string>
+    <string name="a11y_toggle_details">Afficher ou masquer le panneau de détails</string>
+    <string name="a11y_toggle_seek">Afficher ou masquer les contrôles de navigation</string>
+    <string name="a11y_album_art">Pochette de l\'album, touchez pour voir les métadonnées</string>
+    <string name="a11y_seek_bar">Position de lecture</string>
+    <string name="a11y_seek_back_20">Reculer de 20 secondes</string>
+    <string name="a11y_seek_back_5">Reculer de 5 secondes</string>
+    <string name="a11y_seek_forward_5">Avancer de 5 secondes</string>
+    <string name="a11y_seek_forward_20">Avancer de 20 secondes</string>
+    <string name="a11y_track_looper">Définir les points de boucle pour la piste actuelle</string>
+    <string name="a11y_rating_1">Noter 1 étoile</string>
+    <string name="a11y_rating_2">Noter 2 étoiles</string>
+    <string name="a11y_rating_3">Noter 3 étoiles</string>
+    <string name="a11y_rating_4">Noter 4 étoiles</string>
+    <string name="a11y_rating_5">Noter 5 étoiles</string>
+    <string name="a11y_now_playing">En cours de lecture</string>
+    <string name="a11y_song_rating">Note : %d étoiles</string>
+    <string name="a11y_sort_button">Changer le mode d\'affichage</string>
+    <string name="a11y_stereo_button">Alterner stéréo ou mono</string>
+    <string name="a11y_repeat_button">Changer le mode de répétition</string>
+    <string name="a11y_shuffle_button">Changer l\'ordre de lecture</string>
+    <string name="a11y_rating_filter_button">Filtrer les chansons par note</string>
+    <string name="a11y_search_button">Rechercher une chanson</string>
+    <string name="a11y_settings_button">Ouvrir les paramètres</string>
+    <string name="a11y_play_button">Lire ou mettre en pause</string>
+    <string name="a11y_prev_button">Chanson précédente</string>
+    <string name="a11y_next_button">Chanson suivante</string>
+    <string name="a11y_goto_button">Aller à la chanson actuelle</string>
+    <string name="a11y_more_options_button">Afficher plus d\'options</string>
 
 </resources>

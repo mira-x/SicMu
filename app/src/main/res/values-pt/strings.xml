@@ -16,114 +16,256 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources>
+    <string name="permission_needed">Esta aplicação precisa de permissão de leitura do armazenamento
+    para encontrar, mostrar e reproduzir músicas.
+    Por favor, permita o acesso a fotos e conteúdo multimídia quando o sistema solicitar.</string>
 
     <string name="action_sort_folder">pasta</string>
     <string name="action_sort_artist">artista</string>
-    <string name="action_sort_tree">árvore</string>
-    <string name="action_sort">Ordenar músics por:</string>
+    <string name="action_sort_tree">árvore de diretórios</string>
+    <string name="action_sort">Ordenar músicas por:</string>
 
-    <string name="focus_error">Não consegui foco do áudio! Reinicie o app!</string>
+    <string name="ic_action_edit_folder">Pasta: %s</string>
+    <string name="ic_action_edit_song">Música: %s</string>
+
+    <string name="action_rate_group">Avaliar todas as músicas (manter)</string>
+    <string name="action_rate_group_overwrite">Avaliar todas as músicas (substituir)</string>
+    <string name="action_rate_song">Avaliar música</string>
+
+    <string name="action_rescan">Reescanear</string>
+    <string name="start_rescan">Escaneando:</string>
+    <string name="rescanned">Escaneado:</string>
+
+    <string name="action_delete_song">Apagar música</string>
+    <string name="action_ask_delete_song">Tem certeza que quer apagar \'%s\'?</string>
+    <string name="action_delete_song_ok">\'%s\' apagado com sucesso.</string>
+    <string name="action_delete_song_nok">Erro ao apagar \'%s\'!</string>
+
+    <string name="action_min_rating">Tocar músicas com avaliação >=</string>
+    <string name="action_set_rating_folder">Avaliar pasta: %s</string>
+    <string name="action_set_rating_song">Avaliar música: %s</string>
+    <string name="action_set_rating_song_failed">Erro ao avaliar</string>
+
+    <string name="action_genius_lyrics">Buscar no genius.com</string>
+
+    <string name="action_search">Buscar</string>
+    <string name="search_unsuccessful">Nada encontrado!</string>
+
+    <string name="songs_have_been_rated">%d músicas avaliadas</string>
+    <string name="current_rating_idx">Avaliação atual</string>
+
+    <string name="action_play">Tocar</string>
+    <string name="action_pause">Pausar</string>
+    <string name="action_next">Próxima</string>
+    <string name="action_prev">Anterior</string>
+
+    <string name="show_song_details">Detalhes</string>
+    <string name="popup_song_info_title">Detalhes da música:</string>
+    <string name="popup_song_artist">Artista: %s</string>
+    <string name="popup_song_album">Álbum: %s</string>
+    <string name="popup_song_title">Título: %s</string>
+    <string name="popup_song_track">Faixa: %d</string>
+    <string name="popup_song_year">Ano: %d</string>
+    <string name="popup_song_rating">Avaliação: %d</string>
+    <string name="popup_song_mime">Tipo MIME: %s</string>
+    <string name="popup_song_path">Caminho: %s</string>
+
+    <string name="explain_playback_speed">Deslize para cima/baixo ou esquerda/direita para aumentar/diminuir a velocidade de reprodução.</string>
+
+    <string name="focus_error">Não foi possível acessar o áudio! Por favor, reinicie a aplicação.</string>
 
     <string name="settings_title">Configurações</string>
 
-    <string name="settings_song_view">Visão das músicas</string>
-    <string name="settings_fold_title">Estado das pastas ao iniciar</string>
+    <string name="settings_theme_title">Tema</string>
+    <string-array name="settings_theme_entries">
+        <item>Escuro, acentos vermelhos</item>
+        <item>Escuro, acentos brancos</item>
+        <item>Claro, acentos pretos</item>
+    </string-array>
+
+    <string name="settings_song_view">Vista de músicas</string>
+    <string name="settings_fold_title">Estado inicial de dobra</string>
     <string-array name="settings_fold_entries">
         <item>Fechadas</item>
         <item>Abertas</item>
     </string-array>
     <string name="settings_unfold_subgroup">Abrir subgrupos</string>
-    <string name="settings_unfold_subgroup_summary">Se marcado: clicar no grupo abrirá todos os subgrupos.</string>
-    <string name="settings_unfold_subgroup_threshold">Abrir subgrupos se grupo</string>
-    <string name="settings_unfold_subgroup_threshold_summary">tem menos que %d músicas</string>
+    <string name="settings_unfold_subgroup_summary">Se ativado, tocar num grupo abre todos os subgrupos e músicas.</string>
+    <string name="settings_unfold_subgroup_threshold">Abrir subgrupos</string>
+    <string name="settings_unfold_subgroup_threshold_summary">se contiverem menos de %d músicas.</string>
 
+    <string name="settings_sleep_timer">Temporizador de sono</string>
+    <string name="settings_sleep_timer_start">Iniciar</string>
+    <string name="settings_sleep_timer_stop">Parar</string>
+    <string name="settings_sleep_timer_delay">Duração (min)</string>
+    <string name="settings_sleep_timer_remaining">A reprodução vai parar às %s</string>
+    <string name="settings_sleep_timer_delay_wrong">A duração deve ser positiva!</string>
 
-    <string name="settings_song_view_font">Fonte para visão das músicas</string>
-    <string name="settings_text_size_regular">Fonte pequena</string>
-    <string name="settings_text_size_big">Fonte grande</string>
-    <string name="settings_text_size_ratio">Proporção entre tamnho de texto grupo/música</string>
+    <string name="settings_toggle_font_size">Tamanho da fonte</string>
+    <string name="settings_toggle_font_size_label">Toque para alternar entre fonte grande e pequena.</string>
+    <string name="settings_song_view_font">Fonte da vista de músicas</string>
+    <string name="settings_text_size_regular">Tamanho de fonte pequena</string>
+    <string name="settings_text_size_big">Tamanho de fonte grande</string>
+    <string name="settings_text_size_ratio">Proporção de tamanho grupo/música</string>
 
-    <string name="settings_rescan_title">Procurar músicas</string>
-    <string name="settings_rescan">Iniciar busca por arquivos de mídia no dispositivo.</string>
-    <string name="settings_rescan_triggered">Buscador de Mídia Iniciado…</string>
-    <string name="settings_rescan_storage">Procurando em armazenamento: %s</string>
-    <string name="settings_rescan_finished">Busca de mídia terminada. Pode levar algum tempo até que os novos arquivos apareçam.</string>
+    <string name="settings_ratings_not_written_title">Mostrar avaliações</string>
+    <string name="settings_ratings_not_written">Mostrar avaliações não guardadas</string>
+    <string name="settings_ratings_are_in_sync">Todas as avaliações foram guardadas.</string>
 
+    <string name="settings_rescan_title">Reescanear</string>
+    <string name="settings_rescan">Reescanear ficheiros multimédia.</string>
+    <string name="settings_rescan_triggered">Escaneando ficheiros multimédia…</string>
+    <string name="settings_rescan_storage">Escaneando armazenamento %s</string>
+    <string name="settings_rescan_finished">Escaneamento terminado. Pode demorar um pouco até os novos ficheiros aparecerem (pode ser necessário reiniciar o SicMu Player).</string>
+    <string name="settings_rescan_purge">O escaneador encontrou entradas (%s) que já não existem. As entradas foram removidas da lista.</string>
 
-    <string name="settings_media_button_start_app_title">Botões de mídia iniciam app</string>
-    <string name="settings_media_button_start_app">Botões de mídia iniciam o app se já não estiver rodando.</string>
+    <string name="settings_media_button_start_app_title">Início automático com botões multimédia</string>
+    <string name="settings_media_button_start_app">Os botões multimédia iniciam a aplicação se não estiver a correr.</string>
 
-    <string name="settings_autoscroll">Rolar até a próxima música</string>
-    <string name="settings_autoscroll_summary">Quando uma música começar a tocar, role até ela.</string>
+    <string name="settings_autoscroll">Música a tocar</string>
+    <string name="settings_autoscroll_summary">Deslocar para a música quando ela toca</string>
 
-    <string name="settings_songpos_title">Gravar posição na música</string>
-    <string name="settings_songpos">Ao iniciar a música começará da posição em que estava tocando anteriormente.</string>
+    <string name="settings_songpos_title">Guardar posição de reprodução</string>
+    <string name="settings_songpos">Continuar a música da última posição guardada.</string>
+
+    <string name="settings_shuffle_explainer_sequential">Aleatório desativado</string>
+    <string name="settings_shuffle_explainer_random">Aleatório ativado</string>
+    <string name="settings_shuffle_explainer_radio">Aleatório + Iniciar músicas em momento aleatório</string>
+
+    <string name="settings_stereo_on">Estéreo</string>
+    <string name="settings_stereo_off">Mono</string>
 
     <string name="settings_scrobble_title">Scrobble</string>
-    <string name="settings_scrobble">Mandar detalhes das faixas tocadas para Last.FM ou Libre.FM (requer Scrobble Droid ou Simple Last.fm Scrobbler instalado)</string>
+    <string name="settings_scrobble">Enviar informações das músicas tocadas para Last.FM ou Libre.FM (requer Scrobble Droid ou Simple Last.fm Scrobbler instalado)</string>
 
-    <string name="settings_vibrate_title">Vibrar com toque</string>
-    <string name="settings_vibrate">Vibrar brevemente quando botões ou a lista de músicas forem pressionados.</string>
+    <string name="settings_vibrate_title">Vibrar ao tocar</string>
+    <string name="settings_vibrate">Vibrar brevemente ao tocar botões ou a lista de músicas.</string>
 
     <string name="settings_root_folder">Pastas raiz</string>
-    <string name="settings_root_folder_summary">O caminho %s não existe neste dispositivo!</string>
+    <string name="settings_root_folder_summary">O caminho %s não existe no dispositivo!</string>
 
-    <string name="settings_accelerometer">Ação de sacudir</string>
-    <string name="settings_accelerometer_summary">Sacudir faz ir para a próxima música.</string>
-    <string name="settings_accelerometer_threshold">Limiar de força para sacudir</string>
-    <string name="settings_no_accelerometer">Seu dispositivo não tem acelerômetro. A funcionalidade de sacudir ficará desabilitada.</string>
+    <string name="settings_accelerometer">Agitar</string>
+    <string name="settings_accelerometer_summary">Passar para a próxima música ao agitar o dispositivo.</string>
+    <string name="settings_accelerometer_threshold">Intensidade do agitar</string>
+    <string name="settings_no_accelerometer">O seu dispositivo não tem acelerómetro! A função de agitar não está disponível.</string>
 
+    <string name="settings_rating">Ativar avaliações</string>
+    <string name="settings_rating_summary">Aumenta o uso do processador</string>
 
     <string name="settings_help">Ajuda</string>
-    <string name="settings_help_summary">Se você estiver um pouco/a perdido/a.</string>
+    <string name="settings_help_summary">Manual de utilização</string>
 
-    <string name="help_start_song">Começar a tocar</string>
-    <string name="help_start_song_summary">Clique em uma música para começar a tocá-la.</string>
-    <string name="help_start_group">Começar a tocar um grupo</string>
-    <string name="help_start_group_summary">Toque longo em um grupo começa a tocar a primeira música dele.</string>
-    <string name="help_next_group">Toque longo em \'próximo\'</string>
-    <string name="help_next_group_summary">Toque longo em \'próximo\' começa a tocar o próximo grupo (semelhante para \'anterior\')</string>
-    <string name="help_unfold_group">Colapsar (fechar) / abrir grupo</string>
-    <string name="help_unfold_group_summary">Toque em um grupo para colapsar (fechar) ou abrir.</string>
-    <string name="help_scroll">Rolar até a música atual</string>
-    <string name="help_scroll_summary">Pressione o botão à direita do botão \'próximo\' para rolar a lista até a música atual. Um toque longo fecha tudo exceto a música atual.</string>
-    <string name="help_root_folders">Pastas Raiz</string>
-    <string name="help_root_folders_summary">As pastas raíz podem ser modificadas nas configuações avançadas: só são usadas para esconder a primeira parte das pastas quando as músicas são ordenadas por pasta (não interfere nos caminhos de busca de músicas). Para incluir várias pastas raiz, separe os caminhos com ponto-e-ivírgula.</string>
-    <string name="help_background">Música em background</string>
-    <string name="help_background_summary">Enquanto tocado música, toque no botão home ou no botão voltar para fechar a interface e continuar tocando em background.</string>
+    <string name="help_start_song">Tocar uma música</string>
+    <string name="help_start_song_summary">Toque numa música para a reproduzir.</string>
+    <string name="help_start_group">Tocar a partir de um grupo</string>
+    <string name="help_start_group_summary">Toque longo num grupo para reproduzir a primeira música do grupo.</string>
+    <string name="help_next_group">Toque longo em \"Próxima\"</string>
+    <string name="help_next_group_summary">Toque longo em \"Próxima\" reproduz a primeira música do próximo grupo (igual para \"Anterior\" para o grupo anterior)</string>
+    <string name="help_unfold_group">Abrir/fechar grupo</string>
+    <string name="help_unfold_group_summary">Toque num grupo para o abrir ou fechar.</string>
+    <string name="help_scroll">Mostrar música atual na lista</string>
+    <string name="help_scroll_summary">Pressione o botão à direita de \"Próxima\" para ir à música a tocar. Toque longo fecha todos os grupos exceto a música atual.</string>
+    <string name="help_root_folders">Pastas raiz</string>
+    <string name="help_root_folders_summary">As pastas raiz configuram-se nas definições avançadas: servem para ocultar a primeira parte do caminho quando as músicas são ordenadas por pasta. Para adicionar várias pastas, separe-as com ponto e vírgula.</string>
+    <string name="help_background">Segundo plano</string>
+    <string name="help_background_summary">Durante a reprodução, pressionar o botão Início ou Voltar mantém a aplicação em segundo plano.</string>
     <string name="help_quit">Sair</string>
-    <string name="help_quit_summary">O app deverá morrer se nenhuma música estiver sendo tocada e o botão de voltar for pressionado. Se não, o Android o matará se necessitar de mais memória.</string>
-    <string name="help_stop">Parar</string>
-    <string name="help_stop_summary">O app ficará na memóra se nenhuma música estiver sendo tocada e o botão home for tocado, mas o Android o matará se houver pouca memória disponível.</string>
-    <string name="help_mediabutton">Botões de mídia</string>
-    <string name="help_mediabutton_summary">Botões de mídia (como em headphones bluetooth) podem controlar o app (próxima, anterior, pausa/tocar).</string>
-    <string name="help_mediabutton_autostart">Botões de mídia iniciam app</string>
-    <string name="help_mediabutton_autostart_summary">Se o app estiver fechado os botões de mídia o iniciarão. Para desabilitar desmarque esta opção em configurações->Botões de mídia iniciam app.</string>
-    <string name="help_seek_menu">Busca dentro da músia</string>
-    <string name="help_seek_menu_summary">Clique no canto superior direito para abrir o menu para busca dentro da música. Um toque longo em próximo/anterior fará busca contínua.</string>
+    <string name="help_quit_summary">A aplicação fechará se não houver música a tocar e pressionar o botão Voltar. O Android pode fechar a aplicação quando precisar de recursos do sistema.</string>
+    <string name="help_stop">Manter em memória</string>
+    <string name="help_stop_summary">A aplicação permanece em memória mesmo se não houver música a tocar e pressionar o botão Início. O Android pode fechar a aplicação quando precisar de recursos do sistema.</string>
+    <string name="help_mediabutton">Botões multimédia</string>
+    <string name="help_mediabutton_summary">Os botões multimédia (como em auscultadores Bluetooth) podem controlar a aplicação (Próxima, Anterior, Pausar/Tocar).</string>
+    <string name="help_mediabutton_autostart">Início automático com botões multimédia</string>
+    <string name="help_mediabutton_autostart_summary">Se a aplicação estiver fechada, pressionar os botões multimédia irá iniciá-la. Para desativar, desmarque \"Início automático com botões multimédia\" nas definições.</string>
+    <string name="help_details_menu">Informações da música (capa, …)</string>
+    <string name="help_details_menu_summary">Toque no ícone do SicMu para ver informações da música a tocar (capa, …)</string>
+    <string name="help_seek_menu">Menu de navegação</string>
+    <string name="help_seek_menu_summary">Toque no canto superior direito da barra de menu para abrir/fechar o menu de navegação. Toque longo em \"Próxima\"/\"Anterior\" avança/retrocede continuamente.</string>
+    <string name="help_donate">Doar</string>
+    <string name="help_context_menu">Menu de contexto</string>
+    <string name="help_context_menu_summary">Toque longo numa música para mostrar um menu com opções como avaliar ou apagar</string>
 
-
-    <string name="settings_misc">Miscelânea</string>
+    <string name="settings_misc">Diversos</string>
 
     <string name="settings_about">Sobre</string>
+    <string name="settings_about_summary">Informações sobre a aplicação e os seus autores</string>
 
     <string name="settings_version_title">Versão</string>
+    <string name="settings_author_new_title">Autor/a do SicMu Neo</string>
+    <string name="settings_author_old_title">Autor do SicMu</string>
     <string name="settings_source_title">Código fonte</string>
     <string name="settings_licence_title">Licença</string>
+    <string name="donate_souchaud_title">Doar</string>
+    <string name="donate_souchaud_summary">Se gosta da aplicação, pode doar ao Mathieu Souchaud aqui</string>
+    <string name="close">Fechar</string>
 
-    <string name="settings_thanks">Agradecimentos espciais</string>
+    <string name="changelogs_title">Alterações nesta versão</string>
+    <string name="changelogs_header">Novidades:</string>
+
+    <string name="settings_thanks">Agradecimentos</string>
     <string name="settings_thanks_icons">Ícones</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (ícones achados em iconfinder.com), Google Material Symbols</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (ícones de iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutorial</string>
-    <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre como criar um tocador de música para Android)</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre como criar um reprodutor de música para Android)</string>
     <string name="settings_thanks_i15n">Tradução</string>
-    <string name="settings_thanks_i15n_summary">Jerônimo Cordoni Pellegrini (Português), Mehmet Gülmen (Türkçe), Mladen Pejaković (Serbian), </string>
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (sérvio), Jerônimo Cordoni Pellegrini (português), Mehmet Gülmen (turco), Martin Scherbaum (alemão)</string>
+
+    <string name="settings_show_filename">Mostrar nome do ficheiro</string>
+    <string name="settings_show_filename_summary">Mostrar nome do ficheiro em vez do título da música</string>
+
+    <string name="settings_show_remaining_time">Mostrar tempo restante</string>
+    <string name="settings_show_remaining_time_summary">Mostrar tempo restante em vez do tempo total</string>
+
+    <string name="settings_hide_navigation_bar">Ocultar barra de navegação</string>
+    <string name="settings_hide_navigation_bar_summary">Ocultar a barra de navegação automaticamente</string>
+
+    <string name="settings_show_group_total_time">Mostrar duração total</string>
+    <string name="settings_show_group_total_time_summary">Mostrar a duração total do grupo em vez do número de músicas</string>
 
     <string name="action_repeat_title">Repetir</string>
-    <string name="action_repeat_all">Tudo</string>
-    <string name="action_repeat_one">Faixa</string>
+    <string name="action_repeat_all">Todas</string>
+    <string name="action_repeat_one">Música</string>
     <string name="action_repeat_group">Grupo</string>
+    <string name="action_repeat_not">Parar no fim da pasta</string>
+    <string name="action_stop_at_end_of_track">Parar depois da música</string>
 
+    <string name="detail_metadata_hint_label">Toque na capa do álbum para ver todos os metadados</string>
+    <string name="action_youtube_search">Buscar no YouTube</string>
+    <string name="action_youtube_open">Abrir vídeo do YouTube</string>
+
+    <string name="settings_disable_pitch_compensation_title">Compensação de tom (Nightcore)</string>
+    <string name="settings_disable_pitch_compensation">Não compensar as mudanças de tom ao aumentar a velocidade de reprodução, ou seja, aumentar tempo e tom.</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Mostrar detalhes da música</string>
+    <string name="a11y_toggle_details">Mostrar ou ocultar painel de detalhes</string>
+    <string name="a11y_toggle_seek">Mostrar ou ocultar controlos de navegação</string>
+    <string name="a11y_album_art">Capa do álbum, toque para ver metadados</string>
+    <string name="a11y_seek_bar">Posição de reprodução</string>
+    <string name="a11y_seek_back_20">Retroceder 20 segundos</string>
+    <string name="a11y_seek_back_5">Retroceder 5 segundos</string>
+    <string name="a11y_seek_forward_5">Avançar 5 segundos</string>
+    <string name="a11y_seek_forward_20">Avançar 20 segundos</string>
+    <string name="a11y_track_looper">Definir pontos de repetição para a faixa atual</string>
+    <string name="a11y_rating_1">Avaliar com 1 estrela</string>
+    <string name="a11y_rating_2">Avaliar com 2 estrelas</string>
+    <string name="a11y_rating_3">Avaliar com 3 estrelas</string>
+    <string name="a11y_rating_4">Avaliar com 4 estrelas</string>
+    <string name="a11y_rating_5">Avaliar com 5 estrelas</string>
+    <string name="a11y_now_playing">A tocar agora</string>
+    <string name="a11y_song_rating">Avaliação: %d estrelas</string>
+    <string name="a11y_sort_button">Mudar modo de visualização</string>
+    <string name="a11y_stereo_button">Alternar estéreo ou mono</string>
+    <string name="a11y_repeat_button">Mudar modo de repetição</string>
+    <string name="a11y_shuffle_button">Mudar ordem de reprodução</string>
+    <string name="a11y_rating_filter_button">Filtrar músicas por avaliação</string>
+    <string name="a11y_search_button">Buscar música</string>
+    <string name="a11y_settings_button">Abrir definições</string>
+    <string name="a11y_play_button">Tocar ou pausar</string>
+    <string name="a11y_prev_button">Música anterior</string>
+    <string name="a11y_next_button">Música seguinte</string>
+    <string name="a11y_goto_button">Ir para a música atual</string>
+    <string name="a11y_more_options_button">Mostrar mais opções</string>
 
 </resources>
