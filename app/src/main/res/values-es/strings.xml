@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SicMu Player - Lightweight music player for Android
+  Copyright (C) 2015  Mathieu Souchaud
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string name="permission_needed">Esta aplicación necesita permiso de lectura del almacenamiento
+    para encontrar, mostrar y reproducir canciones.
+    Por favor, permite el acceso a fotos y contenido multimedia cuando el sistema lo solicite.</string>
+
+    <string name="action_sort_folder">carpeta</string>
+    <string name="action_sort_artist">artista</string>
+    <string name="action_sort_tree">árbol de directorios</string>
+    <string name="action_sort">Ordenar canciones por:</string>
+
+    <string name="ic_action_edit_folder">Carpeta: %s</string>
+    <string name="ic_action_edit_song">Canción: %s</string>
+
+    <string name="action_rate_group">Valorar todas las canciones (mantener)</string>
+    <string name="action_rate_group_overwrite">Valorar todas las canciones (sobrescribir)</string>
+    <string name="action_rate_song">Valorar canción</string>
+
+    <string name="action_rescan">Volver a escanear</string>
+    <string name="start_rescan">Escaneando:</string>
+    <string name="rescanned">Escaneado:</string>
+
+    <string name="action_delete_song">Eliminar canción</string>
+    <string name="action_ask_delete_song">¿Seguro que quieres eliminar \'%s\'?</string>
+    <string name="action_delete_song_ok">\'%s\' eliminado correctamente.</string>
+    <string name="action_delete_song_nok">¡Error al eliminar \'%s\'!</string>
+
+    <string name="action_min_rating">Reproducir canciones con valoración >=</string>
+    <string name="action_set_rating_folder">Valorar carpeta: %s</string>
+    <string name="action_set_rating_song">Valorar canción: %s</string>
+    <string name="action_set_rating_song_failed">Error al valorar</string>
+
+    <string name="action_genius_lyrics">Buscar en genius.com</string>
+
+    <string name="action_search">Buscar</string>
+    <string name="search_unsuccessful">¡No se encontró nada!</string>
+
+    <string name="songs_have_been_rated">%d canciones valoradas</string>
+    <string name="current_rating_idx">Valoración actual</string>
+
+    <string name="action_play">Reproducir</string>
+    <string name="action_pause">Pausar</string>
+    <string name="action_next">Siguiente</string>
+    <string name="action_prev">Anterior</string>
+
+    <string name="show_song_details">Detalles</string>
+    <string name="popup_song_info_title">Detalles de la canción:</string>
+    <string name="popup_song_artist">Artista: %s</string>
+    <string name="popup_song_album">Álbum: %s</string>
+    <string name="popup_song_title">Título: %s</string>
+    <string name="popup_song_track">Pista: %d</string>
+    <string name="popup_song_year">Año: %d</string>
+    <string name="popup_song_rating">Valoración: %d</string>
+    <string name="popup_song_mime">Tipo MIME: %s</string>
+    <string name="popup_song_path">Ruta: %s</string>
+
+    <string name="explain_playback_speed">Desliza arriba/abajo o izquierda/derecha para aumentar/disminuir la velocidad de reproducción.</string>
+
+    <string name="focus_error">¡No se pudo acceder al audio! Por favor, reinicia la aplicación.</string>
+
+    <string name="settings_title">Ajustes</string>
+
+    <string name="settings_theme_title">Tema</string>
+    <string-array name="settings_theme_entries">
+        <item>Oscuro, acentos rojos</item>
+        <item>Oscuro, acentos blancos</item>
+        <item>Claro, acentos negros</item>
+    </string-array>
+
+    <string name="settings_song_view">Vista de canciones</string>
+    <string name="settings_fold_title">Estado inicial de plegado</string>
+    <string-array name="settings_fold_entries">
+        <item>Plegado</item>
+        <item>Desplegado</item>
+    </string-array>
+    <string name="settings_unfold_subgroup">Desplegar subgrupos</string>
+    <string name="settings_unfold_subgroup_summary">Si está activado, al tocar un grupo se despliegan todos los subgrupos y canciones.</string>
+    <string name="settings_unfold_subgroup_threshold">Desplegar subgrupos</string>
+    <string name="settings_unfold_subgroup_threshold_summary">si contienen menos de %d canciones.</string>
+
+    <string name="settings_sleep_timer">Temporizador de sueño</string>
+    <string name="settings_sleep_timer_start">Iniciar</string>
+    <string name="settings_sleep_timer_stop">Detener</string>
+    <string name="settings_sleep_timer_delay">Duración (min)</string>
+    <string name="settings_sleep_timer_remaining">La reproducción se detendrá a las %s</string>
+    <string name="settings_sleep_timer_delay_wrong">¡La duración debe ser positiva!</string>
+
+    <string name="settings_toggle_font_size">Tamaño de fuente</string>
+    <string name="settings_toggle_font_size_label">Toca para alternar entre fuente grande y pequeña.</string>
+    <string name="settings_song_view_font">Fuente de la vista de canciones</string>
+    <string name="settings_text_size_regular">Tamaño de fuente pequeña</string>
+    <string name="settings_text_size_big">Tamaño de fuente grande</string>
+    <string name="settings_text_size_ratio">Proporción de tamaño grupo/canción</string>
+
+    <string name="settings_ratings_not_written_title">Mostrar valoraciones</string>
+    <string name="settings_ratings_not_written">Mostrar valoraciones no guardadas</string>
+    <string name="settings_ratings_are_in_sync">Todas las valoraciones han sido guardadas.</string>
+
+    <string name="settings_rescan_title">Volver a escanear</string>
+    <string name="settings_rescan">Volver a escanear archivos multimedia.</string>
+    <string name="settings_rescan_triggered">Escaneando archivos multimedia…</string>
+    <string name="settings_rescan_storage">Escaneando almacenamiento %s</string>
+    <string name="settings_rescan_finished">Escaneo finalizado. Puede tardar un poco hasta que los nuevos archivos sean visibles (puede ser necesario reiniciar SicMu Player).</string>
+    <string name="settings_rescan_purge">El escáner encontró entradas (%s) que ya no existen. Las entradas han sido eliminadas de la lista.</string>
+
+    <string name="settings_media_button_start_app_title">Inicio automático con botones multimedia</string>
+    <string name="settings_media_button_start_app">Los botones multimedia inician la aplicación si no está ejecutándose.</string>
+
+    <string name="settings_autoscroll">Canción en reproducción</string>
+    <string name="settings_autoscroll_summary">Desplazarse a la canción cuando se reproduce</string>
+
+    <string name="settings_songpos_title">Guardar posición de reproducción</string>
+    <string name="settings_songpos">Continuar la canción desde la última posición guardada.</string>
+
+    <string name="settings_shuffle_explainer_sequential">Aleatorio desactivado</string>
+    <string name="settings_shuffle_explainer_random">Aleatorio activado</string>
+    <string name="settings_shuffle_explainer_radio">Aleatorio + Iniciar canciones en momento aleatorio</string>
+
+    <string name="settings_stereo_on">Estéreo</string>
+    <string name="settings_stereo_off">Mono</string>
+
+    <string name="settings_scrobble_title">Scrobble</string>
+    <string name="settings_scrobble">Enviar información de las canciones reproducidas a Last.FM o Libre.FM (requiere Scrobble Droid o Simple Last.fm Scrobbler instalado)</string>
+
+    <string name="settings_vibrate_title">Vibrar al tocar</string>
+    <string name="settings_vibrate">Vibrar brevemente al tocar botones o la lista de canciones.</string>
+
+    <string name="settings_root_folder">Carpetas raíz</string>
+    <string name="settings_root_folder_summary">¡La ruta %s no existe en el dispositivo!</string>
+
+    <string name="settings_accelerometer">Agitar</string>
+    <string name="settings_accelerometer_summary">Pasar a la siguiente canción al agitar el dispositivo.</string>
+    <string name="settings_accelerometer_threshold">Intensidad del agitado</string>
+    <string name="settings_no_accelerometer">¡Tu dispositivo no tiene acelerómetro! La función de agitar no está disponible.</string>
+
+    <string name="settings_rating">Activar valoraciones</string>
+    <string name="settings_rating_summary">Aumenta el uso del procesador</string>
+
+    <string name="settings_help">Ayuda</string>
+    <string name="settings_help_summary">Manual de uso</string>
+
+    <string name="help_start_song">Reproducir una canción</string>
+    <string name="help_start_song_summary">Toca una canción para reproducirla.</string>
+    <string name="help_start_group">Reproducir desde un grupo</string>
+    <string name="help_start_group_summary">Mantén pulsado un grupo para reproducir la primera canción del grupo.</string>
+    <string name="help_next_group">Mantener pulsado \"Siguiente\"</string>
+    <string name="help_next_group_summary">Mantener pulsado \"Siguiente\" reproduce la primera canción del siguiente grupo (igual con \"Anterior\" para el grupo anterior)</string>
+    <string name="help_unfold_group">Plegar/desplegar grupo</string>
+    <string name="help_unfold_group_summary">Toca un grupo para plegarlo o desplegarlo.</string>
+    <string name="help_scroll">Mostrar canción actual en la lista</string>
+    <string name="help_scroll_summary">Pulsa el botón a la derecha de \"Siguiente\" para ir a la canción en reproducción. Mantener pulsado pliega todos los grupos excepto la canción actual.</string>
+    <string name="help_root_folders">Carpetas raíz</string>
+    <string name="help_root_folders_summary">Las carpetas raíz se configuran en los ajustes avanzados: se usan solo para ocultar la primera parte de la ruta cuando las canciones se ordenan por carpeta. Para añadir varias carpetas raíz, sepáralas con punto y coma.</string>
+    <string name="help_background">Segundo plano</string>
+    <string name="help_background_summary">Mientras se reproduce música, pulsar el botón Inicio o Atrás mantiene la aplicación en segundo plano.</string>
+    <string name="help_quit">Salir</string>
+    <string name="help_quit_summary">La aplicación se cerrará inmediatamente si no hay música reproduciéndose y se pulsa el botón Atrás. Android puede cerrar la aplicación cuando necesite recursos del sistema.</string>
+    <string name="help_stop">Mantener en memoria</string>
+    <string name="help_stop_summary">La aplicación permanece en memoria aunque no se esté reproduciendo música y se pulse el botón Inicio. Android puede cerrar la aplicación cuando necesite recursos del sistema.</string>
+    <string name="help_mediabutton">Botones multimedia</string>
+    <string name="help_mediabutton_summary">Los botones multimedia (como en auriculares Bluetooth) pueden controlar la aplicación (Siguiente, Anterior, Pausar/Reproducir).</string>
+    <string name="help_mediabutton_autostart">Inicio automático con botones multimedia</string>
+    <string name="help_mediabutton_autostart_summary">Si la aplicación está cerrada, pulsar los botones multimedia la iniciará. Para desactivar esto, desmarca \"Inicio automático con botones multimedia\" en los ajustes.</string>
+    <string name="help_details_menu">Información de la canción (carátula, …)</string>
+    <string name="help_details_menu_summary">Toca el icono de SicMu para ver información de la canción en reproducción (carátula, …)</string>
+    <string name="help_seek_menu">Menú de salto</string>
+    <string name="help_seek_menu_summary">Toca arriba a la derecha en la barra de menú para abrir/cerrar el menú de salto. Mantener pulsado \"Siguiente\"/\"Anterior\" avanza/retrocede continuamente.</string>
+    <string name="help_donate">Donar</string>
+    <string name="help_context_menu">Menú contextual</string>
+    <string name="help_context_menu_summary">Mantén pulsada una canción para mostrar un menú con opciones adicionales como valorar o eliminar</string>
+
+    <string name="settings_misc">Varios</string>
+
+    <string name="settings_about">Acerca de</string>
+    <string name="settings_about_summary">Información sobre la aplicación y sus autores</string>
+
+    <string name="settings_version_title">Versión</string>
+    <string name="settings_author_new_title">Autor/a de SicMu Neo</string>
+    <string name="settings_author_old_title">Autor de SicMu</string>
+    <string name="settings_source_title">Código fuente</string>
+    <string name="settings_licence_title">Licencia</string>
+    <string name="donate_souchaud_title">Donar</string>
+    <string name="donate_souchaud_summary">Si te gusta la aplicación, puedes donar a Mathieu Souchaud aquí</string>
+    <string name="close">Cerrar</string>
+
+    <string name="changelogs_title">Cambios en esta versión</string>
+    <string name="changelogs_header">Novedades:</string>
+
+    <string name="settings_thanks">Agradecimientos</string>
+    <string name="settings_thanks_icons">Iconos</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (iconos de iconfinder.com), Google Material Symbols</string>
+    <string name="settings_thanks_doc">Tutorial</string>
+    <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre cómo crear un reproductor de música en Android)</string>
+    <string name="settings_thanks_i15n">Traducción</string>
+    <string name="settings_thanks_i15n_summary">Mladen Pejaković (serbio), Jerônimo Cordoni Pellegrini (portugués), Mehmet Gülmen (turco), Martin Scherbaum (alemán)</string>
+
+    <string name="settings_show_filename">Mostrar nombre de archivo</string>
+    <string name="settings_show_filename_summary">Mostrar nombre de archivo en lugar del título de la canción</string>
+
+    <string name="settings_show_remaining_time">Mostrar tiempo restante</string>
+    <string name="settings_show_remaining_time_summary">Mostrar tiempo restante en lugar del tiempo total</string>
+
+    <string name="settings_hide_navigation_bar">Ocultar barra de navegación</string>
+    <string name="settings_hide_navigation_bar_summary">Ocultar la barra de navegación automáticamente</string>
+
+    <string name="settings_show_group_total_time">Mostrar duración total</string>
+    <string name="settings_show_group_total_time_summary">Mostrar la duración total del grupo en lugar del número de canciones</string>
+
+    <string name="action_repeat_title">Repetir</string>
+    <string name="action_repeat_all">Todas</string>
+    <string name="action_repeat_one">Canción</string>
+    <string name="action_repeat_group">Grupo</string>
+    <string name="action_repeat_not">Parar al final de la carpeta</string>
+    <string name="action_stop_at_end_of_track">Parar después de la canción</string>
+
+    <string name="detail_metadata_hint_label">Toca la carátula del álbum para ver todos los metadatos</string>
+    <string name="action_youtube_search">Buscar en YouTube</string>
+    <string name="action_youtube_open">Abrir vídeo de YouTube</string>
+
+</resources>
