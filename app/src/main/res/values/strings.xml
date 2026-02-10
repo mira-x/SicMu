@@ -277,4 +277,35 @@
     <string name="settings_disable_pitch_compensation">Don\'t compensate for pitch changes when increasing playback speed, i.e. increase tempo and pitch.</string>
     <string name="settings_disable_pitch_compensation_title">Pitch Compensation (Nightcore)</string>
 
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Show song details</string>
+    <string name="a11y_toggle_details">Toggle details panel</string>
+    <string name="a11y_toggle_seek">Toggle seek controls</string>
+    <string name="a11y_album_art">Album artwork, tap to view metadata</string>
+    <string name="a11y_seek_bar">Playback position</string>
+    <string name="a11y_seek_back_20">Seek back 20 seconds</string>
+    <string name="a11y_seek_back_5">Seek back 5 seconds</string>
+    <string name="a11y_seek_forward_5">Seek forward 5 seconds</string>
+    <string name="a11y_seek_forward_20">Seek forward 20 seconds</string>
+    <string name="a11y_track_looper">Set loop points for current track</string>
+    <string name="a11y_rating_1">Rate 1 star</string>
+    <string name="a11y_rating_2">Rate 2 stars</string>
+    <string name="a11y_rating_3">Rate 3 stars</string>
+    <string name="a11y_rating_4">Rate 4 stars</string>
+    <string name="a11y_rating_5">Rate 5 stars</string>
+    <string name="a11y_now_playing">Now playing</string>
+    <string name="a11y_song_rating">Rating: %d stars</string>
+    <string name="a11y_sort_button">Change display mode</string>
+    <string name="a11y_stereo_button">Toggle stereo or mono</string>
+    <string name="a11y_repeat_button">Change repeat mode</string>
+    <string name="a11y_shuffle_button">Change playback order</string>
+    <string name="a11y_rating_filter_button">Filter songs by star rating</string>
+    <string name="a11y_search_button">Search for song</string>
+    <string name="a11y_settings_button">Open settings</string>
+    <string name="a11y_play_button">Play or pause</string>
+    <string name="a11y_prev_button">Previous song</string>
+    <string name="a11y_next_button">Next song</string>
+    <string name="a11y_goto_button">Scroll to current song</string>
+    <string name="a11y_more_options_button">Show more options</string>
+
 </resources>

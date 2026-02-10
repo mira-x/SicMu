@@ -237,4 +237,35 @@
     <string name="settings_disable_pitch_compensation_title">Tonalteca kompenso (Nightcore)</string>
     <string name="settings_disable_pitch_compensation">Ne kompensi tonaltecajn ŝanĝojn kiam plirapidigo de ludado, t.e. pliigi tempon kaj tonaltecon.</string>
 
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Montri kantdetalojn</string>
+    <string name="a11y_toggle_details">Montri aŭ kaŝi detalojn</string>
+    <string name="a11y_toggle_seek">Montri aŭ kaŝi saltregilojn</string>
+    <string name="a11y_album_art">Albumkovrilo, tuŝu por vidi metadatenojn</string>
+    <string name="a11y_seek_bar">Ludpozicio</string>
+    <string name="a11y_seek_back_20">Retroiri 20 sekundojn</string>
+    <string name="a11y_seek_back_5">Retroiri 5 sekundojn</string>
+    <string name="a11y_seek_forward_5">Antaŭeniri 5 sekundojn</string>
+    <string name="a11y_seek_forward_20">Antaŭeniri 20 sekundojn</string>
+    <string name="a11y_track_looper">Agordi ripetpunktojn por aktuala trako</string>
+    <string name="a11y_rating_1">Doni 1 stelon</string>
+    <string name="a11y_rating_2">Doni 2 stelojn</string>
+    <string name="a11y_rating_3">Doni 3 stelojn</string>
+    <string name="a11y_rating_4">Doni 4 stelojn</string>
+    <string name="a11y_rating_5">Doni 5 stelojn</string>
+    <string name="a11y_now_playing">Nun ludas</string>
+    <string name="a11y_song_rating">Takso: %d steloj</string>
+    <string name="a11y_sort_button">Ŝanĝi vidreĝimon</string>
+    <string name="a11y_stereo_button">Ŝanĝi inter stereo kaj mono</string>
+    <string name="a11y_repeat_button">Ŝanĝi ripetreĝimon</string>
+    <string name="a11y_shuffle_button">Ŝanĝi ludordon</string>
+    <string name="a11y_rating_filter_button">Filtri kantojn laŭ takso</string>
+    <string name="a11y_search_button">Serĉi kanton</string>
+    <string name="a11y_settings_button">Malfermi agordojn</string>
+    <string name="a11y_play_button">Ludi aŭ paŭzigi</string>
+    <string name="a11y_prev_button">Antaŭa kanto</string>
+    <string name="a11y_next_button">Sekva kanto</string>
+    <string name="a11y_goto_button">Iri al aktuala kanto</string>
+    <string name="a11y_more_options_button">Montri pliajn opciojn</string>
+
 </resources>

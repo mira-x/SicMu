@@ -51,6 +51,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/ic_actionbar_launcher_anim"
                 android:onClick="toggleDetails"
+                android:contentDescription="@string/a11y_app_button"
                 android:scaleType="fitXY" />
 
             <ImageButton
@@ -60,6 +61,7 @@
                 android:layout_height="9dp"
                 android:layout_gravity="bottom|center_horizontal"
                 android:scaleType="centerCrop"
+                android:contentDescription="@string/a11y_toggle_details"
                 android:src="@drawable/ic_action_open_pos" />
 
         </FrameLayout>
@@ -87,6 +89,7 @@
             android:layout_marginTop="2dp"
             android:layout_weight="10"
             android:onClick="playOrPause"
+            android:contentDescription="@string/a11y_seek_bar"
             android:visibility="invisible" />
 
         <LinearLayout
@@ -113,6 +116,7 @@
                 style="@style/BottomButton"
                 android:layout_width="40dp"
                 android:layout_height="9dp"
+                android:contentDescription="@string/a11y_toggle_seek"
                 android:scaleType="centerCrop" />
 
         </LinearLayout>
@@ -146,6 +150,7 @@
             android:paddingRight="0dp"
             android:paddingLeft="0dp"
             android:onClick="seek"
+            android:contentDescription="@string/a11y_seek_back_20"
             android:src="@drawable/action_prev" />
 
         <TextView
@@ -168,6 +173,7 @@
             android:paddingBottom="0dp"
             android:paddingTop="0dp"
             android:onClick="seek"
+            android:contentDescription="@string/a11y_seek_back_5"
             android:src="@drawable/action_prev" />
 
         <TextView
@@ -188,6 +194,7 @@
             android:paddingBottom="0dp"
             android:paddingTop="0dp"
             android:onClick="seek"
+            android:contentDescription="@string/a11y_seek_forward_5"
             android:src="@drawable/action_next" />
 
         <TextView
@@ -210,6 +217,7 @@
             android:paddingRight="0dp"
             android:paddingLeft="0dp"
             android:onClick="seek"
+            android:contentDescription="@string/a11y_seek_forward_20"
             android:src="@drawable/action_next" />
 
         <ImageButton
@@ -224,6 +232,7 @@
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:scaleType="centerInside"
+            android:contentDescription="@string/a11y_track_looper"
             app:srcCompat="@drawable/ic_track_looper"/>
 
     </LinearLayout>
@@ -261,6 +270,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="@string/a11y_album_art"
             android:src="@drawable/ic_default_coverart" />
 
         <LinearLayout
@@ -338,6 +348,7 @@
                     android:padding="4dp"
                     android:scaleType="centerInside"
                     android:onClick="ratingClick"
+                    android:contentDescription="@string/a11y_rating_1"
                     app:srcCompat="@drawable/ic_star_5"/>
                 <ImageButton
                     android:id="@+id/rating_button_2"
@@ -348,6 +359,7 @@
                     android:padding="4dp"
                     android:scaleType="centerInside"
                     android:onClick="ratingClick"
+                    android:contentDescription="@string/a11y_rating_2"
                     app:srcCompat="@drawable/ic_star_5"/>
                 <ImageButton
                     android:id="@+id/rating_button_3"
@@ -358,6 +370,7 @@
                     android:padding="4dp"
                     android:scaleType="centerInside"
                     android:onClick="ratingClick"
+                    android:contentDescription="@string/a11y_rating_3"
                     app:srcCompat="@drawable/ic_star_5"/>
                 <ImageButton
                     android:id="@+id/rating_button_4"
@@ -368,6 +381,7 @@
                     android:padding="4dp"
                     android:scaleType="centerInside"
                     android:onClick="ratingClick"
+                    android:contentDescription="@string/a11y_rating_4"
                     app:srcCompat="@drawable/ic_star_0"/>
                 <ImageButton
                     android:id="@+id/rating_button_5"
@@ -378,6 +392,7 @@
                     android:padding="4dp"
                     android:scaleType="centerInside"
                     android:onClick="ratingClick"
+                    android:contentDescription="@string/a11y_rating_5"
                     app:srcCompat="@drawable/ic_star_0"/>
             </LinearLayout>
 
@@ -423,7 +438,7 @@
             android:longClickable="true"
             android:onClick="openSort"
             android:padding="12dp"
-            android:contentDescription="Change display mode"
+            android:contentDescription="@string/a11y_sort_button"
             android:scaleType="centerInside"
             android:src="@drawable/ic_menu_tree" />
 
@@ -447,7 +462,7 @@
             android:layout_height="60dp"
             android:layout_weight="50"
             android:onClick="toggleStereo"
-            android:contentDescription="Toggle stereo / mono"
+            android:contentDescription="@string/a11y_stereo_button"
             android:scaleType="center"
             android:src="@drawable/ic_stereo" />
 
@@ -457,7 +472,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:contentDescription="Change loop mode"
+            android:contentDescription="@string/a11y_repeat_button"
             android:longClickable="true"
             android:onClick="openRepeat"
             android:scaleType="fitCenter"
@@ -470,7 +485,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:longClickable="true"
-            android:contentDescription="Change playback order"
+            android:contentDescription="@string/a11y_shuffle_button"
             android:onClick="changeShuffle"
             android:padding="14dp"
             android:scaleType="fitCenter"
@@ -484,7 +499,7 @@
             android:layout_weight="50"
             android:longClickable="true"
             android:onClick="openMinRating"
-            android:contentDescription="Filter songs by star rating"
+            android:contentDescription="@string/a11y_rating_filter_button"
             android:padding="14dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_star_5_highlight" />
@@ -498,7 +513,7 @@
             android:onClick="openSearchDialog"
             android:padding="14dp"
             android:scaleType="centerInside"
-            android:contentDescription="Search for song"
+            android:contentDescription="@string/a11y_search_button"
             app:srcCompat="@drawable/ic_action_search" />
 
         <ImageButton
@@ -507,7 +522,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:onClick="openSettings"
-            android:contentDescription="Open settings menu"
+            android:contentDescription="@string/a11y_settings_button"
             android:src="@drawable/ic_menu_settings" />
 
     </LinearLayout>
@@ -532,7 +547,7 @@
             android:layout_height="60dp"
             android:layout_weight="48"
             android:onClick="playOrPause"
-            android:contentDescription="Start playback"
+            android:contentDescription="@string/a11y_play_button"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:scaleType="fitCenter"
@@ -546,7 +561,7 @@
             android:layout_weight="51"
             android:longClickable="true"
             android:onClick="playPrev"
-            android:contentDescription="Go to previous song"
+            android:contentDescription="@string/a11y_prev_button"
             android:scaleType="fitCenter"
             android:src="@drawable/action_prev" />
 
@@ -557,7 +572,7 @@
             android:layout_height="match_parent"
             android:layout_weight="51"
             android:longClickable="true"
-            android:contentDescription="Go to next song"
+            android:contentDescription="@string/a11y_next_button"
             android:onClick="playNext"
             android:scaleType="fitCenter"
             android:src="@drawable/action_next" />
@@ -571,7 +586,7 @@
             android:longClickable="true"
             android:onClick="gotoCurrSong"
             android:paddingTop="15dp"
-            android:contentDescription="Scroll to selected item"
+            android:contentDescription="@string/a11y_goto_button"
             android:paddingBottom="15dp"
             android:scaleType="fitCenter"
             android:src="@drawable/action_goto_play" />
@@ -582,7 +597,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:longClickable="true"
-            android:contentDescription="Show more options"
+            android:contentDescription="@string/a11y_more_options_button"
             android:onClick="toggleMoreButtons"
             app:srcCompat="@drawable/ic_option" />
 

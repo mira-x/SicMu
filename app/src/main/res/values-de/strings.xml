@@ -217,4 +217,36 @@
     <string name="action_youtube_open">Öffne YouTube video</string>
     <string name="settings_disable_pitch_compensation">Die Tonhöhe nicht gleichbleiben, wenn die Geschwindigkeit geändert wird</string>
     <string name="settings_disable_pitch_compensation_title">Tonhöhenkompensation (Nightcore)</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Lieddetails anzeigen</string>
+    <string name="a11y_toggle_details">Detailbereich ein-/ausklappen</string>
+    <string name="a11y_toggle_seek">Sprungsteuerung ein-/ausblenden</string>
+    <string name="a11y_album_art">Albumcover, tippen für Metadaten</string>
+    <string name="a11y_seek_bar">Wiedergabeposition</string>
+    <string name="a11y_seek_back_20">20 Sekunden zurückspulen</string>
+    <string name="a11y_seek_back_5">5 Sekunden zurückspulen</string>
+    <string name="a11y_seek_forward_5">5 Sekunden vorspulen</string>
+    <string name="a11y_seek_forward_20">20 Sekunden vorspulen</string>
+    <string name="a11y_track_looper">Schleifenpunkte für aktuelles Lied setzen</string>
+    <string name="a11y_rating_1">1 Stern vergeben</string>
+    <string name="a11y_rating_2">2 Sterne vergeben</string>
+    <string name="a11y_rating_3">3 Sterne vergeben</string>
+    <string name="a11y_rating_4">4 Sterne vergeben</string>
+    <string name="a11y_rating_5">5 Sterne vergeben</string>
+    <string name="a11y_now_playing">Wird gerade abgespielt</string>
+    <string name="a11y_song_rating">Bewertung: %d Sterne</string>
+    <string name="a11y_sort_button">Anzeigemodus ändern</string>
+    <string name="a11y_stereo_button">Stereo oder Mono umschalten</string>
+    <string name="a11y_repeat_button">Wiederholungsmodus ändern</string>
+    <string name="a11y_shuffle_button">Wiedergabereihenfolge ändern</string>
+    <string name="a11y_rating_filter_button">Lieder nach Bewertung filtern</string>
+    <string name="a11y_search_button">Lied suchen</string>
+    <string name="a11y_settings_button">Einstellungen öffnen</string>
+    <string name="a11y_play_button">Abspielen oder pausieren</string>
+    <string name="a11y_prev_button">Vorheriges Lied</string>
+    <string name="a11y_next_button">Nächstes Lied</string>
+    <string name="a11y_goto_button">Zum aktuellen Lied springen</string>
+    <string name="a11y_more_options_button">Weitere Optionen anzeigen</string>
+
 </resources>

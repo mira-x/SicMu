@@ -237,4 +237,35 @@
     <string name="settings_disable_pitch_compensation_title">Compensación de tono (Nightcore)</string>
     <string name="settings_disable_pitch_compensation">No compensar los cambios de tono al aumentar la velocidad de reproducción, es decir, aumentar tempo y tono.</string>
 
+    <!-- Accessibility descriptions -->
+    <string name="a11y_app_button">Mostrar detalles de la canción</string>
+    <string name="a11y_toggle_details">Mostrar u ocultar panel de detalles</string>
+    <string name="a11y_toggle_seek">Mostrar u ocultar controles de salto</string>
+    <string name="a11y_album_art">Carátula del álbum, toca para ver metadatos</string>
+    <string name="a11y_seek_bar">Posición de reproducción</string>
+    <string name="a11y_seek_back_20">Retroceder 20 segundos</string>
+    <string name="a11y_seek_back_5">Retroceder 5 segundos</string>
+    <string name="a11y_seek_forward_5">Avanzar 5 segundos</string>
+    <string name="a11y_seek_forward_20">Avanzar 20 segundos</string>
+    <string name="a11y_track_looper">Establecer puntos de bucle para la pista actual</string>
+    <string name="a11y_rating_1">Valorar con 1 estrella</string>
+    <string name="a11y_rating_2">Valorar con 2 estrellas</string>
+    <string name="a11y_rating_3">Valorar con 3 estrellas</string>
+    <string name="a11y_rating_4">Valorar con 4 estrellas</string>
+    <string name="a11y_rating_5">Valorar con 5 estrellas</string>
+    <string name="a11y_now_playing">Reproduciendo ahora</string>
+    <string name="a11y_song_rating">Valoración: %d estrellas</string>
+    <string name="a11y_sort_button">Cambiar modo de visualización</string>
+    <string name="a11y_stereo_button">Alternar estéreo o mono</string>
+    <string name="a11y_repeat_button">Cambiar modo de repetición</string>
+    <string name="a11y_shuffle_button">Cambiar orden de reproducción</string>
+    <string name="a11y_rating_filter_button">Filtrar canciones por valoración</string>
+    <string name="a11y_search_button">Buscar canción</string>
+    <string name="a11y_settings_button">Abrir ajustes</string>
+    <string name="a11y_play_button">Reproducir o pausar</string>
+    <string name="a11y_prev_button">Canción anterior</string>
+    <string name="a11y_next_button">Canción siguiente</string>
+    <string name="a11y_goto_button">Ir a la canción actual</string>
+    <string name="a11y_more_options_button">Mostrar más opciones</string>
+
 </resources>
