@@ -236,4 +236,12 @@ public class Parameters {
     public boolean getShowGroupTotalTime() {
         return getPref().getBoolean(PrefKeys.SHOW_GROUP_TOTAL_TIME.name(), false);
     }
+
+    public float getPlaybackSpeedFactor() {
+        return getPref().getFloat(PrefKeys.PLAYBACK_SPEED_FACTOR.name(), 1f);
+    }
+
+    public void setPlaybackSpeedFactor(float x) {
+        getPref().edit().putFloat(PrefKeys.PLAYBACK_SPEED_FACTOR.name(), x).apply();
+    }
 }

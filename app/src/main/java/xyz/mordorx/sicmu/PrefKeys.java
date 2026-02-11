@@ -51,4 +51,5 @@ public enum PrefKeys {
     SHOW_GROUP_TOTAL_TIME,
     STEREO,
     DISABLE_PITCH_COMPENSATION, // Disable pitch compensation when changing playback tempo
+    PLAYBACK_SPEED_FACTOR
 }

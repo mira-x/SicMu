@@ -61,6 +61,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -291,17 +292,27 @@ public class Main extends AppCompatActivity {
 
         playbackSpeedText = findViewById(R.id.playBackSpeed);
         playbackSpeedText.setMinValue(1);
-        playbackSpeedText.setValue(100);
-        DecimalFormat decimalFormat = new DecimalFormat("#0.0x");
-        decimalFormat.setDecimalSeparatorAlwaysShown(true);
         playbackSpeedText.setFormatter(v -> String.format("%3d%%", v));
+        playbackSpeedText.setValue(100);
         playbackSpeedText.setMaxValue(200);
         if (SDK_INT >= Build.VERSION_CODES.Q) {
             playbackSpeedText.setTextColor(getResources().getColor(R.color.Blood, getTheme()));
         }
-        playbackSpeedText.setOnValueChangedListener((a, b, c) -> {
-            setPlaybackSpeed(a.getValue() / 100.0f);
+        playbackSpeedText.setOnValueChangedListener((picker, ignored, Ignored) -> {
+            var factor = picker.getValue() / 100.0f;
+            setPlaybackSpeed(factor);
+            params.setPlaybackSpeedFactor(factor);
         });
+
+        try {
+            /**
+             * Since 10+ years, Android has a bug where the initial value of a NumberPicker does not
+             * use the formatter. This is a hacky fix. See: https://stackoverflow.com/a/19104078
+             */
+            Method method = playbackSpeedText.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
+            method.setAccessible(true);
+            method.invoke(playbackSpeedText, true);
+        } catch (Exception e) {}
     }
 
     private void askPermission() {
@@ -438,6 +449,9 @@ public class Main extends AppCompatActivity {
                     playAlreadySelectedSong();
                 }
             }
+
+            var speed = params.getPlaybackSpeedFactor();
+            setPlaybackSpeed(speed);
             setPlaybackSpeedText();
         }
 
