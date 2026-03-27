@@ -42,8 +42,8 @@ android {
     buildFeatures {
         buildConfig = true
     }
-    lintOptions {
-        baseline file("lint-baseline.xml")
+    lint {
+        baseline file('lint-baseline.xml')
     }
 }
 
