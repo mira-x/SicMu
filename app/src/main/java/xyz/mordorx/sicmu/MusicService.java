@@ -35,14 +35,13 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -126,6 +125,23 @@ public class MusicService extends Service implements
 
     /// set to false if seekTo() has been called but the seek is still not done
     private boolean seekFinished;
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Runnable trackLooperRunnable = new Runnable() {
+        @Override
+        public void run() {
+            seekTo(trackLooperAPosMs);
+        }
+    };
+
+    private final Runnable sleepTimerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            pause();
+            setChanged();
+            stopSleepTimer();
+        }
+    };
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -560,23 +576,17 @@ public class MusicService extends Service implements
     }
 
     private int seekPosNbLoop;
-    private Timer trackLooperTimer = null;
     public void onSeekComplete(ExoPlayer mp) {
-        // on a 4.1 phone no bug : calling getCurrentPosition now gives the new seeked position
-        // on My 2.3.6 phone, the phone seems bugged : calling now getCurrentPosition gives
-        // last position. So wait the seekpos goes after the asked seekpos.
         if(seekPosMsBug != -1) {
             // todo: make it thread safe?
             seekPosNbLoop = 15;
 
-            final Timer seekPosTimer = new Timer();
-            seekPosTimer.schedule(new TimerTask() {
+            mainHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (seekPosNbLoop-- > 0 || getCurrentPositionMs() >= seekPosMsBug) {
                         seekFinished = true;
                         seekPosMsBug = -1;
-                        seekPosTimer.cancel();
                     }
                 }
             }, 300);
@@ -774,22 +784,14 @@ public class MusicService extends Service implements
             if (diffMs <= 0)
                 seekTo(trackLooperAPosMs);
             else {
-                if (trackLooperTimer != null)
-                    trackLooperTimer.cancel();
-                trackLooperTimer = new Timer();
-                trackLooperTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        seekTo(trackLooperAPosMs);
-                    }
-                }, diffMs);
+                mainHandler.removeCallbacks(trackLooperRunnable);
+                mainHandler.postDelayed(trackLooperRunnable, diffMs);
             }
         }
     }
 
     public void cancelTrackLooperRewinder() {
-        if (trackLooperTimer != null)
-            trackLooperTimer.cancel();
+        mainHandler.removeCallbacks(trackLooperRunnable);
     }
 
     // unpause
@@ -1120,7 +1122,6 @@ public class MusicService extends Service implements
         }
     }
 
-    private Timer sleepTimer = null;
     private long sleepTimerScheduleMs = 0;
 
     // return > 0 if sleep timer has been started
@@ -1135,22 +1136,11 @@ public class MusicService extends Service implements
         stopSleepTimer();
         final long delayMillis = (long) delayMinutes * 60 * 1000;
         sleepTimerScheduleMs = System.currentTimeMillis() + delayMillis;
-        sleepTimer = new Timer();
-        sleepTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    pause();
-                    setChanged();
-                    stopSleepTimer();
-                }
-            }, delayMillis);
+        mainHandler.postDelayed(sleepTimerRunnable, delayMillis);
     }
 
     public void stopSleepTimer() {
-        if (sleepTimer != null) {
-            sleepTimer.cancel();
-            sleepTimer = null;
-        }
+        mainHandler.removeCallbacks(sleepTimerRunnable);
         sleepTimerScheduleMs = 0;
     }
 }
