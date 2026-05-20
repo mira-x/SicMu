@@ -1,0 +1,3 @@
+Version 2.4.6
+* Fix AB loop crash
+* Remember playback speed after restart
