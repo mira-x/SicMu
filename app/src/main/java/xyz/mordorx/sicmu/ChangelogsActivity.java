@@ -64,7 +64,6 @@ public class ChangelogsActivity extends AppCompatActivity {
 
         Log.d("Changelogs", "loading logs");
         AssetManager assetManager = getAssets();
-        BufferedReader reader = null;
         final String changelogsAssetDir = "changelogs";
         try {
             String[] logs = assetManager.list(changelogsAssetDir);
@@ -73,34 +72,24 @@ public class ChangelogsActivity extends AppCompatActivity {
             for (String log: logs) {
                 Log.d("Changelogs", "loading log from file " + log);
                 final String logFilepath = changelogsAssetDir + "/" + log;
-                reader = new BufferedReader(new InputStreamReader(
-                        assetManager.open(logFilepath)));
-
-                boolean firstLine = true;
-                String mLine;
-                while ((mLine = reader.readLine()) != null) {
-                    if (firstLine)
-                        logText.append("<b>").append(mLine).append("</b>");
-                    else
-                        logText.append(mLine);
+                try (var reader = new BufferedReader(new InputStreamReader(assetManager.open(logFilepath)))) {
+                    boolean firstLine = true;
+                    String mLine;
+                    while ((mLine = reader.readLine()) != null) {
+                        if (firstLine)
+                            logText.append("<b>").append(mLine).append("</b>");
+                        else
+                            logText.append(mLine);
+                        logText.append("<br />");
+                        firstLine = false;
+                        // <small>yo</small>
+                    }
                     logText.append("<br />");
-                    firstLine = false;
-                    // <small>yo</small>
                 }
-                logText.append("<br />");
             }
         }
         catch (IOException ioe) {
             Log.w("Changelogs", "error listing log: " + ioe.toString());
-        }
-        finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
         }
         return logText.toString();
     }

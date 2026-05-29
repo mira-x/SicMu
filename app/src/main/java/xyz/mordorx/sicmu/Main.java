@@ -391,6 +391,7 @@ public class Main extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("Main", "onServiceConnected");
+            if (songView == null) return;
 
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicSrv = binder.getService();
@@ -612,7 +613,7 @@ public class Main extends AppCompatActivity {
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (seekbar.getVisibility() == TextView.VISIBLE) {
+            if (seekbar != null && seekbar.getVisibility() == TextView.VISIBLE) {
                 setCurrDuration(seekBar.getProgress());
             }
         }
@@ -699,7 +700,16 @@ public class Main extends AppCompatActivity {
         super.onDestroy();
         Log.d("Main", "onDestroy");
 
+        var audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.unregisterAudioDeviceCallback(audioDeviceStereoConfigCallback);
+        stopCloseMoreButtonsTimer();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
         if (serviceBound) {
+            musicSrv.setMainIsVisible(false);
             // stop the service if not playing music
             if (!musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
@@ -708,12 +718,41 @@ public class Main extends AppCompatActivity {
             serviceBound = false;
             musicSrv = null;
         }
+
+        // Clear view references and listeners to help GC
+        if (songView != null) {
+            songView.setAdapter(null);
+            songView.setOnItemClickListener(null);
+            songView.setOnItemLongClickListener(null);
+        }
+        if (seekbar != null) {
+            seekbar.setOnSeekBarChangeListener(null);
+        }
+        if (albumImage != null) {
+            albumImage.setOnTouchListener(null);
+        }
+        if (playButton != null) {
+            playButton.setOnTouchListener(null);
+        }
+        if (appAnimation != null) {
+            appAnimation.stop();
+            appAnimation = null;
+        }
+        
+        songView = null;
+        songAdt = null;
+        playButton = null;
+        albumImage = null;
+        duration = null;
+        currDuration = null;
+        seekbar = null;
+        ratingButtons.clear();
     }
 
 
     final Runnable updateInfo = new Runnable() {
         public void run() {
-            if (!serviceBound)
+            if (!serviceBound || songAdt == null)
                 return;
 
             //Log.d("Main", "updateInfo");
@@ -743,13 +782,14 @@ public class Main extends AppCompatActivity {
     };
 
     final Runnable firstScroll = () -> {
+        if (songAdt == null) return;
         updatePlayButton();
         unfoldAndscrollToCurrSong();
     };
 
 
     private void updatePlayButton() {
-        if (!serviceBound || musicSrv.playingStopped()) {
+        if (!serviceBound || songAdt == null || musicSrv.playingStopped()) {
             // MediaPlayer has been destroyed or first start
             stopPlayButton();
         } else {
@@ -781,6 +821,7 @@ public class Main extends AppCompatActivity {
     }
 
     private void setCurrDuration(long currDurationMs) {
+        if (currDuration == null) return;
         if (params.getShowRemainingTime()) {
             RowSong rowSong = rows.getCurrSong();
             if (rowSong != null) {
@@ -1981,7 +2022,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void unfoldAndscrollToCurrSong() {
-        if (rows == null)
+        if (rows == null || songAdt == null)
             return;
         if(rows.unfoldCurrPos())
             songAdt.notifyDataSetChanged();
@@ -1995,6 +2036,7 @@ public class Main extends AppCompatActivity {
 
     // this method could be improved, code is a bit obscure :-)
     public void scrollToSong(int gotoSong) {
+        if (songView == null) return;
         Log.d("Main", "scrollToSong getCurrPos:" + gotoSong);
 
         if(rows.size() == 0 || gotoSong < 0 || gotoSong >= rows.size())

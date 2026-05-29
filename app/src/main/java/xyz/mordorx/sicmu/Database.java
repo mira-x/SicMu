@@ -34,16 +34,23 @@ public class Database {
     private SongDAO songDAO;
     private ConfigurationDAO configurationDAO;
     private Context context;
+    private SongDatabase db;
 
     public Database(Context context) {
         this.context = context;
-        SongDatabase db = Room.databaseBuilder(context,
+        db = Room.databaseBuilder(context,
                 SongDatabase.class, "database-SicMuNeo")
                 .addMigrations(MIGRATION_1_2)
                 //.allowMainThreadQueries()
                 .build();
         songDAO = db.getSongDAO();
         configurationDAO = db.getConfigurationDAO();
+    }
+
+    public void close() {
+        if (db != null && db.isOpen()) {
+            db.close();
+        }
     }
 
     public SongDAO getSongDAO() {
@@ -70,7 +77,10 @@ public class Database {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                intf.changelogsMustBeShown(doesChangelogsMustBeShown());
+                boolean result = doesChangelogsMustBeShown();
+                if (db != null && db.isOpen()) {
+                    intf.changelogsMustBeShown(result);
+                }
             }
         };
         thread.start();

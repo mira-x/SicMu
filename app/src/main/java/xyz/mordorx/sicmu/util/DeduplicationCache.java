@@ -24,7 +24,7 @@ public class DeduplicationCache<K, V> {
      */
     public DeduplicationCache(CacheBuilderSpec specs, BiFunction<V, V, Boolean> comparator) {
         valueCache = CacheBuilder.from(specs).build();
-        keyCache = CacheBuilder.newBuilder().build();
+        keyCache = CacheBuilder.newBuilder().maximumSize(1000).build();
         this.comparator = comparator;
     }
 

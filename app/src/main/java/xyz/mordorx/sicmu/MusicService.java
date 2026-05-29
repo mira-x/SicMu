@@ -345,8 +345,15 @@ public class MusicService extends Service implements
     public void onDestroy() {
         Log.d("MusicService", "onDestroy");
         save();
+        rows.terminate();
         rows.save();
+        stopSleepTimer();
+        unregisterNoisyReceiver();
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
         releaseAudio();
+        database.close();
 
         if (!params.getMediaButtonStartAppShake())
             audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
@@ -466,10 +473,12 @@ public class MusicService extends Service implements
 
         stopNotification();
         if (mediaSession != null) {
+            mediaSession.setActive(false);
             mediaSession.release();
-            mediaSession.setActive(false); // should be put in stop() ?
+            mediaSession = null;
         }
 
+        audioManager.abandonAudioFocus(this);
         unregisterNoisyReceiver();
     }
 

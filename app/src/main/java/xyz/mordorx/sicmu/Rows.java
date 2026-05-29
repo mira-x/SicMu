@@ -64,6 +64,7 @@ public class Rows {
 
     private Database database;
     private AtomicBoolean ratingsMustBeSynchronized, ratingsSynchronizing;
+    private volatile boolean terminated = false;
 
     private Timer timer;
 
@@ -91,6 +92,11 @@ public class Rows {
 
         restore();
         init();
+    }
+
+    public void terminate() {
+        terminated = true;
+        AlbumArtLoader.terminate();
     }
 
     // size of the foldable array
@@ -136,6 +142,7 @@ public class Rows {
     private MediaScannerConnection.OnScanCompletedListener scanFileCompletedCallback = new MediaScannerConnection.OnScanCompletedListener () {
         @Override
         public void onScanCompleted(String path, Uri uri){
+            if (terminated) return;
             int pos = -1;
             if (uri != null) {
                 Log.d("Rows", "onScanCompleted file " + path + " found");
@@ -776,12 +783,13 @@ public class Rows {
 
 
     public void init() {
+        terminated = false;
+        AlbumArtLoader.resetTermination();
         rowsUnfolded.clear();
         rows.clear();
 
         long startTime = System.currentTimeMillis();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor;
         String[] projection = new String[] {
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media._ID,
@@ -817,31 +825,27 @@ public class Rows {
             default:
                 return;
         }
-        try {
-            musicCursor = musicResolver.query(musicUri, projection, where, null, sortOrder);
+        try (var musicCursor = musicResolver.query(musicUri, projection, where, null, sortOrder)) {
+            switch(filter) {
+                case ARTIST:
+                    initByArtist(musicCursor);
+                    break;
+                case FOLDER:
+                    initByPath(musicCursor);
+                    break;
+                case TREE:
+                    initByTree(musicCursor);
+                    break;
+                default:
+                    return;
+            }
+
         } catch (Exception e) {
             final String msg = "No songItems found!";
             //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
             Log.e("MusicService", msg);
             return;
         }
-
-        switch(filter) {
-            case ARTIST:
-                initByArtist(musicCursor);
-                break;
-            case FOLDER:
-                initByPath(musicCursor);
-                break;
-            case TREE:
-                initByTree(musicCursor);
-                break;
-            default:
-                return;
-        }
-
-        if(musicCursor != null)
-            musicCursor.close();
 
         // if no songPos saved : search the first song
         if(currPos == -1) {
@@ -854,15 +858,13 @@ public class Rows {
             }
         }
 
-        switch (params.getDefaultFold()) {
-            case 0:
-                // fold
-                initRowsFolded();
-                break;
-            default:
-                // unfolded
-                // shallow copy
-                rows = (ArrayList<Row>) rowsUnfolded.clone();
+        if (params.getDefaultFold() == 0) {
+            // fold
+            initRowsFolded();
+        } else {
+            // unfolded
+            // shallow copy
+            rows = (ArrayList<Row>) rowsUnfolded.clone();
         }
 
         // to comment in release mode:
@@ -895,6 +897,7 @@ public class Rows {
         int nbLoaded = 0;
         // preload in db every songs
         for (Row row : rowsUnfolded) {
+            if (terminated) return;
             if (row.getClass() == RowSong.class) {
                 RowSong rowSong = (RowSong) row;
                 SongORM songORM = database.getSongDAO().findByPath(rowSong.getPath());
@@ -951,6 +954,7 @@ public class Rows {
         // preload from the currpos so that next songs are loaded earlier
         int startPos = Math.max(currPos, 0);
         for (int i = startPos; i < rowsUnfolded.size(); i++) {
+            if (terminated) return;
             Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {
                 ((RowSong) row).loadRating();
@@ -958,6 +962,7 @@ public class Rows {
             }
         }
         for (int i = 0; i < startPos && i < rowsUnfolded.size(); i++) {
+            if (terminated) return;
             Row row = rowsUnfolded.get(i);
             if (row.getClass() == RowSong.class) {
                 ((RowSong) row).loadRating();
@@ -1332,13 +1337,18 @@ public class Rows {
     }
 
     // fetch song's rating that are currently visible to the user
+    private Thread loadRatingsThread;
     public synchronized void loadRatingsAsync(RatingCallbackInterface ratingCallbackInterface) {
-        Thread thread = new Thread() {
+        if (loadRatingsThread != null && loadRatingsThread.isAlive()) {
+            loadRatingsThread.interrupt();
+        }
+        loadRatingsThread = new Thread() {
             @Override
             public void run() {
                 Log.d("Rows", "loadRatings");
                 boolean someRatingChanged = false;
                 for (int i = 0; i < rows.size(); i++) {
+                    if (terminated || isInterrupted()) return;
                     Row row = rows.get(i);
                     if (row.getClass() == RowSong.class) {
                         RowSong rowSong = (RowSong) row;
@@ -1347,10 +1357,12 @@ public class Rows {
                             someRatingChanged = true;
                     }
                 }
-                ratingCallbackInterface.ratingCallback(someRatingChanged);
+                if (!isInterrupted()) {
+                    ratingCallbackInterface.ratingCallback(someRatingChanged);
+                }
             }
         };
-        thread.start();
+        loadRatingsThread.start();
     }
 
     public interface RateGroupCallbackInterface {
@@ -1383,6 +1395,7 @@ public class Rows {
                         while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
                                 (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
                                         groupToRate.getLevel()) {
+                            if (terminated) break;
                             if (row.getClass() == RowSong.class) {
                                 if (rateSong((RowSong) row, rating, overwriteRating))
                                     nbChanged++;

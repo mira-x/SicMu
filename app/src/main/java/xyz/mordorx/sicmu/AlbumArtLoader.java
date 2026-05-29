@@ -42,8 +42,22 @@ public class AlbumArtLoader {
 
     private final Context ctx;
     private final RowSong song;
+    private static volatile boolean terminated = false;
+
+    public static void terminate() {
+        terminated = true;
+    }
+
+    public static void resetTermination() {
+        terminated = false;
+    }
+
+    public static boolean isTerminated() {
+        return terminated;
+    }
+
     public AlbumArtLoader(Context ctx, RowSong song) {
-        this.ctx = ctx;
+        this.ctx = ctx.getApplicationContext();
         this.song = song;
 
         if (fallback == null) {
@@ -64,7 +78,12 @@ public class AlbumArtLoader {
             return;
         }
 
-        new Thread(() -> albumBmpCallback.callback(song.getID(), load())).start();
+        new Thread(() -> {
+            if (terminated) return;
+            var bmp = load();
+            if (terminated) return;
+            albumBmpCallback.callback(song.getID(), bmp);
+        }).start();
     }
 
     @Nullable

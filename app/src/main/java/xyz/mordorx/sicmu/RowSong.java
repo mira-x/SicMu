@@ -256,8 +256,10 @@ public class RowSong extends Row {
         }
 
         new Thread(() -> {
+            if (AlbumArtLoader.isTerminated()) return;
             Log.d("RowSong", "loadRating");
             boolean someRatingChanged = (rating == RowSong.RATING_NOT_INITIALIZED && loadRating() > 0);
+            if (AlbumArtLoader.isTerminated()) return;
             ratingCallbackInterface.ratingCallback(rating, someRatingChanged);
         }).start();
     }
@@ -270,6 +272,7 @@ public class RowSong extends Row {
         }
 
         new Thread(() -> {
+            if (AlbumArtLoader.isTerminated()) return;
             try {
                 var f = new File(path);
                 var file = AudioFileIO.read(f);
@@ -277,6 +280,7 @@ public class RowSong extends Row {
                 if (metadata == null) {
                     throw new RuntimeException("AudioFileIO.getTag() returned null");
                 }
+                if (AlbumArtLoader.isTerminated()) return;
                 callback.callback(metadata);
             } catch (Exception e) {
                 Log.e("RowSong", "Could not load metadata tags:", e);
