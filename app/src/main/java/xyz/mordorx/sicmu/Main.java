@@ -258,19 +258,7 @@ public class Main extends AppCompatActivity {
         albumImage = findViewById(R.id.album_image);
         albumImage.setVisibility(View.VISIBLE);
         albumImage.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
-            public void onSwipeTop() {
-                if (detailsBigCoverArt) {
-                    detailsBigCoverArt = false;
-                    applyBiggerCoverArt();
-                } else
-                    toggleDetails(null);
-            }
-
-            public void onSwipeBottom() {
-                detailsBigCoverArt = true;
-                applyBiggerCoverArt();
-            }
-
+            @Override
             public void performClick() {
                 toggleBiggerCoverArt(null);
             }
