@@ -84,6 +84,7 @@ import static android.widget.Toast.LENGTH_LONG;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.jsibbold.zoomage.ZoomageView;
 
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
@@ -133,7 +134,7 @@ public class Main extends AppCompatActivity {
     private LinearLayout moreButtonsLayout;
     private Timer closeMoreButtonsTimer;
 
-    private ImageButton albumImage;
+    private ZoomageView albumImage;
     private TextView songTitle, songAlbum, songArtist, songMime, warningText;
     ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
@@ -257,12 +258,7 @@ public class Main extends AppCompatActivity {
 
         albumImage = findViewById(R.id.album_image);
         albumImage.setVisibility(View.VISIBLE);
-        albumImage.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
-            @Override
-            public void performClick() {
-                toggleBiggerCoverArt(null);
-            }
-        });
+        albumImage.setOnSingleTapListener(this::toggleBiggerCoverArt);
 
         detailsBigCoverArt = false;
 
@@ -717,7 +713,7 @@ public class Main extends AppCompatActivity {
             seekbar.setOnSeekBarChangeListener(null);
         }
         if (albumImage != null) {
-            albumImage.setOnTouchListener(null);
+            albumImage.setOnSingleTapListener(null);
         }
         if (playButton != null) {
             playButton.setOnTouchListener(null);
@@ -989,7 +985,7 @@ public class Main extends AppCompatActivity {
     }
 
 
-    public void toggleBiggerCoverArt(View view) {
+    public void toggleBiggerCoverArt() {
         detailsBigCoverArt = !detailsBigCoverArt;
         applyBiggerCoverArt();
     }
@@ -1005,9 +1001,6 @@ public class Main extends AppCompatActivity {
             albumImage.setLayoutParams(
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-
-            // click on image go back to normal details
-            albumImage.setOnClickListener(this::toggleBiggerCoverArt);
         } else {
             // decrease cover art size
             params.height = params.height / 2;
@@ -1017,10 +1010,8 @@ public class Main extends AppCompatActivity {
             albumImage.setLayoutParams(
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-
-            // click on image hide details
-            albumImage.setOnClickListener(this::toggleDetails);
         }
+        albumImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 
     public void deleteSongFile(@NonNull RowSong song) {

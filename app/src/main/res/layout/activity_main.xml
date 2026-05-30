@@ -263,7 +263,7 @@
         android:gravity="left"
         android:orientation="horizontal">
 
-        <ImageButton
+        <com.jsibbold.zoomage.ZoomageView
             android:id="@+id/album_image"
             style="@style/BottomButton"
             android:layout_width="match_parent"
@@ -271,7 +271,18 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             android:contentDescription="@string/a11y_album_art"
-            android:src="@drawable/ic_default_coverart" />
+            android:src="@drawable/ic_default_coverart"
+            app:zoomage_restrictBounds="false"
+            app:zoomage_animateOnReset="true"
+            app:zoomage_autoResetMode="ALWAYS"
+            app:zoomage_autoCenter="true"
+            app:zoomage_zoomable="true"
+            app:zoomage_translatable="true"
+            app:zoomage_minScale="0.8"
+            app:zoomage_maxScale="5"
+            app:zoomage_doubleTapToZoom="false"
+            app:zoomage_doubleTapToZoomScaleFactor="1"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
