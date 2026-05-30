@@ -205,7 +205,6 @@
 
     <string name="settings_thanks">Agradecimientos</string>
     <string name="settings_thanks_icons">Iconos</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (iconos de iconfinder.com), Google Material Symbols</string>
     <string name="settings_thanks_doc">Tutorial</string>
     <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre cómo crear un reproductor de música en Android)</string>
     <string name="settings_thanks_i15n">Traducción</string>

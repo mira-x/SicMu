@@ -142,6 +142,11 @@
             </Preference>
 
             <Preference
+                android:title="@string/settings_thanks_material_icons"
+                android:summary="@string/settings_thanks_material_icons_summary">
+            </Preference>
+
+            <Preference
                 android:title="@string/settings_thanks_doc"
                 android:summary="@string/settings_thanks_doc_summary">
             </Preference>
@@ -150,6 +155,22 @@
                 android:title="@string/settings_thanks_i15n"
                 android:summary="@string/settings_thanks_i15n_summary">
             </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_jaudiotagger"
+                android:summary="@string/settings_thanks_jaudiotagger_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_zoomage"
+                android:summary="@string/settings_thanks_zoomage_summary">
+            </Preference>
+
+            <Preference
+                android:title="@string/settings_thanks_freedroidwarn"
+                android:summary="@string/settings_thanks_freedroidwarn_summary">
+            </Preference>
+
 
         </PreferenceCategory>
 
