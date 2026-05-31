@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Touchez un groupe pour le plier ou le déplier.</string>
     <string name="help_scroll">Afficher la chanson actuelle dans la liste</string>
     <string name="help_scroll_summary">Appuyez sur le bouton à droite de \"Suivant\" pour aller à la chanson en cours. Un appui long replie tous les groupes sauf la chanson actuelle.</string>
-    <string name="help_root_folders">Dossiers racine</string>
+    <string name="help_root_folders">Dossiers racine (CSV)</string>
     <string name="help_root_folders_summary">Les dossiers racine se configurent dans les paramètres avancés : ils servent à masquer la première partie du chemin quand les chansons sont triées par dossier. Pour ajouter plusieurs dossiers, séparez-les par des points-virgules.</string>
     <string name="help_background">Arrière-plan</string>
     <string name="help_background_summary">Pendant la lecture, appuyer sur Accueil ou Retour maintient l\'application en arrière-plan.</string>

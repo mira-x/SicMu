@@ -59,7 +59,7 @@ public class Path {
 
         // remove rootFolders
         if (rootFolders != null) {
-            String[] rootFoldersArray = rootFolders.split(";");
+            String[] rootFoldersArray = rootFolders.split("[,;]");
             for (String rootFolder : rootFoldersArray) {
                 if (rootFolder.length() <= path.length() &&
                         rootFolder.equals(path.substring(0, rootFolder.length()))) {

@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Toque num grupo para o abrir ou fechar.</string>
     <string name="help_scroll">Mostrar música atual na lista</string>
     <string name="help_scroll_summary">Pressione o botão à direita de \"Próxima\" para ir à música a tocar. Toque longo fecha todos os grupos exceto a música atual.</string>
-    <string name="help_root_folders">Pastas raiz</string>
+    <string name="help_root_folders">Pastas raiz (CSV)</string>
     <string name="help_root_folders_summary">As pastas raiz configuram-se nas definições avançadas: servem para ocultar a primeira parte do caminho quando as músicas são ordenadas por pasta. Para adicionar várias pastas, separe-as com ponto e vírgula.</string>
     <string name="help_background">Segundo plano</string>
     <string name="help_background_summary">Durante a reprodução, pressionar o botão Início ou Voltar mantém a aplicação em segundo plano.</string>

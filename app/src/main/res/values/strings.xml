@@ -201,7 +201,7 @@
     <string name="help_unfold_group_summary">Tap on a group to fold / unfold it.</string>
     <string name="help_scroll">Scroll to current song</string>
     <string name="help_scroll_summary">Press the button to the right of \'next\' button to scroll the list to currently playing song. Long tap folds everything except current song.</string>
-    <string name="help_root_folders">Root folders</string>
+    <string name="help_root_folders">Root folders (CSV)</string>
     <string name="help_root_folders_summary">Root folders can be customized from advanced settings: it is used only for hiding the first portion of folders path when songs are sorted by folder. To put several root folders, separate path using a semi-colon.</string>
     <string name="help_background">Background</string>
     <string name="help_background_summary">While playing music, press on home button or back button to close the song list and keep the music playing in background.</string>

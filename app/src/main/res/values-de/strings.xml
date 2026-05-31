@@ -102,7 +102,7 @@
     <string name="help_unfold_group_summary">Auf eine Gruppe tippen, um sie ein- bzw. auszuklappen.</string>
     <string name="help_scroll">Aktuelles Lied in Liste zeigen</string>
     <string name="help_scroll_summary">Den Button rechts von "Nächstes" drücken, um in der Liederliste zum gerade abgespielten Lied zu springen. Langes Tippen klappt alle Gruppen bis auf das gerade abgespielte Lied zu.</string>
-    <string name="help_root_folders">Wurzelverzeichnisse</string>
+    <string name="help_root_folders">Wurzelverzeichnisse (CSV)</string>
     <string name="help_root_folders_summary">Die Festlegung der Wurzelverzeichnisse erfolgt in den Erweiterten Einstellungen: sie werden nur verwendet, um den vorderen Teil des Verzeichnispfades zu verbergen, wenn die Lieder nach Verzeichnis geordnet angezeigt werden. Mehrere Wurzelverzeichniseinträge werden durch Semikolon getrennt angegeben.</string>
     <string name="help_background">Hintergrund</string>
     <string name="help_background_summary">Wenn ein Lied abgespielt wird, lässt das Drücken der Home oder Zurück-Buttons die App im Hintergrund weiterlaufen.</string>

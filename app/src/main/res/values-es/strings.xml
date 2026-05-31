@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Toca un grupo para plegarlo o desplegarlo.</string>
     <string name="help_scroll">Mostrar canción actual en la lista</string>
     <string name="help_scroll_summary">Pulsa el botón a la derecha de \"Siguiente\" para ir a la canción en reproducción. Mantener pulsado pliega todos los grupos excepto la canción actual.</string>
-    <string name="help_root_folders">Carpetas raíz</string>
+    <string name="help_root_folders">Carpetas raíz (CSV)</string>
     <string name="help_root_folders_summary">Las carpetas raíz se configuran en los ajustes avanzados: se usan solo para ocultar la primera parte de la ruta cuando las canciones se ordenan por carpeta. Para añadir varias carpetas raíz, sepáralas con punto y coma.</string>
     <string name="help_background">Segundo plano</string>
     <string name="help_background_summary">Mientras se reproduce música, pulsar el botón Inicio o Atrás mantiene la aplicación en segundo plano.</string>

@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Додирните групу да бисте је сажели или раширили.</string>
     <string name="help_scroll">Прикажи тренутну песму у списку</string>
     <string name="help_scroll_summary">Притисните дугме десно од \"Следећа\" да бисте отишли на песму која свира. Дуги додир сажима све групе осим тренутне песме.</string>
-    <string name="help_root_folders">Коренске фасцикле</string>
+    <string name="help_root_folders">Коренске фасцикле (CSV)</string>
     <string name="help_root_folders_summary">Коренске фасцикле се подешавају у напредним подешавањима: користе се за скривање првог дела путање када су песме поређане по фасцикли. За додавање више фасцикли, одвојите их тачком и зарезом.</string>
     <string name="help_background">Позадина</string>
     <string name="help_background_summary">Током репродукције, притисак на дугме Почетна или Назад држи апликацију у позадини.</string>

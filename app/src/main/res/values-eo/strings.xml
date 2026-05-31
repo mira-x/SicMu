@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Tuŝu grupon por faldi aŭ malfaldu ĝin.</string>
     <string name="help_scroll">Montri aktualan kanton en la listo</string>
     <string name="help_scroll_summary">Premu la butonon dekstre de \"Sekva\" por iri al la ludata kanto. Longa tuŝo faldas ĉiujn grupojn krom la aktuala kanto.</string>
-    <string name="help_root_folders">Radikaj dosierujoj</string>
+    <string name="help_root_folders">Radikaj dosierujoj (CSV)</string>
     <string name="help_root_folders_summary">Radikaj dosierujoj estas agorditaj en la altnivela agordoj: ili estas uzataj nur por kaŝi la unuan parton de la vojo kiam kantoj estas ordigitaj laŭ dosierujo. Por aldoni plurajn radikajn dosierujojn, apartigu ilin per punktokomo.</string>
     <string name="help_background">Fono</string>
     <string name="help_background_summary">Dum muziko ludas, premi la Hejmo- aŭ Reen-butonon tenas la aplikaĵon en la fono.</string>

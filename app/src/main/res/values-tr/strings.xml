@@ -166,7 +166,7 @@
     <string name="help_unfold_group_summary">Açmak veya kapatmak için gruba dokunun.</string>
     <string name="help_scroll">Mevcut şarkıyı listede göster</string>
     <string name="help_scroll_summary">Çalan şarkıya gitmek için \"Sonraki\"nin sağındaki düğmeye basın. Uzun dokunma mevcut şarkı hariç tüm grupları kapatır.</string>
-    <string name="help_root_folders">Kök dizinler</string>
+    <string name="help_root_folders">Kök dizinler (CSV)</string>
     <string name="help_root_folders_summary">Kök dizinler gelişmiş ayarlarda yapılandırılır: şarkılar dizine göre sıralandığında yolun ilk kısmını gizlemek için kullanılır. Birden fazla dizin eklemek için noktalı virgülle ayırın.</string>
     <string name="help_background">Arka plan</string>
     <string name="help_background_summary">Çalma sırasında Ana Sayfa veya Geri düğmesine basmak uygulamayı arka planda tutar.</string>
