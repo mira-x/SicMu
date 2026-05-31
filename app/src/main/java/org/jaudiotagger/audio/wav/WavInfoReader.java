@@ -41,10 +41,10 @@ import java.util.logging.Logger;
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
 
 
-  private String loggingName;
+  private final String loggingName;
 
   public WavInfoReader(String loggingName) {
     this.loggingName = loggingName;

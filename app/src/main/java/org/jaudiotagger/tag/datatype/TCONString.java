@@ -37,7 +37,7 @@ public class TCONString extends TextEncodedStringSizeTerminated {
     String[] valuesarray = value.replaceAll("(\\(\\d+\\)|\\(RX\\)|\\(CR\\)\\w*)", "$1\u0000").split("\u0000");
     List<String> values = Arrays.asList(valuesarray);
     //Read only list so if empty have to create new list
-    if (values.size() == 0) {
+    if (values.isEmpty()) {
       values = new ArrayList<String>(1);
       values.add("");
     }

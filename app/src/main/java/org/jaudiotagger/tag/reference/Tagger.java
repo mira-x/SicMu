@@ -25,8 +25,8 @@ public enum Tagger {
   MUSICHI(15, "Musichi"),
   ;
 
-  private int compatability;
-  private String desc;
+  private final int compatability;
+  private final String desc;
 
   Tagger(int compatability, String desc) {
     this.compatability = compatability;

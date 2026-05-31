@@ -283,7 +283,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         startActivity(intent);
     }
 
-    private ServiceConnection musicConnection = new ServiceConnection() {
+    private final ServiceConnection musicConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

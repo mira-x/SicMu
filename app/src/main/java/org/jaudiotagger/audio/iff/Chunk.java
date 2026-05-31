@@ -10,8 +10,8 @@ import java.nio.ByteBuffer;
  * @author Gary McGath
  */
 public abstract class Chunk {
-  protected ByteBuffer chunkData;
-  protected ChunkHeader chunkHeader;
+  protected final ByteBuffer chunkData;
+  protected final ChunkHeader chunkHeader;
 
 
   /**

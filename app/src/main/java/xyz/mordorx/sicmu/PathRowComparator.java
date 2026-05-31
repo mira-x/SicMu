@@ -20,8 +20,8 @@ package xyz.mordorx.sicmu;
 import java.util.Comparator;
 
 public class PathRowComparator implements Comparator<Row> {
-    private boolean showFilename;
-    AlphaNumComparator alphaNumComparator;
+    private final boolean showFilename;
+    final AlphaNumComparator alphaNumComparator;
 
     public PathRowComparator(boolean showFilename) {
         this.showFilename = showFilename;

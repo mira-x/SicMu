@@ -1,7 +1,5 @@
 package org.jaudiotagger.audio;
 
-import java.util.List;
-
 /**
  * Files formats currently supported by Library.
  * Each enum value is associated with a file suffix (extension).
@@ -24,7 +22,7 @@ public enum SupportedFileFormat {
   AIFC("aifc"),
   DSF("dsf");
 
-  private String filesuffix;
+  private final String filesuffix;
 
   /**
    * Constructor for internal use by this enum.

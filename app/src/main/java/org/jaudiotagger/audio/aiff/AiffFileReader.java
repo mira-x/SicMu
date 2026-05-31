@@ -12,8 +12,8 @@ import java.io.IOException;
  * Reads Audio and Metadata information contained in Aiff file.
  */
 public class AiffFileReader extends AudioFileReader2 {
-  private AiffInfoReader ir = new AiffInfoReader();
-  private AiffTagReader im = new AiffTagReader();
+  private final AiffInfoReader ir = new AiffInfoReader();
+  private final AiffTagReader im = new AiffTagReader();
 
   @Override
   protected GenericAudioHeader getEncodingInfo(File file) throws CannotReadException, IOException {

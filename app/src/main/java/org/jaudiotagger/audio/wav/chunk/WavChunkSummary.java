@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  */
 public class WavChunkSummary {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
 
   /**
    * Get start location in file of first metadata chunk (could be LIST or ID3)

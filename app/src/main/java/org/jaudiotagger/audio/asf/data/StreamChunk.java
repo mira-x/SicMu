@@ -162,11 +162,10 @@ public abstract class StreamChunk extends Chunk {
    */
   @Override
   public String prettyPrint(final String prefix) {
-      String result = super.prettyPrint(prefix) + prefix + "  |-> Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR +
+      return super.prettyPrint(prefix) + prefix + "  |-> Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR +
               prefix + "  |-> Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR +
               prefix + "  |-> Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR +
               prefix + "  |-> Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR +
               prefix + "  |-> Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR;
-    return result;
   }
 }

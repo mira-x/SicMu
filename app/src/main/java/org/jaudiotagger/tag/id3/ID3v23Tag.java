@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -97,10 +98,10 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   protected static final String TYPE_EXTENDED = "extended";
   protected static final String TYPE_PADDINGSIZE = "paddingsize";
   protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  protected static int TAG_EXT_HEADER_LENGTH = 10;
-  protected static int TAG_EXT_HEADER_CRC_LENGTH = 4;
-  protected static int FIELD_TAG_EXT_SIZE_LENGTH = 4;
-  protected static int TAG_EXT_HEADER_DATA_LENGTH = TAG_EXT_HEADER_LENGTH - FIELD_TAG_EXT_SIZE_LENGTH;
+  protected static final int TAG_EXT_HEADER_LENGTH = 10;
+  protected static final int TAG_EXT_HEADER_CRC_LENGTH = 4;
+  protected static final int FIELD_TAG_EXT_SIZE_LENGTH = 4;
+  protected static final int TAG_EXT_HEADER_DATA_LENGTH = TAG_EXT_HEADER_LENGTH - FIELD_TAG_EXT_SIZE_LENGTH;
   /**
    * CRC Checksum calculated
    */
@@ -120,7 +121,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   /**
    * The tag is compressed
    */
-  protected boolean compression = false;
+  protected final boolean compression = false;
   /**
    * Crcdata Checksum in extended header
    */
@@ -903,12 +904,8 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
     } else {
-      try {
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-      } catch (UnsupportedEncodingException uoe) {
-        throw new RuntimeException(uoe.getMessage());
-      }
-      body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1));
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
       body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
@@ -1050,7 +1047,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       }
     } else if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
         return FrameBodyTCON.convertID3v23GenreToGeneric(body.getValues().get(index));
@@ -1075,7 +1072,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     }
 
     if (frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT)) {
-      if (frame.getContent().length() == 0) {
+      if (frame.getContent().isEmpty()) {
         //Discard not useful to complicate by trying to map it
         logger.warning("TDAT is empty so just ignoring");
         return;
@@ -1083,7 +1080,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     }
     if (map.containsKey(frameId) || map.containsKey(TyerTdatAggregatedFrame.ID_TYER_TDAT)) {
       //If we have multiple duplicate frames in a tag separate them with semicolons
-      if (this.duplicateFrameId.length() > 0) {
+      if (!this.duplicateFrameId.isEmpty()) {
         this.duplicateFrameId += ";";
       }
       this.duplicateFrameId += frameId;
@@ -1125,7 +1122,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
       List<String> convertedGenres = new ArrayList<String>();
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
 
@@ -1137,7 +1134,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     } else if (genericKey == FieldKey.YEAR) {
       List<TagField> fields = getFields(genericKey);
       List<String> results = new ArrayList<String>();
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         for (TagField next : fields) {
           if (next instanceof TagTextField) {
             results.add(((TagTextField) next).getContent());

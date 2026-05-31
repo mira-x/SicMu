@@ -26,7 +26,7 @@ import java.util.List;
  * Wraps ID3Tag for most of its metadata.
  */
 public class AiffTag implements Tag, Id3SupportingTag {
-  private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+  private final List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
   private boolean isIncorrectlyAlignedTag = false;
   private boolean isExistingId3Tag = false;
   private AbstractID3v2Tag id3Tag;

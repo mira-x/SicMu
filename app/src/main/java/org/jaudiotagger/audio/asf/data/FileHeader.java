@@ -214,9 +214,8 @@ public class FileHeader extends Chunk {
    */
   @Override
   public String prettyPrint(final String prefix) {
-      String result = super.prettyPrint(prefix) + prefix + "  |-> Filesize      = " + getFileSize().toString() + " Bytes" + Utils.LINE_SEPARATOR +
+      return super.prettyPrint(prefix) + prefix + "  |-> Filesize      = " + getFileSize().toString() + " Bytes" + Utils.LINE_SEPARATOR +
               prefix + "  |-> Media duration= " + getDuration().divide(new BigInteger("10000")).toString() + " ms" + Utils.LINE_SEPARATOR +
               prefix + "  |-> Created at    = " + getFileCreationTime() + Utils.LINE_SEPARATOR;
-    return result;
   }
 }

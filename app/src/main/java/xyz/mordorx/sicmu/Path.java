@@ -26,9 +26,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.provider.MediaStore;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -37,7 +35,6 @@ import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Vector;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Path {
@@ -232,12 +229,9 @@ public class Path {
             }
     }
 
-
     public static void rescanWhole(Context context) {
-        //purgeFiles(context);
         scanMediaFiles(context);
     }
-
 
     public static boolean rescanDir(Context context, File dir) {
         if (!dir.exists())
@@ -249,35 +243,6 @@ public class Path {
         return true;
     }
 
-
-    public static void purgeFiles(Context context) {
-        final String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA};
-        Uri playlist_uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = context.getContentResolver().query(playlist_uri, projection, null, null, null);
-        cursor.moveToFirst();
-        for (int r = 0; r < cursor.getCount(); r++, cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String filePath = cursor.getString(1);
-            boolean delIt = true;
-            if (filePath.length() > 0) {
-                File file = new File(filePath);
-                if (file.exists())
-                    delIt = false;
-            }
-            if (delIt) {
-                // TODO: confirm it (yes, yes to all, no, no to all) rather than toast it
-                Toast.makeText(context,
-                        (new Formatter()).format(context.getResources()
-                                .getString(R.string.settings_rescan_purge), filePath)
-                                .toString(),
-                        Toast.LENGTH_SHORT).show();
-                Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-                context.getContentResolver().delete(uri, null, null);
-            }
-        }
-        cursor.close();
-    }
-
     private static void scanMediaFiles(Context context) {
         // http://stackoverflow.com/questions/13270789/how-to-run-media-scanner-in-android
         Toast.makeText(context,
@@ -285,30 +250,28 @@ public class Path {
                 Toast.LENGTH_SHORT).show();
 
         Collection<File> dirsToScan = Path.getStorages(context); // getBaseContext()
-        if (dirsToScan != null) {
-            for (File dir : dirsToScan) {
-                Toast.makeText(context,
-                        (new Formatter()).format(context.getResources()
-                                .getString(R.string.settings_rescan_storage), dir)
-                                .toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-
-            // add Music folder in first to speedup music folder discovery
-            for (File dir : dirsToScan) {
-                File musicDir = new File(dir, "Music");
-                rescanDir(context, musicDir);
-            }
-
-            // add whole storage at the end
-            for (File dir : dirsToScan) {
-                rescanDir(context, dir);
-            }
-
+        for (File dir : dirsToScan) {
             Toast.makeText(context,
-                    context.getResources().getString(R.string.settings_rescan_finished),
+                    (new Formatter()).format(context.getResources()
+                                    .getString(R.string.settings_rescan_storage), dir)
+                            .toString(),
                     Toast.LENGTH_LONG).show();
         }
+
+        // add Music folder in first to speedup music folder discovery
+        for (File dir : dirsToScan) {
+            File musicDir = new File(dir, "Music");
+            rescanDir(context, musicDir);
+        }
+
+        // add whole storage at the end
+        for (File dir : dirsToScan) {
+            rescanDir(context, dir);
+        }
+
+        Toast.makeText(context,
+                context.getResources().getString(R.string.settings_rescan_finished),
+                Toast.LENGTH_LONG).show();
     }
 
 
@@ -353,22 +316,6 @@ public class Path {
         scanMediaFiles(context, files, mediaScannerCallback);
     }
 
-    static private final String[] imageFileExtensions = new String[]{"jpg", "png", "gif", "jpeg"};
-
-    static public boolean filenameIsImage(String filename) {
-        for (String extension : imageFileExtensions)
-            if (filename.toLowerCase().endsWith(extension))
-                return true;
-        return false;
-    }
-
-    static public boolean isImage(File file) {
-        if (file.isFile())
-            if (filenameIsImage(file.getName()))
-                return true;
-        return false;
-    }
-
     public static String getSongPathFromUri(Context context, Uri uri) {
         String songPath = null;
         File songFile = null;
@@ -408,8 +355,4 @@ public class Path {
         return null;
     }
 
-    public static String getFilename(@NonNull String path) {
-        File f = new File(path);
-        return f.getName();
-    }
 }

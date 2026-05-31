@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  */
 public abstract class Mp4TagField implements TagField {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
 
 
   protected String id;

@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * Read Aiff chunks, except the ID3 chunk.
  */
 public class AiffInfoReader extends AiffChunkReader {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
 
   protected GenericAudioHeader read(File file) throws CannotReadException, IOException {

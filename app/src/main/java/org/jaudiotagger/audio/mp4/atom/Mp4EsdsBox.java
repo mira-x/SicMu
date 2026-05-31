@@ -88,8 +88,8 @@ public class Mp4EsdsBox extends AbstractMp4Box {
   private static final int FILLER_START = 0x80;
   private static final int FILLER_OTHER = 0x81;
   private static final int FILLER_END = 0xFE;
-  private static Map<Integer, Kind> kindMap;
-  private static Map<Integer, AudioProfile> audioProfileMap;
+  private static final Map<Integer, Kind> kindMap;
+  private static final Map<Integer, AudioProfile> audioProfileMap;
 
   static {
     //Create maps to speed up lookup from raw value to enum
@@ -228,7 +228,7 @@ public class Mp4EsdsBox extends AbstractMp4Box {
   /**
    * File type, held in Section 4 , only really expecting type 0x64 (AAC)
    */
-  public static enum Kind {
+  public enum Kind {
     V1(1),
     V2(2),
     MPEG4_VIDEO(32),
@@ -262,7 +262,7 @@ public class Mp4EsdsBox extends AbstractMp4Box {
     H263_VIDEO(242),
     H261_VIDEO(243);
 
-    private int id;
+    private final int id;
 
     Kind(int id) {
       this.id = id;
@@ -276,7 +276,7 @@ public class Mp4EsdsBox extends AbstractMp4Box {
   /**
    * Audio profile, held in Section 5 this is usually type LOW_COMPLEXITY
    */
-  public static enum AudioProfile {
+  public enum AudioProfile {
     MAIN(1, "Main"),
     LOW_COMPLEXITY(2, "Low Complexity"),
     SCALEABLE(3, "Scaleable Sample rate"),
@@ -292,8 +292,8 @@ public class Mp4EsdsBox extends AbstractMp4Box {
     WAVETABLE(13, "WAVETABLE"),
     ;
 
-    private int id;
-    private String description;
+    private final int id;
+    private final String description;
 
     /**
      * @param id          it is stored as in file

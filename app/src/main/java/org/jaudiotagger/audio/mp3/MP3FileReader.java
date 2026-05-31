@@ -32,8 +32,7 @@ public class MP3FileReader extends AudioFileReader {
    */
   //Override because we read mp3s differently to the entagged code
   public AudioFile read(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException {
-    MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
-    return mp3File;
+      return new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
   }
 
   /**
@@ -47,8 +46,7 @@ public class MP3FileReader extends AudioFileReader {
    * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
    */
   public AudioFile readMustBeWritable(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException {
-    MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
-    return mp3File;
+      return new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
   }
 
 }

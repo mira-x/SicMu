@@ -33,8 +33,6 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody {
    * Creates a new FieldBodyIND datatype.
    */
   public FieldFrameBodyIND() {
-    //        this.setObject("Lyrics Present", new Boolean(false));
-    //        this.setObject("Timestamp Present", new Boolean(false));
   }
 
   public FieldFrameBodyIND(FieldFrameBodyIND body) {

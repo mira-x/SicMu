@@ -54,9 +54,9 @@ public class VbriFrame {
    */
   private static final byte[] VBRI_VBR_ID = {'V', 'B', 'R', 'I'};
 
-  private ByteBuffer header;
+  private final ByteBuffer header;
 
-  private boolean vbr = false;
+  private final boolean vbr = false;
   private int frameCount = -1;
   private int audioSize = -1;
   private LameFrame lameFrame;
@@ -81,8 +81,7 @@ public class VbriFrame {
    * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
    */
   public static VbriFrame parseVBRIFrame(ByteBuffer header) throws InvalidAudioFrameException {
-    VbriFrame VBRIFrame = new VbriFrame(header);
-    return VBRIFrame;
+      return new VbriFrame(header);
   }
 
   /**
@@ -120,7 +119,7 @@ public class VbriFrame {
    * Set size of AudioData
    */
   private void setAudioSize() {
-    byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
+    byte[] frameSizeBuffer = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
     header.get(frameSizeBuffer);
     boolean audioSizeEnabled = true;
     audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
@@ -130,7 +129,7 @@ public class VbriFrame {
    * Set count of frames
    */
   private void setFrameCount() {
-    byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
+    byte[] frameCountBuffer = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
     header.get(frameCountBuffer);
     boolean frameCountEnabled = true;
     frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;

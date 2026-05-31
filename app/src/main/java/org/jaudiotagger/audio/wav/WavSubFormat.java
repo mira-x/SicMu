@@ -24,8 +24,8 @@ public enum WavSubFormat {
     }
   }
 
-  private int code;
-  private String description;
+  private final int code;
+  private final String description;
 
   WavSubFormat(int code, String description) {
     this.code = code;

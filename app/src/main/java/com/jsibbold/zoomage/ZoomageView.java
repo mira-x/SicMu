@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Jeffrey Sibbold
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -58,10 +58,10 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
     private ScaleType startScaleType;
 
     // These matrices will be used to move and zoom image
-    private Matrix matrix = new Matrix();
+    private final Matrix matrix = new Matrix();
     private Matrix startMatrix = new Matrix();
 
-    private float[] matrixValues = new float[9];
+    private final float[] matrixValues = new float[9];
     private float[] startValues = null;
 
     private float minScale = MIN_SCALE;
@@ -115,25 +115,23 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
     private void init(Context context, AttributeSet attrs) {
         scaleDetector = new ScaleGestureDetector(context, this);
         gestureDetector = new GestureDetector(context, gestureListener);
-        ScaleGestureDetectorCompat.setQuickScaleEnabled(scaleDetector, false);
+        scaleDetector.setQuickScaleEnabled(false);
         startScaleType = getScaleType();
 
-        TypedArray values = context.obtainStyledAttributes(attrs, R.styleable.ZoomageView);
+        try (TypedArray values = context.obtainStyledAttributes(attrs, R.styleable.ZoomageView)) {
+            zoomable = values.getBoolean(R.styleable.ZoomageView_zoomage_zoomable, true);
+            translatable = values.getBoolean(R.styleable.ZoomageView_zoomage_translatable, true);
+            animateOnReset = values.getBoolean(R.styleable.ZoomageView_zoomage_animateOnReset, true);
+            autoCenter = values.getBoolean(R.styleable.ZoomageView_zoomage_autoCenter, true);
+            restrictBounds = values.getBoolean(R.styleable.ZoomageView_zoomage_restrictBounds, false);
+            doubleTapToZoom = values.getBoolean(R.styleable.ZoomageView_zoomage_doubleTapToZoom, true);
+            minScale = values.getFloat(R.styleable.ZoomageView_zoomage_minScale, MIN_SCALE);
+            maxScale = values.getFloat(R.styleable.ZoomageView_zoomage_maxScale, MAX_SCALE);
+            doubleTapToZoomScaleFactor = values.getFloat(R.styleable.ZoomageView_zoomage_doubleTapToZoomScaleFactor, 3);
+            autoResetMode = AutoResetMode.Parser.fromInt(values.getInt(R.styleable.ZoomageView_zoomage_autoResetMode, AutoResetMode.UNDER));
 
-        zoomable = values.getBoolean(R.styleable.ZoomageView_zoomage_zoomable, true);
-        translatable = values.getBoolean(R.styleable.ZoomageView_zoomage_translatable, true);
-        animateOnReset = values.getBoolean(R.styleable.ZoomageView_zoomage_animateOnReset, true);
-        autoCenter = values.getBoolean(R.styleable.ZoomageView_zoomage_autoCenter, true);
-        restrictBounds = values.getBoolean(R.styleable.ZoomageView_zoomage_restrictBounds, false);
-        doubleTapToZoom = values.getBoolean(R.styleable.ZoomageView_zoomage_doubleTapToZoom, true);
-        minScale = values.getFloat(R.styleable.ZoomageView_zoomage_minScale, MIN_SCALE);
-        maxScale = values.getFloat(R.styleable.ZoomageView_zoomage_maxScale, MAX_SCALE);
-        doubleTapToZoomScaleFactor = values.getFloat(R.styleable.ZoomageView_zoomage_doubleTapToZoomScaleFactor, 3);
-        autoResetMode = AutoResetMode.Parser.fromInt(values.getInt(R.styleable.ZoomageView_zoomage_autoResetMode, AutoResetMode.UNDER));
-
-        verifyScaleRange();
-
-        values.recycle();
+            verifyScaleRange();
+        }
     }
 
     private void verifyScaleRange() {
@@ -143,10 +141,6 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
 
         if (minScale < 0) {
             throw new IllegalStateException("minScale must be greater than 0");
-        }
-
-        if (maxScale < 0) {
-            throw new IllegalStateException("maxScale must be greater than 0");
         }
 
         if (doubleTapToZoomScaleFactor > maxScale) {
@@ -526,7 +520,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
                     scaleBy = 1f;
                     resetImage();
                 }
-            } else if (singleTapDetected && onSingleTapListener != null) {
+            } else if (onSingleTapListener != null) {
                 onSingleTapListener.run();
             }
 
@@ -747,7 +741,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
         animator.addUpdateListener(new AnimatorUpdateListener() {
 
             final float[] values = new float[9];
-            Matrix current = new Matrix();
+            final Matrix current = new Matrix();
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -932,7 +926,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
         }
     };
 
-    private class SimpleAnimatorListener implements Animator.AnimatorListener {
+    private static class SimpleAnimatorListener implements Animator.AnimatorListener {
         @Override
         public void onAnimationStart(Animator animation) {
         }

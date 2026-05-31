@@ -186,12 +186,11 @@ public final class ContentDescription extends MetadataContainer {
    */
   @Override
   public String prettyPrint(final String prefix) {
-      String result = super.prettyPrint(prefix) + prefix + "  |->Title      : " + getTitle() + Utils.LINE_SEPARATOR +
+      return super.prettyPrint(prefix) + prefix + "  |->Title      : " + getTitle() + Utils.LINE_SEPARATOR +
               prefix + "  |->Author     : " + getAuthor() + Utils.LINE_SEPARATOR +
               prefix + "  |->Copyright  : " + getCopyRight() + Utils.LINE_SEPARATOR +
               prefix + "  |->Description: " + getComment() + Utils.LINE_SEPARATOR +
               prefix + "  |->Rating     :" + getRating() + Utils.LINE_SEPARATOR;
-    return result;
   }
 
   /**

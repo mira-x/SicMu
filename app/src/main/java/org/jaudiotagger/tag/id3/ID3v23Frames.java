@@ -128,13 +128,13 @@ public class ID3v23Frames extends ID3Frames {
   /**
    * Maps from Generic key to ID3 key
    */
-  protected EnumMap<FieldKey, ID3v23FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v23FieldKey>(FieldKey.class);
+  protected final EnumMap<FieldKey, ID3v23FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v23FieldKey>(FieldKey.class);
 
 
   /**
    * Maps from ID3 key to Generic key
    */
-  protected EnumMap<ID3v23FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v23FieldKey, FieldKey>(ID3v23FieldKey.class);
+  protected final EnumMap<ID3v23FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v23FieldKey, FieldKey>(ID3v23FieldKey.class);
 
   private ID3v23Frames() {
     // The defined v23 frames,

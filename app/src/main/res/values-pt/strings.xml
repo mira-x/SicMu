@@ -71,10 +71,6 @@
     <string name="popup_song_mime">Tipo MIME: %s</string>
     <string name="popup_song_path">Caminho: %s</string>
 
-    <string name="explain_playback_speed">Deslize para cima/baixo ou esquerda/direita para aumentar/diminuir a velocidade de reprodução.</string>
-
-    <string name="focus_error">Não foi possível acessar o áudio! Por favor, reinicie a aplicação.</string>
-
     <string name="settings_title">Configurações</string>
 
     <string name="settings_theme_title">Tema</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Escaneando ficheiros multimédia…</string>
     <string name="settings_rescan_storage">Escaneando armazenamento %s</string>
     <string name="settings_rescan_finished">Escaneamento terminado. Pode demorar um pouco até os novos ficheiros aparecerem (pode ser necessário reiniciar o SicMu Player).</string>
-    <string name="settings_rescan_purge">O escaneador encontrou entradas (%s) que já não existem. As entradas foram removidas da lista.</string>
-
-    <string name="settings_media_button_start_app_title">Início automático com botões multimédia</string>
-    <string name="settings_media_button_start_app">Os botões multimédia iniciam a aplicação se não estiver a correr.</string>
 
     <string name="settings_autoscroll">Música a tocar</string>
     <string name="settings_autoscroll_summary">Deslocar para a música quando ela toca</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Toque no ícone do SicMu para ver informações da música a tocar (capa, …)</string>
     <string name="help_seek_menu">Menu de navegação</string>
     <string name="help_seek_menu_summary">Toque no canto superior direito da barra de menu para abrir/fechar o menu de navegação. Toque longo em \"Próxima\"/\"Anterior\" avança/retrocede continuamente.</string>
-    <string name="help_donate">Doar</string>
     <string name="help_context_menu">Menu de contexto</string>
     <string name="help_context_menu_summary">Toque longo numa música para mostrar um menu com opções como avaliar ou apagar</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Parar no fim da pasta</string>
     <string name="action_stop_at_end_of_track">Parar depois da música</string>
 
-    <string name="detail_metadata_hint_label">Toque na capa do álbum para ver todos os metadados</string>
     <string name="action_youtube_search">Buscar no YouTube</string>
     <string name="action_youtube_open">Abrir vídeo do YouTube</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">Avaliar com 4 estrelas</string>
     <string name="a11y_rating_5">Avaliar com 5 estrelas</string>
     <string name="a11y_now_playing">A tocar agora</string>
-    <string name="a11y_song_rating">Avaliação: %d estrelas</string>
     <string name="a11y_sort_button">Mudar modo de visualização</string>
     <string name="a11y_stereo_button">Alternar estéreo ou mono</string>
     <string name="a11y_repeat_button">Mudar modo de repetição</string>

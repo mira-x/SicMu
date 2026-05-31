@@ -66,7 +66,7 @@ public class VorbisIdentificationHeader implements VorbisHeader {
   public static final int FIELD_BLOCKSIZE_LENGTH = 1;
   public static final int FIELD_FRAMING_FLAG_LENGTH = 1;
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
   private int audioChannels;
   private boolean isValid = false;
   private int vorbisVersion, audioSampleRate;
@@ -127,10 +127,8 @@ public class VorbisIdentificationHeader implements VorbisHeader {
       this.bitrateMinimal = u(b[16]) + (u(b[17]) << 8) + (u(b[18]) << 16) + (u(b[19]) << 24);
       this.bitrateNominal = u(b[20]) + (u(b[21]) << 8) + (u(b[22]) << 16) + (u(b[23]) << 24);
       this.bitrateMaximal = u(b[24]) + (u(b[25]) << 8) + (u(b[26]) << 16) + (u(b[27]) << 24);
-      //byte blockSize0 = (byte) ( b[28] & 240 );
-      //byte blockSize1 = (byte) ( b[28] & 15 );
 
-      int framingFlag = b[FIELD_FRAMING_FLAG_POS];
+        int framingFlag = b[FIELD_FRAMING_FLAG_POS];
       logger.fine("framingFlag" + framingFlag);
       if (framingFlag != 0) {
         isValid = true;

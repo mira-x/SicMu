@@ -61,7 +61,7 @@ public abstract class AudioFileWriter {
   private static final String FILE_NAME_TOO_LONG2 = "The filename, directory name, or volume label syntax is incorrect";
   private static final int FILE_NAME_TOO_LONG_SAFE_LIMIT = 50;
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
   /**
    * If not <code>null</code>, this listener is used to notify the listener
    * about modification events.<br>

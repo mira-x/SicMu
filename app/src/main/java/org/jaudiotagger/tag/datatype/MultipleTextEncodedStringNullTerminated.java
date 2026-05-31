@@ -138,7 +138,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
    * This holds the values held by a MultipleTextEncodedData type
    */
   public static class Values {
-    private List<String> valueList = new ArrayList<String>();
+    private final List<String> valueList = new ArrayList<String>();
 
     public Values() {
 

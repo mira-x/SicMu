@@ -114,7 +114,7 @@ public class Parameters {
 
 
     public int getDefaultFold() {
-        return Integer.valueOf(getPref().getString(PrefKeys.DEFAULT_FOLD.name(), "0"));
+        return Integer.parseInt(getPref().getString(PrefKeys.DEFAULT_FOLD.name(), "0"));
     }
 
     public boolean getUnfoldSubGroup() {
@@ -122,7 +122,7 @@ public class Parameters {
     }
 
     public int getUnfoldSubGroupThreshold() {
-        return Integer.valueOf(getPref().getString(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name(),
+        return Integer.parseInt(getPref().getString(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name(),
                 context.getString(R.string.settings_unfold_subgroup_threshold_default)));
     }
 
@@ -151,7 +151,7 @@ public class Parameters {
     }
 
     public float getShakeThreshold() {
-        return Float.valueOf(getPref().getString(PrefKeys.SHAKE_THRESHOLD.name(),
+        return Float.parseFloat(getPref().getString(PrefKeys.SHAKE_THRESHOLD.name(),
                 context.getString(R.string.settings_default_shake_threshold)));
     }
 
@@ -185,7 +185,7 @@ public class Parameters {
         var s = new StringBuilder();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Arrays.stream(outs)
-                    .map(dev -> new Pair<String, String>(dev.getAddress(), dev.getProductName().toString()))
+                    .map(dev -> new Pair<>(dev.getAddress(), dev.getProductName().toString()))
                     .distinct()
                     .sorted(Comparator.comparing(Parameters::PairFirst).thenComparing(Parameters::PairSecond))
                     .forEach(dev -> {s.append(dev.first); s.append(dev.second);});

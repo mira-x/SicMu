@@ -71,16 +71,6 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyRVRB datatype.
    */
   public FrameBodyRVRB() {
-    //        this.setObject("Reverb Left", new Short((short) 0));
-    //        this.setObject("Reverb Right", new Short((short) 0));
-    //        this.setObject("Reverb Bounces Left", new Byte((byte) 0));
-    //        this.setObject("Reverb Bounces Right", new Byte((byte) 0));
-    //        this.setObject("Reverb Feedback Left To Left", new Byte((byte) 0));
-    //        this.setObject("Reverb Feedback Left To Right", new Byte((byte) 0));
-    //        this.setObject("Reverb Feedback Right To Right", new Byte((byte) 0));
-    //        this.setObject("Reverb Feedback Right to Left", new Byte((byte) 0));
-    //        this.setObject("Premix Left To Right", new Byte((byte) 0));
-    //        this.setObject("Premix Right To Left", new Byte((byte) 0));
   }
 
   public FrameBodyRVRB(FrameBodyRVRB body) {

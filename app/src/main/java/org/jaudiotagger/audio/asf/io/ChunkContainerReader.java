@@ -46,7 +46,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
    * chunk reader, all {@link InputStream} objects passed to
    * {@link #read(GUID, InputStream, long)} must support mark/reset.
    */
-  protected boolean hasFailingReaders = false;
+  protected final boolean hasFailingReaders = false;
 
   /**
    * Creates a reader instance, which only utilizes the given list of chunk

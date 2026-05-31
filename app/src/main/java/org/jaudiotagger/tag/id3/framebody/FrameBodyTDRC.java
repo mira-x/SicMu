@@ -46,9 +46,14 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
   private static final int PRECISION_DAY = 3;
   private static final int PRECISION_MONTH = 4;
   private static final int PRECISION_YEAR = 5;
-  private static SimpleDateFormat formatYearIn, formatYearOut;
-  private static SimpleDateFormat formatDateIn, formatDateOut, formatMonthOut;
-  private static SimpleDateFormat formatTimeIn, formatTimeOut, formatHoursOut;
+  private static final SimpleDateFormat formatYearIn;
+    private static final SimpleDateFormat formatYearOut;
+  private static final SimpleDateFormat formatDateIn;
+    private static final SimpleDateFormat formatDateOut;
+    private static final SimpleDateFormat formatMonthOut;
+  private static final SimpleDateFormat formatTimeIn;
+    private static final SimpleDateFormat formatTimeOut;
+    private static final SimpleDateFormat formatHoursOut;
 
   static {
     //This is allowable v24 format , we use UK Locale not because we are restricting to UK
@@ -191,8 +196,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
   private static synchronized String formatAndParse(SimpleDateFormat formatDate, SimpleDateFormat parseDate, String text) {
     try {
       Date date = parseDate.parse(text);
-      String result = formatDate.format(date);
-      return result;
+        return formatDate.format(date);
     } catch (ParseException e) {
       logger.warning("Unable to parse:" + text);
     }
@@ -332,42 +336,41 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
   //first day
   private void extractID3v23Formats(final Date dateRecord, final int precision) {
     logger.fine("Precision is:" + precision + "for date:" + dateRecord.toString());
-    Date d = dateRecord;
 
-    //Precision Year
+      //Precision Year
     if (precision == PRECISION_YEAR) {
-      setYear(formatDateAsYear(d));
+      setYear(formatDateAsYear(dateRecord));
     }
     //Precision Month
     else if (precision == PRECISION_MONTH) {
-      setYear(formatDateAsYear(d));
-      setDate(formatDateAsDate(d));
+      setYear(formatDateAsYear(dateRecord));
+      setDate(formatDateAsDate(dateRecord));
       monthOnly = true;
     }
     //Precision Day
     else if (precision == PRECISION_DAY) {
-      setYear(formatDateAsYear(d));
-      setDate(formatDateAsDate(d));
+      setYear(formatDateAsYear(dateRecord));
+      setDate(formatDateAsDate(dateRecord));
     }
     //Precision Hour
     else if (precision == PRECISION_HOUR) {
-      setYear(formatDateAsYear(d));
-      setDate(formatDateAsDate(d));
-      setTime(formatDateAsTime(d));
+      setYear(formatDateAsYear(dateRecord));
+      setDate(formatDateAsDate(dateRecord));
+      setTime(formatDateAsTime(dateRecord));
       hoursOnly = true;
 
     }
     //Precision Minute
     else if (precision == PRECISION_MINUTE) {
-      setYear(formatDateAsYear(d));
-      setDate(formatDateAsDate(d));
-      setTime(formatDateAsTime(d));
+      setYear(formatDateAsYear(dateRecord));
+      setDate(formatDateAsDate(dateRecord));
+      setTime(formatDateAsTime(dateRecord));
     }
     //Precision Minute
     else if (precision == PRECISION_SECOND) {
-      setYear(formatDateAsYear(d));
-      setDate(formatDateAsDate(d));
-      setTime(formatDateAsTime(d));
+      setYear(formatDateAsYear(dateRecord));
+      setDate(formatDateAsDate(dateRecord));
+      setTime(formatDateAsTime(dateRecord));
     }
   }
 

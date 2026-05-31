@@ -56,7 +56,7 @@ public interface AudioFileModificationListener {
    *                             If the original is already modified, this exception results
    *                             in nothing.
    */
-  public void fileModified(AudioFile original, File temporary) throws ModifyVetoException;
+  void fileModified(AudioFile original, File temporary) throws ModifyVetoException;
 
   /**
    * Informs the listener that the process has been finished.<br>
@@ -68,7 +68,7 @@ public interface AudioFileModificationListener {
    *               long and unnecessary operation time, if the tag data is not
    *               needed any more.
    */
-  public void fileOperationFinished(File result);
+  void fileOperationFinished(File result);
 
   /**
    * Notifies that the <code>file</code> is about to be modified.
@@ -78,7 +78,7 @@ public interface AudioFileModificationListener {
    *               performed.
    * @throws ModifyVetoException Thrown if the listener wants to prevent the process.
    */
-  public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException;
+  void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException;
 
   /**
    * This method notifies about a veto exception that has been thrown by
@@ -88,6 +88,6 @@ public interface AudioFileModificationListener {
    * @param original The original file, that was about to be modified.
    * @param veto     The thrown exception.
    */
-  public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto);
+  void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto);
 
 }

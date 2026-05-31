@@ -66,10 +66,6 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyOWNE datatype.
    */
   public FrameBodyOWNE() {
-    //        this.setObject("Text Encoding", new Byte((byte) 0));
-    //        this.setObject("Price Paid", "");
-    //        this.setObject("Date Of Purchase", "");
-    //        this.setObject("Seller", "");
   }
 
   public FrameBodyOWNE(FrameBodyOWNE body) {

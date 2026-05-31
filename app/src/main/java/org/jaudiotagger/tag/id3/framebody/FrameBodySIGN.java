@@ -36,8 +36,6 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodySIGN datatype.
    */
   public FrameBodySIGN() {
-    //        this.setObject("Group Symbol", new Byte((byte) 0));
-    //        this.setObject("Signature", new byte[0]);
   }
 
   public FrameBodySIGN(FrameBodySIGN body) {

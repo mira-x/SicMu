@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  * Contains the ID3 tags.
  */
 public class WavId3Chunk extends Chunk {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
-  private WavTag wavTag;
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.chunk");
+  private final WavTag wavTag;
 
   /**
    * Constructor.

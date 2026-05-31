@@ -90,10 +90,6 @@
     <string name="popup_song_mime">mime: %s</string>
     <string name="popup_song_path">path: %s</string>
 
-    <string name="explain_playback_speed">Swipe up/down or left/right to decrease/increase speed playback!</string>
-
-    <string name="focus_error">Could not get audio focus! Restart the app!</string>
-
     <string name="settings_title">Settings</string>
 
     <string name="settings_theme_title">Theme</string>
@@ -152,10 +148,6 @@
     <string name="settings_rescan_triggered">Media scanner triggered…</string>
     <string name="settings_rescan_storage">Scan storage %s</string>
     <string name="settings_rescan_finished">Media scanner has finished. It can take a while before the new files will become visible (possibly SicmuPlayer needs to be restarted).</string>
-    <string name="settings_rescan_purge">Media scanner found a file (%s) that does is not present in the file system: remove its entry from MediaStore ?</string>
-
-    <string name="settings_media_button_start_app_title">Media buttons auto start</string>
-    <string name="settings_media_button_start_app">Media buttons launch the app if not already started.</string>
 
     <string name="settings_autoscroll">Scroll to new song played</string>
     <string name="settings_autoscroll_summary">When a song starts playing, scroll to it</string>
@@ -217,7 +209,6 @@
     <string name="help_details_menu_summary">Tap on Sicmu\'s icon to show details of current song (album\'s cover art, …)</string>
     <string name="help_seek_menu">Seek menu</string>
     <string name="help_seek_menu_summary">Click at the top right to open seek menu. Long tap on next/prev will seek forward or backward continuously.</string>
-    <string name="help_donate">Tap 3 times on donate button and the donate popup will never show again.</string>
 
     <string name="help_context_menu">Context menu</string>
     <string name="help_context_menu_summary">Long tap on the songs list makes a context menu appears. From this context menu one can rate song, remove file, …</string>
@@ -269,9 +260,6 @@
     <string name="action_repeat_group">Repeat same folder</string>
     <string name="action_repeat_not">Stop at the end of folder</string>
     <string name="action_stop_at_end_of_track">Stop at the end of track</string>
-    <string name="detail_metadata_hint_label">Tap on the album art to see all metadata tags</string>
-    <string name="metadata_saving_success">Metadata was saved successfully.</string>
-    <string name="metadata_saving_failure">Error saving metadata: %s</string>
     <string name="action_youtube_search">Search on YouTube</string>
     <string name="action_youtube_open">Open YouTube video</string>
     <string name="settings_disable_pitch_compensation">Don\'t compensate for pitch changes when increasing playback speed, i.e. increase tempo and pitch.</string>
@@ -294,7 +282,6 @@
     <string name="a11y_rating_4">Rate 4 stars</string>
     <string name="a11y_rating_5">Rate 5 stars</string>
     <string name="a11y_now_playing">Now playing</string>
-    <string name="a11y_song_rating">Rating: %d stars</string>
     <string name="a11y_sort_button">Change display mode</string>
     <string name="a11y_stereo_button">Toggle stereo or mono</string>
     <string name="a11y_repeat_button">Change repeat mode</string>

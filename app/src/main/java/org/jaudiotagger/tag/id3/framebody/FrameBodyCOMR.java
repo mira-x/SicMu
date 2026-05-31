@@ -97,15 +97,6 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyCOMR datatype.
    */
   public FrameBodyCOMR() {
-    //        this.setObject("Text Encoding", new Byte((byte) 0));
-    //        this.setObject("Price String", "");
-    //        this.setObject("Valid Until", "");
-    //        this.setObject("Contact URL", "");
-    //        this.setObject("Recieved As", new Byte((byte) 0));
-    //        this.setObject("Name Of Seller", "");
-    //        this.setObject(ObjectTypes.OBJ_DESCRIPTION, "");
-    //        this.setObject("Picture MIME Type", "");
-    //        this.setObject("Seller Logo", new byte[0]);
   }
 
   public FrameBodyCOMR(FrameBodyCOMR body) {

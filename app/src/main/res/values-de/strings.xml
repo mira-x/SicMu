@@ -28,10 +28,6 @@
 
     <string name="popup_song_path">Dateipfad: %s</string>
 
-    <string name="explain_playback_speed">Nach oben/unten bzw. links/rechts wischen, um die Abspielgeschwindigkeit zu erhöhen/verringern.</string>
-
-    <string name="focus_error">Zugriff auf Audio nicht möglich! Bitte App neustarten.</string>
-
     <string name="settings_title">Einstellungen</string>
 
     <string name="settings_song_view">Liedansicht</string>
@@ -59,10 +55,6 @@
     <string name="settings_rescan_triggered">Mediendateien einlesen gestartet…</string>
     <string name="settings_rescan_storage">Lese Speicherverzeichnis %s</string>
     <string name="settings_rescan_finished">Mediendateien Einlesen beendet. Es kann ein bisschen dauern, bis die neu eingelesenen Daten erscheinen (evtl. SicmuPlayer neu starten).</string>
-    <string name="settings_rescan_purge">Mediendateien Einlesen hat (%s) frühere Einträge nicht mehr gefunden. Einträge wurden aus der Liste gelöscht.</string>
-
-    <string name="settings_media_button_start_app_title">Starten durch Media-Buttons</string>
-    <string name="settings_media_button_start_app">Media-Buttons starten die App, wenn sie noch nicht läuft.</string>
 
     <string name="settings_autoscroll">Abgespielter Titel</string>
     <string name="settings_autoscroll_summary">In Ansicht zu Lied gehen, wenn abgespielt</string>
@@ -192,7 +184,6 @@
     <string name="settings_sleep_timer_remaining">Wiedergabe stoppt um %s Uhr</string>
     <string name="settings_ratings_not_written_title">Bewertungen anzeigen</string>
     <string name="settings_ratings_not_written">Ungespeicherte Bewertungen anzeigen</string>
-    <string name="help_donate">Spenden</string>
     <string name="help_context_menu">Kontextmenü</string>
     <string name="donate_souchaud_summary">Falls dir die App gefällt, kannst du hier an Mathieu Souchaud spenden</string>
     <string name="close">Schließen</string>
@@ -212,7 +203,6 @@
     <string name="settings_toggle_font_size">Schriftgröße</string>
     <string name="settings_author_new_title">Autor*in von SicMu Neo</string>
     <string name="settings_author_old_title">Autor von SicMu</string>
-    <string name="detail_metadata_hint_label">Tippe auf das Albumcover, um alle Metadaten anzuzeigen</string>
     <string name="action_youtube_search">Suchen bei YouTube</string>
     <string name="action_youtube_open">Öffne YouTube video</string>
     <string name="settings_disable_pitch_compensation">Die Tonhöhe nicht beibehalten, wenn die Geschwindigkeit geändert wird</string>
@@ -235,7 +225,6 @@
     <string name="a11y_rating_4">4 Sterne vergeben</string>
     <string name="a11y_rating_5">5 Sterne vergeben</string>
     <string name="a11y_now_playing">Wird gerade abgespielt</string>
-    <string name="a11y_song_rating">Bewertung: %d Sterne</string>
     <string name="a11y_sort_button">Anzeigemodus ändern</string>
     <string name="a11y_stereo_button">Stereo oder Mono umschalten</string>
     <string name="a11y_repeat_button">Wiederholungsmodus ändern</string>

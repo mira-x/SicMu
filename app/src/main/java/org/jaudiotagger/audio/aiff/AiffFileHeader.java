@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public class AiffFileHeader {
   private static final String FORM = "FORM";
-  private static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
+  private static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
 
   /**
    * Reads the file header and registers the data (file type) with the given header.

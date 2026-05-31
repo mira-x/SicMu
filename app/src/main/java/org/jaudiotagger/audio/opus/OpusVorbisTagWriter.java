@@ -24,10 +24,10 @@ import java.util.logging.Logger;
  */
 public class OpusVorbisTagWriter {
 
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.opus");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.opus");
 
-    private OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator(new byte[0], OpusHeader.TAGS_CAPTURE_PATTERN_AS_BYTES, false);
-    private OpusVorbisTagReader reader = new OpusVorbisTagReader();
+    private final OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator(new byte[0], OpusHeader.TAGS_CAPTURE_PATTERN_AS_BYTES, false);
+    private final OpusVorbisTagReader reader = new OpusVorbisTagReader();
 
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotReadException, CannotWriteException {
         try {

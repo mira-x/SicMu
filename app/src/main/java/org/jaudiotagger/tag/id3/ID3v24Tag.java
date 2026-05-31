@@ -61,6 +61,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -177,13 +178,13 @@ public class ID3v24Tag extends AbstractID3v2Tag {
   protected static final String TYPE_EXTENDED = "extended";
   protected static final String TYPE_PADDINGSIZE = "paddingsize";
   protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  protected static int TAG_EXT_HEADER_LENGTH = 6;
-  protected static int TAG_EXT_HEADER_UPDATE_LENGTH = 1;
-  protected static int TAG_EXT_HEADER_CRC_LENGTH = 6;
-  protected static int TAG_EXT_HEADER_RESTRICTION_LENGTH = 2;
-  protected static int TAG_EXT_HEADER_CRC_DATA_LENGTH = 5;
-  protected static int TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH = 1;
-  protected static int TAG_EXT_NUMBER_BYTES_DATA_LENGTH = 1;
+  protected static final int TAG_EXT_HEADER_LENGTH = 6;
+  protected static final int TAG_EXT_HEADER_UPDATE_LENGTH = 1;
+  protected static final int TAG_EXT_HEADER_CRC_LENGTH = 6;
+  protected static final int TAG_EXT_HEADER_RESTRICTION_LENGTH = 2;
+  protected static final int TAG_EXT_HEADER_CRC_DATA_LENGTH = 5;
+  protected static final int TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH = 1;
+  protected static final int TAG_EXT_NUMBER_BYTES_DATA_LENGTH = 1;
   /**
    * CRC Checksum calculated
    */
@@ -253,7 +254,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
   /**
    * Tag padding
    */
-  protected int paddingSize = 0;
+  protected final int paddingSize = 0;
   /**
    * If set Text fields size restrictions
    * <p>
@@ -319,31 +320,31 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         ID3v1Tag id3tag = (ID3v1Tag) mp3tag;
         ID3v24Frame newFrame;
         AbstractID3v2FrameBody newBody;
-        if (id3tag.title.length() > 0) {
+        if (!id3tag.title.isEmpty()) {
           newBody = new FrameBodyTIT2((byte) 0, id3tag.title);
           newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_TITLE);
           newFrame.setBody(newBody);
           frameMap.put(newFrame.getIdentifier(), newFrame);
         }
-        if (id3tag.artist.length() > 0) {
+        if (!id3tag.artist.isEmpty()) {
           newBody = new FrameBodyTPE1((byte) 0, id3tag.artist);
           newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
           newFrame.setBody(newBody);
           frameMap.put(newFrame.getIdentifier(), newFrame);
         }
-        if (id3tag.album.length() > 0) {
+        if (!id3tag.album.isEmpty()) {
           newBody = new FrameBodyTALB((byte) 0, id3tag.album);
           newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ALBUM);
           newFrame.setBody(newBody);
           frameMap.put(newFrame.getIdentifier(), newFrame);
         }
-        if (id3tag.year.length() > 0) {
+        if (!id3tag.year.isEmpty()) {
           newBody = new FrameBodyTDRC((byte) 0, id3tag.year);
           newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_YEAR);
           newFrame.setBody(newBody);
           frameMap.put(newFrame.getIdentifier(), newFrame);
         }
-        if (id3tag.comment.length() > 0) {
+        if (!id3tag.comment.isEmpty()) {
           newBody = new FrameBodyCOMM((byte) 0, "ENG", "", id3tag.comment);
           newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_COMMENT);
           newFrame.setBody(newBody);
@@ -1181,12 +1182,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
     } else {
-      try {
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-      } catch (UnsupportedEncodingException uoe) {
-        throw new RuntimeException(uoe.getMessage());
-      }
-      body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1));
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
       body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
@@ -1259,7 +1256,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
     if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
       List<String> convertedGenres = new ArrayList<String>();
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
 
@@ -1290,7 +1287,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
 
     if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
         return FrameBodyTCON.convertID3v24GenreToGeneric(body.getValues().get(index));

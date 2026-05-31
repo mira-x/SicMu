@@ -37,7 +37,7 @@ public abstract class AbstractDataType {
   protected static final String TYPE_ELEMENT = "element";
 
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
 
   /**
    * Holds the data

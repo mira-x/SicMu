@@ -55,13 +55,13 @@ public class WavTag implements Tag, Id3SupportingTag {
 
   private static final String NULL = "\0";
 
-  private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+  private final List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
   private boolean isIncorrectlyAlignedTag = false;
   private boolean isExistingId3Tag = false;
   private boolean isExistingInfoTag = false;
   private WavInfoTag infoTag;
   private AbstractID3v2Tag id3Tag;
-  private WavOptions wavOptions;
+  private final WavOptions wavOptions;
 
   public WavTag(WavOptions wavOptions) {
     this.wavOptions = wavOptions;
@@ -174,7 +174,7 @@ public class WavTag implements Tag, Id3SupportingTag {
       sb.append(id3Tag.toString()).append("\n");
     }
     if (infoTag != null) {
-      sb.append(infoTag.toString()).append("\n");
+      sb.append(infoTag).append("\n");
     }
     return sb.toString();
   }

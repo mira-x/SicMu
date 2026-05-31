@@ -30,7 +30,7 @@ import java.io.File;
  */
 public class AiffFileWriter extends AudioFileWriter2 {
 
-  private AiffTagWriter tw = new AiffTagWriter();
+  private final AiffTagWriter tw = new AiffTagWriter();
 
   @Override
   protected void writeTag(Tag tag, File file) throws CannotWriteException {

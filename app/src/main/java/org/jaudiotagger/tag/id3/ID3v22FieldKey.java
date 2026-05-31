@@ -168,11 +168,11 @@ public enum ID3v22FieldKey {
   YEAR(ID3v22Frames.FRAME_ID_V2_TYER, Id3FieldType.TEXT),
   ;
 
-  private String fieldName;
+  private final String fieldName;
 
-  private String frameId;
+  private final String frameId;
   private String subId;
-  private Id3FieldType fieldType;
+  private final Id3FieldType fieldType;
 
   /**
    * For usual metadata fields that use a data field

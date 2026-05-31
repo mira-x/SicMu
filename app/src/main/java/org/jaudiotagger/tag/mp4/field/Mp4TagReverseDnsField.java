@@ -183,7 +183,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
       baos.write(nameRawData);
 
       //Create DataBox data if we have data only
-      if (content.length() > 0) {
+      if (!content.isEmpty()) {
         baos.write(getRawContentDataOnly());
       }
       //Now wrap with reversedns box

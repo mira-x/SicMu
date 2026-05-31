@@ -57,9 +57,6 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyUSER datatype.
    */
   public FrameBodyUSER() {
-    //        setObject("Text Encoding", new Byte((byte) 0));
-    //        setObject("Language", "");
-    //        setObject("Text", "");
   }
 
   public FrameBodyUSER(FrameBodyUSER body) {

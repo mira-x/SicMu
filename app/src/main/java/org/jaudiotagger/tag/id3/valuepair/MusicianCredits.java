@@ -8,7 +8,7 @@ import java.util.Set;
  * signify pair should be allocated to TMCL
  */
 public class MusicianCredits {
-  private static Set<String> musicianCredits = new HashSet();
+  private static final Set<String> musicianCredits = new HashSet();
 
   static {
     musicianCredits.add("12 string guitar");

@@ -71,10 +71,6 @@
     <string name="popup_song_mime">Tipo MIME: %s</string>
     <string name="popup_song_path">Ruta: %s</string>
 
-    <string name="explain_playback_speed">Desliza arriba/abajo o izquierda/derecha para aumentar/disminuir la velocidad de reproducción.</string>
-
-    <string name="focus_error">¡No se pudo acceder al audio! Por favor, reinicia la aplicación.</string>
-
     <string name="settings_title">Ajustes</string>
 
     <string name="settings_theme_title">Tema</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Escaneando archivos multimedia…</string>
     <string name="settings_rescan_storage">Escaneando almacenamiento %s</string>
     <string name="settings_rescan_finished">Escaneo finalizado. Puede tardar un poco hasta que los nuevos archivos sean visibles (puede ser necesario reiniciar SicMu Player).</string>
-    <string name="settings_rescan_purge">El escáner encontró entradas (%s) que ya no existen. Las entradas han sido eliminadas de la lista.</string>
-
-    <string name="settings_media_button_start_app_title">Inicio automático con botones multimedia</string>
-    <string name="settings_media_button_start_app">Los botones multimedia inician la aplicación si no está ejecutándose.</string>
 
     <string name="settings_autoscroll">Canción en reproducción</string>
     <string name="settings_autoscroll_summary">Desplazarse a la canción cuando se reproduce</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Toca el icono de SicMu para ver información de la canción en reproducción (carátula, …)</string>
     <string name="help_seek_menu">Menú de salto</string>
     <string name="help_seek_menu_summary">Toca arriba a la derecha en la barra de menú para abrir/cerrar el menú de salto. Mantener pulsado \"Siguiente\"/\"Anterior\" avanza/retrocede continuamente.</string>
-    <string name="help_donate">Donar</string>
     <string name="help_context_menu">Menú contextual</string>
     <string name="help_context_menu_summary">Mantén pulsada una canción para mostrar un menú con opciones adicionales como valorar o eliminar</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Parar al final de la carpeta</string>
     <string name="action_stop_at_end_of_track">Parar después de la canción</string>
 
-    <string name="detail_metadata_hint_label">Toca la carátula del álbum para ver todos los metadatos</string>
     <string name="action_youtube_search">Buscar en YouTube</string>
     <string name="action_youtube_open">Abrir vídeo de YouTube</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">Valorar con 4 estrellas</string>
     <string name="a11y_rating_5">Valorar con 5 estrellas</string>
     <string name="a11y_now_playing">Reproduciendo ahora</string>
-    <string name="a11y_song_rating">Valoración: %d estrellas</string>
     <string name="a11y_sort_button">Cambiar modo de visualización</string>
     <string name="a11y_stereo_button">Alternar estéreo o mono</string>
     <string name="a11y_repeat_button">Cambiar modo de repetición</string>

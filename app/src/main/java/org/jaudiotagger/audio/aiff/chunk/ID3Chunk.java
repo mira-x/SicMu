@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  * Contains the ID3 tags.
  */
 public class ID3Chunk extends Chunk {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.chunk");
-  private AiffTag aiffTag;
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.chunk");
+  private final AiffTag aiffTag;
 
   /**
    * Constructor.

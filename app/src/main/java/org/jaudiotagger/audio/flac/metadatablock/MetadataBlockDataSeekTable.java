@@ -34,7 +34,7 @@ import java.nio.channels.FileChannel;
  * which can be used to reserve space for future seek point insertion.
  */
 public class MetadataBlockDataSeekTable implements MetadataBlockData {
-  private ByteBuffer data;
+  private final ByteBuffer data;
 
   public MetadataBlockDataSeekTable(MetadataBlockHeader header, FileChannel fc) throws IOException {
     data = ByteBuffer.allocate(header.getDataLength());

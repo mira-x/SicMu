@@ -383,9 +383,6 @@ public class Lyrics3v2 extends AbstractLyrics3 {
     size = file.getFilePointer() - filePointer;
 
     if (this.getSize() != size) {
-      //logger.config("Lyrics3v2 size didn't match up while writing.");
-      //logger.config("this.getsize()     = " + this.getSize());
-      //logger.config("size (filePointer) = " + size);
     }
 
     str = Long.toString(size);
@@ -424,45 +421,6 @@ public class Lyrics3v2 extends AbstractLyrics3 {
    * @return
    */
   private int seekSize(ByteBuffer byteBuffer) {
-        /*
-        byte[] buffer = new byte[11];
-        String lyricEnd = "";
-        long filePointer = 0;
-
-        // check right before the ID3 1.0 tag for the lyrics tag
-        file.seek(file.length() - 128 - 9);
-        file.read(buffer, 0, 9);
-        lyricEnd = new String(buffer, 0, 9);
-
-        if (lyricEnd.equals("LYRICS200"))
-        {
-            filePointer = file.getFilePointer();
-        }
-        else
-        {
-            // check the end of the file for a lyrics tag incase an ID3
-            // tag wasn't placed after it.
-            file.seek(file.length() - 9);
-            file.read(buffer, 0, 9);
-            lyricEnd = new String(buffer, 0, 9);
-
-            if (lyricEnd.equals("LYRICS200"))
-            {
-                filePointer = file.getFilePointer();
-            }
-            else
-            {
-                return -1;
-            }
-        }
-
-        // read the 6 bytes for the length of the tag
-        filePointer -= (9 + 6);
-        file.seek(filePointer);
-        file.read(buffer, 0, 6);
-
-        return Integer.parseInt(new String(buffer, 0, 6));
-        */
-    return -1;
+      return -1;
   }
 }

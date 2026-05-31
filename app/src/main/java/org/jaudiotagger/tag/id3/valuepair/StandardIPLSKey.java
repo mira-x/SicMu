@@ -25,7 +25,7 @@ public enum StandardIPLSKey {
     }
   }
 
-  private String key;
+  private final String key;
 
   StandardIPLSKey(String key) {
     this.key = key;

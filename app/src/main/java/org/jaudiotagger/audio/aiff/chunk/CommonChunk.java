@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
  * bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
  */
 public class CommonChunk extends Chunk {
-  private AiffAudioHeader aiffHeader;
+  private final AiffAudioHeader aiffHeader;
 
   /**
    * @param hdr

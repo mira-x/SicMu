@@ -84,13 +84,6 @@ public class RowSong extends Row {
         album = songAlbum;
         this.durationMs = durationMs;
         track = songTrack;
-//        // some songs are numbered from 1000, usually when there is 2 CD
-//        if (track > 1000 && track < 2000)
-//            track -= 1000;
-//        if (track > 2000 && track < 3000)
-//            track -= 2000;
-//        if (track > 3000 && track < 4000)
-//            track -= 3000;
         path = songPath;
         File f = new File(path);
         filename = f.getName();
@@ -171,10 +164,6 @@ public class RowSong extends Row {
         duration.setTextColor(normalSongDurationTextColor);
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         duration.setTypeface(null, typeface);
-        /*
-        duration.setBackgroundColor(Color.argb(0x00, 0x0, 0x0, 0x0));
-        duration.setOnClickListener(null);
-        */
     }
 
     private void setCurrIcon(ImageView img, Main main) {
@@ -398,12 +387,7 @@ public class RowSong extends Row {
         this.rating = rating;
 
         if (async) {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    updateOrInsertSongOrm(songDAO.findByPath(path), false);
-                }
-            };
+            Thread thread = new Thread(() -> updateOrInsertSongOrm(songDAO.findByPath(path), false));
             thread.start();
         }
         else {

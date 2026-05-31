@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class OpusInfoReader {
 
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.opus.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.opus.atom");
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException {
         long start = raf.getFilePointer();

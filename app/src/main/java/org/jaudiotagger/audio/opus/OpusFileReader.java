@@ -18,8 +18,8 @@ public class OpusFileReader extends AudioFileReader {
 
     public static Logger logger = Logger.getLogger(OpusFileReader.class.getPackage().getName());
 
-    private OpusInfoReader ir;
-    private OpusVorbisTagReader vtr;
+    private final OpusInfoReader ir;
+    private final OpusVorbisTagReader vtr;
 
     public OpusFileReader() {
         ir = new OpusInfoReader();

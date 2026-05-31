@@ -342,11 +342,11 @@ public interface Tag {
      *
      * @return A hash code that enables comparing Tag objects per value
      */
-  public static int hash(Tag tags) {
+  static int hash(Tag tags) {
       var s = new AtomicReference<>("");
       tags.getFields().forEachRemaining(t -> {
           Log.d("Tag", "found field: " + t.getId());
-          s.getAndUpdate(x -> x + (t.getId() + "=" + t.toString()) + " ");
+          s.getAndUpdate(x -> x + (t.getId() + "=" + t) + " ");
       });
       Log.d("Tag", "hash returned " + s.get().hashCode() + " for string: " + s);
       return s.get().hashCode();

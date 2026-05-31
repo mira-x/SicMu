@@ -10,7 +10,7 @@ public enum EncoderType {
   APPLE_LOSSLESS("Apple Lossless"),
   ;
 
-  private String description;
+  private final String description;
 
   EncoderType(String description) {
     this.description = description;

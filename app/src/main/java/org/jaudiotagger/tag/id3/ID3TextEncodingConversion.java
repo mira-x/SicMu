@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class ID3TextEncodingConversion {
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
 
 
   /**

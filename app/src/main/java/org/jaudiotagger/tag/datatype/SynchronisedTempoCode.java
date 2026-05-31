@@ -26,8 +26,8 @@ import org.jaudiotagger.tag.id3.valuepair.EventTimingTypes;
  */
 public class SynchronisedTempoCode extends AbstractDataType implements Cloneable {
 
-  private TempoCode tempo = new TempoCode(DataTypes.OBJ_SYNCHRONISED_TEMPO_DATA, null, 1);
-  private NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
+  private final TempoCode tempo = new TempoCode(DataTypes.OBJ_SYNCHRONISED_TEMPO_DATA, null, 1);
+  private final NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
 
   public SynchronisedTempoCode(final SynchronisedTempoCode copy) {
     super(copy);

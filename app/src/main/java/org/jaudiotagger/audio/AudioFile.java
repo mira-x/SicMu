@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  */
 public class AudioFile {
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
   /**
    * The physical file that this instance represents.

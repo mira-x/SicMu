@@ -7,6 +7,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -124,31 +125,18 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
 
     // mimetype
     byte[] mimeTypeData;
-    try {
-      mimeTypeData = mimeType.getBytes(AsfHeader.ASF_CHARSET.name());
-    } catch (final UnsupportedEncodingException uee) {
-      // Should never happen
-      throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
-        + AsfHeader.ASF_CHARSET.name());
-    }
-    baos.write(mimeTypeData, 0, mimeTypeData.length);
+      mimeTypeData = mimeType.getBytes(AsfHeader.ASF_CHARSET);
+      baos.write(mimeTypeData, 0, mimeTypeData.length);
 
     // Seperator
     baos.write(0x00);
     baos.write(0x00);
 
     // description
-    if (description != null && description.length() > 0) {
+    if (description != null && !description.isEmpty()) {
       byte[] descriptionData;
-      try {
-        descriptionData = description.getBytes(AsfHeader.ASF_CHARSET
-          .name());
-      } catch (final UnsupportedEncodingException uee) {
-        // Should never happen
-        throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
-          + AsfHeader.ASF_CHARSET.name());
-      }
-      baos.write(descriptionData, 0, descriptionData.length);
+        descriptionData = description.getBytes(AsfHeader.ASF_CHARSET);
+        baos.write(descriptionData, 0, descriptionData.length);
     }
 
     // Seperator (always write whther or not we have descriptor field)
@@ -208,11 +196,11 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
       if (getRawContent()[count] == 0 && getRawContent()[count + 1] == 0) {
         if (this.mimeType == null) {
           this.mimeType = new String(getRawContent(), 5, (count) - 5,
-            "UTF-16LE");
+                  StandardCharsets.UTF_16LE);
           endOfMimeType = count + 2;
         } else if (this.description == null) {
           this.description = new String(getRawContent(),
-            endOfMimeType, count - endOfMimeType, "UTF-16LE");
+            endOfMimeType, count - endOfMimeType, StandardCharsets.UTF_16LE);
           this.endOfName = count + 2;
           break;
         }

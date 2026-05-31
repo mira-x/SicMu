@@ -63,7 +63,6 @@ import android.widget.Toast;
 
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -136,7 +135,7 @@ public class Main extends AppCompatActivity {
 
     private ZoomageView albumImage;
     private TextView songTitle, songAlbum, songArtist, songMime, warningText;
-    ArrayList<ImageButton> ratingButtons = new ArrayList<>();
+    final ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private boolean detailsBigCoverArt;
     private int coverArtNum = 0;
@@ -296,7 +295,7 @@ public class Main extends AppCompatActivity {
             Method method = playbackSpeedText.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
             method.setAccessible(true);
             method.invoke(playbackSpeedText, true);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     private void askPermission() {
@@ -533,9 +532,6 @@ public class Main extends AppCompatActivity {
                 unfoldAndscrollToCurrSong();
                 hideWarning();
 
-//                    playIntent = new Intent(Main.this, MusicService.class);
-//                    startService(playIntent);
-//                    bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             } else {
                 Log.e("Main", "Permission READ_EXTERNAL_STORAGE refused!");
                 showWarning();
@@ -548,9 +544,6 @@ public class Main extends AppCompatActivity {
                     showWarning();
                 }
             }
-//                playIntent = new Intent(Main.this, MusicService.class);
-//                startService(playIntent);
-//                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -912,7 +905,7 @@ public class Main extends AppCompatActivity {
     private void showMetadataTable(Tag tags) {
         runOnUiThread(() -> {
             // Comments
-            var comments = new AtomicReference<String>("");
+            var comments = new AtomicReference<>("");
             try {
                 tags.getFields(FieldKey.COMMENT).forEach(line -> comments.getAndUpdate(c -> c + line + "\n"));
             } catch (Exception ignored) { }
@@ -1046,13 +1039,6 @@ public class Main extends AppCompatActivity {
             }
         }
 
-//        int check = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        if (check == PackageManager.PERMISSION_GRANTED) {
-//            rateCurrSong();
-//        } else {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, SET_RATING_REQUEST_CODE);
-//        }
     }
 
     private void rateCurrSong(int rating) {
@@ -1979,22 +1965,6 @@ public class Main extends AppCompatActivity {
         Snackbar.make(v, toastText, BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
-    /*
-        public void openTextSize(View view) {
-            params.setChooseTextSize(!params.getChoosedTextSize());
-            ImageButton img = findViewById(R.id.text_size_button);
-            if (params.getChoosedTextSize()) {
-                img.setImageResource(R.drawable.ic_menu_text_big);
-            }
-            else {
-                img.setImageResource(R.drawable.ic_menu_text_regular);
-            }
-            applyTextSize();
-            songAdt.notifyDataSetChanged();
-            setTextSizeButton();
-            startCloseMoreButtonsTimer();
-        }
-    */
     public void openMinRating(View view) {
         openRatingMenu();
         startCloseMoreButtonsTimer();
@@ -2106,7 +2076,7 @@ public class Main extends AppCompatActivity {
     /// This callback is used for audio channel config. Each different set of audio output
     /// devices generates a hardware ID, each having a stereo config. This allows us to
     /// have different configs, for instance, for our AirPods and our Phone speaker.
-    private AudioDeviceCallback audioDeviceStereoConfigCallback = new AudioDeviceCallback() {
+    private final AudioDeviceCallback audioDeviceStereoConfigCallback = new AudioDeviceCallback() {
         @Override
         public void onAudioDevicesAdded(AudioDeviceInfo[] addedDevices) {
             setStereoButton();

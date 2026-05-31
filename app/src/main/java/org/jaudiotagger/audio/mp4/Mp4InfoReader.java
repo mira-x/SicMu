@@ -65,7 +65,7 @@ import java.util.logging.Logger;
  */
 public class Mp4InfoReader {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
   private boolean isTrackAtomVideo(Mp4FtypBox ftyp, Mp4BoxHeader boxHeader, ByteBuffer mvhdBuffer)
     throws IOException {

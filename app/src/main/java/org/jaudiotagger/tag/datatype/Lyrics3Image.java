@@ -192,7 +192,7 @@ public class Lyrics3Image extends AbstractDataType {
     str = "filename = " + filename + ", description = " + description;
 
     if (time != null) {
-      str += (", timestamp = " + time.toString());
+      str += (", timestamp = " + time);
     }
 
     return str + "\n";

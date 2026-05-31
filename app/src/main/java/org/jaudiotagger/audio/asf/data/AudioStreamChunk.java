@@ -279,11 +279,10 @@ public final class AudioStreamChunk extends StreamChunk {
    */
   @Override
   public String prettyPrint(final String prefix) {
-      String result = super.prettyPrint(prefix) + prefix + "  |-> Audio info:" + Utils.LINE_SEPARATOR +
+      return super.prettyPrint(prefix) + prefix + "  |-> Audio info:" + Utils.LINE_SEPARATOR +
               prefix + "  |  : Bitrate : " + getKbps() + Utils.LINE_SEPARATOR +
               prefix + "  |  : Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR +
               prefix + "  |  : Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR +
               prefix + "  |  : Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR;
-    return result;
   }
 }

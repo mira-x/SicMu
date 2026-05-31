@@ -161,5 +161,4 @@ public enum FieldKey {
   WORK,
   WORK_TYPE,
   YEAR,
-  ;
 }

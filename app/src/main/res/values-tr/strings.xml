@@ -71,10 +71,6 @@
     <string name="popup_song_mime">MIME türü: %s</string>
     <string name="popup_song_path">Yol: %s</string>
 
-    <string name="explain_playback_speed">Çalma hızını artırmak/azaltmak için yukarı/aşağı veya sola/sağa kaydırın.</string>
-
-    <string name="focus_error">Sese erişilemedi! Lütfen uygulamayı yeniden başlatın.</string>
-
     <string name="settings_title">Ayarlar</string>
 
     <string name="settings_theme_title">Tema</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Medya dosyaları taranıyor…</string>
     <string name="settings_rescan_storage">Depolama taranıyor %s</string>
     <string name="settings_rescan_finished">Tarama tamamlandı. Yeni dosyaların görünmesi biraz zaman alabilir (SicMu Player\'ı yeniden başlatmanız gerekebilir).</string>
-    <string name="settings_rescan_purge">Tarayıcı artık var olmayan girdiler (%s) buldu. Girdiler listeden kaldırıldı.</string>
-
-    <string name="settings_media_button_start_app_title">Medya düğmeleriyle otomatik başlat</string>
-    <string name="settings_media_button_start_app">Medya düğmeleri çalışmıyorsa uygulamayı başlatır.</string>
 
     <string name="settings_autoscroll">Çalan şarkı</string>
     <string name="settings_autoscroll_summary">Şarkı çaldığında ona kaydır</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Çalan şarkının bilgilerini görmek için SicMu simgesine dokunun (kapak, …)</string>
     <string name="help_seek_menu">Gezinme menüsü</string>
     <string name="help_seek_menu_summary">Gezinme menüsünü açmak/kapatmak için menü çubuğunun sağ üstüne dokunun. \"Sonraki\"/\"Önceki\"ye uzun dokunma sürekli ileri/geri sarar.</string>
-    <string name="help_donate">Bağış yap</string>
     <string name="help_context_menu">Bağlam menüsü</string>
     <string name="help_context_menu_summary">Puanlama veya silme gibi seçenekler içeren bir menü göstermek için şarkıya uzun dokunun</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Dizin sonunda dur</string>
     <string name="action_stop_at_end_of_track">Şarkıdan sonra dur</string>
 
-    <string name="detail_metadata_hint_label">Tüm meta verileri görmek için albüm kapağına dokunun</string>
     <string name="action_youtube_search">YouTube\'da ara</string>
     <string name="action_youtube_open">YouTube videosunu aç</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">4 yıldız ver</string>
     <string name="a11y_rating_5">5 yıldız ver</string>
     <string name="a11y_now_playing">Şu an çalıyor</string>
-    <string name="a11y_song_rating">Puan: %d yıldız</string>
     <string name="a11y_sort_button">Görüntüleme modunu değiştir</string>
     <string name="a11y_stereo_button">Stereo veya mono arasında geçiş yap</string>
     <string name="a11y_repeat_button">Tekrar modunu değiştir</string>

@@ -11,8 +11,8 @@ public enum Mp4RatingValue {
   CLEAN("Clean", 2),
   EXPLICIT("Explicit", 4);
 
-  private String description;
-  private int id;
+  private final String description;
+  private final int id;
 
 
   /**

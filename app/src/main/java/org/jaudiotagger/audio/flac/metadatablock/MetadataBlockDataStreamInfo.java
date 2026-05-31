@@ -55,11 +55,19 @@ public class MetadataBlockDataStreamInfo implements MetadataBlockData {
   private final static char[] hexArray = "0123456789abcdef".toCharArray();
   // Logger Object
   public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
-  private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, noOfChannels, noOfSamples;
-  private float trackLength;
-  private String md5;
-  private boolean isValid = true;
-  private ByteBuffer rawdata;
+  private final int minBlockSize;
+    private final int maxBlockSize;
+    private final int minFrameSize;
+    private final int maxFrameSize;
+    private final int samplingRate;
+    private final int samplingRatePerChannel;
+    private final int bitsPerSample;
+    private final int noOfChannels;
+    private final int noOfSamples;
+  private final float trackLength;
+  private final String md5;
+  private final boolean isValid = true;
+  private final ByteBuffer rawdata;
 
   public MetadataBlockDataStreamInfo(MetadataBlockHeader header, FileChannel fc) throws IOException {
     rawdata = ByteBuffer.allocate(header.getDataLength());
@@ -161,8 +169,7 @@ public class MetadataBlockDataStreamInfo implements MetadataBlockData {
    * @return
    */
   private int readThreeByteInteger(byte b1, byte b2, byte b3) {
-    int rate = (Utils.u(b1) << 16) + (Utils.u(b2) << 8) + (Utils.u(b3));
-    return rate;
+      return (Utils.u(b1) << 16) + (Utils.u(b2) << 8) + (Utils.u(b3));
   }
 
   /**
@@ -171,8 +178,7 @@ public class MetadataBlockDataStreamInfo implements MetadataBlockData {
    * @return
    */
   private int readSamplingRate() {
-    int rate = (Utils.u(rawdata.get(10)) << 12) + (Utils.u(rawdata.get(11)) << 4) + ((Utils.u(rawdata.get(12)) & 0xF0) >>> 4);
-    return rate;
+      return (Utils.u(rawdata.get(10)) << 12) + (Utils.u(rawdata.get(11)) << 4) + ((Utils.u(rawdata.get(12)) & 0xF0) >>> 4);
   }
 
   /**

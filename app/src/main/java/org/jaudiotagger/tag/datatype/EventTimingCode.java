@@ -27,8 +27,8 @@ import org.jaudiotagger.tag.id3.valuepair.EventTimingTypes;
 public class EventTimingCode extends AbstractDataType implements Cloneable {
 
   private static final int SIZE = 5;
-  private NumberHashMap type = new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, null, 1);
-  private NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
+  private final NumberHashMap type = new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, null, 1);
+  private final NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
 
   public EventTimingCode(final EventTimingCode copy) {
     super(copy);

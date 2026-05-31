@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public abstract class AbstractID3Tag extends AbstractTag {
   protected static final String TAG_RELEASE = "ID3v";
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
   //The purpose of this is to provide the filename that should be used when writing debug messages
   //when problems occur reading or writing to file, otherwise it is difficult to track down the error
   //when processing many files

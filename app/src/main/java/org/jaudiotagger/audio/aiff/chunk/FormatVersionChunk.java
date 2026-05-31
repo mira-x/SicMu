@@ -34,7 +34,7 @@ import java.util.Date;
  * </p>
  */
 public class FormatVersionChunk extends Chunk {
-  private AiffAudioHeader aiffHeader;
+  private final AiffAudioHeader aiffHeader;
 
   /**
    * @param chunkHeader     The header for this chunk

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.EnumMap;
@@ -41,7 +42,7 @@ import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
  * This is the logical representation of  Vorbis Comment Data
  */
 public class VorbisCommentTag extends AbstractTag {
-    private static EnumMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<>(FieldKey.class);
+    private static final EnumMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<>(FieldKey.class);
 
     static {
         tagFieldToOggField.put(FieldKey.ACOUSTID_FINGERPRINT, VorbisCommentFieldKey.ACOUSTID_FINGERPRINT);
@@ -242,7 +243,7 @@ public class VorbisCommentTag extends AbstractTag {
     }
 
     protected boolean isAllowedEncoding(Charset enc) {
-        return enc.equals(Charset.forName(TextEncoding.CHARSET_UTF_8));
+        return enc.equals(StandardCharsets.UTF_8);
     }
 
     public String toString() {
@@ -376,7 +377,7 @@ public class VorbisCommentTag extends AbstractTag {
         if (vorbisFieldKey == null)
             return false;
 
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+        return !getFields(vorbisFieldKey.getFieldName()).isEmpty();
     }
 
     /**
@@ -384,7 +385,7 @@ public class VorbisCommentTag extends AbstractTag {
      * @return
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+        return !getFields(vorbisFieldKey.getFieldName()).isEmpty();
     }
 
     /**
@@ -532,7 +533,7 @@ public class VorbisCommentTag extends AbstractTag {
     private MetadataBlockDataPicture createMetadataBlockDataPicture(Artwork artwork) throws FieldDataInvalidException {
         if (artwork.isLinked()) {
             return new MetadataBlockDataPicture(
-                    artwork.getImageUrl().getBytes(Charset.forName("ISO-8859-1")),
+                    artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1),
                     artwork.getPictureType(),
                     MetadataBlockDataPicture.IMAGE_IS_URL,
                     "",
@@ -584,7 +585,7 @@ public class VorbisCommentTag extends AbstractTag {
 
         //If worked okay above then that should be first artwork and if we still had old coverart format
         //that should be removed
-        if (this.getFirst(VorbisCommentFieldKey.COVERART).length() > 0) {
+        if (!this.getFirst(VorbisCommentFieldKey.COVERART).isEmpty()) {
             this.deleteField(VorbisCommentFieldKey.COVERART);
             this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
         }

@@ -50,7 +50,7 @@ public class LameFrame {
   public static final int ENCODER_SIZE = 9;   //Includes LAME ID
   public static final int LAME_ID_SIZE = 4;
   public static final String LAME_ID = "LAME";
-  private String encoder;
+  private final String encoder;
 
   /**
    * Initilise a Lame Mpeg Frame
@@ -72,8 +72,7 @@ public class LameFrame {
     String id = Utils.getString(lameHeader, 0, LAME_ID_SIZE, StandardCharsets.ISO_8859_1);
     lameHeader.rewind();
     if (id.equals(LAME_ID)) {
-      LameFrame lameFrame = new LameFrame(lameHeader);
-      return lameFrame;
+        return new LameFrame(lameHeader);
     }
     return null;
   }

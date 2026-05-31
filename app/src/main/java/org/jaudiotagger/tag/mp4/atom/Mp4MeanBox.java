@@ -15,7 +15,7 @@ public class Mp4MeanBox extends AbstractMp4Box {
   public static final int VERSION_LENGTH = 1;
   public static final int FLAGS_LENGTH = 3;
   public static final int PRE_DATA_LENGTH = VERSION_LENGTH + FLAGS_LENGTH;
-  private String issuer;
+  private final String issuer;
 
   /**
    * @param header     parentHeader info

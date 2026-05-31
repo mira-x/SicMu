@@ -11,12 +11,12 @@ import java.util.logging.Logger;
  * Common to all IFF formats such as Wav and Aiff
  */
 public class IffHeaderChunk {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.iff");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.iff");
 
-  public static int SIGNATURE_LENGTH = 4;
-  public static int SIZE_LENGTH = 4;
-  public static int TYPE_LENGTH = 4;
-  public static int HEADER_LENGTH = SIGNATURE_LENGTH + SIZE_LENGTH + TYPE_LENGTH;
+  public static final int SIGNATURE_LENGTH = 4;
+  public static final int SIZE_LENGTH = 4;
+  public static final int TYPE_LENGTH = 4;
+  public static final int HEADER_LENGTH = SIGNATURE_LENGTH + SIZE_LENGTH + TYPE_LENGTH;
 
   /**
    * If Size is not even then we skip a byte, because chunks have to be aligned

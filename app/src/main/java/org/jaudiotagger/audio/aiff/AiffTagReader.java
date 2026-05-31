@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
  */
 public class AiffTagReader extends AiffChunkReader {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
 
   /**

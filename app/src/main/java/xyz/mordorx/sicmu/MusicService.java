@@ -134,13 +134,10 @@ public class MusicService extends Service implements
         }
     };
 
-    private final Runnable sleepTimerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            pause();
-            setChanged();
-            stopSleepTimer();
-        }
+    private final Runnable sleepTimerRunnable = () -> {
+        pause();
+        setChanged();
+        stopSleepTimer();
     };
 
     private SensorManager sensorManager;
@@ -427,11 +424,8 @@ public class MusicService extends Service implements
                 }
             });
 
-//            player.setWakeMode(getApplicationContext(),
-//                    PowerManager.PARTIAL_WAKE_LOCK);
-
             if (!wakeLock.isHeld())
-                wakeLock.acquire();
+                wakeLock.acquire(60*1000L /*1 minute*/);
         }
         return player;
     }
@@ -590,13 +584,10 @@ public class MusicService extends Service implements
             // todo: make it thread safe?
             seekPosNbLoop = 15;
 
-            mainHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (seekPosNbLoop-- > 0 || getCurrentPositionMs() >= seekPosMsBug) {
-                        seekFinished = true;
-                        seekPosMsBug = -1;
-                    }
+            mainHandler.postDelayed(() -> {
+                if (seekPosNbLoop-- > 0 || getCurrentPositionMs() >= seekPosMsBug) {
+                    seekFinished = true;
+                    seekPosMsBug = -1;
                 }
             }, 300);
         }
@@ -970,16 +961,15 @@ public class MusicService extends Service implements
     public static final String channel_id = "SicMuNeo_channelid";
     private void createNotificationChannel()
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "SicMuNeo Channel";
-            String description = "SicMuNeo Channel";
-            var importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel mChannel = new NotificationChannel(channel_id, name, importance);
-            mChannel.setDescription(description);
-            mChannel.enableLights(true); // todo: useful ?
-            mChannel.setLightColor(Color.RED); // todo: useful ?
-            NotificationManagerCompat.from(MusicService.this).createNotificationChannel(mChannel);
-        }
+        CharSequence name = "SicMuNeo Channel";
+        String description = "SicMuNeo Channel";
+        var importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationChannel mChannel = new NotificationChannel(channel_id, name, importance);
+        mChannel.setDescription(description);
+        mChannel.enableLights(true); // todo: useful ?
+        mChannel.setLightColor(Color.RED); // todo: useful ?
+        NotificationManagerCompat.from(MusicService.this).createNotificationChannel(mChannel);
+
     }
 
     /*** PREFERENCES ***/

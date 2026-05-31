@@ -18,9 +18,9 @@ public class AiffAudioHeader extends GenericAudioHeader {
   private String name;
   private String author;
   private String copyright;
-  private List<String> applicationIdentifiers;
-  private List<String> comments;
-  private List<String> annotations;
+  private final List<String> applicationIdentifiers;
+  private final List<String> comments;
+  private final List<String> annotations;
 
   public AiffAudioHeader() {
     this.applicationIdentifiers = new ArrayList<String>();
@@ -170,27 +170,27 @@ public class AiffAudioHeader extends GenericAudioHeader {
       sb.append("\tCopyright:").append(copyright).append("\n");
     }
 
-    if (comments.size() > 0) {
+    if (!comments.isEmpty()) {
       sb.append("Comments:\n");
       for (String next : comments) {
         sb.append("\t").append(next).append("\n");
       }
     }
 
-    if (applicationIdentifiers.size() > 0) {
+    if (!applicationIdentifiers.isEmpty()) {
       sb.append("ApplicationIds:\n");
       for (String next : applicationIdentifiers) {
         sb.append("\t").append(next).append("\n");
       }
     }
 
-    if (annotations.size() > 0) {
+    if (!annotations.isEmpty()) {
       sb.append("Annotations:\n");
       for (String next : annotations) {
         sb.append("\t").append(next).append("\n");
       }
     }
-    return super.toString() + sb.toString();
+    return super.toString() + sb;
   }
 
   public enum Endian {

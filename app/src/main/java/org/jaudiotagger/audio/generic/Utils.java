@@ -29,6 +29,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,8 +41,8 @@ import java.util.logging.Logger;
  * @author Raphael Slinckx
  */
 public class Utils {
-    public static int BITS_IN_BYTE_MULTIPLIER = 8;
-    public static int KILOBYTE_MULTIPLIER = 1000;
+    public static final int BITS_IN_BYTE_MULTIPLIER = 8;
+    public static final int KILOBYTE_MULTIPLIER = 1000;
 
     private static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic.utils");
     private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
@@ -227,12 +228,12 @@ public class Utils {
         final int len = Utils.u(bb.get()); //Read as unsigned value
         final byte[] buf = new byte[len];
         bb.get(buf);
-        return new String(buf, 0, len, Charset.forName(TextEncoding.CHARSET_ISO_8859_1));
+        return new String(buf, 0, len, StandardCharsets.ISO_8859_1);
     }
 
     public static void writePascalString(ByteBuffer buffer, String name) {
         buffer.put((byte) name.length());
-        buffer.put(name.getBytes(Charset.forName(TextEncoding.CHARSET_ISO_8859_1)));
+        buffer.put(name.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     /**
@@ -293,7 +294,7 @@ public class Utils {
     public static String readString(final DataInput di, final int charsToRead) throws IOException {
         final byte[] buf = new byte[charsToRead];
         di.readFully(buf);
-        return new String(buf, Charset.forName("US-ASCII"));
+        return new String(buf, StandardCharsets.US_ASCII);
     }
 
     /**
@@ -411,11 +412,11 @@ public class Utils {
     }
 
     public static String reinterpretIntAsString(Integer i) {
-        return new String(ByteBuffer.allocate(4).putInt(i).array(), Charset.forName(TextEncoding.CHARSET_ISO_8859_1));
+        return new String(ByteBuffer.allocate(4).putInt(i).array(), StandardCharsets.ISO_8859_1);
     }
 
     public static Integer reinterpretStringAsInt(String str) {
-        return ByteBuffer.wrap(str.getBytes(Charset.forName(TextEncoding.CHARSET_ISO_8859_1))).getInt();
+        return ByteBuffer.wrap(str.getBytes(StandardCharsets.ISO_8859_1)).getInt();
     }
 
     public static ByteBuffer readBuf(ByteBuffer buffer) {
@@ -438,7 +439,7 @@ public class Utils {
 
         byte[] b = new byte[4];
         bytes.get(b);
-        return new String(b, Charset.forName("ISO-8859-1"));
+        return new String(b, StandardCharsets.ISO_8859_1);
     }
 
     /**
@@ -447,7 +448,7 @@ public class Utils {
     public static String readString(final ByteBuffer bytes, final int charsToRead) {
         final byte[] buf = new byte[charsToRead];
         bytes.get(buf);
-        return new String(buf, Charset.forName("US-ASCII"));
+        return new String(buf, StandardCharsets.US_ASCII);
     }
 
     public static byte[] toArray(ByteBuffer buffer) {
@@ -474,7 +475,7 @@ public class Utils {
     public static String readThreeBytesAsChars(final ByteBuffer bytes) {
         byte[] b = new byte[3];
         bytes.get(b);
-        return new String(b, Charset.forName("ISO-8859-1"));
+        return new String(b, StandardCharsets.ISO_8859_1);
     }
 
     /**

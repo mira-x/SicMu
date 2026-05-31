@@ -273,7 +273,7 @@ public class ID3v11Tag extends ID3v1Tag {
   }
 
   public List<TagField> getTrack() {
-    if (getFirst(FieldKey.TRACK).length() > 0) {
+    if (!getFirst(FieldKey.TRACK).isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirst(FieldKey.TRACK));
       return returnFieldToList(field);
     } else {
@@ -356,7 +356,7 @@ public class ID3v11Tag extends ID3v1Tag {
     if (FieldKey.TRACK.name().equals(id)) {
       results = getTrack();
       if (results != null) {
-        if (results.size() > 0) {
+        if (!results.isEmpty()) {
           return results.get(0);
         }
       }

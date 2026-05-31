@@ -128,11 +128,11 @@ public class ID3v24Frames extends ID3Frames {
   public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
   public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
   private static ID3v24Frames id3v24Frames;
-  protected EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v24FieldKey>(FieldKey.class);
+  protected final EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v24FieldKey>(FieldKey.class);
   /**
    * Maps from ID3 key to Generic key
    */
-  protected EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v24FieldKey, FieldKey>(ID3v24FieldKey.class);
+  protected final EnumMap<ID3v24FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v24FieldKey, FieldKey>(ID3v24FieldKey.class);
 
   private ID3v24Frames() {
     supportedFrames.add(FRAME_ID_ACCOMPANIMENT);

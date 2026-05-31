@@ -18,9 +18,9 @@ import java.util.logging.Logger;
 public class FlacStreamReader {
   public static final int FLAC_STREAM_IDENTIFIER_LENGTH = 4;
   public static final String FLAC_STREAM_IDENTIFIER = "fLaC";
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
-  private FileChannel fc;
-  private String loggingName;
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+  private final FileChannel fc;
+  private final String loggingName;
   private int startOfFlacInFile;
 
   /**

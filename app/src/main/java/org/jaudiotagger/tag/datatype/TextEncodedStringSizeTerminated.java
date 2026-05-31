@@ -62,7 +62,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
     String[] valuesarray = value.split("\\u0000");
     List<String> values = Arrays.asList(valuesarray);
     //Read only list so if empty have to create new list
-    if (values.size() == 0) {
+    if (values.isEmpty()) {
       values = new ArrayList<String>(1);
       values.add("");
     }
@@ -107,7 +107,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
     CharsetDecoder decoder = getCorrectDecoder(inBuffer);
     CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
     if (coderResult.isError()) {
-      logger.warning("Decoding error:" + coderResult.toString());
+      logger.warning("Decoding error:" + coderResult);
     }
     decoder.flush(outBuffer);
     outBuffer.flip();
@@ -216,7 +216,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
   protected void stripTrailingNull() {
     if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite()) {
       String stringValue = (String) value;
-      if (stringValue.length() > 0) {
+      if (!stringValue.isEmpty()) {
         if (stringValue.charAt(stringValue.length() - 1) == '\0') {
           stringValue = (stringValue).substring(0, stringValue.length() - 1);
           value = stringValue;
@@ -234,7 +234,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    */
   protected void checkTrailingNull(List<String> values, String stringValue) {
     if (!TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite()) {
-      if (stringValue.length() > 0 && stringValue.charAt(stringValue.length() - 1) == '\0') {
+      if (!stringValue.isEmpty() && stringValue.charAt(stringValue.length() - 1) == '\0') {
         String lastVal = values.get(values.size() - 1);
         String newLastVal = lastVal + '\0';
         values.set(values.size() - 1, newLastVal);

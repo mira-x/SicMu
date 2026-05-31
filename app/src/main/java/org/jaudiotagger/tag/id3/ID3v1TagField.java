@@ -33,7 +33,7 @@ public class ID3v1TagField implements TagTextField {
   /**
    * Stores the id (name) of the tag field. <br>
    */
-  private String id;
+  private final String id;
 
   /**
    * Creates an instance.
@@ -92,9 +92,7 @@ public class ID3v1TagField implements TagTextField {
    *                  copied.
    */
   protected void copy(byte[] src, byte[] dst, int dstOffset) {
-    //        for (int i = 0; i < src.length; i++)
-    //            dst[i + dstOffset] = src[i];
-    /*
+      /*
      * Heared that this method is optimized and does its job very near of
      * the system.
      */

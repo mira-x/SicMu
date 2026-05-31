@@ -100,7 +100,7 @@ public class FlacTag implements Tag {
    * @return <code>true</code> if tag contains no field.
    */
   public boolean isEmpty() {
-    return (tag == null || tag.isEmpty()) && images.size() == 0;
+    return (tag == null || tag.isEmpty()) && images.isEmpty();
   }
 
   @Override
@@ -235,7 +235,7 @@ public class FlacTag implements Tag {
    */
   public void setField(TagField field) throws FieldDataInvalidException {
     if (field instanceof MetadataBlockDataPicture) {
-      if (images.size() == 0) {
+      if (images.isEmpty()) {
         images.add(0, (MetadataBlockDataPicture) field);
       } else {
         images.set(0, (MetadataBlockDataPicture) field);
@@ -308,7 +308,7 @@ public class FlacTag implements Tag {
 
   public TagField getFirstField(String id) {
     if (id.equals(FieldKey.COVER_ART.name())) {
-      if (images.size() > 0) {
+      if (!images.isEmpty()) {
         return images.get(0);
       } else {
         return null;
@@ -451,7 +451,7 @@ public class FlacTag implements Tag {
 
   public Artwork getFirstArtwork() {
     List<Artwork> artwork = getArtworkList();
-    if (artwork.size() > 0) {
+    if (!artwork.isEmpty()) {
       return artwork.get(0);
     }
     return null;
@@ -472,7 +472,7 @@ public class FlacTag implements Tag {
    */
   public boolean hasField(FieldKey genericKey) {
     if (genericKey == FieldKey.COVER_ART) {
-      return images.size() > 0;
+      return !images.isEmpty();
     } else {
       return tag.hasField(genericKey);
     }
@@ -488,7 +488,7 @@ public class FlacTag implements Tag {
 
   public boolean hasField(String id) {
     if (id.equals(FieldKey.COVER_ART.name())) {
-      return images.size() > 0;
+      return !images.isEmpty();
     } else {
       return tag.hasField(id);
     }

@@ -58,9 +58,9 @@ import java.util.logging.Logger;
  */
 public class WavTagWriter {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
   //For logging
-  private String loggingName;
+  private final String loggingName;
 
   public WavTagWriter(String loggingName) {
     this.loggingName = loggingName;

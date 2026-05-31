@@ -35,7 +35,7 @@ public class ModificationHandler implements AudioFileModificationListener {
   /**
    * The listeners to wich events are broadcasted are stored here.
    */
-  private Vector<AudioFileModificationListener> listeners = new Vector<AudioFileModificationListener>();
+  private final Vector<AudioFileModificationListener> listeners = new Vector<AudioFileModificationListener>();
 
   /**
    * This method adds an {@link AudioFileModificationListener}
@@ -56,11 +56,10 @@ public class ModificationHandler implements AudioFileModificationListener {
    */
   public void fileModified(AudioFile original, File temporary) throws ModifyVetoException {
     for (AudioFileModificationListener listener : this.listeners) {
-      AudioFileModificationListener current = listener;
-      try {
-        current.fileModified(original, temporary);
+        try {
+        listener.fileModified(original, temporary);
       } catch (ModifyVetoException e) {
-        vetoThrown(current, original, e);
+        vetoThrown(listener, original, e);
         throw e;
       }
     }
@@ -73,8 +72,7 @@ public class ModificationHandler implements AudioFileModificationListener {
    */
   public void fileOperationFinished(File result) {
     for (AudioFileModificationListener listener : this.listeners) {
-      AudioFileModificationListener current = listener;
-      current.fileOperationFinished(result);
+        listener.fileOperationFinished(result);
     }
   }
 
@@ -86,11 +84,10 @@ public class ModificationHandler implements AudioFileModificationListener {
    */
   public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException {
     for (AudioFileModificationListener listener : this.listeners) {
-      AudioFileModificationListener current = listener;
-      try {
-        current.fileWillBeModified(file, delete);
+        try {
+        listener.fileWillBeModified(file, delete);
       } catch (ModifyVetoException e) {
-        vetoThrown(current, file, e);
+        vetoThrown(listener, file, e);
         throw e;
       }
     }
@@ -114,8 +111,7 @@ public class ModificationHandler implements AudioFileModificationListener {
    */
   public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto) {
     for (AudioFileModificationListener listener : this.listeners) {
-      AudioFileModificationListener current = listener;
-      current.vetoThrown(cause, original, veto);
+        listener.vetoThrown(cause, original, veto);
     }
   }
 }

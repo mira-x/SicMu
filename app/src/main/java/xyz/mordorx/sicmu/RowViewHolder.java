@@ -32,9 +32,9 @@ public class RowViewHolder {
         ratingStar = view.findViewById(R.id.rating_star);
     }
 
-    public RelativeLayout layout;
-    public TextView text;
-    public TextView duration;
-    public ImageView image;
-    public ImageView ratingStar;
+    public final RelativeLayout layout;
+    public final TextView text;
+    public final TextView duration;
+    public final ImageView image;
+    public final ImageView ratingStar;
 }

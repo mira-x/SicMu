@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class VorbisSetupHeader implements VorbisHeader {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
   private boolean isValid = false;
 

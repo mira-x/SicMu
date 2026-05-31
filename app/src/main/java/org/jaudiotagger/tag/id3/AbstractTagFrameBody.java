@@ -46,7 +46,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
   /**
    * List of data types that make up this particular frame body.
    */
-  protected ArrayList<AbstractDataType> objectList = new ArrayList<AbstractDataType>();
+  protected final ArrayList<AbstractDataType> objectList = new ArrayList<AbstractDataType>();
   /**
    * Reference to the header associated with this frame body, a framebody can be created without a header
    * but one it is associated with a header this should be set. It is principally useful for the framebody to know
@@ -125,7 +125,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
     StringBuilder str = new StringBuilder();
     for (AbstractDataType object : objectList) {
       if ((object.toString() != null) && (object.toString().length() > 0)) {
-        str.append(object.getIdentifier()).append("=\"").append(object.toString()).append("\"; ");
+        str.append(object.getIdentifier()).append("=\"").append(object).append("\"; ");
       }
     }
     return str.toString();
@@ -143,7 +143,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
     StringBuilder str = new StringBuilder();
     for (AbstractDataType object : objectList) {
       if ((object.toString() != null) && (object.toString().length() > 0)) {
-        str.append(object.getIdentifier()).append(" = ").append(object.toString()).append("\n");
+        str.append(object.getIdentifier()).append(" = ").append(object).append("\n");
       }
     }
     return str.toString();
@@ -252,8 +252,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
       return false;
     }
     AbstractTagFrameBody object = (AbstractTagFrameBody) obj;
-    boolean check = this.objectList.equals(object.objectList) && super.equals(obj);
-    return check;
+      return this.objectList.equals(object.objectList) && super.equals(obj);
   }
 
   /**

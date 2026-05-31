@@ -3,6 +3,7 @@ package org.jaudiotagger.audio.ogg.util;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Defines variables common to all vorbis headers
@@ -10,7 +11,7 @@ import java.nio.charset.Charset;
 public interface VorbisHeader {
     //Capture pattern at start of header
     String CAPTURE_PATTERN = "vorbis";
-    byte[] CAPTURE_PATTERN_AS_BYTES = CAPTURE_PATTERN.getBytes(Charset.forName(TextEncoding.CHARSET_ISO_8859_1));
+    byte[] CAPTURE_PATTERN_AS_BYTES = CAPTURE_PATTERN.getBytes(StandardCharsets.ISO_8859_1);
 
     int FIELD_PACKET_TYPE_POS = 0;
     int FIELD_CAPTURE_PATTERN_POS = 1;

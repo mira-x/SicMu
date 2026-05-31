@@ -17,7 +17,7 @@ public enum BlockType {
   CUESHEET(5),
   PICTURE(6);
 
-  private int id;
+  private final int id;
 
   BlockType(int id) {
     this.id = id;

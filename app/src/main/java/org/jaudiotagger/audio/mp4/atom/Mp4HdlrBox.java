@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class Mp4HdlrBox extends AbstractMp4Box {
       RESERVED2_LENGTH +
       RESERVED3_LENGTH +
       NAME_LENGTH;
-  private static Map<String, MediaDataType> mediaDataTypeMap;
+  private static final Map<String, MediaDataType> mediaDataTypeMap;
 
   static {
     //Create maps to speed up lookup from raw value to enum
@@ -89,8 +90,7 @@ public class Mp4HdlrBox extends AbstractMp4Box {
     hdlrData.put(RESERVED1_POS + 3, (byte) 0x6c);
     hdlrData.rewind();
 
-    Mp4HdlrBox hdlrBox = new Mp4HdlrBox(hdlrHeader, hdlrData);
-    return hdlrBox;
+      return new Mp4HdlrBox(hdlrHeader, hdlrData);
   }
 
   public void processData() throws CannotReadException {
@@ -98,7 +98,7 @@ public class Mp4HdlrBox extends AbstractMp4Box {
     dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + RESERVED_FLAG_LENGTH);
 
 
-    CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
+    CharsetDecoder decoder = StandardCharsets.ISO_8859_1.newDecoder();
     try {
       handlerType = decoder.decode((ByteBuffer) dataBuffer.slice().limit(HANDLER_LENGTH)).toString();
     } catch (CharacterCodingException cee) {
@@ -119,11 +119,10 @@ public class Mp4HdlrBox extends AbstractMp4Box {
   }
 
   public String toString() {
-    String s = "handlerType:" + handlerType + ":human readable:" + mediaDataType.getDescription();
-    return s;
+      return "handlerType:" + handlerType + ":human readable:" + mediaDataType.getDescription();
   }
 
-  public static enum MediaDataType {
+  public enum MediaDataType {
     ODSM("odsm", "ObjectDescriptorStream - defined in ISO/IEC JTC1/SC29/WG11 - CODING OF MOVING PICTURES AND AUDIO"),
     CRSM("crsm", "ClockReferenceStream - defined in ISO/IEC JTC1/SC29/WG11 - CODING OF MOVING PICTURES AND AUDIO"),
     SDSM("sdsm", "SceneDescriptionStream - defined in ISO/IEC JTC1/SC29/WG11 - CODING OF MOVING PICTURES AND AUDIO"),
@@ -141,8 +140,8 @@ public class Mp4HdlrBox extends AbstractMp4Box {
     META("meta", "Timed Metadata track - defined in ISO/IEC JTC1/SC29/WG11 - CODING OF MOVING PICTURES AND AUDIO"),
     ;
 
-    private String id;
-    private String description;
+    private final String id;
+    private final String description;
 
 
     MediaDataType(String id, String description) {

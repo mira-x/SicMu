@@ -75,9 +75,6 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyLINK datatype.
    */
   public FrameBodyLINK() {
-    //        this.setObject("Frame Identifier", "");
-    //        this.setObject("URL", "");
-    //        this.setObject("ID and Additional Data", "");
   }
 
   public FrameBodyLINK(FrameBodyLINK body) {

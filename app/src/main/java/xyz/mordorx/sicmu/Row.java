@@ -29,7 +29,7 @@ public class Row {
     protected int level;
     // position of the row within the unfolded rows array
     protected int genuinePos;
-    protected int typeface;
+    protected final int typeface;
     // null if no parent
     protected Row parent;
 
@@ -81,7 +81,7 @@ public class Row {
     }
 
     // cache result
-    private static Map<Integer, Integer> converted = new HashMap<>();
+    private static final Map<Integer, Integer> converted = new HashMap<>();
     public static int convertDpToPixels(int dp, Resources resources) {
         int px;
         if (converted.containsKey(dp)) {

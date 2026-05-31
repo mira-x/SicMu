@@ -37,7 +37,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField {
     numbers = new ArrayList<Short>();
     numbers.add(new Short("0"));
 
-    String values[] = trackValue.split("/");
+    String[] values = trackValue.split("/");
     switch (values.length) {
       case 1:
         try {

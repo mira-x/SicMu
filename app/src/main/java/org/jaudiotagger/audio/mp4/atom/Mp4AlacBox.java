@@ -102,17 +102,16 @@ public class Mp4AlacBox extends AbstractMp4Box {
   }
 
   public String toString() {
-    String s = "maxSamplePerFrame:" + maxSamplePerFrame
-      + "unknown1:" + unknown1
-      + "sampleSize:" + sampleSize
-      + "historyMult:" + historyMult
-      + "initialHistory:" + initialHistory
-      + "kModifier:" + kModifier
-      + "channels:" + channels
-      + "unknown2 :" + unknown2
-      + "maxCodedFrameSize:" + maxCodedFrameSize
-      + "bitRate:" + bitRate
-      + "sampleRate:" + sampleRate;
-    return s;
+      return "maxSamplePerFrame:" + maxSamplePerFrame
+        + "unknown1:" + unknown1
+        + "sampleSize:" + sampleSize
+        + "historyMult:" + historyMult
+        + "initialHistory:" + initialHistory
+        + "kModifier:" + kModifier
+        + "channels:" + channels
+        + "unknown2 :" + unknown2
+        + "maxCodedFrameSize:" + maxCodedFrameSize
+        + "bitRate:" + bitRate
+        + "sampleRate:" + sampleRate;
   }
 }

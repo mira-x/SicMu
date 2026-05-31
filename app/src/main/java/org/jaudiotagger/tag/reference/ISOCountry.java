@@ -14,8 +14,8 @@ import java.util.Map;
  * More details at <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c">...</a>
  */
 public class ISOCountry {
-  private static Map<String, Country> codeMap;
-  private static Map<String, Country> descriptionMap;
+  private static final Map<String, Country> codeMap;
+  private static final Map<String, Country> descriptionMap;
 
   static {
     codeMap = new HashMap<String, Country>();
@@ -57,7 +57,7 @@ public class ISOCountry {
   /**
    * List of valid Iso Country, shows 2 letter abbreviation and country human readable name
    */
-  public static enum Country {
+  public enum Country {
     AFGHANISTAN(" AF", "Afghanistan"),
     ALAND_ISLANDS("AX", "Åland Islands"),
     ALBANIA("AL", "Albania"),
@@ -306,8 +306,8 @@ public class ISOCountry {
     ZIMBABWE("ZW", "Zimbabwe");
 
 
-    private String code;
-    private String description;
+    private final String code;
+    private final String description;
 
     Country(String code, String description) {
       this.code = code;

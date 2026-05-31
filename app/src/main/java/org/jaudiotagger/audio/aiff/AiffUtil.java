@@ -40,8 +40,7 @@ public class AiffUtil {
     int seconds = (int) (timestamp - (long) hours * 3600L);
     cal.add(Calendar.HOUR_OF_DAY, hours);
     cal.add(Calendar.SECOND, seconds);
-    Date dat = cal.getTime();
-    return dat;
+      return cal.getTime();
   }
 
   /**

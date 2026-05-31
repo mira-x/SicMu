@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -43,9 +44,9 @@ import java.util.logging.Logger;
  */
 public class OggVorbisTagReader {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private VorbisCommentReader vorbisCommentReader;
+    private final VorbisCommentReader vorbisCommentReader;
 
     public OggVorbisTagReader() {
         vorbisCommentReader = new VorbisCommentReader();
@@ -112,7 +113,7 @@ public class OggVorbisTagReader {
      * @return true if the headerData matches a VorbisComment header i.e is a Vorbis header of type COMMENT_HEADER
      */
     public boolean isVorbisCommentHeader(byte[] headerData) {
-        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, Charset.forName("ISO-8859-1"));
+        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, StandardCharsets.ISO_8859_1);
         return !(headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN));
     }
 
@@ -123,7 +124,7 @@ public class OggVorbisTagReader {
      * @return true if matches vorbis setupheader
      */
     public boolean isVorbisSetupHeader(byte[] headerData) {
-        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, Charset.forName("ISO-8859-1"));
+        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, StandardCharsets.ISO_8859_1);
         return !(headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.SETUP_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN));
     }
 
@@ -441,11 +442,11 @@ public class OggVorbisTagReader {
      * for the two OggVorbisHeader we need to know about when writing data (sizes included vorbis header)
      */
     public static class OggVorbisHeaderSizes {
-        private long commentHeaderStartPosition;
-        private long setupHeaderStartPosition;
-        private int commentHeaderSize;
-        private int setupHeaderSize;
-        private List<OggPageHeader.PacketStartAndLength> packetList;
+        private final long commentHeaderStartPosition;
+        private final long setupHeaderStartPosition;
+        private final int commentHeaderSize;
+        private final int setupHeaderSize;
+        private final List<OggPageHeader.PacketStartAndLength> packetList;
 
         OggVorbisHeaderSizes(long commentHeaderStartPosition, long setupHeaderStartPosition, int commentHeaderSize, int setupHeaderSize, List<OggPageHeader.PacketStartAndLength> packetList) {
             this.packetList = packetList;

@@ -37,7 +37,7 @@ public class OggFileWriter extends AudioFileWriter {
   // Logger Object
   public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-  private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
+  private final OggVorbisTagWriter vtw = new OggVorbisTagWriter();
 
   protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException {
     vtw.write(tag, raf, rafTemp);

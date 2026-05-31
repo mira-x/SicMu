@@ -251,7 +251,7 @@ public class Mp4Tag extends AbstractTag {
    * @return
    */
   public boolean hasField(FieldKey genericKey) {
-    return getFields(genericKey).size() != 0;
+    return !getFields(genericKey).isEmpty();
   }
 
   /**
@@ -259,7 +259,7 @@ public class Mp4Tag extends AbstractTag {
    * @return
    */
   public boolean hasField(Mp4FieldKey mp4FieldKey) {
-    return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    return !getFields(mp4FieldKey.getFieldName()).isEmpty();
   }
 
   /**
@@ -277,12 +277,12 @@ public class Mp4Tag extends AbstractTag {
     List<TagField> filteredList = new ArrayList<TagField>();
 
     if (genericKey == FieldKey.KEY) {
-      if (list.size() == 0) {
+      if (list.isEmpty()) {
         list = getFields(KEY_OLD.getFieldName());
       }
       return list;
     } else if (genericKey == FieldKey.GENRE) {
-      if (list.size() == 0) {
+      if (list.isEmpty()) {
         list = getFields(GENRE_CUSTOM.getFieldName());
       }
       return list;
@@ -404,7 +404,7 @@ public class Mp4Tag extends AbstractTag {
 
   public Mp4TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
     List<TagField> fields = getFields(genericKey);
-    if (fields.size() == 0) {
+    if (fields.isEmpty()) {
       return null;
     }
     return (Mp4TagField) fields.get(0);
@@ -433,7 +433,7 @@ public class Mp4Tag extends AbstractTag {
       deleteField(mp4FieldName);
     } else if (genericKey == FieldKey.TRACK) {
       String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
-      if (trackTotal.length() == 0) {
+      if (trackTotal.isEmpty()) {
         super.deleteField(mp4FieldName);
       } else {
         Mp4TrackField field = (Mp4TrackField) this.getFirstField(FieldKey.TRACK_TOTAL);
@@ -441,7 +441,7 @@ public class Mp4Tag extends AbstractTag {
       }
     } else if (genericKey == FieldKey.TRACK_TOTAL) {
       String track = this.getFirst(FieldKey.TRACK);
-      if (track.length() == 0) {
+      if (track.isEmpty()) {
         super.deleteField(mp4FieldName);
       } else {
         Mp4TrackField field = (Mp4TrackField) this.getFirstField(FieldKey.TRACK);
@@ -449,7 +449,7 @@ public class Mp4Tag extends AbstractTag {
       }
     } else if (genericKey == FieldKey.DISC_NO) {
       String discTotal = this.getFirst(FieldKey.DISC_TOTAL);
-      if (discTotal.length() == 0) {
+      if (discTotal.isEmpty()) {
         super.deleteField(mp4FieldName);
       } else {
         Mp4DiscNoField field = (Mp4DiscNoField) this.getFirstField(FieldKey.DISC_TOTAL);
@@ -457,7 +457,7 @@ public class Mp4Tag extends AbstractTag {
       }
     } else if (genericKey == FieldKey.DISC_TOTAL) {
       String discno = this.getFirst(FieldKey.DISC_NO);
-      if (discno.length() == 0) {
+      if (discno.isEmpty()) {
         super.deleteField(mp4FieldName);
       } else {
         Mp4DiscNoField field = (Mp4DiscNoField) this.getFirstField(FieldKey.DISC_NO);
@@ -637,7 +637,7 @@ public class Mp4Tag extends AbstractTag {
 
     if (field.getId().equals(TRACK.getFieldName())) {
       List<TagField> list = fields.get(field.getId());
-      if (list == null || list.size() == 0) {
+      if (list == null || list.isEmpty()) {
         super.setField(field);
       } else {
         Mp4TrackField existingTrackField = (Mp4TrackField) list.get(0);
@@ -656,7 +656,7 @@ public class Mp4Tag extends AbstractTag {
       }
     } else if (field.getId().equals(DISCNUMBER.getFieldName())) {
       List<TagField> list = fields.get(field.getId());
-      if (list == null || list.size() == 0) {
+      if (list == null || list.isEmpty()) {
         super.setField(field);
       } else {
         Mp4DiscNoField existingDiscNoField = (Mp4DiscNoField) list.get(0);

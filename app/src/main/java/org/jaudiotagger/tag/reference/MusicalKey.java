@@ -38,14 +38,14 @@ public enum MusicalKey {
     }
   }
 
-  private String value;
+  private final String value;
 
   MusicalKey(String value) {
     this.value = value;
   }
 
   public static boolean isValid(String musicalKey) {
-    if (musicalKey == null || musicalKey.length() > MAX_KEY_LENGTH || musicalKey.length() == 0) {
+    if (musicalKey == null || musicalKey.length() > MAX_KEY_LENGTH || musicalKey.isEmpty()) {
       return false;
     }
 

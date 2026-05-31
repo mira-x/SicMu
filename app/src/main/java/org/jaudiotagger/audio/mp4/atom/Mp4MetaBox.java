@@ -35,8 +35,7 @@ public class Mp4MetaBox extends AbstractMp4Box {
     Mp4BoxHeader metaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.META.getFieldName());
     metaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + childrenSize);
     ByteBuffer metaData = ByteBuffer.allocate(Mp4MetaBox.FLAGS_LENGTH);
-    Mp4MetaBox metaBox = new Mp4MetaBox(metaHeader, metaData);
-    return metaBox;
+      return new Mp4MetaBox(metaHeader, metaData);
   }
 
   public void processData() throws CannotReadException {

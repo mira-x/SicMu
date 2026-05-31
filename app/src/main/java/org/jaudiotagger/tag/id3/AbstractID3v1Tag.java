@@ -67,9 +67,9 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag {
   protected static final String TYPE_YEAR = "year";
   protected static final String TYPE_GENRE = "genre";
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
   //Used to detect end of field in String constructed from Data
-  protected static Pattern endofStringPattern = Pattern.compile("\\x00");
+  protected static final Pattern endofStringPattern = Pattern.compile("\\x00");
 
   public AbstractID3v1Tag() {
   }

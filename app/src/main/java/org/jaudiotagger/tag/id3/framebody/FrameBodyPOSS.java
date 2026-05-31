@@ -61,8 +61,6 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyPOSS datatype.
    */
   public FrameBodyPOSS() {
-    //        this.setObject(ObjectNumberHashMap.OBJ_TIME_STAMP_FORMAT, new Byte((byte) 0));
-    //        this.setObject("Position", new Long(0));
   }
 
   public FrameBodyPOSS(FrameBodyPOSS body) {

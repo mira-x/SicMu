@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -33,7 +32,7 @@ public class AlphaNumComparatorTest {
     public void testTwoSorted() {
         List<String> values = Arrays.asList("1", "2");
         List<String> valuesSorted = Arrays.asList("1", "2");
-        Collections.sort(values, new AlphaNumComparator());
+        values.sort(new AlphaNumComparator());
         assertEquals(valuesSorted, values);
     }
 
@@ -41,7 +40,7 @@ public class AlphaNumComparatorTest {
     public void testTwoUnsorted() {
         List<String> values = Arrays.asList("2", "1");
         List<String> valuesSorted = Arrays.asList("1", "2");
-        Collections.sort(values, new AlphaNumComparator());
+        values.sort(new AlphaNumComparator());
         assertEquals(valuesSorted, values);
     }
 
@@ -65,7 +64,7 @@ public class AlphaNumComparatorTest {
         List<String> values = new ArrayList<>();
         Arrays.stream(new Integer[]{8, 4, 2, 9, 10, 3, 1, 11, 12, 7, 13, 0, 6, 5}).forEach(i ->
                 values.add(filenameSongsSorted.get(i)));
-        Collections.sort(values, new AlphaNumComparator());
+        values.sort(new AlphaNumComparator());
         assertEquals(filenameSongsSorted, values);
     }
 
@@ -76,7 +75,7 @@ public class AlphaNumComparatorTest {
                 "2", "10", "1", "EctoMorph6", "EctoMorph62", "EctoMorph7");
         List<String> valuesSorted = Arrays.asList("1", "2", "10", "EctoMorph6", "EctoMorph7",
                 "EctoMorph62", "dazzle1", "dazzle2", "dazzle2.7", "dazzle2.10", "dazzle10");
-        Collections.sort(values, new AlphaNumComparator());
+        values.sort(new AlphaNumComparator());
         assertEquals(valuesSorted, values);
     }
 
@@ -84,7 +83,7 @@ public class AlphaNumComparatorTest {
     public void testMp3() {
         List<String> values = Arrays.asList("aa.mp3", "bb2.mp3");
         List<String> valuesSorted = Arrays.asList("aa.mp3", "bb2.mp3");
-        Collections.sort(values, new AlphaNumComparator());
+        values.sort(new AlphaNumComparator());
         assertEquals(valuesSorted, values);
     }
 }

@@ -64,7 +64,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
   private static final byte RELEASE = 1;
   private static final byte MAJOR_VERSION = 0;
   private static final byte REVISION = 0;
-  static EnumMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field = new EnumMap<FieldKey, ID3v1FieldKey>(FieldKey.class);
+  static final EnumMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field = new EnumMap<FieldKey, ID3v1FieldKey>(FieldKey.class);
 
   static {
     tagFieldToID3v1Field.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST);
@@ -257,7 +257,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return album within list or empty if does not exist
    */
   public List<TagField> getAlbum() {
-    if (getFirstAlbum().length() > 0) {
+    if (!getFirstAlbum().isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), getFirstAlbum());
       return returnFieldToList(field);
     } else {
@@ -290,7 +290,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return Artist within list or empty if does not exist
    */
   public List<TagField> getArtist() {
-    if (getFirstArtist().length() > 0) {
+    if (!getFirstArtist().isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), getFirstArtist());
       return returnFieldToList(field);
     } else {
@@ -314,7 +314,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return comment within list or empty if does not exist
    */
   public List<TagField> getComment() {
-    if (getFirstComment().length() > 0) {
+    if (!getFirstComment().isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment());
       return returnFieldToList(field);
     } else {
@@ -367,7 +367,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return
    */
   public List<TagField> getGenre() {
-    if (getFirst(FieldKey.GENRE).length() > 0) {
+    if (!getFirst(FieldKey.GENRE).isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.GENRE.name(), getFirst(FieldKey.GENRE));
       return returnFieldToList(field);
     } else {
@@ -413,7 +413,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return
    */
   public List<TagField> getTitle() {
-    if (getFirst(FieldKey.TITLE).length() > 0) {
+    if (!getFirst(FieldKey.TITLE).isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TITLE.name(), getFirst(FieldKey.TITLE));
       return returnFieldToList(field);
     } else {
@@ -450,7 +450,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
    * @return
    */
   public List<TagField> getYear() {
-    if (getFirst(FieldKey.YEAR).length() > 0) {
+    if (!getFirst(FieldKey.YEAR).isEmpty()) {
       ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR));
       return returnFieldToList(field);
     } else {
@@ -493,7 +493,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     }
 
     if (results != null) {
-      if (results.size() > 0) {
+      if (!results.isEmpty()) {
         return results.get(0);
       }
     }
@@ -510,7 +510,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
   }
 
   public boolean hasField(FieldKey genericKey) {
-    return getFirst(genericKey).length() > 0;
+    return !getFirst(genericKey).isEmpty();
   }
 
   public boolean hasField(String id) {
@@ -523,12 +523,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
   }
 
   public boolean isEmpty() {
-    return !(getFirst(FieldKey.TITLE).length() > 0 ||
-      getFirstArtist().length() > 0 ||
-      getFirstAlbum().length() > 0 ||
-      getFirst(FieldKey.GENRE).length() > 0 ||
-      getFirst(FieldKey.YEAR).length() > 0 ||
-      getFirstComment().length() > 0);
+    return !(!getFirst(FieldKey.TITLE).isEmpty() ||
+            !getFirstArtist().isEmpty() ||
+            !getFirstAlbum().isEmpty() ||
+            !getFirst(FieldKey.GENRE).isEmpty() ||
+            !getFirst(FieldKey.YEAR).isEmpty() ||
+            !getFirstComment().isEmpty());
   }
 
 
@@ -596,7 +596,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
   public TagField getFirstField(FieldKey genericKey) {
     List<TagField> l = getFields(genericKey);
-    return (l.size() != 0) ? l.get(0) : null;
+    return (!l.isEmpty()) ? l.get(0) : null;
   }
 
   /**

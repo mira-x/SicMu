@@ -33,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,13 +41,13 @@ import androidx.annotation.NonNull;
 
 
 public class Rows {
-    Context context;
+    final Context context;
 
     private Random random = new Random();
-    private ArrayList<Integer> shuffleSavedPos;
+    private final ArrayList<Integer> shuffleSavedPos;
 
-    private ContentResolver musicResolver;
-    private Parameters params;
+    private final ContentResolver musicResolver;
+    private final Parameters params;
 
     private Filter filter;
 
@@ -57,13 +56,14 @@ public class Rows {
 
     // todo: see if another Collection than ArrayList would give better perf and code simplicity
     private ArrayList<Row> rows;
-    private ArrayList<Row> rowsUnfolded;
+    private final ArrayList<Row> rowsUnfolded;
     /// Current selected position within rowsUnfolded.
     /// Never assign this directly, instead use setCurrPos
     private int currPos;
 
-    private Database database;
-    private AtomicBoolean ratingsMustBeSynchronized, ratingsSynchronizing;
+    private final Database database;
+    private final AtomicBoolean ratingsMustBeSynchronized;
+    private final AtomicBoolean ratingsSynchronizing;
     private volatile boolean terminated = false;
 
     private Timer timer;
@@ -105,16 +105,6 @@ public class Rows {
     }
 
     // the user choose a row
-    /*
-    public void select(int pos) {
-        if(rows.get(pos).getClass() == RowSong.class) {
-            setCurrPos(rows.get(pos).getGenuinePos());
-        }
-        else {
-            invertFold(pos);
-        }
-    }
-    */
 
     // select first song encountered from pos
     public void selectNearestSong(int pos) {
@@ -139,7 +129,7 @@ public class Rows {
     }
 
     public static String intentExtraFileScanComplete = "SicMuFileScanned";
-    private MediaScannerConnection.OnScanCompletedListener scanFileCompletedCallback = new MediaScannerConnection.OnScanCompletedListener () {
+    private final MediaScannerConnection.OnScanCompletedListener scanFileCompletedCallback = new MediaScannerConnection.OnScanCompletedListener () {
         @Override
         public void onScanCompleted(String path, Uri uri){
             if (terminated) return;
@@ -183,7 +173,7 @@ public class Rows {
             }
         }
         else {
-            String wrn = context.getString(R.string.app_name) + ": playing uri " + uri.toString() + " failed !";
+            String wrn = context.getString(R.string.app_name) + ": playing uri " + uri + " failed !";
             Log.i("Rows", wrn);
             Toast.makeText(context, wrn, Toast.LENGTH_LONG).show();
         }
@@ -252,19 +242,8 @@ public class Rows {
     }
 
     public void moveToRandomSong() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
-
-        if(false) {
-            // A more stupid, but simpler Shuffle function.
-            // Might delete later. Or the one below. Disabled for now.
-            int _firstSongPos = getFirstSongPosInGroup(currPos);
-            int _lastSongPos = getLastSongPosInGroup(currPos);
-            int len = _lastSongPos - _firstSongPos;
-            int pos = _firstSongPos + Math.abs(random.nextInt() % len);
-            setCurrPos(pos);
-            return;
-        }
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
             int firstSongPos = getFirstSongPosInGroup(currPos);
@@ -274,11 +253,7 @@ public class Rows {
             int nbSongInCurGroup = (lastSongPos - firstSongPos) + 1;
 
             // remove pos not in specified limit
-            for (Iterator<Integer> iterator = shuffleSavedPos.iterator(); iterator.hasNext(); ) {
-                int pos = iterator.next();
-                if (pos < firstSongPos || pos > lastSongPos)
-                    iterator.remove();
-            }
+            shuffleSavedPos.removeIf(pos -> pos < firstSongPos || pos > lastSongPos);
 
             // save the previously song chosen
             shuffleSavedPos.add(currPos);
@@ -295,8 +270,7 @@ public class Rows {
             int randNum = random.nextInt(nbSongInCurGroup - shuffleSavedPos.size());
             currPos = randNum + firstSongPos;
             // shift song already done
-            for (Iterator<Integer> iterator = shuffleSavedPos.iterator(); iterator.hasNext(); ) {
-                int pos = iterator.next();
+            for (int pos : shuffleSavedPos) {
                 if (pos <= currPos)
                     currPos++;
             }
@@ -321,25 +295,23 @@ public class Rows {
     // return the pos of the last song belonging to the given songPos group
     int getLastSongPosInGroup(int songPos) {
         Row currParent = rowsUnfolded.get(songPos).parent;
-        songPos++;
         // if next row is the end of the list or a group or a different group, we reached another group
-        while (songPos < rowsUnfolded.size() &&
-                rowsUnfolded.get(songPos).getClass() == RowSong.class &&
-                rowsUnfolded.get(songPos).parent == currParent) {
+        do {
             songPos++;
-        }
+        } while (songPos < rowsUnfolded.size() &&
+                rowsUnfolded.get(songPos).getClass() == RowSong.class &&
+                rowsUnfolded.get(songPos).parent == currParent);
         return songPos - 1;
     }
 
     // return the pos of the first song belonging to the given songPos group
     int getFirstSongPosInGroup(int songPos) {
         Row currParent = rowsUnfolded.get(songPos).parent;
-        songPos--;
-        while (songPos > 0 &&
-                rowsUnfolded.get(songPos).getClass() == RowSong.class &&
-                rowsUnfolded.get(songPos).parent == currParent) {
+        do {
             songPos--;
-        }
+        } while (songPos > 0 &&
+                rowsUnfolded.get(songPos).getClass() == RowSong.class &&
+                rowsUnfolded.get(songPos).parent == currParent);
         return songPos + 1;
     }
 
@@ -351,11 +323,11 @@ public class Rows {
 
     // go back to previous random song done
     public void moveToRandomSongBack() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         boolean backOk = false;
-        if (shuffleSavedPos.size() > 0) {
+        if (!shuffleSavedPos.isEmpty()) {
             int pos = shuffleSavedPos.remove(shuffleSavedPos.size() - 1);
             // check
             if (pos < rowsUnfolded.size() && rowsUnfolded.get(pos).getClass() == RowSong.class) {
@@ -379,7 +351,7 @@ public class Rows {
     }
 
     private void moveToNextSongRatingEnabled() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -438,7 +410,7 @@ public class Rows {
     }
 
     private void moveToNextSongNoRating() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -519,7 +491,7 @@ public class Rows {
     }
 
     public void moveToPrevSong() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
@@ -532,37 +504,29 @@ public class Rows {
         else {
             setGroupSelectedState(currPos, false);
 
-            currPos--;
-            if (currPos < 0)
-                currPos = rowsUnfolded.size() - 1;
-
-            while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class) {
+            do {
                 currPos--;
                 if (currPos < 0)
                     currPos = rowsUnfolded.size() - 1;
-            }
+            } while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class);
 
             setGroupSelectedState(currPos, true);
         }
     }
 
     public void moveToPrevGroup() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         setGroupSelectedState(currPos, false);
 
         currPos = getFirstSongPosInGroup(currPos);
-        currPos--;
 
-        if (currPos < 0)
-            currPos = rowsUnfolded.size() - 1;
-
-        while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class) {
+        do {
             currPos--;
             if (currPos < 0)
                 currPos = rowsUnfolded.size() - 1;
-        }
+        } while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class);
 
         if (currPos < 0)
             currPos = rowsUnfolded.size() - 1;
@@ -573,7 +537,7 @@ public class Rows {
     }
 
     public void moveToNextGroup() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         setGroupSelectedState(currPos, false);
@@ -600,7 +564,7 @@ public class Rows {
 
     // fold everything
     public void fold() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         // todo: better to recopy first level from unfolded?
@@ -613,7 +577,7 @@ public class Rows {
 
     // unfold everything
     public void unfold() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         rows = (ArrayList<Row>) rowsUnfolded.clone();
@@ -623,7 +587,7 @@ public class Rows {
     }
 
     public void invertFold(int pos) {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return;
 
         if (pos < 0 || pos >= rows.size()) {
@@ -659,13 +623,13 @@ public class Rows {
     //
     // @return true if at least one group has been unfold
     public boolean unfoldCurrPos() {
-        if (rowsUnfolded.size() == 0)
+        if (rowsUnfolded.isEmpty())
             return false;
 
         boolean changed = false;
         int pos = getCurrPos();
         if (pos < 0 || pos >= rows.size())
-            return changed;
+            return false;
 
         Row row = rows.get(pos);
         if (row != null && row.getClass() == RowGroup.class) {
@@ -868,11 +832,6 @@ public class Rows {
         }
 
         // to comment in release mode:
-        /*
-        int idx;
-        for(idx = 0; idx < rowsUnfolded.size(); idx++)
-            Log.d("Rows", "songItem " + idx + " added: " + rowsUnfolded.get(idx).toString());
-        */
         Log.d("Rows", "======> songItems initialized in " + (System.currentTimeMillis() - startTime) + "ms");
         Log.d("Rows", "songPos: " + currPos);
 
@@ -882,12 +841,7 @@ public class Rows {
     }
 
     private void preloadDBSongsAsync() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                preloadDBSongs();
-            }
-        };
+        Thread thread = new Thread(this::preloadDBSongs);
         thread.start();
     }
 
@@ -937,12 +891,7 @@ public class Rows {
     }
 
     private void preloadSongRatingAsync() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                preloadSongsRatings();
-            }
-        };
+        Thread thread = new Thread(this::preloadSongsRatings);
         thread.start();
     }
 
@@ -1080,7 +1029,7 @@ public class Rows {
             while (musicCursor.moveToNext());
         }
 
-        Collections.sort(rowsUnfolded, new PathRowComparator(params.getShowFilename()));
+        rowsUnfolded.sort(new PathRowComparator(params.getShowFilename()));
 
         // add group
         RowGroup prevFolderGroup = null;
@@ -1160,7 +1109,7 @@ public class Rows {
 
 //        long beforeMs = (new Date()).getTime();
         TreeRowComparator treeRowComparator = new TreeRowComparator(params.getShowFilename());
-        Collections.sort(rowsUnfolded, treeRowComparator);
+        rowsUnfolded.sort(treeRowComparator);
 //        Log.w("Rows==========", "Sort time: " + ((new Date()).getTime() - beforeMs) + " ms");
 //        // 127 ms tree no show filename
 //        // 283 ms tree show filename
@@ -1244,24 +1193,9 @@ public class Rows {
         try {
             track = Integer.parseInt(strTrack);
         }
-        catch (NumberFormatException e) {}
+        catch (NumberFormatException ignored) {}
 
         // get track number from path
-//        if (track == 0 && path != null) {
-//            String filename = Path.getFilename(path);
-//            String filenameBegin = "";
-//            if (filename.length() > 0 && isDigit(filename.charAt(0))) {
-//                filenameBegin += filename.charAt(0);
-//                if (filename.length() > 1 && isDigit(filename.charAt(1)))
-//                    filenameBegin += filename.charAt(1);
-//            }
-//            if (!filenameBegin.isEmpty()) {
-//                try {
-//                    track = Integer.parseInt(filenameBegin);
-//                } catch (Exception e) {
-//                }
-//            }
-//        }
 
         return track;
     }
@@ -1381,32 +1315,29 @@ public class Rows {
                     context.getString(R.string.action_set_rating_song_failed));
         }
         else {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    int nbChanged = 0;
-                    Row row = rows.get(pos);
-                    if (row.getClass() == RowSong.class) {
-                        if (rateSong((RowSong) row, rating, overwriteRating))
-                            nbChanged++;
-                    } else {
-                        RowGroup groupToRate = (RowGroup) row;
-                        int i = 1;
-                        while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
-                                (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
-                                        groupToRate.getLevel()) {
-                            if (terminated) break;
-                            if (row.getClass() == RowSong.class) {
-                                if (rateSong((RowSong) row, rating, overwriteRating))
-                                    nbChanged++;
-                            }
-                            i++;
+            Thread thread = new Thread(() -> {
+                int nbChanged = 0;
+                Row row = rows.get(pos);
+                if (row.getClass() == RowSong.class) {
+                    if (rateSong((RowSong) row, rating, overwriteRating))
+                        nbChanged++;
+                } else {
+                    RowGroup groupToRate = (RowGroup) row;
+                    int i = 1;
+                    while (groupToRate.getGenuinePos() + i < rowsUnfolded.size() &&
+                            (row = rowsUnfolded.get(groupToRate.getGenuinePos() + i)).getLevel() >
+                                    groupToRate.getLevel()) {
+                        if (terminated) break;
+                        if (row.getClass() == RowSong.class) {
+                            if (rateSong((RowSong) row, rating, overwriteRating))
+                                nbChanged++;
                         }
+                        i++;
                     }
-                    callback.ratingCallback(nbChanged, "");
-                    ratingsSynchronizing.set(false);
                 }
-            };
+                callback.ratingCallback(nbChanged, "");
+                ratingsSynchronizing.set(false);
+            });
             thread.start();
         }
     }

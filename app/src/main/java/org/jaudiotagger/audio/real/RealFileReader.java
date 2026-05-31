@@ -44,8 +44,7 @@ public class RealFileReader extends AudioFileReader {
 
   private RealChunk findPropChunk(RandomAccessFile raf) throws IOException, CannotReadException {
     final RealChunk rmf = RealChunk.readChunk(raf);
-    final RealChunk prop = RealChunk.readChunk(raf);
-    return prop;
+      return RealChunk.readChunk(raf);
   }
 
   private RealChunk findContChunk(RandomAccessFile raf) throws IOException, CannotReadException {
@@ -68,8 +67,8 @@ public class RealFileReader extends AudioFileReader {
     // NOTE: frequently these fields are off-by-one, thus the crazy
     // logic below...
     try {
-      rv.addField(FieldKey.TITLE, (title.length() == 0 ? author : title));
-      rv.addField(FieldKey.ARTIST, title.length() == 0 ? copyright : author);
+      rv.addField(FieldKey.TITLE, (title.isEmpty() ? author : title));
+      rv.addField(FieldKey.ARTIST, title.isEmpty() ? copyright : author);
       rv.addField(FieldKey.COMMENT, comment);
     } catch (FieldDataInvalidException fdie) {
       throw new RuntimeException(fdie);

@@ -93,7 +93,7 @@ public class PartOfSet extends AbstractString {
     decoder.reset();
     CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
     if (coderResult.isError()) {
-      logger.warning("Decoding error:" + coderResult.toString());
+      logger.warning("Decoding error:" + coderResult);
     }
     decoder.flush(outBuffer);
     outBuffer.flip();
@@ -121,7 +121,7 @@ public class PartOfSet extends AbstractString {
     //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
     try {
       if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite()) {
-        if (value.length() > 0) {
+        if (!value.isEmpty()) {
           if (value.charAt(value.length() - 1) == '\0') {
             value = value.substring(0, value.length() - 1);
           }

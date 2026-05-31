@@ -19,7 +19,7 @@ import java.nio.ByteBuffer;
  * written back to file
  */
 public class Mp4TagRawBinaryField extends Mp4TagField {
-  protected int dataSize;
+  protected final int dataSize;
   protected byte[] dataBytes;
 
 

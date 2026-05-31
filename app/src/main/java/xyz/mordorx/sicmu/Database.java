@@ -31,13 +31,11 @@ import androidx.room.Room;
 import static xyz.mordorx.sicmu.SongDatabase.MIGRATION_1_2;
 
 public class Database {
-    private SongDAO songDAO;
-    private ConfigurationDAO configurationDAO;
-    private Context context;
-    private SongDatabase db;
+    private final SongDAO songDAO;
+    private final ConfigurationDAO configurationDAO;
+    private final SongDatabase db;
 
     public Database(Context context) {
-        this.context = context;
         db = Room.databaseBuilder(context,
                 SongDatabase.class, "database-SicMuNeo")
                 .addMigrations(MIGRATION_1_2)
@@ -74,15 +72,12 @@ public class Database {
         void changelogsMustBeShown(boolean mustBeShown) ;
     }
     public void doesChangelogsMustBeShownAsync(DoesChangelogsMustBeShownInterface intf) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                boolean result = doesChangelogsMustBeShown();
-                if (db != null && db.isOpen()) {
-                    intf.changelogsMustBeShown(result);
-                }
+        Thread thread = new Thread(() -> {
+            boolean result = doesChangelogsMustBeShown();
+            if (db != null && db.isOpen()) {
+                intf.changelogsMustBeShown(result);
             }
-        };
+        });
         thread.start();
     }
 
@@ -116,26 +111,23 @@ public class Database {
     }
 
     public void cleanupSongsDB() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                if (songsDBNeedCleanup()) {
-                    Date beg = new Date();
-                    List<SongORM> songORMs = songDAO.getAll();
-                    int nbDelete = 0;
-                    for (SongORM songORM : songORMs) {
-                        if (!(new File(songORM.path).exists())) {
-                            Log.d("Database", "Delete songORM for path=" + songORM.path);
-                            songDAO.delete(songORM);
-                            nbDelete++;
-                        }
+        Thread thread = new Thread(() -> {
+            if (songsDBNeedCleanup()) {
+                Date beg = new Date();
+                List<SongORM> songORMs = songDAO.getAll();
+                int nbDelete = 0;
+                for (SongORM songORM : songORMs) {
+                    if (!(new File(songORM.path).exists())) {
+                        Log.d("Database", "Delete songORM for path=" + songORM.path);
+                        songDAO.delete(songORM);
+                        nbDelete++;
                     }
-                    Date end = new Date();
-                    Log.i("Database", "Cleanup DB: " + nbDelete + "/" + songORMs.size() +
-                            " songORM deleted in " + (end.getTime() - beg.getTime()) + "ms");
                 }
+                Date end = new Date();
+                Log.i("Database", "Cleanup DB: " + nbDelete + "/" + songORMs.size() +
+                        " songORM deleted in " + (end.getTime() - beg.getTime()) + "ms");
             }
-        };
+        });
         thread.start();
     }
 
@@ -144,45 +136,42 @@ public class Database {
         void ratingCallback(boolean succeed, String msg);
     }
     public void trySyncronizeRatingsAsync(@NonNull SyncronizeRatingsCallbackInterface callback) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                boolean succeed = true;
-                StringBuilder retMsg = new StringBuilder();
-                List<SongORM> songORMs = songDAO.getAll();
-                int nbSyncSucceed = 0;
-                int nbSyncTried = 0;
-                for (SongORM songORM : songORMs) {
-                    if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
-                        Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
-                        String msg = "trySyncronizeRating: synchronize rating of " +
-                                songORM.path + " to " + songORM.rating;
-                        if (RowSong.WriteRatingToFile(songORM.path, songORM.rating)) {
-                            msg += " succeed\n\n";
-                            songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
-                            songORM.ratingSynchronized = true;
-                            songDAO.update(songORM);
-                            nbSyncSucceed++;
-                        }
-                        else {
-                            succeed = false;
-                            msg += " failed !\n\n";
-//                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
-                        }
-                        retMsg.append(msg);
-                        Log.d("Database", msg);
-                        nbSyncTried++;
+        Thread thread = new Thread(() -> {
+            boolean succeed = true;
+            StringBuilder retMsg = new StringBuilder();
+            List<SongORM> songORMs = songDAO.getAll();
+            int nbSyncSucceed = 0;
+            int nbSyncTried = 0;
+            for (SongORM songORM : songORMs) {
+                if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
+                    Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
+                    String msg = "trySyncronizeRating: synchronize rating of " +
+                            songORM.path + " to " + songORM.rating;
+                    if (RowSong.WriteRatingToFile(songORM.path, songORM.rating)) {
+                        msg += " succeed\n\n";
+                        songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
+                        songORM.ratingSynchronized = true;
+                        songDAO.update(songORM);
+                        nbSyncSucceed++;
                     }
+                    else {
+                        succeed = false;
+                        msg += " failed !\n\n";
+//                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
+                    }
+                    retMsg.append(msg);
+                    Log.d("Database", msg);
+                    nbSyncTried++;
                 }
-                String msg = "Synchronized rating " + nbSyncSucceed + "/" + nbSyncTried + " succeed";
-//                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-                Log.d("Database", msg);
-                retMsg.append(msg);
-                if (nbSyncTried == 0)
-                    retMsg = new StringBuilder();
-                callback.ratingCallback(succeed, retMsg.toString());
             }
-        };
+            String msg = "Synchronized rating " + nbSyncSucceed + "/" + nbSyncTried + " succeed";
+//                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            Log.d("Database", msg);
+            retMsg.append(msg);
+            if (nbSyncTried == 0)
+                retMsg = new StringBuilder();
+            callback.ratingCallback(succeed, retMsg.toString());
+        });
         thread.start();
     }
 
@@ -190,19 +179,16 @@ public class Database {
         void ratingCallback(String msg);
     }
     public void getRatingsToSynchronizeAsync(@NonNull RatingsToSyncronizeCallbackInterface callback) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                StringBuilder msg = new StringBuilder();
-                List<SongORM> songORMs = songDAO.getAll();
-                for (SongORM songORM : songORMs) {
-                    if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
-                        msg.append(songORM.rating).append(" -> ").append(songORM.path).append("\n");
-                    }
+        Thread thread = new Thread(() -> {
+            StringBuilder msg = new StringBuilder();
+            List<SongORM> songORMs = songDAO.getAll();
+            for (SongORM songORM : songORMs) {
+                if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
+                    msg.append(songORM.rating).append(" -> ").append(songORM.path).append("\n");
                 }
-                callback.ratingCallback(msg.toString());
             }
-        };
+            callback.ratingCallback(msg.toString());
+        });
         thread.start();
     }
 }

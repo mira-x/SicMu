@@ -142,8 +142,7 @@ public class Mp4StcoBox extends AbstractMp4Box {
     if (boxHeader == null) {
       throw new CannotReadException("This file does not appear to be an audio file");
     }
-    Mp4StcoBox stco = new Mp4StcoBox(boxHeader, mvhdBuffer);
-    return stco;
+      return new Mp4StcoBox(boxHeader, mvhdBuffer);
   }
 
   public static void debugShowStcoInfo(RandomAccessFile raf) throws IOException, CannotReadException {

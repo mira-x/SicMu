@@ -65,9 +65,6 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
    * Creates a new FrameBodyCRM datatype.
    */
   public FrameBodyCRM() {
-    //        this.setObject(ObjectTypes.OBJ_OWNER, "");
-    //        this.setObject(ObjectTypes.OBJ_DESCRIPTION, "");
-    //        this.setObject("Encrypted datablock", new byte[0]);
   }
 
   public FrameBodyCRM(FrameBodyCRM body) {

@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -248,13 +249,13 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC)) {
       FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
       ID3v22Frame newFrame;
-      if (tmpBody.getYear().length() != 0) {
+      if (!tmpBody.getYear().isEmpty()) {
         //Create Year frame (v2.2 id,but uses v2.3 body)
         newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
         ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
         frames.add(newFrame);
       }
-      if (tmpBody.getTime().length() != 0) {
+      if (!tmpBody.getTime().isEmpty()) {
         //Create Time frame (v2.2 id,but uses v2.3 body)
         newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);
         ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getTime());
@@ -420,13 +421,13 @@ public class ID3v22Tag extends AbstractID3v2Tag {
   protected void translateFrame(AbstractID3v2Frame frame) {
     FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
     ID3v22Frame newFrame;
-    if (tmpBody.getYear().length() != 0) {
+    if (!tmpBody.getYear().isEmpty()) {
       //Create Year frame (v2.2 id,but uses v2.3 body)
       newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
       ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
       frameMap.put(newFrame.getIdentifier(), newFrame);
     }
-    if (tmpBody.getTime().length() != 0) {
+    if (!tmpBody.getTime().isEmpty()) {
       //Create Time frame (v2.2 id,but uses v2.3 body)
       newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);
       ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getTime());
@@ -718,12 +719,8 @@ public class ID3v22Tag extends AbstractID3v2Tag {
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
     } else {
-      try {
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-      } catch (UnsupportedEncodingException uoe) {
-        throw new RuntimeException(uoe.getMessage());
-      }
-      body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1));
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
       body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
       body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
       return frame;
@@ -751,7 +748,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
       List<String> convertedGenres = new ArrayList<String>();
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
 
@@ -773,7 +770,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
 
     if (genericKey == FieldKey.GENRE) {
       List<TagField> fields = getFields(genericKey);
-      if (fields != null && fields.size() > 0) {
+      if (fields != null && !fields.isEmpty()) {
         AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
         FrameBodyTCON body = (FrameBodyTCON) frame.getBody();
         return FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index));

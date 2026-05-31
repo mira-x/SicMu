@@ -64,9 +64,6 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
    * Creates a new FrameBodyGRID datatype.
    */
   public FrameBodyGRID() {
-    //        this.setObject(ObjectTypes.OBJ_OWNER, "");
-    //        this.setObject("Group Symbol", new Byte((byte) 0));
-    //        this.setObject("Group Dependent Data", new byte[0]);
   }
 
   public FrameBodyGRID(FrameBodyGRID body) {

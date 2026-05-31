@@ -33,7 +33,7 @@ public class OggCRCFactory {
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private static long[] crc_lookup = new long[256];
+    private static final long[] crc_lookup = new long[256];
     private static boolean init = false;
 
 

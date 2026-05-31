@@ -19,8 +19,8 @@ import java.util.logging.Logger;
  */
 public class FmtChunk {
   public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.dsf.FmtChunk");
-  private long chunkSizeLength;
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.dsf.FmtChunk");
+  private final long chunkSizeLength;
 
   private FmtChunk(ByteBuffer dataBuffer) {
     chunkSizeLength = dataBuffer.getLong();

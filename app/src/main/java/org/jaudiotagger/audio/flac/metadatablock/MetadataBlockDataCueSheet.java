@@ -31,7 +31,7 @@ import java.nio.channels.FileChannel;
  * purpose cueing mechanism for playback
  */
 public class MetadataBlockDataCueSheet implements MetadataBlockData {
-  private ByteBuffer data;
+  private final ByteBuffer data;
 
   public MetadataBlockDataCueSheet(MetadataBlockHeader header, FileChannel fc) throws IOException {
     data = ByteBuffer.allocate(header.getDataLength());

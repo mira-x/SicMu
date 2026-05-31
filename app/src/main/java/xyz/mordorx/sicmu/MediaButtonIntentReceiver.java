@@ -27,35 +27,10 @@ import android.view.KeyEvent;
 
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
-//    private static final int MSG_LONGPRESS_TIMEOUT = 1;
-//    private static final int LONG_PRESS_DELAY = 1000;
-
     private static long mLastClickTime = 0;
 //    private static boolean mDown = false;
 
     // souch: disable shuffle mode support
-    /*
-    private static boolean mLaunched = false;
-
-    private static Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LONGPRESS_TIMEOUT:
-                    if (!mLaunched) {
-                        Context context = (Context)msg.obj;
-                        Intent i = new Intent();
-                        i.putExtra("autoshuffle", "true");
-                        i.setClass(context, MusicBrowserActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        context.startActivity(i);
-                        mLaunched = true;
-                    }
-                    break;
-            }
-        }
-    };
-    */
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -131,8 +106,6 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                             mLastClickTime = eventtime;
                         }
 
-                        //mLaunched = false;
-                        //mDown = true;
                     }
                 } /* else {
                     //mHandler.removeMessages(MSG_LONGPRESS_TIMEOUT);

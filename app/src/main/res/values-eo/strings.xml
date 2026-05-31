@@ -71,10 +71,6 @@
     <string name="popup_song_mime">MIME-tipo: %s</string>
     <string name="popup_song_path">Vojo: %s</string>
 
-    <string name="explain_playback_speed">Ŝovu supren/malsupren aŭ maldekstren/dekstren por pliigi/malpliigi la ludrapidecon.</string>
-
-    <string name="focus_error">Ne eblis aliri la aŭdion! Bonvolu restartigi la aplikaĵon.</string>
-
     <string name="settings_title">Agordoj</string>
 
     <string name="settings_theme_title">Etoso</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Skanas aŭdvidajn dosierojn…</string>
     <string name="settings_rescan_storage">Skanas memoron %s</string>
     <string name="settings_rescan_finished">Skanado finita. Eble daŭros iom antaŭ ol novaj dosieroj aperos (eble necesas restartigi SicMu Player).</string>
-    <string name="settings_rescan_purge">La skanilo trovis enskribojn (%s) kiuj ne plu ekzistas. La enskriboj estis forigitaj el la listo.</string>
-
-    <string name="settings_media_button_start_app_title">Aŭtomata starto per aŭdvidbutonoj</string>
-    <string name="settings_media_button_start_app">Aŭdvidbutonoj startas la aplikaĵon se ĝi ne funkcias.</string>
 
     <string name="settings_autoscroll">Ludata kanto</string>
     <string name="settings_autoscroll_summary">Rulumi al kanto kiam ĝi estas ludata</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Tuŝu la SicMu-ikonon por vidi informojn pri la ludata kanto (kovrilbildo, …)</string>
     <string name="help_seek_menu">Saltmenuo</string>
     <string name="help_seek_menu_summary">Tuŝu supre dekstre en la menubreto por malfermi/fermi la saltmenuon. Longe tuŝi \"Sekva\"/\"Antaŭa\" rapide antaŭen-/retroiras.</string>
-    <string name="help_donate">Donaci</string>
     <string name="help_context_menu">Kunteksta menuo</string>
     <string name="help_context_menu_summary">Longe tuŝu kanton por montri menuon kun pliaj opcioj kiel taksi aŭ forigi</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Halti ĉe la fino de la dosierujo</string>
     <string name="action_stop_at_end_of_track">Halti post la kanto</string>
 
-    <string name="detail_metadata_hint_label">Tuŝu la albumkovrilon por vidi ĉiujn metadatenojn</string>
     <string name="action_youtube_search">Serĉi ĉe YouTube</string>
     <string name="action_youtube_open">Malfermi YouTube-videon</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">Doni 4 stelojn</string>
     <string name="a11y_rating_5">Doni 5 stelojn</string>
     <string name="a11y_now_playing">Nun ludas</string>
-    <string name="a11y_song_rating">Takso: %d steloj</string>
     <string name="a11y_sort_button">Ŝanĝi vidreĝimon</string>
     <string name="a11y_stereo_button">Ŝanĝi inter stereo kaj mono</string>
     <string name="a11y_repeat_button">Ŝanĝi ripetreĝimon</string>

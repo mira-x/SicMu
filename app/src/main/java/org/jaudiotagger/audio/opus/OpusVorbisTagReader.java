@@ -12,10 +12,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class OpusVorbisTagReader extends OggVorbisTagReader {
 
-    private VorbisCommentReader tagReader = new VorbisCommentReader();
+    private final VorbisCommentReader tagReader = new VorbisCommentReader();
 
     /**
      * Read the Logical VorbisComment Tag from the file
@@ -105,7 +106,7 @@ public class OpusVorbisTagReader extends OggVorbisTagReader {
 
     @Override
     public boolean isVorbisCommentHeader(byte[] headerData) {
-        String opusTags = new String(headerData, OpusHeader.TAGS_CAPTURE_PATTERN_POS, OpusHeader.TAGS_CAPTURE_PATTERN_LENGTH, Charset.forName(TextEncoding.CHARSET_ISO_8859_1));
+        String opusTags = new String(headerData, OpusHeader.TAGS_CAPTURE_PATTERN_POS, OpusHeader.TAGS_CAPTURE_PATTERN_LENGTH, StandardCharsets.ISO_8859_1);
         return opusTags.equals(OpusHeader.TAGS_CAPTURE_PATTERN);
     }
 }

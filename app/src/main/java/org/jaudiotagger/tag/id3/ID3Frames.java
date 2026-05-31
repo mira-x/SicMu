@@ -59,19 +59,19 @@ public abstract class ID3Frames extends AbstractStringStringValuePair {
   /**
    * These frames are part of the Official Specification for that Tag Version
    */
-  protected TreeSet<String> supportedFrames = new TreeSet<String>();
+  protected final TreeSet<String> supportedFrames = new TreeSet<String>();
   /**
    * These frames are extensions to the  Specification for that Tag Version
    */
-  protected TreeSet<String> extensionFrames = new TreeSet<String>();
+  protected final TreeSet<String> extensionFrames = new TreeSet<String>();
   /**
    * These frames are Common , this is a loose term
    */
-  protected TreeSet<String> commonFrames = new TreeSet<String>();
+  protected final TreeSet<String> commonFrames = new TreeSet<String>();
   /**
    * These frames are Binary
    */
-  protected TreeSet<String> binaryFrames = new TreeSet<String>();
+  protected final TreeSet<String> binaryFrames = new TreeSet<String>();
 
   private static void loadID3v23ID3v24Mapping() {
     // Define the mapping from v23 to v24 only maps values where

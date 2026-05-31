@@ -30,7 +30,7 @@ import java.io.File;
  */
 public class FlacFileWriter extends AudioFileWriter2 {
 
-  private FlacTagWriter tw = new FlacTagWriter();
+  private final FlacTagWriter tw = new FlacTagWriter();
 
   @Override
   protected void writeTag(Tag tag, File file) throws CannotWriteException {

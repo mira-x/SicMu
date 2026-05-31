@@ -80,22 +80,22 @@ public class Lyrics3v2Field extends AbstractTagFrame {
     } else if (frameIdentifier.equals("TCOM")) {
       textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
       frameBody = new FieldFrameBodyAUT("");
-      if ((textFrame != null) && (textFrame.getText().length() > 0)) {
+      if ((textFrame != null) && (!textFrame.getText().isEmpty())) {
         frameBody = new FieldFrameBodyAUT(textFrame.getText());
       }
     } else if (frameIdentifier.equals("TALB")) {
       textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-      if ((textFrame != null) && (textFrame.getText().length() > 0)) {
+      if ((textFrame != null) && (!textFrame.getText().isEmpty())) {
         frameBody = new FieldFrameBodyEAL(textFrame.getText());
       }
     } else if (frameIdentifier.equals("TPE1")) {
       textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-      if ((textFrame != null) && (textFrame.getText().length() > 0)) {
+      if ((textFrame != null) && (!textFrame.getText().isEmpty())) {
         frameBody = new FieldFrameBodyEAR(textFrame.getText());
       }
     } else if (frameIdentifier.equals("TIT2")) {
       textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-      if ((textFrame != null) && (textFrame.getText().length() > 0)) {
+      if ((textFrame != null) && (!textFrame.getText().isEmpty())) {
         frameBody = new FieldFrameBodyETT(textFrame.getText());
       }
     } else {

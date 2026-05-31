@@ -17,7 +17,7 @@ import java.util.zip.Inflater;
 //TODO also need to support compress framedata
 public class ID3Compression {
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
 
   /**
    * Decompress realFrameSize bytes to decompressedFrameSize bytes and return as ByteBuffer

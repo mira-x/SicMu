@@ -18,13 +18,11 @@
  */
 package org.jaudiotagger.audio.ogg;
 
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
 
-import java.io.StringBufferInputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
@@ -44,7 +42,7 @@ public class OggVorbisCommentTagCreator {
     public static final int FIELD_FRAMING_BIT_LENGTH = 1;
     public static final byte FRAMING_BIT_VALID_VALUE = (byte) 0x01;
 
-    private VorbisCommentCreator creator = new VorbisCommentCreator();
+    private final VorbisCommentCreator creator = new VorbisCommentCreator();
     private final byte[] prefix;
     private final byte[] capturePattern;
     private final boolean shouldWriteFramingBit;

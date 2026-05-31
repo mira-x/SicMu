@@ -15,19 +15,16 @@ public class FileTypeUtil {
   // PDF files starts with: %PDF
   // MS office files starts with: (D0 CF 11 E0 A1 B1 1A E1)
   // Java does not support byte literals. Use int literals instead.
-  // private static final int[] pdfSig = { 0x25, 0x50, 0x44, 0x46 };
-  // private static final int[] msOfficeSig = { 0xd0, 0xcf, 0x11, 0xe0, 0xa1,
-  // 0xb1, 0x1a, 0xe1 };
 
-  private static final Integer[] mp3v2Sig = {0x49, 0x44, 0x33};
+    private static final Integer[] mp3v2Sig = {0x49, 0x44, 0x33};
   private static final Integer[] mp3v1Sig_1 = {0xFF, 0xF3};
   private static final Integer[] mp3v1Sig_2 = {0xFF, 0xFA};
   private static final Integer[] mp3v1Sig_3 = {0xFF, 0xF2};
   private static final Integer[] mp3v1Sig_4 = {0xFF, 0xFB};
   private static final Integer[] mp4Sig = {0x00, 0x00, 0x00, null, 0x66, 0x74, 0x79, 0x70};
 
-  private static Map<String, Integer[]> signatureMap;
-  private static Map<String, String> extensionMap;
+  private static final Map<String, Integer[]> signatureMap;
+  private static final Map<String, String> extensionMap;
 
   static {
     signatureMap = new HashMap<String, Integer[]>();
@@ -98,11 +95,7 @@ public class FileTypeUtil {
 
 
   public static void main(String[] args) throws IOException {
-    // if (args.length < 1) {
-    // System.out.println("Usage: java TestExcelPDF <filename>");
-    // System.exit(1);
-    // }
-    String testFileLoc = "C:/Users/keerthi/Dropbox/Works/Java/github/GaanaExtractor/workspace/jaudiotagger/testm4a";
+      String testFileLoc = "C:/Users/keerthi/Dropbox/Works/Java/github/GaanaExtractor/workspace/jaudiotagger/testm4a";
     // FileTypeUtil t = new FileTypeUtil();
     String fileType = getMagicFileType(new File(testFileLoc));
     System.out.println("File type: " + fileType);

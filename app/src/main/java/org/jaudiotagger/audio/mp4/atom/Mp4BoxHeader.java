@@ -59,7 +59,7 @@ public class Mp4BoxHeader {
   //Mp4 uses UTF-8 for all text
   public static final String CHARSET_UTF_8 = "UTF-8";
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
   //Box length
   protected int length;
   //Raw Header data
@@ -88,16 +88,11 @@ public class Mp4BoxHeader {
       throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
     }
     dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-    try {
       this.id = id;
-      dataBuffer.put(4, id.getBytes("ISO-8859-1")[0]);
-      dataBuffer.put(5, id.getBytes("ISO-8859-1")[1]);
-      dataBuffer.put(6, id.getBytes("ISO-8859-1")[2]);
-      dataBuffer.put(7, id.getBytes("ISO-8859-1")[3]);
-    } catch (UnsupportedEncodingException uee) {
-      //Should never happen
-      throw new RuntimeException(uee);
-    }
+      dataBuffer.put(4, id.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1)[0]);
+      dataBuffer.put(5, id.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1)[1]);
+      dataBuffer.put(6, id.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1)[2]);
+      dataBuffer.put(7, id.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1)[3]);
   }
 
   /**

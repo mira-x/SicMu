@@ -100,7 +100,7 @@ import java.util.logging.Logger;
 public class AudioFileIO {
 
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
   // !! Do not forget to also add new supported extensions to AudioFileFilter
   // !!
@@ -115,8 +115,8 @@ public class AudioFileIO {
   private final ModificationHandler modificationHandler;
   // These tables contains all the readers/writers associated with extension
   // as a key
-  public Map<String, AudioFileReader> readers = new HashMap<String, AudioFileReader>();
-  public Map<String, AudioFileWriter> writers = new HashMap<String, AudioFileWriter>();
+  public final Map<String, AudioFileReader> readers = new HashMap<String, AudioFileReader>();
+  public final Map<String, AudioFileWriter> writers = new HashMap<String, AudioFileWriter>();
 
   /**
    * Creates an instance.

@@ -118,7 +118,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
 
   public boolean isMediaMonkeyFrame() {
     String desc = getDescription();
-    if (desc != null && !(desc.length() == 0)) {
+    if (desc != null && !(desc.isEmpty())) {
       if (desc.startsWith(MM_PREFIX)) {
         return true;
       }
@@ -128,7 +128,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
 
   public boolean isItunesFrame() {
     String desc = getDescription();
-    if (desc != null && !(desc.length() == 0)) {
+    if (desc != null && !(desc.isEmpty())) {
       if (desc.equals(ITUNES_NORMALIZATION)) {
         return true;
       }
@@ -182,11 +182,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
    */
   public void setLanguage(String language) {
     //TODO not sure if this might break existing code
-        /*if(language==null)
-        {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        } */
-    setObjectValue(DataTypes.OBJ_LANGUAGE, language);
+      setObjectValue(DataTypes.OBJ_LANGUAGE, language);
   }
 
   /**

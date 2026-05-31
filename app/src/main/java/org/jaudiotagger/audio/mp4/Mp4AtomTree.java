@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class Mp4AtomTree {
   //Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
   private DefaultMutableTreeNode rootNode;
   private DefaultTreeModel dataTree;
   private DefaultMutableTreeNode moovNode;
@@ -46,11 +46,11 @@ public class Mp4AtomTree {
   private DefaultMutableTreeNode udtaNode;
   private DefaultMutableTreeNode hdlrWithinMdiaNode;
   private DefaultMutableTreeNode hdlrWithinMetaNode;
-  private List<DefaultMutableTreeNode> stcoNodes = new ArrayList<DefaultMutableTreeNode>();
-  private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
-  private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
-  private List<DefaultMutableTreeNode> trakNodes = new ArrayList<DefaultMutableTreeNode>();
-  private List<Mp4StcoBox> stcos = new ArrayList<Mp4StcoBox>();
+  private final List<DefaultMutableTreeNode> stcoNodes = new ArrayList<DefaultMutableTreeNode>();
+  private final List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
+  private final List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
+  private final List<DefaultMutableTreeNode> trakNodes = new ArrayList<DefaultMutableTreeNode>();
+  private final List<Mp4StcoBox> stcos = new ArrayList<Mp4StcoBox>();
   private ByteBuffer moovBuffer; //Contains all the data under moov
   private Mp4BoxHeader moovHeader;
 
@@ -156,11 +156,7 @@ public class Mp4AtomTree {
           //mdatNode always points to the last mDatNode, normally there is just one mdatnode but do have
           //a valid example of multiple mdatnode
 
-          //if(mdatNode!=null)
-          //{
-          //    throw new CannotReadException(ErrorMessage.MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS.getMsg());
-          //}
-          mdatNode = newAtom;
+            mdatNode = newAtom;
           mdatNodes.add(newAtom);
         }
         rootNode.add(newAtom);

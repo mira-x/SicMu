@@ -19,7 +19,7 @@ public class OpusFileWriter extends AudioFileWriter {
 
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.opus");
 
-    private OpusVorbisTagWriter vtw = new OpusVorbisTagWriter();
+    private final OpusVorbisTagWriter vtw = new OpusVorbisTagWriter();
 
     protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException {
         vtw.write(tag, raf, rafTemp);

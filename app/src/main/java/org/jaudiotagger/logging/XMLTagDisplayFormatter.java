@@ -37,7 +37,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter {
   protected static final String xmlCDataTagOpen = "<![CDATA[";
   protected static final String xmlCDataTagClose = "]]>";
   private static XMLTagDisplayFormatter formatter;
-  StringBuffer sb = new StringBuffer();
+  final StringBuffer sb = new StringBuffer();
 
   public XMLTagDisplayFormatter() {
 
@@ -134,7 +134,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter {
   }
 
   public void openHeadingElement(String type, String value) {
-    if (value.length() == 0) {
+    if (value.isEmpty()) {
       sb.append(xmlOpen(type));
     } else {
       sb.append(xmlOpenHeading(type, replaceXMLCharacters(value)));

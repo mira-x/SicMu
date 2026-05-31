@@ -84,7 +84,7 @@ import java.util.logging.Logger;
 public class Mp4TagReader {
 
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
 
   /*
    * The metadata is stored in the box under the hierachy moov.udta.meta.ilst

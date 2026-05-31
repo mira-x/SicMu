@@ -74,7 +74,7 @@ public class MP3AudioHeader implements AudioHeader {
   private final static int MIN_BUFFER_REMAINING_REQUIRED = MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
   private static final int NO_SECONDS_IN_HOUR = 3600;
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp3");
   protected MPEGFrameHeader mp3FrameHeader;
   protected XingFrame mp3XingFrame;
   protected VbriFrame mp3VbriFrame;
@@ -273,12 +273,7 @@ public class MP3AudioHeader implements AudioHeader {
     setTrackLength();
     setBitRate();
     setEncoder();
-        /*if((filePointerCount - startByte )>0)
-        {
-            logger.severe(seekFile.getName()+"length:"+startByte+"Difference:"+(filePointerCount - startByte));
-        }
-        */
-    return syncFound;
+      return syncFound;
   }
 
   /**

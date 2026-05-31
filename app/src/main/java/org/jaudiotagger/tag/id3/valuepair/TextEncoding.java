@@ -25,6 +25,7 @@ package org.jaudiotagger.tag.id3.valuepair;
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,10 +75,10 @@ public class TextEncoding extends AbstractIntStringValuePair {
     }
 
     private TextEncoding() {
-        idToCharset.put((int) ISO_8859_1, Charset.forName(CHARSET_ISO_8859_1));
-        idToCharset.put((int) UTF_16, Charset.forName(CHARSET_UTF_16));
-        idToCharset.put((int) UTF_16BE, Charset.forName(CHARSET_UTF_16BE));
-        idToCharset.put((int) UTF_8, Charset.forName(CHARSET_UTF_8));
+        idToCharset.put((int) ISO_8859_1, StandardCharsets.ISO_8859_1);
+        idToCharset.put((int) UTF_16, StandardCharsets.UTF_16);
+        idToCharset.put((int) UTF_16BE, StandardCharsets.UTF_16BE);
+        idToCharset.put((int) UTF_8, StandardCharsets.UTF_8);
 
         for (final Map.Entry<Integer, Charset> e : idToCharset.entrySet()) {
             idToValue.put(e.getKey(), e.getValue().name());

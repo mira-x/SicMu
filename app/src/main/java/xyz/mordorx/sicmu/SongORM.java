@@ -28,7 +28,7 @@ import androidx.room.PrimaryKey;
 public class SongORM {
     @PrimaryKey
     @NonNull
-    public String path;
+    public final String path;
     public long lastModifiedMs; // ms since 1970
     public int rating;
     // set to true if DB's rating is synchronized to file's rating

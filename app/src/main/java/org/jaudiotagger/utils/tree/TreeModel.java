@@ -47,7 +47,7 @@ public interface TreeModel {
    *
    * @return the root of the tree
    */
-  public Object getRoot();
+  Object getRoot();
 
 
   /**
@@ -62,7 +62,7 @@ public interface TreeModel {
    * @param parent a node in the tree, obtained from this data source
    * @return the child of <code>parent</code> at index <code>index</code>
    */
-  public Object getChild(Object parent, int index);
+  Object getChild(Object parent, int index);
 
 
   /**
@@ -74,7 +74,7 @@ public interface TreeModel {
    * @param parent a node in the tree, obtained from this data source
    * @return the number of children of the node <code>parent</code>
    */
-  public int getChildCount(Object parent);
+  int getChildCount(Object parent);
 
 
   /**
@@ -88,7 +88,7 @@ public interface TreeModel {
    * @param node a node in the tree, obtained from this data source
    * @return true if <code>node</code> is a leaf
    */
-  public boolean isLeaf(Object node);
+  boolean isLeaf(Object node);
 
   /**
    * Messaged when the user has altered the value for the item identified
@@ -99,7 +99,7 @@ public interface TreeModel {
    * @param path     path to the node that the user has altered
    * @param newValue the new value from the TreeCellEditor
    */
-  public void valueForPathChanged(TreePath path, Object newValue);
+  void valueForPathChanged(TreePath path, Object newValue);
 
   /**
    * Returns the index of child in parent.  If either <code>parent</code>
@@ -113,7 +113,7 @@ public interface TreeModel {
    * <code>child</code> or <code>parent</code> are <code>null</code>
    * or don't belong to this tree model
    */
-  public int getIndexOfChild(Object parent, Object child);
+  int getIndexOfChild(Object parent, Object child);
 
 //
 //  Change Events

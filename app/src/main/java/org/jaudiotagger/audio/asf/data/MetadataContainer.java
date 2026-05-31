@@ -85,7 +85,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk {
       }
     }
     if (result == null) {
-      throw new IllegalArgumentException("Unknown metadata container specified by GUID (" + guid.toString() + ")");
+      throw new IllegalArgumentException("Unknown metadata container specified by GUID (" + guid + ")");
     }
     return result;
   }

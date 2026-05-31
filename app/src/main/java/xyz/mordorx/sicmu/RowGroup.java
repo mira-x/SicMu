@@ -28,16 +28,16 @@ import android.widget.TextView;
 import java.io.File;
 
 public class RowGroup extends Row {
-    protected String name;
+    protected final String name;
     protected boolean folded;
     protected boolean selected;
-    private boolean overrideBackgroundColor;
+    private final boolean overrideBackgroundColor;
     private int nbRowSong;
     private String path;
     private long totalDurationMs = 0;
     public static Filter rowType;
     protected static int textSize = 18;
-    private Parameters params;
+    private final Parameters params;
 
     // must be set outside before calling setText
     public static int normalTextColor;
@@ -128,8 +128,6 @@ public class RowGroup extends Row {
             text.setTextColor(normalTextColor);
 
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
-        //text.setPaintFlags(text.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        //text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     }
 
     static public String msToTime(long durationMs){
@@ -149,23 +147,6 @@ public class RowGroup extends Row {
             return hours + (minutes < 10 ? ":0" : ":") + minutes +
                     (seconds < 10 ? ":0" : ":") + seconds;
         }
-//        if (seconds < 60) {
-//            return seconds + "s";
-//        }
-//        else if (seconds < 600) {
-//            seconds = seconds % 60;
-//            return minutes + (seconds < 10 ? "m0" : "m") + seconds;
-//        }
-//        else if (seconds < 3600) {
-//            return minutes + "m";
-//        }
-//        else if (minutes < 60 * 5) {
-//            minutes = minutes % 60;
-//            return hours + (minutes < 10 ? "h0" : "h") + minutes;
-//        }
-//        else {
-//            return hours + "h";
-//        }
     }
 
     private void setDuration(TextView duration) {
@@ -188,26 +169,6 @@ public class RowGroup extends Row {
 
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         duration.setTypeface(null, typeface == Typeface.ITALIC ? Typeface.NORMAL : typeface);
-        /*
-        duration.setBackgroundColor(Color.argb(0x88, 0x30, 0x30, 0x30));
-        duration.setId(position);
-        duration.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View durationView) {
-                Log.d("Main", "durationView.getId(): " + durationView.getId());
-                durationView.setBackgroundColor(Color.argb(0x88, 0x65, 0x65, 0x65));
-
-                class InvertFold implements Runnable {
-                    View view;
-                    InvertFold(View view) { this.view = view; }
-                    public void run() {
-                        main.invertFold(view.getId());
-                        // todo: reset highlight color for a few ms after invertFold?
-                    }
-                }
-                durationView.postDelayed(new InvertFold(durationView), 200);
-            }
-        });
-        */
     }
 
 

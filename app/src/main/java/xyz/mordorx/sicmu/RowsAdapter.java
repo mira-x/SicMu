@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class RowsAdapter extends BaseAdapter {
-    private Rows rows;
-    private LayoutInflater songInf;
-    private Main main;
+    private final Rows rows;
+    private final LayoutInflater songInf;
+    private final Main main;
 
 
     public RowsAdapter(Context c, Rows theRows, Main mn) {

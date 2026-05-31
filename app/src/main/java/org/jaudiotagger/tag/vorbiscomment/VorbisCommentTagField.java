@@ -62,7 +62,7 @@ public class VorbisCommentTagField implements TagTextField {
   /**
    * Stores the id (name) of the tag field. <br>
    */
-  private String id;
+  private final String id;
 
   /**
    * Creates an instance.
@@ -71,7 +71,7 @@ public class VorbisCommentTagField implements TagTextField {
    * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
    */
   public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException {
-    String field = new String(raw, "UTF-8");
+    String field = new String(raw, java.nio.charset.StandardCharsets.UTF_8);
     int i = field.indexOf("=");
     if (i == -1) {
       //Beware that ogg ID, must be capitalized and contain no space..
@@ -129,9 +129,7 @@ public class VorbisCommentTagField implements TagTextField {
    *                  copied.
    */
   protected void copy(byte[] src, byte[] dst, int dstOffset) {
-    //        for (int i = 0; i < src.length; i++)
-    //            dst[i + dstOffset] = src[i];
-    /*
+      /*
      * Heared that this method is optimized and does its job very near of
      * the system.
      */

@@ -8,6 +8,7 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Mp4FtypBox extends AbstractMp4Box {
   private static final int COMPATIBLE_BRAND_LENGTH = 4; //Can be multiple of these
   private String majorBrand;
   private int majorBrandVersion;
-  private List<String> compatibleBrands = new ArrayList<String>();
+  private final List<String> compatibleBrands = new ArrayList<String>();
 
   /**
    * @param header     header info
@@ -35,7 +36,7 @@ public class Mp4FtypBox extends AbstractMp4Box {
   }
 
   public void processData() throws CannotReadException {
-    CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
+    CharsetDecoder decoder = StandardCharsets.ISO_8859_1.newDecoder();
     try {
       majorBrand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
     } catch (CharacterCodingException cee) {
@@ -64,7 +65,7 @@ public class Mp4FtypBox extends AbstractMp4Box {
   public String toString() {
 
     StringBuilder info = new StringBuilder("Major Brand:" + majorBrand + "Version:" + majorBrandVersion);
-    if (compatibleBrands.size() > 0) {
+    if (!compatibleBrands.isEmpty()) {
       info.append("Compatible:");
       for (String brand : compatibleBrands) {
         info.append(brand);
@@ -94,7 +95,7 @@ public class Mp4FtypBox extends AbstractMp4Box {
    * but this is not an exhaustive list, so for that reason we don't force the values read from the file
    * to tie in with this enum.
    */
-  public static enum Brand {
+  public enum Brand {
     ISO14496_1_BASE_MEDIA("isom", "ISO 14496-1"),
     ISO14496_12_BASE_MEDIA("iso2", "ISO 14496-12"),
     ISO14496_1_VERSION_1("mp41", "ISO 14496-1"),
@@ -109,8 +110,8 @@ public class Mp4FtypBox extends AbstractMp4Box {
     APPLE_AUDIO_ONLY("M4A ", "M4A Audio"), //SOmetimes used by protected mutli track audio
     ;
 
-    private String id;
-    private String description;
+    private final String id;
+    private final String description;
 
     /**
      * @param id          it is stored as in file

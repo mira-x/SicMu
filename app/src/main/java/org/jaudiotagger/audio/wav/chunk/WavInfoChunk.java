@@ -17,10 +17,10 @@ import java.util.logging.Logger;
  * instead contains a number of name,size, value tuples. So for this reason we do not subclass the Chunk class
  */
 public class WavInfoChunk {
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
 
-  private WavInfoTag wavInfoTag;
-  private String loggingName;
+  private final WavInfoTag wavInfoTag;
+  private final String loggingName;
 
   public WavInfoChunk(WavTag tag, String loggingName) {
     this.loggingName = loggingName;

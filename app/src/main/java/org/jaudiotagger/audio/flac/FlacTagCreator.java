@@ -40,7 +40,7 @@ public class FlacTagCreator extends AbstractTagCreator {
   public static final int DEFAULT_PADDING = 4000;
   private static final VorbisCommentCreator creator = new VorbisCommentCreator();
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
   /**
    * @param tag
@@ -68,7 +68,7 @@ public class FlacTagCreator extends AbstractTagCreator {
     MetadataBlockHeader vorbisHeader;
     //If there are other metadata blocks
     if (flacTag.getVorbisCommentTag() != null) {
-      if ((paddingSize > 0) || (flacTag.getImages().size() > 0)) {
+      if ((paddingSize > 0) || (!flacTag.getImages().isEmpty())) {
         vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
       } else {
         vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());

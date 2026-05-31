@@ -87,7 +87,7 @@ public class MP3File extends AudioFile {
   /**
    * The Lyrics3 tag that this file contains.
    */
-  private AbstractLyrics3 lyrics3tag = null;
+  private final AbstractLyrics3 lyrics3tag = null;
   /**
    * The ID3v1 tag that this file contains.
    */
@@ -299,27 +299,6 @@ public class MP3File extends AudioFile {
    * @throws IOException
    */
   private void readLyrics3Tag(File file, RandomAccessFile newFile, int loadOptions) throws IOException {
-        /*if ((loadOptions & LOAD_LYRICS3) != 0)
-        {
-            try
-            {
-                lyrics3tag = new Lyrics3v2(newFile);
-            }
-            catch (TagNotFoundException ex)
-            {
-            }
-            try
-            {
-                if (lyrics3tag == null)
-                {
-                    lyrics3tag = new Lyrics3v1(newFile);
-                }
-            }
-            catch (TagNotFoundException ex)
-            {
-            }
-        }
-        */
   }
 
   /**
@@ -465,14 +444,8 @@ public class MP3File extends AudioFile {
    * TODO disabled until Lyrics3 fixed
    * @return true if this datatype contains a <code>Lyrics3</code> tag
    */
-    /*
-    public boolean hasLyrics3Tag()
-    {
-        return (lyrics3tag != null);
-    }
-    */
 
-  /**
+    /**
    * Extracts the raw ID3v2 tag data into a file.
    * <p>
    * This provides access to the raw data before manipulation, the data is written from the start of the file
@@ -698,38 +671,20 @@ public class MP3File extends AudioFile {
    * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
    *               new Lyrics3v2 dataType.
    */
-    /*
-    public void setLyrics3Tag(AbstractTag mp3tag)
-    {
-        lyrics3tag = new Lyrics3v2(mp3tag);
-    }
-    */
 
-  /**
+    /**
    *
    *
    * @param lyrics3tag
    */
-    /*
-    public void setLyrics3Tag(AbstractLyrics3 lyrics3tag)
-    {
-        this.lyrics3tag = lyrics3tag;
-    }
-    */
 
-  /**
+    /**
    * Returns the <code>ID3v1</code> tag for this datatype.
    *
    * @return the <code>ID3v1</code> tag for this datatype
    */
-    /*
-    public AbstractLyrics3 getLyrics3Tag()
-    {
-        return lyrics3tag;
-    }
-    */
 
-  /**
+    /**
    * Sets the <code>ID3v2</code> tag for this dataType. A new
    * <code>ID3v2_4</code> dataType is created from the argument and then used
    * here.

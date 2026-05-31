@@ -429,7 +429,7 @@ public final class GUID {
     if (!Utils.isBlank(descr)) {
       result.append("Description: ").append(descr).append(Utils.LINE_SEPARATOR).append("   ");
     }
-    result.append(this.toString());
+    result.append(this);
     return result.toString();
   }
 

@@ -54,7 +54,7 @@ public abstract class AbstractTag implements Tag {
    * that they are added in is preserved, the only exception to this rule is when two fields of the same id
    * exist, both will be returned according to when the first item was added to the file. <br>
    */
-  protected Map<String, List<TagField>> fields = new LinkedHashMap<String, List<TagField>>();
+  protected final Map<String, List<TagField>> fields = new LinkedHashMap<String, List<TagField>>();
 
   /**
    * Add field
@@ -78,11 +78,11 @@ public abstract class AbstractTag implements Tag {
       if (field.isCommon()) {
         commonNumber++;
       }
-      Log.d("AbstractTag", "addField: NEW key='" + field.getId() + "' value='" + field.toString() + "' (list size now: 1)");
+      Log.d("AbstractTag", "addField: NEW key='" + field.getId() + "' value='" + field + "' (list size now: 1)");
     } else {
       // We append to existing list
       list.add(field);
-      Log.d("AbstractTag", "addField: APPEND to key='" + field.getId() + "' value='" + field.toString() + "' (list size now: " + list.size() + ")");
+      Log.d("AbstractTag", "addField: APPEND to key='" + field.getId() + "' value='" + field + "' (list size now: " + list.size() + ")");
     }
   }
 
@@ -150,13 +150,13 @@ public abstract class AbstractTag implements Tag {
   @Override
   public String getFirst(String id) {
     List<TagField> l = getFields(id);
-    return (l.size() != 0) ? l.get(0).toString() : "";
+    return (!l.isEmpty()) ? l.get(0).toString() : "";
   }
 
   @Override
   public TagField getFirstField(String id) {
     List<TagField> l = getFields(id);
-    return (l.size() != 0) ? l.get(0) : null;
+    return (!l.isEmpty()) ? l.get(0) : null;
   }
 
   public List<TagField> getAll() {
@@ -247,7 +247,7 @@ public abstract class AbstractTag implements Tag {
    */
   @Override
   public boolean hasField(String id) {
-    return getFields(id).size() != 0;
+    return !getFields(id).isEmpty();
   }
 
   @Override
@@ -271,7 +271,7 @@ public abstract class AbstractTag implements Tag {
    */
   @Override
   public boolean isEmpty() {
-    return fields.size() == 0;
+    return fields.isEmpty();
   }
 
   /**
@@ -367,7 +367,7 @@ public abstract class AbstractTag implements Tag {
       out.append("\t");
       out.append(field.getId());
       out.append(":");
-      out.append(field.toString());
+      out.append(field);
       out.append("\n");
     }
     return out.toString().substring(0, out.length() - 1);
@@ -407,7 +407,7 @@ public abstract class AbstractTag implements Tag {
 
   public Artwork getFirstArtwork() {
     List<Artwork> artwork = getArtworkList();
-    if (artwork.size() > 0) {
+    if (!artwork.isEmpty()) {
       return artwork.get(0);
     }
     return null;

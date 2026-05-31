@@ -33,8 +33,8 @@ public class Mp4MdhdBox extends AbstractMp4Box {
 
   private static final int LONG_FORMAT = 1;
 
-  private int samplingRate;
-  private long timeLength;
+  private final int samplingRate;
+  private final long timeLength;
 
   /**
    * @param header     header info

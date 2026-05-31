@@ -47,11 +47,11 @@ public class TagOptionSingleton {
   /**
    *
    */
-  private static HashMap<String, TagOptionSingleton> tagOptionTable = new HashMap<String, TagOptionSingleton>();
+  private static final HashMap<String, TagOptionSingleton> tagOptionTable = new HashMap<String, TagOptionSingleton>();
   /**
    *
    */
-  private static String DEFAULT = "default";
+  private static final String DEFAULT = "default";
   /**
    *
    */
@@ -862,7 +862,7 @@ public class TagOptionSingleton {
       throw new TagException("Invalid class type. Must be AbstractId3v2FrameBody " + id3v2FrameBodyClass);
     }
 
-    if ((keyword != null) && (keyword.length() > 0)) {
+    if ((keyword != null) && (!keyword.isEmpty())) {
       LinkedList<String> keywordList;
 
       if (!keywordMap.containsKey(id3v2FrameBodyClass)) {

@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 public class MetadataBlockDataPicture implements MetadataBlockData, TagField {
   public static final String IMAGE_IS_URL = "-->";
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
   private int pictureType;
   private String mimeType = "";
   private String description;
@@ -153,7 +153,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField {
     imageData = new byte[lengthOfPictureInBytes];
     rawdata.get(imageData);
 
-    logger.config("Read image:" + this.toString());
+    logger.config("Read image:" + this);
   }
 
   private String getString(ByteBuffer rawdata, int length, String charset) throws IOException {

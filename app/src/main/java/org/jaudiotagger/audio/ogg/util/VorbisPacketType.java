@@ -11,7 +11,7 @@ public enum VorbisPacketType {
   COMMENT_HEADER(3),
   SETUP_HEADER(5);
 
-  int type;
+  final int type;
 
   VorbisPacketType(int type) {
     this.type = type;

@@ -8,8 +8,8 @@ import java.util.EnumSet;
  * Created by Paul on 09/11/2016.
  */
 public class ID3NumberTotalFields {
-  private static EnumSet<FieldKey> numberField = EnumSet.noneOf(FieldKey.class);
-  private static EnumSet<FieldKey> totalField = EnumSet.noneOf(FieldKey.class);
+  private static final EnumSet<FieldKey> numberField = EnumSet.noneOf(FieldKey.class);
+  private static final EnumSet<FieldKey> totalField = EnumSet.noneOf(FieldKey.class);
 
   static {
     numberField.add(FieldKey.TRACK);

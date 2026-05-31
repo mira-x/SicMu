@@ -51,7 +51,7 @@ import java.util.logging.Logger;
  */
 public class AiffTagWriter {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
   /**
    * Read existing metadata

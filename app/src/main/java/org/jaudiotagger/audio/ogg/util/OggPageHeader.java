@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  */
 public class OggPageHeader {
 
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
+    public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
     //Capture pattern at start of header
     public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g', 'S'};
@@ -88,10 +88,10 @@ public class OggPageHeader {
     public static final int FIELD_PAGE_CHECKSUM_LENGTH = 4;
     public static final int FIELD_PAGE_SEGMENTS_LENGTH = 1;
 
-    private byte[] rawHeaderData;
+    private final byte[] rawHeaderData;
 
-    private byte streamStructureRevision;
-    private byte headerTypeFlag;
+    private final byte streamStructureRevision;
+    private final byte headerTypeFlag;
     private long absoluteGranulePosition;
 
     private int streamSerialNumber;
@@ -102,13 +102,13 @@ public class OggPageHeader {
 
     private transient boolean isValid;
     private transient boolean lastPacketIncomplete;
-    private transient boolean firstPage;
-    private transient boolean continuedPage;
-    private transient boolean lastPage;
+    private final transient boolean firstPage;
+    private final transient boolean continuedPage;
+    private final transient boolean lastPage;
 
     private transient int pageLength = 0;
     private transient long startByte = 0;
-    private transient List<PacketStartAndLength> packetList = new ArrayList<>();
+    private final transient List<PacketStartAndLength> packetList = new ArrayList<>();
 
     public static OggPageHeader createCommentHeader(int pageSize, boolean continued, int serial, int sequence) {
         int fullPacketSegments = pageSize / MAXIMUM_NO_OF_SEGMENT_SIZE;
@@ -274,7 +274,7 @@ public class OggPageHeader {
         }
 
         if (logger.isLoggable(Level.CONFIG)) {
-            logger.config("Constructed OggPage: " + this.toString());
+            logger.config("Constructed OggPage: " + this);
         }
     }
 
@@ -452,7 +452,7 @@ public class OggPageHeader {
         START_OF_BITSTREAM((byte) 0x2),
         END_OF_BITSTREAM((byte) 0x4);
 
-        byte fileValue;
+        final byte fileValue;
 
         HeaderTypeFlag(byte fileValue) {
             this.fileValue = fileValue;

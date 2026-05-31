@@ -71,10 +71,6 @@
     <string name="popup_song_mime">Type MIME : %s</string>
     <string name="popup_song_path">Chemin : %s</string>
 
-    <string name="explain_playback_speed">Glissez vers le haut/bas ou gauche/droite pour augmenter/diminuer la vitesse de lecture.</string>
-
-    <string name="focus_error">Impossible d\'accéder à l\'audio ! Veuillez redémarrer l\'application.</string>
-
     <string name="settings_title">Paramètres</string>
 
     <string name="settings_theme_title">Thème</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Scan des fichiers en cours…</string>
     <string name="settings_rescan_storage">Scan du stockage %s</string>
     <string name="settings_rescan_finished">Scan terminé. Les nouveaux fichiers peuvent mettre un moment à apparaître (un redémarrage de SicMu Player peut être nécessaire).</string>
-    <string name="settings_rescan_purge">Le scan a trouvé des entrées (%s) qui n\'existent plus. Les entrées ont été supprimées de la liste.</string>
-
-    <string name="settings_media_button_start_app_title">Démarrage auto par boutons média</string>
-    <string name="settings_media_button_start_app">Les boutons média démarrent l\'application si elle n\'est pas lancée.</string>
 
     <string name="settings_autoscroll">Chanson en cours</string>
     <string name="settings_autoscroll_summary">Défiler vers la chanson quand elle est jouée</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Touchez l\'icône SicMu pour voir les infos de la chanson en cours (pochette, …)</string>
     <string name="help_seek_menu">Menu de navigation</string>
     <string name="help_seek_menu_summary">Touchez en haut à droite de la barre de menu pour ouvrir/fermer le menu de navigation. Appui long sur \"Suivant\"/\"Précédent\" avance/recule en continu.</string>
-    <string name="help_donate">Faire un don</string>
     <string name="help_context_menu">Menu contextuel</string>
     <string name="help_context_menu_summary">Appui long sur une chanson pour afficher un menu avec des options comme noter ou supprimer</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Arrêter à la fin du dossier</string>
     <string name="action_stop_at_end_of_track">Arrêter après la chanson</string>
 
-    <string name="detail_metadata_hint_label">Touchez la pochette pour voir tous les métadonnées</string>
     <string name="action_youtube_search">Rechercher sur YouTube</string>
     <string name="action_youtube_open">Ouvrir la vidéo YouTube</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">Noter 4 étoiles</string>
     <string name="a11y_rating_5">Noter 5 étoiles</string>
     <string name="a11y_now_playing">En cours de lecture</string>
-    <string name="a11y_song_rating">Note : %d étoiles</string>
     <string name="a11y_sort_button">Changer le mode d\'affichage</string>
     <string name="a11y_stereo_button">Alterner stéréo ou mono</string>
     <string name="a11y_repeat_button">Changer le mode de répétition</string>

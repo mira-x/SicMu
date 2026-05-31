@@ -31,7 +31,7 @@ import java.util.HashMap;
  * Abstract class that provides structure to use for displaying a files metadata content
  */
 public abstract class AbstractTagDisplayFormatter {
-  private static HashMap<String, String> hexBinaryMap = new HashMap<String, String>();
+  private static final HashMap<String, String> hexBinaryMap = new HashMap<String, String>();
 
   static {
     hexBinaryMap.put("0", "0000");

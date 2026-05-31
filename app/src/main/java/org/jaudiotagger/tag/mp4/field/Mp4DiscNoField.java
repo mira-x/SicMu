@@ -35,7 +35,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField {
     numbers = new ArrayList<Short>();
     numbers.add(new Short("0"));
 
-    String values[] = discValue.split("/");
+    String[] values = discValue.split("/");
     switch (values.length) {
       case 1:
 

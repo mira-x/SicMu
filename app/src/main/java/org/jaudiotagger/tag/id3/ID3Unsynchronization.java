@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class ID3Unsynchronization {
   //Logger
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
 
 
   /**
@@ -100,42 +100,8 @@ public class ID3Unsynchronization {
    * @param source a ByteBuffer to be unsynchronized
    * @return a synchronized representation of the source
    */
-    /*
-    public static ByteBuffer synchronize(ByteBuffer source)
-    {
-        long start = System.nanoTime();
 
-        int bufferSize = source.limit();
-        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream(bufferSize);
-        int position = 0;
-        while (position < bufferSize)
-        {
-            int byteValue = source.get();
-            position ++;
-            oBAOS.write(byteValue);
-            if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
-            {
-                // we are skipping if $00 byte but check not an end of stream
-                if (position < bufferSize)
-                {
-                    int unsyncByteValue = source.get();
-                    position++;
-                    //If its the null byte we just ignore it
-                    if (unsyncByteValue != 0)
-                    {
-                        oBAOS.write(unsyncByteValue);
-                    }
-                }
-            }
-        }
-        long time = System.nanoTime() - start;
-        ByteBuffer bb = ByteBuffer.wrap(oBAOS.toByteArray());
-        System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), bb.limit());
-        return bb;
-    }
-    */
-
-  /**
+    /**
    * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
    *
    * Any patterns of the form $FF $00 should be replaced by $FF
@@ -143,54 +109,8 @@ public class ID3Unsynchronization {
    * @param source a ByteBuffer to be unsynchronized
    * @return a synchronized representation of the source
    */
-    /*
-    public static ByteBuffer synchronize(ByteBuffer source)
-    {
-        long start = System.nanoTime();
 
-        int bufferSize = source.limit();
-        ByteBuffer output = ByteBuffer.allocate(bufferSize);
-        int position = 0;
-        int offset = 0;
-        int length = 0;
-        while (position < bufferSize)
-        {
-            int byteValue = source.get();
-            position++;
-            length++;
-            if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
-            {
-                // we are skipping if $00 byte but check not an end of stream
-                if (position < bufferSize)
-                {
-                    int unsyncByteValue = source.get();
-                    position++;
-                    //If this is null byte, then write upto this point
-                    if (unsyncByteValue == 0)
-                    {
-                        output.put(source.array(), source.arrayOffset() + offset, length);
-                        offset = position;
-                        length = 0;
-                    }
-                    else
-                    {
-                        length++;
-                    }
-                }
-            }
-        }
-        if (length > 0)
-        {
-            output.put(source.array(), source.arrayOffset() + offset, length);
-        }
-        output.flip();
-        long time = System.nanoTime() - start;
-        System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), output.limit());
-        return output;
-    }
-    */
-
-  /**
+    /**
    * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
    * <p>
    * Any patterns of the form $FF $00 should be replaced by $FF
@@ -213,10 +133,7 @@ public class ID3Unsynchronization {
       copy = ((byteValue & MPEGFrameHeader.SYNC_BYTE1) != MPEGFrameHeader.SYNC_BYTE1);
     }
 
-    ByteBuffer bb2 = ByteBuffer.wrap(bytes, 0, to);
-    //long time = System.nanoTime() - start;
-    //System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), bb2.limit());
-    return bb2;
+      return ByteBuffer.wrap(bytes, 0, to);
   }
 
 }

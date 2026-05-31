@@ -26,7 +26,7 @@ package org.jaudiotagger.logging;
 public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter {
   private static PlainTextTagDisplayFormatter formatter;
 
-  StringBuffer sb = new StringBuffer();
+  final StringBuffer sb = new StringBuffer();
   StringBuffer indent = new StringBuffer();
 
   public PlainTextTagDisplayFormatter() {

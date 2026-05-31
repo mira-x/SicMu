@@ -72,7 +72,7 @@ import java.util.Vector;
  * @version 1.25 03/23/10
  * @see MutableTreeNode
  */
-public class DefaultMutableTreeNode extends Object implements Cloneable,
+public class DefaultMutableTreeNode implements Cloneable,
   MutableTreeNode, Serializable {
 
   /**
@@ -1292,7 +1292,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
   }
 
   static final class PreorderEnumeration implements Enumeration<TreeNode> {
-    protected Stack stack;
+    protected final Stack stack;
 
     public PreorderEnumeration(TreeNode rootNode) {
       super();
@@ -1326,7 +1326,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 
   static final class PostorderEnumeration implements Enumeration<TreeNode> {
     protected TreeNode root;
-    protected Enumeration<TreeNode> children;
+    protected final Enumeration<TreeNode> children;
     protected Enumeration<TreeNode> subtree;
 
     public PostorderEnumeration(TreeNode rootNode) {
@@ -1361,7 +1361,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 
 
   static final class BreadthFirstEnumeration implements Enumeration<TreeNode> {
-    protected Queue queue;
+    protected final Queue queue;
 
     public BreadthFirstEnumeration(TreeNode rootNode) {
       super();
@@ -1434,7 +1434,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
       }
 
       final class QNode {
-        public Object object;
+        public final Object object;
         public QNode next;  // null if end
 
         public QNode(Object object, QNode next) {
@@ -1476,7 +1476,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
     }
 
     public boolean hasMoreElements() {
-      return stack.size() > 0;
+      return !stack.isEmpty();
     }
 
     public TreeNode nextElement() {

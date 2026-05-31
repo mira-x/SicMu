@@ -31,7 +31,7 @@ public enum Mp4FieldType {
 
 
   private final static HashMap<Integer, Mp4FieldType> fileClassIdFiedTypeMap;
-  private static EnumSet<Mp4FieldType> coverArtTypes;
+  private static final EnumSet<Mp4FieldType> coverArtTypes;
 
   static {
     fileClassIdFiedTypeMap = new HashMap<Integer, Mp4FieldType>(Mp4FieldType.values().length);
@@ -44,7 +44,7 @@ public enum Mp4FieldType {
     coverArtTypes = EnumSet.of(COVERART_GIF, COVERART_JPEG, COVERART_PNG, COVERART_BMP);
   }
 
-  private int fileClassId;
+  private final int fileClassId;
 
   Mp4FieldType(int fileClassId) {
     this.fileClassId = fileClassId;

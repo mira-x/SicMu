@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -43,7 +44,7 @@ public class Utils {
   /**
    * Stores the default line separator of the current underlying system.
    */
-  public final static String LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
+  public final static String LINE_SEPARATOR = System.lineSeparator(); //$NON-NLS-1$
   /**
    *
    */
@@ -318,7 +319,7 @@ public class Utils {
           strBytes = copy;
         }
       }
-      return new String(strBytes, "UTF-16LE");
+      return new String(strBytes, StandardCharsets.UTF_16LE);
     }
     throw new IllegalStateException("Couldn't read the necessary amount of bytes.");
   }
@@ -420,7 +421,7 @@ public class Utils {
           buf = copy;
         }
       }
-      return new String(buf, AsfHeader.ASF_CHARSET.name());
+      return new String(buf, AsfHeader.ASF_CHARSET);
     }
     throw new IllegalStateException("Invalid Data for current interpretation"); //$NON-NLS-1$
   }

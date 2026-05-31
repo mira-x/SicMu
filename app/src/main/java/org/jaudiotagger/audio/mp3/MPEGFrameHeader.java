@@ -444,9 +444,8 @@ public class MPEGFrameHeader {
     int position = bb.position();
     bb.get(header, 0, HEADER_SIZE);
     bb.position(position);
-    MPEGFrameHeader frameHeader = new MPEGFrameHeader(header);
 
-    return frameHeader;
+      return new MPEGFrameHeader(header);
   }
 
   /**
@@ -740,8 +739,7 @@ public class MPEGFrameHeader {
    * @return
    */
   public int getNoOfSamples() {
-    Integer noOfSamples = samplesPerFrameMap.get(version).get(layer);
-    return noOfSamples;
+      return samplesPerFrameMap.get(version).get(layer);
   }
 
   public boolean isPadding() {

@@ -71,10 +71,6 @@
     <string name="popup_song_mime">MIME тип: %s</string>
     <string name="popup_song_path">Путања: %s</string>
 
-    <string name="explain_playback_speed">Превуците горе/доле или лево/десно да бисте повећали/смањили брзину репродукције.</string>
-
-    <string name="focus_error">Није могуће приступити звуку! Молимо поново покрените апликацију.</string>
-
     <string name="settings_title">Подешавања</string>
 
     <string name="settings_theme_title">Тема</string>
@@ -118,10 +114,6 @@
     <string name="settings_rescan_triggered">Скенирање мултимедијалних датотека…</string>
     <string name="settings_rescan_storage">Скенирање меморије %s</string>
     <string name="settings_rescan_finished">Скенирање завршено. Може потрајати док нове датотеке постану видљиве (можда је потребно поново покренути SicMu Player).</string>
-    <string name="settings_rescan_purge">Скенер је пронашао уносе (%s) који више не постоје. Уноси су уклоњени са списка.</string>
-
-    <string name="settings_media_button_start_app_title">Аутоматско покретање медија тастерима</string>
-    <string name="settings_media_button_start_app">Медија тастери покрећу апликацију ако није покренута.</string>
 
     <string name="settings_autoscroll">Песма која свира</string>
     <string name="settings_autoscroll_summary">Помери на песму када почне да свира</string>
@@ -182,7 +174,6 @@
     <string name="help_details_menu_summary">Додирните икону SicMu да видите информације о песми која свира (омот, …)</string>
     <string name="help_seek_menu">Мени за навигацију</string>
     <string name="help_seek_menu_summary">Додирните горе десно у траци менија да отворите/затворите мени за навигацију. Дуги додир на \"Следећа\"/\"Претходна\" непрекидно премотава напред/назад.</string>
-    <string name="help_donate">Донирај</string>
     <string name="help_context_menu">Контекстни мени</string>
     <string name="help_context_menu_summary">Дуги додир на песму приказује мени са опцијама као што су оцењивање или брисање</string>
 
@@ -229,7 +220,6 @@
     <string name="action_repeat_not">Заустави на крају фасцикле</string>
     <string name="action_stop_at_end_of_track">Заустави после песме</string>
 
-    <string name="detail_metadata_hint_label">Додирните омот албума да видите све метаподатке</string>
     <string name="action_youtube_search">Претражи на YouTube</string>
     <string name="action_youtube_open">Отвори YouTube видео</string>
 
@@ -253,7 +243,6 @@
     <string name="a11y_rating_4">Оцени са 4 звездице</string>
     <string name="a11y_rating_5">Оцени са 5 звездица</string>
     <string name="a11y_now_playing">Тренутно свира</string>
-    <string name="a11y_song_rating">Оцена: %d звездица</string>
     <string name="a11y_sort_button">Промени режим приказа</string>
     <string name="a11y_stereo_button">Пребаци између стерео и моно</string>
     <string name="a11y_repeat_button">Промени режим понављања</string>

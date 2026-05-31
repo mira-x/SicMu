@@ -32,9 +32,9 @@ import java.nio.ByteBuffer;
  * 0 - 3   uint   totalNoSamples (Per channel ?)
  */
 public class WavFactChunk extends Chunk {
-  private boolean isValid = false;
+  private final boolean isValid = false;
 
-  private GenericAudioHeader info;
+  private final GenericAudioHeader info;
 
   public WavFactChunk(ByteBuffer chunkData, ChunkHeader hdr, GenericAudioHeader info) throws IOException {
     super(chunkData, hdr);

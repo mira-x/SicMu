@@ -657,7 +657,7 @@ public final class AsfTag extends AbstractTag {
    */
   public boolean hasField(FieldKey genericKey) {
     AsfFieldKey mp4FieldKey = tagFieldToAsfField.get(genericKey);
-    return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    return !getFields(mp4FieldKey.getFieldName()).isEmpty();
   }
 
   /**
@@ -665,7 +665,7 @@ public final class AsfTag extends AbstractTag {
    * @return
    */
   public boolean hasField(AsfFieldKey asfFieldKey) {
-    return getFields(asfFieldKey.getFieldName()).size() != 0;
+    return !getFields(asfFieldKey.getFieldName()).isEmpty();
   }
 
   public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {

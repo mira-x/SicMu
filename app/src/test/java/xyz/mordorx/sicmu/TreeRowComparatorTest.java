@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 
 public class TreeRowComparatorTest {
@@ -35,7 +34,7 @@ public class TreeRowComparatorTest {
                 "", null);
     }
 
-    String[] filenameSongsSorted = {
+    final String[] filenameSongsSorted = {
             "01 filename only.mp3",
             "02 filename+title.mp3",
             "03 filename+tracknr.mp3",
@@ -65,7 +64,7 @@ public class TreeRowComparatorTest {
         @SuppressWarnings("unchecked")
         ArrayList<Row> rowsSorted = (ArrayList<Row>) rows.clone();
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
-        Collections.sort(rowsSorted, treeRowComparator);
+        rowsSorted.sort(treeRowComparator);
         assertEquals(rows.get(0), rowsSorted.get(1));
         assertEquals(rows.get(1), rowsSorted.get(0));
     }
@@ -76,7 +75,7 @@ public class TreeRowComparatorTest {
         Arrays.stream(filenameSongsSorted).forEach(str ->
                 rows.add(createSong("title2", 0, str)));
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
-        Collections.sort(rows, treeRowComparator);
+        rows.sort(treeRowComparator);
 
         checkSortedPath(filenameSongsSorted, rows);
     }
@@ -87,7 +86,7 @@ public class TreeRowComparatorTest {
         Arrays.stream(new Integer[]{8, 4, 2, 3, 1, 7, 0, 6, 5}).forEach(i ->
                 rows.add(createSong("title2", 0, filenameSongsSorted[i])));
         TreeRowComparator treeRowComparator = new TreeRowComparator(true);
-        Collections.sort(rows, treeRowComparator);
+        rows.sort(treeRowComparator);
         checkSortedPath(filenameSongsSorted, rows);
     }
 
@@ -97,7 +96,7 @@ public class TreeRowComparatorTest {
         Arrays.stream(new Integer[]{4, 8, 2, 3, 7, 1, 0, 6, 5}).forEach(i ->
                 rows.add(createSong(filenameSongsSorted[i], i, filenameSongsSorted[i])));
         TreeRowComparator treeRowComparator = new TreeRowComparator(false);
-        Collections.sort(rows, treeRowComparator);
+        rows.sort(treeRowComparator);
         checkSortedTrack(rows);
     }
 
@@ -110,7 +109,7 @@ public class TreeRowComparatorTest {
         Arrays.stream(new Integer[]{4, 8, 2, 3, 7, 1, 0, 6, 5}).forEach(i ->
                 rows.add(createSong(filenameSongsSorted[i], i, filenameSongsSorted[i])));
         TreeRowComparator treeRowComparator = new TreeRowComparator(false);
-        Collections.sort(rows, treeRowComparator);
+        rows.sort(treeRowComparator);
         checkSortedTrack(rows);
     }
 }

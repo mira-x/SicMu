@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class FlacInfoReader {
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
 
   public FlacAudioHeader read(File file) throws CannotReadException, IOException {
@@ -56,7 +56,7 @@ public class FlacInfoReader {
       //the bitrate
       while (isLastBlock == false) {
         MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-        logger.info(file.getPath() + " " + mbh.toString());
+        logger.info(file.getPath() + " " + mbh);
         if (mbh.getBlockType() == BlockType.STREAMINFO) {
           mbdsi = new MetadataBlockDataStreamInfo(mbh, fc);
           if (!mbdsi.isValid()) {

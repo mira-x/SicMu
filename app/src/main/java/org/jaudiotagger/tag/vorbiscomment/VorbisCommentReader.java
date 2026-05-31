@@ -23,7 +23,6 @@ import android.util.Log;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
@@ -63,7 +62,7 @@ public class VorbisCommentReader {
    */
   private static final int JAUDIOTAGGER_MAX_COMMENT_LENGTH = 10000000;
   // Logger Object
-  public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
+  public static final Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
 
   public VorbisCommentReader() {
 

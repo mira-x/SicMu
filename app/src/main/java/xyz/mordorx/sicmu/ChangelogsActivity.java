@@ -45,14 +45,10 @@ public class ChangelogsActivity extends AppCompatActivity {
 
         ImageView appButton = findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);
-        findViewById(R.id.actions_bar).setOnClickListener(view -> {
-            finish();
-        });
+        findViewById(R.id.actions_bar).setOnClickListener(view -> finish());
 
         Button closeButton = findViewById(R.id.close_button);
-        closeButton.setOnClickListener(view -> {
-            finish();
-        });
+        closeButton.setOnClickListener(view -> finish());
 
         TextView changelogsTextview = findViewById(R.id.changelogs_text);
         changelogsTextview.setMovementMethod(new ScrollingMovementMethod());
@@ -89,7 +85,7 @@ public class ChangelogsActivity extends AppCompatActivity {
             }
         }
         catch (IOException ioe) {
-            Log.w("Changelogs", "error listing log: " + ioe.toString());
+            Log.w("Changelogs", "error listing log: " + ioe);
         }
         return logText.toString();
     }

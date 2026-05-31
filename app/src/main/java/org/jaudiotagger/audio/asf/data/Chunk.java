@@ -147,10 +147,9 @@ public class Chunk {
    * @return Information of current Chunk Object.
    */
   public String prettyPrint(final String prefix) {
-      String result = prefix + "-> GUID: " + GUID.getGuidDescription(this.guid) + Utils.LINE_SEPARATOR +
+      return prefix + "-> GUID: " + GUID.getGuidDescription(this.guid) + Utils.LINE_SEPARATOR +
               prefix + "  | : Starts at position: " + getPosition() + Utils.LINE_SEPARATOR +
               prefix + "  | : Last byte at: " + (getChunkEnd() - 1) + Utils.LINE_SEPARATOR;
-    return result;
   }
 
   /**
