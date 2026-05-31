@@ -249,7 +249,7 @@
     <string name="a11y_goto_button">Zum aktuellen Lied springen</string>
     <string name="a11y_more_options_button">Weitere Optionen anzeigen</string>
     
-    <string name="settings_thanks_material_icons_summary">Von Google, veröffentlich unter der Apache 2.0 Lizenz</string>
+    <string name="settings_thanks_material_icons_summary">Von Google, veröffentlicht unter der Apache 2.0 Lizenz</string>
     <string name="settings_thanks_freedroidwarn_summary">Von woheller69, veröffentlicht unter der Apache 2.0 Lizenz</string>
     <string name="settings_thanks_jaudiotagger_summary">Mischmasch aus dem Original von JThink Ltd und den Forks von Kaned1as und Shabinder Singh, veröffentlicht unter der LGPL 2.1</string>
     <string name="settings_thanks_zoomage_summary">Von Jeffrey Sibbold, veröffentlicht unter der Apache 2.0 Lizenz</string>
