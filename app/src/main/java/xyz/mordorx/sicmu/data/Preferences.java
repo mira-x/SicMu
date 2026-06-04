@@ -50,7 +50,7 @@ public class Preferences {
     }
 
     public void setChooseTextSize(boolean big) {
-        write.putBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(), big).commit();
+        write.putBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(), big).apply();
     }
     public boolean getChoosedTextSize() {
         return read.getBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name(),
@@ -77,7 +77,7 @@ public class Preferences {
         return read.getLong(PrefKeys.SONG_ID.name(), -1);
     }
     public void setSongID(long songID) {
-        write.putLong(PrefKeys.SONG_ID.name(), songID).commit();
+        write.putLong(PrefKeys.SONG_ID.name(), songID).apply();
     }
 
     public boolean getSaveSongPos() {
@@ -88,27 +88,27 @@ public class Preferences {
         return read.getLong(PrefKeys.SONG_POS.name(), -1);
     }
     public void setSongPos(long songPos) {
-        write.putLong(PrefKeys.SONG_POS.name(), songPos).commit();
+        write.putLong(PrefKeys.SONG_POS.name(), songPos).apply();
     }
     public long getSongPosId() {
         return read.getLong(PrefKeys.SONG_POS_ID.name(), -1);
     }
     public void setSongPosId(long songPos) {
-        write.putLong(PrefKeys.SONG_POS_ID.name(), songPos).commit();
+        write.putLong(PrefKeys.SONG_POS_ID.name(), songPos).apply();
     }
 
     public Filter getFilter() {
         return Filter.valueOf(read.getString(PrefKeys.FILTER.name(), Filter.TREE.name()));
     }
     public void setFilter(Filter filter) {
-        write.putString(PrefKeys.FILTER.name(), filter.name()).commit();
+        write.putString(PrefKeys.FILTER.name(), filter.name()).apply();
     }
 
     public RepeatMode getRepeatMode() {
         return RepeatMode.valueOf(read.getString(PrefKeys.REPEAT_MODE.name(), RepeatMode.REPEAT_ALL.name()));
     }
     public void setRepeatMode(RepeatMode repeatMode) {
-        write.putString(PrefKeys.REPEAT_MODE.name(), repeatMode.name()).commit();
+        write.putString(PrefKeys.REPEAT_MODE.name(), repeatMode.name()).apply();
     }
 
     public String getRootFolders() {
@@ -134,7 +134,7 @@ public class Preferences {
     }
 
     public void setEnableShake(boolean shakeEnabled) {
-        write.putBoolean(PrefKeys.ENABLE_SHAKE.name(), shakeEnabled).commit();
+        write.putBoolean(PrefKeys.ENABLE_SHAKE.name(), shakeEnabled).apply();
     }
 
     public boolean getEnableRating() {
@@ -142,7 +142,7 @@ public class Preferences {
     }
 
     public void setEnableRating(boolean ratingEnabled) {
-        write.putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).commit();
+        write.putBoolean(PrefKeys.ENABLE_RATING.name(), ratingEnabled).apply();
     }
 
     public int getMinRating() {
@@ -150,7 +150,7 @@ public class Preferences {
     }
 
     public void setMinRating(int rating) {
-        write.putInt(PrefKeys.MIN_RATING.name(), rating).commit();
+        write.putInt(PrefKeys.MIN_RATING.name(), rating).apply();
     }
 
     public float getShakeThreshold() {
@@ -171,7 +171,7 @@ public class Preferences {
     }
 
     public void setShuffle(ShuffleMode shuffle) {
-        write.putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).commit();
+        write.putInt(PrefKeys.SHUFFLE_V2.name(), shuffle.num).apply();
     }
 
     private static String PairFirst(Pair<String, String> p) {
@@ -206,7 +206,7 @@ public class Preferences {
     /// The stereo/mono setting is unique to each device.
     public void setStereo(boolean stereo) {
         var key = PrefKeys.STEREO.name() + getAudioHardwareId();
-        write.putBoolean(key, stereo).commit();
+        write.putBoolean(key, stereo).apply();
     }
 
     public boolean getScrobble() {
@@ -257,13 +257,13 @@ public class Preferences {
     }
 
     public int getLastSeenChangelogVersion() {
-        return read.getInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), BuildConfig.VERSION_CODE);
+        return read.getInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), 0);
     }
     public boolean isLastSeenChangelogVersionOutdated() {
         return getLastSeenChangelogVersion() < BuildConfig.VERSION_CODE;
     }
     public void setLastSeenChangelogVersionToCurrent() {
-        write.putInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), BuildConfig.VERSION_CODE);
+        write.putInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), BuildConfig.VERSION_CODE).apply();
     }
 
 }

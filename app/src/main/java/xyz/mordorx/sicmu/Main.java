@@ -400,9 +400,9 @@ public class Main extends AppCompatActivity {
             if(prefs.isLastSeenChangelogVersionOutdated()) {
                 runOnUiThread(() -> {
                     showChangelogs();
-                    prefs.setLastSeenChangelogVersionToCurrent();
                 });
             }
+            prefs.setLastSeenChangelogVersionToCurrent();
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);
