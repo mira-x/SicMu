@@ -34,7 +34,7 @@ public class SongORM {
     // set to true if DB's rating is synchronized to file's rating
     public boolean ratingSynchronized;
 
-    public SongORM(String path, int rating, boolean ratingSynchronized) {
+    public SongORM(@NonNull String path, int rating, boolean ratingSynchronized) {
         this.path = path;
         this.rating = rating;
         this.lastModifiedMs = (new File(path)).lastModified();

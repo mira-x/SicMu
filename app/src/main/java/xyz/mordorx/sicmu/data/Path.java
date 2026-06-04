@@ -40,7 +40,6 @@ import androidx.annotation.Nullable;
 import xyz.mordorx.sicmu.R;
 
 public class Path {
-    public final static char separatorChar = System.getProperty("file.separator", "/").charAt(0);
     public static String rootFolders = "";
 
     /**
@@ -64,7 +63,7 @@ public class Path {
                         rootFolder.equals(path.substring(0, rootFolder.length()))) {
                     int rootFolderSize = rootFolder.length();
                     // remove / remaining at the beginning of path
-                    if (path.length() > rootFolderSize && path.charAt(rootFolderSize) == separatorChar)
+                    if (path.length() > rootFolderSize && path.charAt(rootFolderSize) == File.separatorChar)
                         rootFolderSize++;
 
                     folder = path.substring(rootFolderSize);
@@ -76,7 +75,7 @@ public class Path {
         }
 
         // remove filename
-        int index = folder.lastIndexOf(separatorChar);
+        int index = folder.lastIndexOf(File.separatorChar);
         if (index == -1) // no folder: remove everything
             index = 0;
         folder = folder.substring(0, index);
@@ -96,7 +95,7 @@ public class Path {
         int beg = 0;
         boolean folderFound = false;
         for (int i = 0; i < path.length(); i++) {
-            if (path.charAt(i) == separatorChar) {
+            if (path.charAt(i) == File.separatorChar) {
                 if (folderFound) {
                     folders.add(path.substring(beg, i));
                     folderFound = false;
@@ -295,8 +294,7 @@ public class Path {
         }
     }
 
-    public static void scanMediaFolder(Context context, String path,
-                                       MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
+    public static void scanMediaFolder(Context context, String path, MediaScannerConnection.OnScanCompletedListener mediaScannerCallback) {
         if (path == null)
             return;
         File file = new File(path);

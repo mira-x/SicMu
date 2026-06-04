@@ -58,7 +58,7 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.audio.AudioSink;
 import androidx.media3.exoplayer.audio.DefaultAudioSink;
 
-import xyz.mordorx.sicmu.data.Database;
+import kotlin.NotImplementedError;
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver;
 import xyz.mordorx.sicmu.data.Preferences;
@@ -66,6 +66,7 @@ import xyz.mordorx.sicmu.R;
 import xyz.mordorx.sicmu.data.RowSong;
 import xyz.mordorx.sicmu.data.Rows;
 import xyz.mordorx.sicmu.data.Scrobble;
+import xyz.mordorx.sicmu.data.SongDatabase;
 
 @UnstableApi
 public class MusicService extends Service implements
@@ -129,7 +130,7 @@ public class MusicService extends Service implements
     /// current state of the MediaPlayer
     private PlayerState state;
 
-    private Database database;
+    private SongDatabase database;
 
     /// set to false if seekTo() has been called but the seek is still not done
     private boolean seekFinished;
@@ -306,10 +307,10 @@ public class MusicService extends Service implements
         audioManager = null;
 
         params = new Preferences(this);
-        database = new Database(getApplicationContext());
-        database.cleanupSongsDB();
-        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(),
-                database);
+        database = SongDatabase.init(getApplicationContext());
+        database.cleanUp();
+
+        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(), database.getSongDAO());
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "xyz.mordorx.sicmu:MusicService");
@@ -330,7 +331,7 @@ public class MusicService extends Service implements
         scrobble = new Scrobble(rows, params, getApplicationContext());
     }
 
-    public Database getDatabase() {
+    public SongDatabase getDatabase() {
         return database;
     }
 
@@ -661,7 +662,7 @@ public class MusicService extends Service implements
     // so failed rating should be resync when another song is playing
     // todo: use an Observer design pattern ?
     private void synchronizeFailedRatings() {
-        rows.synchronizeFailedRatings();
+        // TODO: IMPLEMENT!
     }
 
     public void onCompletion(ExoPlayer mp) {

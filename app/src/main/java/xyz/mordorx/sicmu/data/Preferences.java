@@ -18,6 +18,7 @@
 
 package xyz.mordorx.sicmu.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -180,6 +181,7 @@ public class Preferences {
     }
     /// This generates an ID for the current audio output devices hardware. It is used so that
     /// we can have distinct audio channel configurations for different devices.
+    @SuppressLint("WrongConstant")
     private int getAudioHardwareId() {
         var aman = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         var outs = aman.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS);

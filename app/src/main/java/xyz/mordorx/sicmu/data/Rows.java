@@ -68,7 +68,7 @@ public class Rows {
     /// Never assign this directly, instead use setCurrPos
     private int currPos;
 
-    private final Database database;
+    private final SongDAO db;
     private final AtomicBoolean ratingsMustBeSynchronized;
     private final AtomicBoolean ratingsSynchronizing;
     private volatile boolean terminated = false;
@@ -80,11 +80,10 @@ public class Rows {
 
     private boolean fileToOpenFound = false;
 
-    public Rows(Context context, ContentResolver resolver, Preferences params, Resources resources,
-                Database database) {
+    public Rows(Context context, ContentResolver resolver, Preferences params, Resources resources, SongDAO database) {
         this.context = context;
         this.params = params;
-        this.database = database;
+        this.db = database;
         musicResolver = resolver;
         currPos = -1;
 
@@ -861,12 +860,12 @@ public class Rows {
             if (terminated) return;
             if (row.getClass() == RowSong.class) {
                 RowSong rowSong = (RowSong) row;
-                SongORM songORM = database.getSongDAO().findByPath(rowSong.getPath());
+                SongORM songORM = db.findByPath(rowSong.getPath());
                 nbLoaded++;
                 if (songORM == null) {
                     Log.d("Rows", "New songORM for path=" + rowSong.getPath());
                     try {
-                        database.getSongDAO().insert(new SongORM(rowSong.getPath(), rowSong.loadRating(), true));
+                        db.insert(new SongORM(rowSong.getPath(), rowSong.loadRating(), true));
                     } catch (Exception e) {
                         Log.w("Rows", "Unable to add songORM for path=" + rowSong.getPath()
                                 + " e=" + e);
@@ -880,7 +879,7 @@ public class Rows {
                         songORM.rating = rowSong.loadRating();
                         songORM.lastModifiedMs = lastModified;
                         try {
-                            database.getSongDAO().update(songORM);
+                            db.update(songORM);
                         } catch (Exception e) {
                             Log.w("Rows", "Unable to update songORM for path=" + rowSong.getPath()
                                     + " e=" + e);
@@ -983,7 +982,7 @@ public class Rows {
                     prevAlbumGroup = albumGroup;
                 }
 
-                RowSong rowSong = new RowSong(database.getSongDAO(), rowsUnfolded.size(), 2, id, title, artist, album,
+                RowSong rowSong = new RowSong(db, rowsUnfolded.size(), 2, id, title, artist, album,
                         durationMs, track, path, albumId, year, mime, params);
                 rowSong.setParent(prevAlbumGroup);
 
@@ -1028,7 +1027,7 @@ public class Rows {
                 int year = musicCursor.getInt(yearCol);
                 String mime = musicCursor.getString(mimeCol);
 
-                RowSong rowSong = new RowSong(database.getSongDAO(), -1, 2, id, title, artist, album,
+                RowSong rowSong = new RowSong(db, -1, 2, id, title, artist, album,
                         durationMs, track, path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
@@ -1106,7 +1105,7 @@ public class Rows {
                 String mime = musicCursor.getString(mimeCol);
 
                 final int pos = -1, level = 2;
-                RowSong rowSong = new RowSong(database.getSongDAO(), pos, level, id, title, artist, album, durationMs,
+                RowSong rowSong = new RowSong(db, pos, level, id, title, artist, album, durationMs,
                         track, path, albumId, year, mime, params);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
@@ -1374,16 +1373,6 @@ public class Rows {
         if (rowSong != null) {
             rowSong.scheduleSetRating(rating, true);
             ratingsMustBeSynchronized.set(true);
-        }
-    }
-
-    public void synchronizeFailedRatings() {
-        if (ratingsMustBeSynchronized.getAndSet(false)) {
-            database.trySyncronizeRatingsAsync((succeed, msg) -> {
-                if (!succeed)
-                    ratingsMustBeSynchronized.set(true);
-                Log.d("Rows", msg);
-            });
         }
     }
 

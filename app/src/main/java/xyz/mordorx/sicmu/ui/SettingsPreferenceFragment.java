@@ -347,14 +347,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             setSleepTimerTitle();
         } else if (preference.getKey().equals(CHANGELOGS_KEY)) {
             showChangelogs();
-        } else if (preference.getKey().equals(RATINGS_NOT_WRITTEN_KEY)) {
-            musicSrv.getDatabase().getRatingsToSynchronizeAsync(songs -> {
-                if (songs.isEmpty())
-                    songs = getResources().getString(R.string.settings_ratings_are_in_sync);
-                final String msg = songs;
-                getActivity().runOnUiThread(() ->
-                        Toast.makeText(getActivity().getBaseContext(), msg, Toast.LENGTH_LONG).show());
-            });
         } else if (preference.getKey().equals(TEXT_SIZE_TOGGLE_KEY)) {
             var size = !params.getChoosedTextSize();
             params.setChooseTextSize(size);
