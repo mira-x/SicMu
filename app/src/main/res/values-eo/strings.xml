@@ -54,6 +54,7 @@
 
     <string name="songs_have_been_rated">%d kantoj taksitaj</string>
     <string name="current_rating_idx">Aktuala takso</string>
+    <string name="uninitialized_default_rating">Defaŭlta takso de neinitiatitaj kantoj</string>
 
     <string name="action_play">Ludi</string>
     <string name="action_pause">Paŭzigi</string>
@@ -196,6 +197,7 @@
 
     <string name="settings_thanks">Dankoj</string>
     <string name="settings_thanks_icons">Ikonoj</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (ikonoj trovitaj ĉe iconfinder.com), eldonitaj sub la permesilo CC BY 3.0</string>
     <string name="settings_thanks_doc">Lernilo</string>
     <string name="settings_thanks_doc_summary">Sue Smith (lernilo pri krei muzikludanton por Android)</string>
     <string name="settings_thanks_i15n">Traduko</string>
@@ -255,5 +257,11 @@
     <string name="a11y_next_button">Sekva kanto</string>
     <string name="a11y_goto_button">Iri al aktuala kanto</string>
     <string name="a11y_more_options_button">Montri pliajn opciojn</string>
+
+    <string name="settings_thanks_zoomage_summary">Farita de Jeffrey Sibbold, eldonita sub la permesilo Apache 2.0</string>
+    <string name="settings_thanks_freedroidwarn_summary">Farita de woheller69, eldonita sub la permesilo Apache 2.0</string>
+    <string name="settings_thanks_jaudiotagger_summary">Kompilita de la originalo de JThink Ltd kaj la branĉoj de Kaned1as kaj Shabinder Singh, eldonita sub la LGPL 2.1</string>
+    <string name="settings_thanks_material_icons_summary">Farita de Google, eldonita sub la permesilo Apache 2.0</string>
+    <string name="settings_media_sources">Aŭdvidaĵaj fontoj</string>
 
 </resources>

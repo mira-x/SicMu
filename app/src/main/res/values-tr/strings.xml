@@ -54,6 +54,7 @@
 
     <string name="songs_have_been_rated">%d şarkı puanlandı</string>
     <string name="current_rating_idx">Mevcut puan</string>
+    <string name="uninitialized_default_rating">Başlatılmamış şarkıların varsayılan derecelendirmesi</string>
 
     <string name="action_play">Çal</string>
     <string name="action_pause">Duraklat</string>
@@ -196,6 +197,7 @@
 
     <string name="settings_thanks">Teşekkürler</string>
     <string name="settings_thanks_icons">Simgeler</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (iconfinder.com\'da bulunan simgeler), CC BY 3.0 lisansı altında yayınlanmıştır</string>
     <string name="settings_thanks_doc">Öğretici</string>
     <string name="settings_thanks_doc_summary">Sue Smith (Android için müzik çalar oluşturma hakkında öğretici)</string>
     <string name="settings_thanks_i15n">Çeviri</string>
@@ -255,5 +257,11 @@
     <string name="a11y_next_button">Sonraki şarkı</string>
     <string name="a11y_goto_button">Mevcut şarkıya git</string>
     <string name="a11y_more_options_button">Daha fazla seçenek göster</string>
+
+    <string name="settings_thanks_zoomage_summary">Jeffrey Sibbold tarafından yapılmıştır, Apache 2.0 lisansı altında yayınlanmıştır</string>
+    <string name="settings_thanks_freedroidwarn_summary">woheller69 tarafından yapılmıştır, Apache 2.0 lisansı altında yayınlanmıştır</string>
+    <string name="settings_thanks_jaudiotagger_summary">JThink Ltd\'nin orijinalinden ve Kaned1as ile Shabinder Singh\'in çatallarından derlenmiştir, LGPL 2.1 altında yayınlanmıştır</string>
+    <string name="settings_thanks_material_icons_summary">Google tarafından yapılmıştır, Apache 2.0 lisansı altında yayınlanmıştır</string>
+    <string name="settings_media_sources">Medya kaynakları</string>
 
 </resources>

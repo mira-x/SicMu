@@ -54,6 +54,7 @@
 
     <string name="songs_have_been_rated">%d песама оцењено</string>
     <string name="current_rating_idx">Тренутна оцена</string>
+    <string name="uninitialized_default_rating">Подразумевана оцена неиницијализованих песама</string>
 
     <string name="action_play">Пусти</string>
     <string name="action_pause">Пауза</string>
@@ -196,6 +197,7 @@
 
     <string name="settings_thanks">Захвалнице</string>
     <string name="settings_thanks_icons">Иконе</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (иконице преузете са iconfinder.com), објављене под CC BY 3.0 лиценцом</string>
     <string name="settings_thanks_doc">Туторијал</string>
     <string name="settings_thanks_doc_summary">Sue Smith (туторијал о прављењу музичког плејера за Android)</string>
     <string name="settings_thanks_i15n">Превод</string>
@@ -255,5 +257,11 @@
     <string name="a11y_next_button">Следећа песма</string>
     <string name="a11y_goto_button">Иди на тренутну песму</string>
     <string name="a11y_more_options_button">Прикажи више опција</string>
+
+    <string name="settings_thanks_zoomage_summary">Аутор Jeffrey Sibbold, објављено под Apache 2.0 лиценцом</string>
+    <string name="settings_thanks_freedroidwarn_summary">Аутор woheller69, објављено под Apache 2.0 лиценцом</string>
+    <string name="settings_thanks_jaudiotagger_summary">Компајлирано из оригинала JThink Ltd и огранака Kaned1as и Shabinder Singh, објављено под LGPL 2.1</string>
+    <string name="settings_thanks_material_icons_summary">Аутор Google, објављено под Apache 2.0 лиценцом</string>
+    <string name="settings_media_sources">Извори медија</string>
 
 </resources>

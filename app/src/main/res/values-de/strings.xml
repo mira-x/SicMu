@@ -126,7 +126,7 @@
     <string name="changelogs_header">Was ist neu:</string>
     <string name="settings_thanks">Danksagungen</string>
     <string name="settings_thanks_icons">Icons</string>
-    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (Icons von iconfinder.com), Google Material Symbols</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis, WPZOOM (Icons von iconfinder.com)</string>
     <string name="settings_thanks_doc">Tutorial</string>
     <string name="settings_thanks_doc_summary">Sue Smith (Tutorial zum Erstellen eines Music Players auf Android)</string>
     <string name="settings_thanks_i15n">Übersetzung</string>
@@ -158,6 +158,7 @@
     <string name="search_unsuccessful">Nichts gefunden!</string>
     <string name="songs_have_been_rated">%d Lieder wurden bewertet</string>
     <string name="current_rating_idx">Aktuelle Bewertung</string>
+    <string name="uninitialized_default_rating">Standardbewertung für nicht initialisierte Titel</string>
     <string name="action_play">Abspielen</string>
     <string name="action_pause">Pausieren</string>
     <string name="action_next">Vor</string>
@@ -242,5 +243,6 @@
     <string name="settings_thanks_freedroidwarn_summary">Von woheller69, veröffentlicht unter der Apache 2.0 Lizenz</string>
     <string name="settings_thanks_jaudiotagger_summary">Mischmasch aus dem Original von JThink Ltd und den Forks von Kaned1as und Shabinder Singh, veröffentlicht unter der LGPL 2.1</string>
     <string name="settings_thanks_zoomage_summary">Von Jeffrey Sibbold, veröffentlicht unter der Apache 2.0 Lizenz</string>
+    <string name="settings_media_sources">Medienquellen</string>
 
 </resources>

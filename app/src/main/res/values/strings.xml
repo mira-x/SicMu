@@ -303,5 +303,6 @@
     <string name="settings_thanks_jaudiotagger_summary">Compiled from the original by JThink Ltd and the forks from Kaned1as and Shabinder Singh, released under the LGPL 2.1</string>
     <string name="settings_thanks_material_icons" translatable="false">Material Icons</string>
     <string name="settings_thanks_material_icons_summary">Made by Google, released under the Apache 2.0 license</string>
+    <string name="settings_media_sources">Media sources</string>
 
 </resources>

@@ -171,10 +171,20 @@
                 android:summary="@string/settings_thanks_freedroidwarn_summary">
             </Preference>
 
-
         </PreferenceCategory>
-
     </PreferenceScreen>
+
+    <PreferenceCategory android:title="@string/settings_media_sources">
+        <EditTextPreference
+            android:key="ROOT_FOLDERS"
+            android:title="@string/settings_root_folder"
+            />
+
+        <Preference
+            android:key="RESCAN"
+            android:title="@string/settings_rescan_title"
+            android:summary="@string/settings_rescan"/>
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_song_view">
 
@@ -247,16 +257,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_misc">
-        <EditTextPreference
-            android:key="ROOT_FOLDERS"
-            android:title="@string/settings_root_folder"
-            />
-
-        <Preference
-            android:key="RESCAN"
-            android:title="@string/settings_rescan_title"
-            android:summary="@string/settings_rescan"/>
-
         <CheckBoxPreference
             android:key="DISABLE_PITCH_COMPENSATION"
             android:title="@string/settings_disable_pitch_compensation_title"
@@ -359,4 +359,3 @@
     </PreferenceCategory>
 
 </PreferenceScreen>
-

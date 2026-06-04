@@ -54,6 +54,7 @@
 
     <string name="songs_have_been_rated">%d canciones valoradas</string>
     <string name="current_rating_idx">Valoración actual</string>
+    <string name="uninitialized_default_rating">Calificación predeterminada de canciones no inicializadas</string>
 
     <string name="action_play">Reproducir</string>
     <string name="action_pause">Pausar</string>
@@ -196,6 +197,7 @@
 
     <string name="settings_thanks">Agradecimientos</string>
     <string name="settings_thanks_icons">Iconos</string>
+    <string name="settings_thanks_icons_summary">Daniele De Santis &amp; WPZOOM (iconos encontrados en iconfinder.com), publicados bajo la licencia CC BY 3.0</string>
     <string name="settings_thanks_doc">Tutorial</string>
     <string name="settings_thanks_doc_summary">Sue Smith (tutorial sobre cómo crear un reproductor de música en Android)</string>
     <string name="settings_thanks_i15n">Traducción</string>
@@ -255,5 +257,11 @@
     <string name="a11y_next_button">Canción siguiente</string>
     <string name="a11y_goto_button">Ir a la canción actual</string>
     <string name="a11y_more_options_button">Mostrar más opciones</string>
+
+    <string name="settings_thanks_zoomage_summary">Hecho por Jeffrey Sibbold, publicado bajo la licencia Apache 2.0</string>
+    <string name="settings_thanks_freedroidwarn_summary">Hecho por woheller69, publicado bajo la licencia Apache 2.0</string>
+    <string name="settings_thanks_jaudiotagger_summary">Compilado del original por JThink Ltd y los forks de Kaned1as y Shabinder Singh, publicado bajo la LGPL 2.1</string>
+    <string name="settings_thanks_material_icons_summary">Hecho por Google, publicado bajo la licencia Apache 2.0</string>
+    <string name="settings_media_sources">Fuentes de medios</string>
 
 </resources>
