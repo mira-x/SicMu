@@ -25,6 +25,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
+import xyz.mordorx.sicmu.media.MusicService;
+
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     private static long mLastClickTime = 0;

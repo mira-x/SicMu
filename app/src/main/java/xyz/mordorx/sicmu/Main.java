@@ -89,6 +89,24 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
+import xyz.mordorx.sicmu.data.Database;
+import xyz.mordorx.sicmu.data.Path;
+import xyz.mordorx.sicmu.data.Preferences;
+import xyz.mordorx.sicmu.data.Row;
+import xyz.mordorx.sicmu.data.RowGroup;
+import xyz.mordorx.sicmu.data.RowSong;
+import xyz.mordorx.sicmu.data.Rows;
+import xyz.mordorx.sicmu.media.AlbumArtLoader;
+import xyz.mordorx.sicmu.media.Filter;
+import xyz.mordorx.sicmu.media.MusicService;
+import xyz.mordorx.sicmu.media.PlayerState;
+import xyz.mordorx.sicmu.media.RepeatMode;
+import xyz.mordorx.sicmu.ui.ChangelogsActivity;
+import xyz.mordorx.sicmu.ui.RepeatingImageButton;
+import xyz.mordorx.sicmu.ui.RowsAdapter;
+import xyz.mordorx.sicmu.ui.SettingsActivity;
+import xyz.mordorx.sicmu.ui.SettingsPreferenceFragment;
+
 @UnstableApi
 public class Main extends AppCompatActivity {
     private Rows rows;
@@ -119,7 +137,7 @@ public class Main extends AppCompatActivity {
     private boolean detailsToggledFollowAuto;
     private boolean hasCoverArt;
 
-    private Parameters params;
+    private Preferences params;
 
     private Vibrator vibrator;
 
@@ -148,7 +166,7 @@ public class Main extends AppCompatActivity {
 
         FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
 
-        params = new Parameters(this);
+        params = new Preferences(this);
 
         hideSystemBars();
 

@@ -25,6 +25,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import xyz.mordorx.sicmu.collections.TreeRowComparator;
+import xyz.mordorx.sicmu.data.Row;
+import xyz.mordorx.sicmu.data.RowSong;
+
 
 public class TreeRowComparatorTest {
 

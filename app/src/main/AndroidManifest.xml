@@ -80,7 +80,7 @@
         </activity>
 
         <service
-            android:name=".MusicService"
+            android:name=".media.MusicService"
             android:foregroundServiceType="mediaPlayback"
             android:exported="true"> <!-- should be set to false ? -->
             <intent-filter>
@@ -100,7 +100,7 @@
         </receiver>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="@string/settings_title"
             android:theme="@style/Theme.AppTheme"
             android:parentActivityName=".Main" >
@@ -110,7 +110,7 @@
         </activity>
 
         <activity
-            android:name=".ChangelogsActivity"
+            android:name=".ui.ChangelogsActivity"
             android:label="@string/changelogs_title"
             android:theme="@style/Theme.AppTheme"
             android:parentActivityName=".Main" >

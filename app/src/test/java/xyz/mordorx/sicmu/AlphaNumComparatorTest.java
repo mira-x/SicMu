@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import xyz.mordorx.sicmu.collections.AlphaNumComparator;
+
 
 public class AlphaNumComparatorTest {
     @Test
