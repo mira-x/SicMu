@@ -16,12 +16,13 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <string name="permission_needed">The app needs read storage permission in order to show songs
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">SicMu Neo</string>
+
+    <string name="permission_needed">
+        The app needs read storage permission in order to show songs
         and play them!\n\nWhen asked, please allow access to photos and multimedia content on your android device.
     </string>
-    <!-- and write storage permissions -->
-
     <string name="action_sort_folder">folder</string>
     <string name="action_sort_artist">artist</string>
     <string name="action_sort_tree">tree</string>
