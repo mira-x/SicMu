@@ -58,7 +58,6 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.audio.AudioSink;
 import androidx.media3.exoplayer.audio.DefaultAudioSink;
 
-import kotlin.NotImplementedError;
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver;
 import xyz.mordorx.sicmu.data.Preferences;
@@ -88,7 +87,7 @@ public class MusicService extends Service implements
     public static final String PREVIOUS_ACTION    = "xyz.mordorx.sicmu.musicservicecommand.previous";
     public static final String NEXT_ACTION        = "xyz.mordorx.sicmu.musicservicecommand.next";
 
-    private Preferences params;
+    private Preferences preferences;
     private ExoPlayer player;
     private PowerManager.WakeLock wakeLock;
     private MergeAudioProcessor mergeAudioProcessor;
@@ -130,7 +129,7 @@ public class MusicService extends Service implements
     /// current state of the MediaPlayer
     private PlayerState state;
 
-    private SongDatabase database;
+    private SongDatabase db;
 
     /// set to false if seekTo() has been called but the seek is still not done
     private boolean seekFinished;
@@ -306,17 +305,15 @@ public class MusicService extends Service implements
         remoteControlResponder = null;
         audioManager = null;
 
-        params = new Preferences(this);
-        database = SongDatabase.init(getApplicationContext());
-        database.cleanUp();
+        preferences = new Preferences(this);
+        db = SongDatabase.init(getApplicationContext());
+        // try sync if sth failed in the previous SicMu session
+        db.synchronizeRatingsAsync();
 
-        rows = new Rows(getApplicationContext(), getContentResolver(), params, getResources(), database.getSongDAO());
+        rows = new Rows(getApplicationContext(), getContentResolver(), preferences, getResources(), db.getSongDAO());
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "xyz.mordorx.sicmu:MusicService");
-
-        // try sync if sth failed in the previous SicMu session
-        synchronizeFailedRatings();
 
         restore();
 
@@ -326,13 +323,13 @@ public class MusicService extends Service implements
         foreground = false;
         mainIsVisible = false;
         mergeAudioProcessor = new MergeAudioProcessor();
-        mergeAudioProcessor.setStereo(params.getStereo());
+        mergeAudioProcessor.setStereo(preferences.getStereo());
 
-        scrobble = new Scrobble(rows, params, getApplicationContext());
+        scrobble = new Scrobble(rows, preferences, getApplicationContext());
     }
 
     public SongDatabase getDatabase() {
-        return database;
+        return db;
     }
 
     public class MusicBinder extends Binder {
@@ -359,9 +356,9 @@ public class MusicService extends Service implements
             sensorManager.unregisterListener(this);
         }
         releaseAudio();
-        database.close();
+        db.close();
 
-        if (!params.getMediaButtonStartAppShake())
+        if (!preferences.getMediaButtonStartAppShake())
             audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
     }
 
@@ -442,14 +439,14 @@ public class MusicService extends Service implements
     private void releaseAudio() {
         Log.d("MusicService", "releaseAudio");
 
-        if (params.getSaveSongPos() &&
+        if (preferences.getSaveSongPos() &&
                 player != null &&
                 state.getState() != PlayerState.Nope &&
                 state.getState() != PlayerState.Idle &&
                 state.getState() != PlayerState.Error)
         {
-            params.setSongPos(player.getCurrentPosition());
-            params.setSongPosId(player.getDuration());
+            preferences.setSongPos(player.getCurrentPosition());
+            preferences.setSongPosId(player.getDuration());
         }
 
         state.setState(PlayerState.Nope);
@@ -468,9 +465,6 @@ public class MusicService extends Service implements
         if (wakeLock.isHeld())
             wakeLock.release();
         }
-
-        // try sync when releasing audio
-        synchronizeFailedRatings();
 
         stopSensor();
 
@@ -631,7 +625,7 @@ public class MusicService extends Service implements
             var dur = getRows().getCurrSong().getDurationMs();
             var startTime = 0L;
 
-            if (params.getShuffle().startMidSong() && oldState != PlayerState.PlaybackCompleted) {
+            if (preferences.getShuffle().startMidSong() && oldState != PlayerState.PlaybackCompleted) {
                 // If a song is started for the first time, i.e. this is not the automatic follow up
                 // to a previously played song, and we are in radio FM mode, we want to start playback at a
                 // random point in time.
@@ -653,24 +647,11 @@ public class MusicService extends Service implements
         updateMediaSessionMetadata();
         if(foreground)
             startNotification();
-
-        // try sync at each new song
-        synchronizeFailedRatings();
     }
 
-    // failed ratings occurs usually when rating song that are currently playing
-    // so failed rating should be resync when another song is playing
-    // todo: use an Observer design pattern ?
-    private void synchronizeFailedRatings() {
-        // TODO: IMPLEMENT!
-    }
-
-    public void onCompletion(ExoPlayer mp) {
+    public void onCompletion(ExoPlayer ignored) {
         state.setState(PlayerState.PlaybackCompleted);
         setChanged();
-
-        // try sync on song completion
-        synchronizeFailedRatings();
 
         // loop only to same track if not asked to change track (i.e. loop only on completion)
         if (rows.getRepeatMode() == RepeatMode.REPEAT_ONE)
@@ -703,8 +684,8 @@ public class MusicService extends Service implements
 
         savedSongPos = mp.getCurrentPosition();
         savedSongPosId = 0;
-        params.setSongPos(savedSongPos);
-        params.setSongPosId(savedSongPosId);
+        preferences.setSongPos(savedSongPos);
+        preferences.setSongPosId(savedSongPosId);
 
 
         applyPlaybackSpeed(playbackSpeed);
@@ -728,7 +709,7 @@ public class MusicService extends Service implements
     private void applyPlaybackSpeed(float speed) {
         try {
             var playback = getPlayer().getPlaybackParameters().withSpeed(speed).withPitch(1f);
-            if (params.getDisablePitchCompensation()) {
+            if (preferences.getDisablePitchCompensation()) {
                 playback = playback.withPitch(speed);
             }
 
@@ -828,9 +809,9 @@ public class MusicService extends Service implements
         scrobble.send(Scrobble.SCROBBLE_PAUSE);
         cancelTrackLooperRewinder();
 
-        if (params.getSaveSongPos()) {
-            params.setSongPos(player.getCurrentPosition());
-            params.setSongPosId(player.getDuration());
+        if (preferences.getSaveSongPos()) {
+            preferences.setSongPos(player.getCurrentPosition());
+            preferences.setSongPosId(player.getDuration());
         }
 
         updateMediaPlaybackState();
@@ -840,7 +821,7 @@ public class MusicService extends Service implements
     }
 
     public void playPrev() {
-        if (params.getShuffle().randomSongOrder())
+        if (preferences.getShuffle().randomSongOrder())
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevSong();
@@ -849,7 +830,7 @@ public class MusicService extends Service implements
     }
 
     public void playNext() {
-        if (params.getShuffle().randomSongOrder())
+        if (preferences.getShuffle().randomSongOrder())
             rows.moveToRandomSong();
         else
             rows.moveToNextSong();
@@ -858,7 +839,7 @@ public class MusicService extends Service implements
     }
 
     public void playPrevGroup() {
-        if (params.getShuffle().randomSongOrder())
+        if (preferences.getShuffle().randomSongOrder())
             rows.moveToRandomSongBack();
         else
             rows.moveToPrevGroup();
@@ -867,7 +848,7 @@ public class MusicService extends Service implements
     }
 
     public void playNextGroup() {
-        if (params.getShuffle().randomSongOrder())
+        if (preferences.getShuffle().randomSongOrder())
             rows.moveToRandomSong();
         else
             rows.moveToNextGroup();
@@ -984,22 +965,22 @@ public class MusicService extends Service implements
     /*** PREFERENCES ***/
 
     private void restore() {
-        enableShake = params.getEnableShake();
-        shakeThreshold = params.getShakeThreshold() / 10;
-        if (params.getSaveSongPos()) {
-            savedSongPos = params.getSongPos();
-            savedSongPosId = params.getSongPosId();
+        enableShake = preferences.getEnableShake();
+        shakeThreshold = preferences.getShakeThreshold() / 10;
+        if (preferences.getSaveSongPos()) {
+            savedSongPos = preferences.getSongPos();
+            savedSongPosId = preferences.getSongPosId();
         }
         else {
             savedSongPos = -1;
             savedSongPosId = -1;
         }
-        enableRating = params.getEnableRating();
-        minRating = params.getMinRating();
+        enableRating = preferences.getEnableRating();
+        minRating = preferences.getMinRating();
     }
 
     private void save() {
-        params.setEnableShake(enableShake);
+        preferences.setEnableShake(enableShake);
     }
 
 
@@ -1056,7 +1037,7 @@ public class MusicService extends Service implements
             startSensor();
         else
             stopSensor();
-        params.setEnableShake(enableShake);
+        preferences.setEnableShake(enableShake);
     }
 
     public boolean getEnableShake() { return enableShake; }
@@ -1068,7 +1049,7 @@ public class MusicService extends Service implements
     public void setEnableRating(boolean rating) {
         enableRating = rating;
         setChanged();
-        params.setEnableRating(enableRating);
+        preferences.setEnableRating(enableRating);
     }
 
     public int getMinRating() {
@@ -1077,7 +1058,7 @@ public class MusicService extends Service implements
     public void setMinRating(int rating) {
         Log.d("MusicService", "set min rating to " + rating);
         minRating = rating;
-        params.setMinRating(minRating);
+        preferences.setMinRating(minRating);
         setChanged();
     }
 

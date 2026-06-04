@@ -95,7 +95,6 @@ import xyz.mordorx.sicmu.data.Row;
 import xyz.mordorx.sicmu.data.RowGroup;
 import xyz.mordorx.sicmu.data.RowSong;
 import xyz.mordorx.sicmu.data.Rows;
-import xyz.mordorx.sicmu.data.SongDatabase;
 import xyz.mordorx.sicmu.media.AlbumArtLoader;
 import xyz.mordorx.sicmu.media.Filter;
 import xyz.mordorx.sicmu.media.MusicService;
@@ -397,13 +396,13 @@ public class Main extends AppCompatActivity {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicSrv = binder.getService();
 
-            SongDatabase database = musicSrv.getDatabase();
-            // TODO: Implement doesChangelogsMustBeShown!
-            /*database.doesChangelogsMustBeShownAsync((mustBeShown) -> {
-                if (mustBeShown) {
-                    runOnUiThread(() -> showChangelogs());
-                }
-            });*/
+            var prefs = new Preferences(getApplicationContext());
+            if(prefs.isLastSeenChangelogVersionOutdated()) {
+                runOnUiThread(() -> {
+                    showChangelogs();
+                    prefs.setLastSeenChangelogVersionToCurrent();
+                });
+            }
 
             rows = musicSrv.getRows();
             songAdt = new RowsAdapter(Main.this, rows, Main.this);

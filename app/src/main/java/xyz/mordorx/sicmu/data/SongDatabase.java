@@ -19,12 +19,16 @@
 package xyz.mordorx.sicmu.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.io.File;
+import java.util.List;
 
 @Database(entities = {SongORM.class}, version = 3, exportSchema = false)
 public abstract class SongDatabase extends RoomDatabase {
@@ -52,71 +56,42 @@ public abstract class SongDatabase extends RoomDatabase {
     }
 
     /**
-     * This will delete rows that are not present on the file system.
+     * We cannot save the rating of a currently playing file to disk, thus this should be called
+     * regularly. Also, note that this runs in a thread, so you should not call this in onDestroy().
      */
-    public void cleanUp() {
-        /*
-         *  Thread thread = new Thread(() -> {
-         *             if (songsDBNeedCleanup()) {
-         *                 Date beg = new Date();
-         *                 List<SongORM> songORMs = songDAO.getAll();
-         *                 int nbDelete = 0;
-         *                 for (SongORM songORM : songORMs) {
-         *                     if (!(new File(songORM.path).exists())) {
-         *                         Log.d("Database", "Delete songORM for path=" + songORM.path);
-         *                         songDAO.delete(songORM);
-         *                         nbDelete++;
-         *                     }
-         *                 }
-         *                 Date end = new Date();
-         *                 Log.i("Database", "Cleanup DB: " + nbDelete + "/" + songORMs.size() +
-         *                         " songORM deleted in " + (end.getTime() - beg.getTime()) + "ms");
-         *             }
-         *         });
-         *         thread.start();
-         */
-    }
-
-    public void synchronizeRatings() {
-        /*
+    public void synchronizeRatingsAsync() {
         Thread thread = new Thread(() -> {
-            boolean succeed = true;
             StringBuilder retMsg = new StringBuilder();
-            List<SongORM> songORMs = songDAO.getAll();
+            List<SongORM> songORMs = getSongDAO().getSongsWithUnsynchronizedRatings();
             int nbSyncSucceed = 0;
             int nbSyncTried = 0;
             for (SongORM songORM : songORMs) {
-                if (!songORM.ratingSynchronized && (new File(songORM.path).exists())) {
-                    Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
-                    String msg = "trySyncronizeRating: synchronize rating of " +
-                            songORM.path + " to " + songORM.rating;
-                    if (RowSong.WriteRatingToFile(songORM.path, songORM.rating)) {
-                        msg += " succeed\n\n";
-                        songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
-                        songORM.ratingSynchronized = true;
-                        songDAO.update(songORM);
-                        nbSyncSucceed++;
-                    }
-                    else {
-                        succeed = false;
-                        msg += " failed !\n\n";
-//                            Toast.makeText(context,"msg", Toast.LENGTH_LONG).show();
-                    }
-                    retMsg.append(msg);
-                    Log.d("Database", msg);
-                    nbSyncTried++;
+                if (!new File(songORM.path).exists()) {
+                    Log.d("Database", "Could not synchronize rating for deleted file at path=" + songORM.path);
+                    continue;
                 }
+
+                Log.d("Database", "Trying synchronize rating of path=" + songORM.path);
+                String msg = "trySyncronizeRating: synchronize rating of " + songORM.path + " to " + songORM.rating;
+                if (RowSong.WriteRatingToFile(songORM.path, songORM.rating)) {
+                    msg += " succeed\n\n";
+                    songORM.lastModifiedMs = (new File(songORM.path)).lastModified();
+                    songORM.ratingSynchronized = true;
+                    getSongDAO().update(songORM);
+                    nbSyncSucceed++;
+                }
+                else {
+                    msg += " failed !\n\n";
+                }
+                retMsg.append(msg);
+                Log.d("Database", msg);
+                nbSyncTried++;
             }
             String msg = "Synchronized rating " + nbSyncSucceed + "/" + nbSyncTried + " succeed";
-//                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             Log.d("Database", msg);
             retMsg.append(msg);
-            if (nbSyncTried == 0)
-                retMsg = new StringBuilder();
-            callback.ratingCallback(succeed, retMsg.toString());
         });
         thread.start();
-         */
     }
 }
 

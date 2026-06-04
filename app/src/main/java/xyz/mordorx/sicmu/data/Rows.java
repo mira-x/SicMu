@@ -54,7 +54,7 @@ public class Rows {
     private final ArrayList<Integer> shuffleSavedPos;
 
     private final ContentResolver musicResolver;
-    private final Preferences params;
+    private final Preferences preferences;
 
     private Filter filter;
 
@@ -73,16 +73,14 @@ public class Rows {
     private final AtomicBoolean ratingsSynchronizing;
     private volatile boolean terminated = false;
 
-    private Timer timer;
-
     static final public String defaultStr = "<null>";
     private RepeatMode repeatMode;
 
     private boolean fileToOpenFound = false;
 
-    public Rows(Context context, ContentResolver resolver, Preferences params, Resources resources, SongDAO database) {
+    public Rows(Context context, ContentResolver resolver, Preferences preferences, Resources resources, SongDAO database) {
         this.context = context;
-        this.params = params;
+        this.preferences = preferences;
         this.db = database;
         musicResolver = resolver;
         currPos = -1;
@@ -349,7 +347,7 @@ public class Rows {
     }
 
     public void moveToNextSong() {
-        if (!params.getEnableRating() || params.getMinRating() <= 1)
+        if (!preferences.getEnableRating() || preferences.getMinRating() <= 1)
             moveToNextSongNoRating();
         else {
             moveToNextSongRatingEnabled();
@@ -681,8 +679,8 @@ public class Rows {
 
         // add every missing rows
         Row row;
-        final int autoUnfoldThreshold = params.getUnfoldSubGroupThreshold();
-        if (params.getUnfoldSubGroup() ||
+        final int autoUnfoldThreshold = preferences.getUnfoldSubGroupThreshold();
+        if (preferences.getUnfoldSubGroup() ||
                 group.getLevel() != 0 ||
                 group.getSongCount() < autoUnfoldThreshold ||
                 hasOneSubGroup(group, pos)) {
@@ -828,7 +826,7 @@ public class Rows {
             }
         }
 
-        if (params.getDefaultFold() == 0) {
+        if (preferences.getDefaultFold() == 0) {
             // fold
             initRowsFolded();
         } else {
@@ -842,7 +840,7 @@ public class Rows {
         Log.d("Rows", "songPos: " + currPos);
 
         //preloadDBSongsAsync();
-        if (params.getEnableRating())
+        if (preferences.getEnableRating())
             preloadSongRatingAsync();
     }
 
@@ -968,7 +966,7 @@ public class Rows {
 
                 if (prevArtistGroup == null || artist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
                     RowGroup artistGroup = new RowGroup(rowsUnfolded.size(), 0, artist,
-                            path, Typeface.BOLD, false, params);
+                            path, Typeface.BOLD, false, preferences);
                     rowsUnfolded.add(artistGroup);
                     prevArtistGroup = artistGroup;
                     prevAlbumGroup = null;
@@ -976,14 +974,14 @@ public class Rows {
 
                 if (prevAlbumGroup == null || album.compareToIgnoreCase(prevAlbumGroup.getName()) != 0) {
                     RowGroup albumGroup = new RowGroup(rowsUnfolded.size(), 1, album,
-                            path, Typeface.ITALIC, true, params);
+                            path, Typeface.ITALIC, true, preferences);
                     albumGroup.setParent(prevArtistGroup);
                     rowsUnfolded.add(albumGroup);
                     prevAlbumGroup = albumGroup;
                 }
 
                 RowSong rowSong = new RowSong(db, rowsUnfolded.size(), 2, id, title, artist, album,
-                        durationMs, track, path, albumId, year, mime, params);
+                        durationMs, track, path, albumId, year, mime, preferences);
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
@@ -1028,14 +1026,14 @@ public class Rows {
                 String mime = musicCursor.getString(mimeCol);
 
                 RowSong rowSong = new RowSong(db, -1, 2, id, title, artist, album,
-                        durationMs, track, path, albumId, year, mime, params);
+                        durationMs, track, path, albumId, year, mime, preferences);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
             while (musicCursor.moveToNext());
         }
 
-        rowsUnfolded.sort(new PathRowComparator(params.getShowFilename()));
+        rowsUnfolded.sort(new PathRowComparator(preferences.getShowFilename()));
 
         // add group
         RowGroup prevFolderGroup = null;
@@ -1047,7 +1045,7 @@ public class Rows {
             String curFolder = rowSong.getFolder();
             if (prevFolderGroup == null || curFolder.compareToIgnoreCase(prevFolderGroup.getName()) != 0) {
                 RowGroup folderGroup = new RowGroup(idx, 0, curFolder,
-                        rowSong.getPath(), Typeface.BOLD, false, params);
+                        rowSong.getPath(), Typeface.BOLD, false, preferences);
                 rowsUnfolded.add(idx, folderGroup);
                 idx++;
                 prevFolderGroup = folderGroup;
@@ -1057,7 +1055,7 @@ public class Rows {
             String curArtist = rowSong.getArtist();
             if (prevArtistGroup == null || curArtist.compareToIgnoreCase(prevArtistGroup.getName()) != 0) {
                 RowGroup artistGroup = new RowGroup(idx, 1, curArtist,
-                        rowSong.getPath(), Typeface.BOLD, true, params);
+                        rowSong.getPath(), Typeface.BOLD, true, preferences);
                 artistGroup.setParent(prevFolderGroup);
                 rowsUnfolded.add(idx, artistGroup);
                 idx++;
@@ -1106,7 +1104,7 @@ public class Rows {
 
                 final int pos = -1, level = 2;
                 RowSong rowSong = new RowSong(db, pos, level, id, title, artist, album, durationMs,
-                        track, path, albumId, year, mime, params);
+                        track, path, albumId, year, mime, preferences);
                 rowsUnfolded.add(rowSong);
                 //Log.d("Rows", "song added: " + rowSong.toString());
             }
@@ -1114,7 +1112,7 @@ public class Rows {
         }
 
 //        long beforeMs = (new Date()).getTime();
-        TreeRowComparator treeRowComparator = new TreeRowComparator(params.getShowFilename());
+        TreeRowComparator treeRowComparator = new TreeRowComparator(preferences.getShowFilename());
         rowsUnfolded.sort(treeRowComparator);
 //        Log.w("Rows==========", "Sort time: " + ((new Date()).getTime() - beforeMs) + " ms");
 //        // 127 ms tree no show filename
@@ -1158,7 +1156,7 @@ public class Rows {
                 }
 
                 RowGroup aGroup = new RowGroup(idx, level, folders.get(level),
-                        path, Typeface.BOLD, false, params);
+                        path, Typeface.BOLD, false, preferences);
                 aGroup.setParent(parentGroup);
                 parentGroup = aGroup;
                 rowsUnfolded.add(idx, aGroup);
@@ -1207,17 +1205,17 @@ public class Rows {
     }
 
     private void restore() {
-        savedID = params.getSongID();
-        filter = params.getFilter();
-        repeatMode = params.getRepeatMode();
-        MediaScanner.rootFolders = params.getRootFolders();
+        savedID = preferences.getSongID();
+        filter = preferences.getFilter();
+        repeatMode = preferences.getRepeatMode();
+        MediaScanner.rootFolders = preferences.getRootFolders();
     }
 
     public void save() {
         updateSavedId();
-        params.setSongID(savedID);
-        params.setFilter(filter);
-        params.setRepeatMode(repeatMode);
+        preferences.setSongID(savedID);
+        preferences.setFilter(filter);
+        preferences.setRepeatMode(repeatMode);
     }
 
     
@@ -1230,7 +1228,7 @@ public class Rows {
             this.filter = filter;
             // todo: handle the current playing song finish during reinitSongs()...
             reinit();
-            params.setFilter(filter);
+            preferences.setFilter(filter);
         }
     }
 
@@ -1245,7 +1243,7 @@ public class Rows {
 
     public void setRepeatMode(RepeatMode repeatMode) {
         this.repeatMode = repeatMode;
-        params.setRepeatMode(repeatMode);
+        preferences.setRepeatMode(repeatMode);
     }
 
     public boolean setRootFolders(String rootFolders) {

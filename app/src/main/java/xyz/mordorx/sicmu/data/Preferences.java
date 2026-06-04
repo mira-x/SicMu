@@ -30,6 +30,7 @@ import androidx.core.util.Pair;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import xyz.mordorx.sicmu.BuildConfig;
 import xyz.mordorx.sicmu.media.Filter;
 import xyz.mordorx.sicmu.R;
 import xyz.mordorx.sicmu.media.RepeatMode;
@@ -247,4 +248,22 @@ public class Preferences {
     public void setPlaybackSpeedFactor(float x) {
         write.putFloat(PrefKeys.PLAYBACK_SPEED_FACTOR.name(), x).apply();
     }
+
+    public long getLastDatabasePurgeMillis() {
+        return read.getLong(PrefKeys.LAST_DATABASE_PURGE_MILLIS.name(), 0);
+    }
+    public void setLastDatabasePurgeMillis(long m) {
+        write.putLong(PrefKeys.LAST_DATABASE_PURGE_MILLIS.name(), m).apply();
+    }
+
+    public int getLastSeenChangelogVersion() {
+        return read.getInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), BuildConfig.VERSION_CODE);
+    }
+    public boolean isLastSeenChangelogVersionOutdated() {
+        return getLastSeenChangelogVersion() < BuildConfig.VERSION_CODE;
+    }
+    public void setLastSeenChangelogVersionToCurrent() {
+        write.putInt(PrefKeys.LAST_SEEN_CHANGELOG_VERSION.name(), BuildConfig.VERSION_CODE);
+    }
+
 }

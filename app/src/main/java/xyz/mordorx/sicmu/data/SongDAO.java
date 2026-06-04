@@ -34,6 +34,9 @@ public interface SongDAO {
     @Query("SELECT * FROM songs WHERE path == :aPath LIMIT 1")
     SongORM findByPath(String aPath);
 
+    @Query("SELECT * FROM songs WHERE ratingSynchronized == 0")
+    List<SongORM> getSongsWithUnsynchronizedRatings();
+
     @Insert
     void insert(SongORM item);
 
