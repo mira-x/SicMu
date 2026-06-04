@@ -22,13 +22,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
-import xyz.mordorx.sicmu.data.Path;
+import xyz.mordorx.sicmu.data.MediaScanner;
 
 
-public class PathTest {
+public class MediaScannerTest {
 
     private void tryGetFolder(String path, String expectedFolder) {
-        String folder = Path.getFolder(path);
+        String folder = MediaScanner.getFolder(path);
         assertEquals(expectedFolder, folder);
     }
 
@@ -39,42 +39,42 @@ public class PathTest {
 
     @Test
     public void testGetFolderUsual() {
-        Path.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/toto/tata.mp3", "toto");
     }
 
     @Test
     public void testGetFolderUsual2() {
-        Path.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
     @Test
     public void testGetFolderUsualSlashRootFolder() {
-        Path.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = "/mnt/sdcard/";
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
     @Test
     public void testGetFolderAllRootFolder() {
-        Path.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
 
-        Path.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = "/mnt/sdcard/";
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
     }
 
     @Test
     public void testGetFolderMangleRootFolder() {
-        Path.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = "/mnt/sdcard";
         tryGetFolder("/mnt/sdcard.mp3", ".");
 
-        Path.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = "/mnt/sdcard/";
         tryGetFolder("/mnt/sdcard.mp3", "/mnt");
     }
 
     private void tryTokenizeFolder(String folder, String[] expectedFolders) {
-        ArrayList<String> folders = Path.tokenizeFolder(folder);
+        ArrayList<String> folders = MediaScanner.tokenizeFolder(folder);
         assertEquals(expectedFolders.length, folders.size());
         for (int i = 0; i < folders.size(); i++) {
             assertEquals(expectedFolders[i], folders.get(i));

@@ -161,7 +161,7 @@ public class Rows {
     public boolean setCurrPosFromUri(Context context, Uri uri)
     {
         boolean found = false;
-        String path = Path.getSongPathFromUri(context, uri);
+        String path = MediaScanner.getSongPathFromUri(context, uri);
         if (path != null) {
             Log.d("MusicService", "getFilePathFromUri -> " + path);
             int pos = getGenuinePosFromPath(path);
@@ -169,13 +169,13 @@ public class Rows {
                 setCurrPos(pos);
                 found = true;
                 // rescan path so that it can see deleted file at next SicMu restart
-                Path.scanMediaFolder(context, path, null);
+                MediaScanner.scanMediaFolder(context, path, null);
             }
             else {
                 Log.d("Rows", "Launch scan file for file " + path);
                 // scan folder first so that when the callback fire the folder is already scanned (hopefully)
-                Path.scanMediaFolder(context, path, null);
-                Path.scanMediaFile(context, path, scanFileCompletedCallback);
+                MediaScanner.scanMediaFolder(context, path, null);
+                MediaScanner.scanMediaFile(context, path, scanFileCompletedCallback);
             }
         }
         else {
@@ -1125,7 +1125,7 @@ public class Rows {
         for (int idx = 0; idx < rowsUnfolded.size(); idx++) {
             RowSong rowSong = (RowSong) rowsUnfolded.get(idx);
             // get folder list of current row
-            ArrayList<String> folders = Path.tokenizeFolder(rowSong.getFolder());
+            ArrayList<String> folders = MediaScanner.tokenizeFolder(rowSong.getFolder());
 
             //// get the nearest common group parent
             // search from the bottom the last previous group that is the same with the current group
@@ -1210,7 +1210,7 @@ public class Rows {
         savedID = params.getSongID();
         filter = params.getFilter();
         repeatMode = params.getRepeatMode();
-        Path.rootFolders = params.getRootFolders();
+        MediaScanner.rootFolders = params.getRootFolders();
     }
 
     public void save() {
@@ -1251,8 +1251,8 @@ public class Rows {
     public boolean setRootFolders(String rootFolders) {
         boolean reinited = false;
 
-        if (!Path.rootFolders.equals(rootFolders)) {
-            Path.rootFolders = rootFolders;
+        if (!MediaScanner.rootFolders.equals(rootFolders)) {
+            MediaScanner.rootFolders = rootFolders;
             if (filter == Filter.FOLDER || filter == Filter.TREE) {
                 // reinit everything is a bit heavy: nevermind, rootFolders will not be changed often
                 updateSavedId();

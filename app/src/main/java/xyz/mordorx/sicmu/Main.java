@@ -89,7 +89,7 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
-import xyz.mordorx.sicmu.data.Path;
+import xyz.mordorx.sicmu.data.MediaScanner;
 import xyz.mordorx.sicmu.data.Preferences;
 import xyz.mordorx.sicmu.data.Row;
 import xyz.mordorx.sicmu.data.RowGroup;
@@ -1363,7 +1363,7 @@ public class Main extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),
                 getString(R.string.start_rescan) + rowGroup.getPath(),
                 Toast.LENGTH_SHORT).show();
-        Path.scanMediaFolder(getApplicationContext(), rowGroup.getPath(), (String path, Uri uri) ->
+        MediaScanner.scanMediaFolder(getApplicationContext(), rowGroup.getPath(), (String path, Uri uri) ->
                 runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, LENGTH_LONG).show();
                     if (rows != null)

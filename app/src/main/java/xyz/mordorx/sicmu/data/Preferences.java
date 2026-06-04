@@ -111,7 +111,7 @@ public class Preferences {
     }
 
     public String getRootFolders() {
-        return read.getString(PrefKeys.ROOT_FOLDERS.name(), Path.getMusicStoragesStr(context));
+        return read.getString(PrefKeys.ROOT_FOLDERS.name(), MediaScanner.getMusicStoragesStr(context));
     }
 
 

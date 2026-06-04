@@ -46,7 +46,7 @@ import java.util.Formatter;
 import xyz.mordorx.sicmu.BuildConfig;
 import xyz.mordorx.sicmu.media.MusicService;
 import xyz.mordorx.sicmu.data.Preferences;
-import xyz.mordorx.sicmu.data.Path;
+import xyz.mordorx.sicmu.data.MediaScanner;
 import xyz.mordorx.sicmu.data.PrefKeys;
 import xyz.mordorx.sicmu.R;
 
@@ -148,7 +148,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         EditTextPreference prefRootFolders = (EditTextPreference) findPreference(rootFoldersKey);
         prefRootFolders.setSummary(params.getRootFolders());
         if (!sharedPreferences.contains(rootFoldersKey))
-            prefRootFolders.setText(Path.getMusicStoragesStr(getActivity().getBaseContext()));
+            prefRootFolders.setText(MediaScanner.getMusicStoragesStr(getActivity().getBaseContext()));
 
         findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(params.getSleepDelayM()));
 
@@ -358,7 +358,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
 
     public void rescan() {
-        Path.rescanWhole(getActivity().getBaseContext());
+        MediaScanner.rescanWhole(getActivity().getBaseContext());
     }
 
     void setFontSizeIcon() {

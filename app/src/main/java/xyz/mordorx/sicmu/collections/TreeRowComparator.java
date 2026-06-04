@@ -19,7 +19,7 @@ package xyz.mordorx.sicmu.collections;
 
 import java.util.Comparator;
 
-import xyz.mordorx.sicmu.data.Path;
+import xyz.mordorx.sicmu.data.MediaScanner;
 import xyz.mordorx.sicmu.data.Row;
 import xyz.mordorx.sicmu.data.RowSong;
 
@@ -36,7 +36,7 @@ public class TreeRowComparator implements Comparator<Row> {
         // only Song has been added so far, so unchecked cast is ok
         RowSong a = (RowSong) first;
         RowSong b = (RowSong) second;
-        int cmp = Path.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
+        int cmp = MediaScanner.compareToIgnoreCaseShorterFolderLast(a.getFolder(), b.getFolder());
         if (cmp == 0) {
             if (!showFilename) {
                 //cmp = a.getArtist().compareToIgnoreCase(b.getArtist());

@@ -39,7 +39,7 @@ import androidx.annotation.Nullable;
 
 import xyz.mordorx.sicmu.R;
 
-public class Path {
+public class MediaScanner {
     public static String rootFolders = "";
 
     /**
@@ -239,7 +239,7 @@ public class Path {
             return false;
         Log.d("Settings", "fileToScan: " + dir.getAbsolutePath());
         ArrayList<File> filesToScan = new ArrayList<>();
-        Path.listFiles(dir, filesToScan);
+        MediaScanner.listFiles(dir, filesToScan);
         scanMediaFiles(context, filesToScan, null);
         return true;
     }
@@ -250,7 +250,7 @@ public class Path {
                 context.getString(R.string.settings_rescan_triggered),
                 Toast.LENGTH_SHORT).show();
 
-        Collection<File> dirsToScan = Path.getStorages(context); // getBaseContext()
+        Collection<File> dirsToScan = MediaScanner.getStorages(context); // getBaseContext()
         for (File dir : dirsToScan) {
             Toast.makeText(context,
                     (new Formatter()).format(context.getResources()

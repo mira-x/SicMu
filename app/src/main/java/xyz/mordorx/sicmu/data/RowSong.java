@@ -97,7 +97,7 @@ public class RowSong extends Row {
         this.albumId = albumId;
         this.year = year;
         this.mime = mime;
-        folder = Path.getFolder(path);
+        folder = MediaScanner.getFolder(path);
         this.params = params;
     }
 
