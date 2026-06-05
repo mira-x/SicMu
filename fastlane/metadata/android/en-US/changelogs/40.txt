@@ -1,0 +1,6 @@
+Version 2.4.7
+* Allow zooming in on album art images
+* Allow all screen orientations
+* Add exit button in settings menu
+* Fix resource leaks
+* Rearrange settings menu for legibility
