@@ -60,6 +60,7 @@ import androidx.media3.exoplayer.audio.DefaultAudioSink;
 
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver;
+import xyz.mordorx.sicmu.data.AlbumArtLoader;
 import xyz.mordorx.sicmu.data.Preferences;
 import xyz.mordorx.sicmu.R;
 import xyz.mordorx.sicmu.data.RowSong;
@@ -310,7 +311,7 @@ public class MusicService extends Service implements
         // try sync if sth failed in the previous SicMu session
         db.synchronizeRatingsAsync();
 
-        rows = new Rows(getApplicationContext(), getContentResolver(), preferences, getResources(), db.getSongDAO());
+        rows = new Rows(getApplicationContext(), getContentResolver(), preferences, db.getSongDAO());
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "xyz.mordorx.sicmu:MusicService");

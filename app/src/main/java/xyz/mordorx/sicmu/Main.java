@@ -95,7 +95,7 @@ import xyz.mordorx.sicmu.data.Row;
 import xyz.mordorx.sicmu.data.RowGroup;
 import xyz.mordorx.sicmu.data.RowSong;
 import xyz.mordorx.sicmu.data.Rows;
-import xyz.mordorx.sicmu.media.AlbumArtLoader;
+import xyz.mordorx.sicmu.data.AlbumArtLoader;
 import xyz.mordorx.sicmu.media.Filter;
 import xyz.mordorx.sicmu.media.MusicService;
 import xyz.mordorx.sicmu.media.PlayerState;
@@ -104,7 +104,7 @@ import xyz.mordorx.sicmu.ui.ChangelogsActivity;
 import xyz.mordorx.sicmu.ui.RepeatingImageButton;
 import xyz.mordorx.sicmu.ui.RowsAdapter;
 import xyz.mordorx.sicmu.ui.SettingsActivity;
-import xyz.mordorx.sicmu.ui.SettingsPreferenceFragment;
+import xyz.mordorx.sicmu.ui.SettingsFragment;
 
 @UnstableApi
 public class Main extends AppCompatActivity {
@@ -305,7 +305,7 @@ public class Main extends AppCompatActivity {
         });
 
         try {
-            /**
+            /*
              * Since 10+ years, Android has a bug where the initial value of a NumberPicker does not
              * use the formatter. This is a hacky fix. See: https://stackoverflow.com/a/19104078
              */
@@ -580,9 +580,9 @@ public class Main extends AppCompatActivity {
             }
         }
         else if (requestCode == SETTINGS_ACTION) {
-            if (resultCode == SettingsPreferenceFragment.CHANGE_TEXT_SIZE)
+            if (resultCode == SettingsFragment.CHANGE_TEXT_SIZE)
                 applyTextSize();
-            else if (resultCode == SettingsPreferenceFragment.CHANGE_THEME) {
+            else if (resultCode == SettingsFragment.CHANGE_THEME) {
                 // restart main activity
                 finish();
                 startActivity(getIntent());
@@ -823,8 +823,7 @@ public class Main extends AppCompatActivity {
                 currDuration.setText("- " +
                         RowSong.msToMinutes(rowSong.getDurationMs() - currDurationMs));
             }
-        }
-        else {
+        } else {
             currDuration.setText(RowSong.msToMinutes(currDurationMs));
         }
     }

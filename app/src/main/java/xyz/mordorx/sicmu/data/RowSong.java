@@ -42,10 +42,12 @@ import java.io.File;
 
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.R;
-import xyz.mordorx.sicmu.media.AlbumArtLoader;
 import xyz.mordorx.sicmu.media.MusicService;
 import xyz.mordorx.sicmu.ui.RowViewHolder;
 
+/**
+ * This subclass of <code>Row</code> represents a single media file.
+ */
 public class RowSong extends Row {
     private final long id;
     private final long albumId;
@@ -71,7 +73,7 @@ public class RowSong extends Row {
 
     private final SongDAO songDAO;
 
-    private final Preferences params;
+    private final Preferences preferences;
 
     public static int textSize = 15;
 
@@ -81,7 +83,7 @@ public class RowSong extends Row {
     public static int backgroundSongColor;
 
     public RowSong(SongDAO songDAO, int pos, int level, long songID, String songTitle, String songArtist, String songAlbum,
-                   long durationMs, int songTrack, String songPath, long albumId, int year, String mime, Preferences params) {
+                   long durationMs, int songTrack, String songPath, long albumId, int year, String mime, Preferences preferences) {
         super(pos, level, Typeface.NORMAL);
         this.songDAO = songDAO;
         id = songID;
@@ -98,7 +100,7 @@ public class RowSong extends Row {
         this.year = year;
         this.mime = mime;
         folder = MediaScanner.getFolder(path);
-        this.params = params;
+        this.preferences = preferences;
     }
 
     public long getID(){return id;}
@@ -157,7 +159,7 @@ public class RowSong extends Row {
     }
 
     public String getText() {
-        if (params.getShowFilename())
+        if (preferences.getShowFilename())
             return filename;
         else if (track > 0)
             return track + ". " + title;
@@ -228,8 +230,8 @@ public class RowSong extends Row {
 
     public boolean isRatingInsufficient() {
         final boolean uninitialized = rating == RATING_NOT_INITIALIZED || rating == RATING_UNKNOWN;
-        final int minRating = params.getMinRating();
-        return (!uninitialized || params.getUninitializedDefaultRating() < minRating) &&
+        final int minRating = preferences.getMinRating();
+        return (!uninitialized || preferences.getUninitializedDefaultRating() < minRating) &&
                 rating < minRating;
     }
 

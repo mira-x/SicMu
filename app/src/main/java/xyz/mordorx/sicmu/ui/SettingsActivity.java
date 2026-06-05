@@ -29,6 +29,6 @@ public class SettingsActivity extends PreferenceActivity
         Log.d("Settings", "onCreate");
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsPreferenceFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
     }
 }

@@ -31,6 +31,10 @@ import xyz.mordorx.sicmu.media.Filter;
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.ui.RowViewHolder;
 
+/**
+ * This is a subclass of <code>Row</code> that is foldable/collapsable and may contain
+ * children <code>Row</code> elements.
+ */
 public class RowGroup extends Row {
     protected final String name;
     protected boolean folded;
@@ -41,7 +45,7 @@ public class RowGroup extends Row {
     private long totalDurationMs = 0;
     public static Filter rowType;
     public static int textSize = 18;
-    private final Preferences params;
+    private final Preferences preferences;
 
     // must be set outside before calling setText
     public static int normalTextColor;
@@ -49,14 +53,14 @@ public class RowGroup extends Row {
     public static int backgroundOverrideColor;
 
     public RowGroup(int pos, int level, String name, String path, int typeface,
-                    boolean overrideBackgroundColor, Preferences params) {
+                    boolean overrideBackgroundColor, Preferences preferences) {
         super(pos, level, typeface);
         this.name = name;
         setPath(path);
         folded = false;
         selected = false;
         this.overrideBackgroundColor = overrideBackgroundColor;
-        this.params = params;
+        this.preferences = preferences;
     }
 
     public String getName() { return name; }
@@ -161,7 +165,7 @@ public class RowGroup extends Row {
                 duration.setTextColor(playingTextColor);
             else
                 duration.setTextColor(normalTextColor);
-            if (params.getShowGroupTotalTime())
+            if (preferences.getShowGroupTotalTime())
                 duration.setText(msToTime(totalDurationMs) + " |" + rightSpace);
             else
                 duration.setText(nbRowSong + " |" + rightSpace);

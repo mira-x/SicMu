@@ -27,6 +27,9 @@ import java.util.Map;
 import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.ui.RowViewHolder;
 
+/**
+ * This is a base class for rows in a hierarchical order.
+ */
 public class Row {
     // level from the left
     protected int level;

@@ -28,6 +28,10 @@ import xyz.mordorx.sicmu.Main;
 import xyz.mordorx.sicmu.R;
 import xyz.mordorx.sicmu.data.Rows;
 
+/**
+ * This adapter class allows to graphically represent a <code>Rows</code> object and all its
+ * <code>Row</code> objects.
+ */
 public class RowsAdapter extends BaseAdapter {
     private final Rows rows;
     private final LayoutInflater songInf;

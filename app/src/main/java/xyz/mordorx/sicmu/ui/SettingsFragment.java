@@ -51,7 +51,7 @@ import xyz.mordorx.sicmu.data.PrefKeys;
 import xyz.mordorx.sicmu.R;
 
 @OptIn(markerClass = UnstableApi.class)
-public class SettingsPreferenceFragment extends PreferenceFragment
+public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceClickListener {
     private Preferences preferences;

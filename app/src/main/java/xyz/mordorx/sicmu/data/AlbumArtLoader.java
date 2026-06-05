@@ -1,4 +1,4 @@
-package xyz.mordorx.sicmu.media;
+package xyz.mordorx.sicmu.data;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.Optional;
 
 import xyz.mordorx.sicmu.R;
-import xyz.mordorx.sicmu.data.RowSong;
 import xyz.mordorx.sicmu.collections.DeduplicationCache;
 import xyz.mordorx.sicmu.collections.LastElementCollector;
 

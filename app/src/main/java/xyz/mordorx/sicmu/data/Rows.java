@@ -20,7 +20,6 @@ package xyz.mordorx.sicmu.data;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
-import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.NonNull;
@@ -44,13 +42,15 @@ import xyz.mordorx.sicmu.R;
 import xyz.mordorx.sicmu.media.RepeatMode;
 import xyz.mordorx.sicmu.collections.PathRowComparator;
 import xyz.mordorx.sicmu.collections.TreeRowComparator;
-import xyz.mordorx.sicmu.media.AlbumArtLoader;
 
-
+/**
+ * This class manages <code>Row</code> objects, performs media queries and builds hierarchies
+ * of foldable rows that reflect artists, albums or the file system structure.
+ */
 public class Rows {
     final Context context;
 
-    private Random random = new Random();
+    private final Random random;
     private final ArrayList<Integer> shuffleSavedPos;
 
     private final ContentResolver musicResolver;
@@ -78,7 +78,7 @@ public class Rows {
 
     private boolean fileToOpenFound = false;
 
-    public Rows(Context context, ContentResolver resolver, Preferences preferences, Resources resources, SongDAO database) {
+    public Rows(Context context, ContentResolver resolver, Preferences preferences, SongDAO database) {
         this.context = context;
         this.preferences = preferences;
         this.db = database;

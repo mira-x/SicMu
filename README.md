@@ -11,7 +11,7 @@ SicMu Neo is a file-based music player with a very basic UI. You can use your fo
 ### Upstream Changes
 This fork retains the spirit of the original app and adds these features:
 - Search
-- Advanced album art loading (You have an Album.jpg file? It will be considered.)
+- Advanced album art loading (You have an Album.jpg file? It will be considered.) and zooming
 - Per-audio-device mono/stereo settings
 - Radio shuffle mode (Random song order, starts first song selected at random point in the song)
 - More options in long press menu, e.g. search on Genius.com or YouTube.com
@@ -32,6 +32,8 @@ These are links for the original SicMu Player:
 ### License and Credits
 
 SicMu Player is licensed under the GPLv3 only. See file [LICENSE](LICENSE) for more details.
+
+Please note that this codebase also contains source code which is licensed under other terms, see the list below.
 
 - Original app by [Mathieu Souchaud](https://gitlab.com/souch/SMP) [(Donate)](https://www.paypal.com/donate/?hosted_button_id=QAPVFX7NZ8BTE).
 - Thanks to Sue Smith for [tutorials on creating a Music Player on Android](http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764).
