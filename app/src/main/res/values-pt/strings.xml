@@ -260,4 +260,6 @@
     <string name="settings_thanks_material_icons_summary">Feito pelo Google, lançado sob a licença Apache 2.0</string>
     <string name="settings_media_sources">Fontes de mídia</string>
 
+    <string name="exit">Sair</string>
+    <string name="exit_button">Fechar o aplicativo completamente</string>
 </resources>

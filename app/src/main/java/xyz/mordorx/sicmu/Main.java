@@ -136,7 +136,7 @@ public class Main extends AppCompatActivity {
     private boolean detailsToggledFollowAuto;
     private boolean hasCoverArt;
 
-    private Preferences params;
+    private Preferences prefs;
 
     private Vibrator vibrator;
 
@@ -165,11 +165,11 @@ public class Main extends AppCompatActivity {
 
         FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
 
-        params = new Preferences(this);
+        prefs = new Preferences(this);
 
         hideSystemBars();
 
-        switch (params.getTheme()) {
+        switch (prefs.getTheme()) {
             case 1:
                 setTheme(R.style.AppThemeDark);
                 break;
@@ -301,7 +301,7 @@ public class Main extends AppCompatActivity {
         playbackSpeedText.setOnValueChangedListener((picker, ignored, Ignored) -> {
             var factor = picker.getValue() / 100.0f;
             setPlaybackSpeed(factor);
-            params.setPlaybackSpeedFactor(factor);
+            prefs.setPlaybackSpeedFactor(factor);
         });
 
         try {
@@ -364,7 +364,7 @@ public class Main extends AppCompatActivity {
     }
 
     private void hideSystemBars() {
-        if (params.getHideNavigationBar()) {
+        if (prefs.getHideNavigationBar()) {
             WindowInsetsControllerCompat windowInsetsController =
                     ViewCompat.getWindowInsetsController(getWindow().getDecorView());
             if (windowInsetsController == null) {
@@ -452,7 +452,7 @@ public class Main extends AppCompatActivity {
                 }
             }
 
-            var speed = params.getPlaybackSpeedFactor();
+            var speed = Main.this.prefs.getPlaybackSpeedFactor();
             setPlaybackSpeed(speed);
             setPlaybackSpeedText();
         }
@@ -470,7 +470,7 @@ public class Main extends AppCompatActivity {
         if (row != null) {
             if (row.getClass() == RowGroup.class) {
                 // vibrate when big font choosed
-                if (params.getChoosedTextSize())
+                if (prefs.getChoosedTextSize())
                     vibrate();
 
                 rows.invertFold(position);
@@ -493,7 +493,7 @@ public class Main extends AppCompatActivity {
 
         coverArtNum = 0;
         var offset = 0;
-        if (params.getShuffle().randomSongOrder()) {
+        if (prefs.getShuffle().randomSongOrder()) {
             offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
         }
 
@@ -817,7 +817,7 @@ public class Main extends AppCompatActivity {
 
     private void setCurrDuration(long currDurationMs) {
         if (currDuration == null) return;
-        if (params.getShowRemainingTime()) {
+        if (prefs.getShowRemainingTime()) {
             RowSong rowSong = rows.getCurrSong();
             if (rowSong != null) {
                 currDuration.setText("- " +
@@ -1585,7 +1585,7 @@ public class Main extends AppCompatActivity {
     }
 
     private int getTextSizeResId() {
-        if (params.getChoosedTextSize())
+        if (prefs.getChoosedTextSize())
             return R.drawable.ic_menu_text_big;
         else
             return R.drawable.ic_menu_text_regular;
@@ -1614,7 +1614,7 @@ public class Main extends AppCompatActivity {
     }
 
     private int getShuffleResId() {
-        switch(params.getShuffle()) {
+        switch(prefs.getShuffle()) {
             case SEQUENTIAL:
                 return R.drawable.ic_menu_no_shuffle;
             case RANDOM:
@@ -1637,7 +1637,7 @@ public class Main extends AppCompatActivity {
 
     ///  Sets the stereo button image to reflect the Mono/Stereo setting
     private void setStereoButton() {
-        var stereo = params.getStereo();
+        var stereo = prefs.getStereo();
         ImageButton btn = findViewById(R.id.stereo_button);
         if (stereo) {
             btn.setImageResource(R.drawable.ic_stereo);
@@ -1651,7 +1651,7 @@ public class Main extends AppCompatActivity {
         if(musicSrv == null) {
             return;
         }
-        musicSrv.applyStereo(params.getStereo());
+        musicSrv.applyStereo(prefs.getStereo());
     }
 
     private void setShuffleButton() {
@@ -1957,16 +1957,16 @@ public class Main extends AppCompatActivity {
     }
 
     public void changeShuffle(View view) {
-        var mode = params.getShuffle().next();
-        params.setShuffle(mode);
+        var mode = prefs.getShuffle().next();
+        prefs.setShuffle(mode);
         setShuffleButton();
         mode.showExplainSnackbar(view);
         startCloseMoreButtonsTimer();
     }
 
     public void toggleStereo(View view) {
-        var stereo = !params.getStereo();
-        params.setStereo(stereo);
+        var stereo = !prefs.getStereo();
+        prefs.setStereo(stereo);
         setStereoButton();
         showStereoSnackbar(view);
         applyStereo();
@@ -1975,7 +1975,7 @@ public class Main extends AppCompatActivity {
     /// Shows a Snackbar showing "Stereo" or "Mono"
     public void showStereoSnackbar(View v) {
         int toastText;
-        if (params.getStereo()) {
+        if (prefs.getStereo()) {
             toastText = R.string.settings_stereo_on;
         } else {
             toastText = R.string.settings_stereo_off;
@@ -2070,24 +2070,24 @@ public class Main extends AppCompatActivity {
 
     public void applyTextSize() {
         int textSize;
-        if (!params.getChoosedTextSize())
-            textSize = params.getNormalTextSize();
+        if (!prefs.getChoosedTextSize())
+            textSize = prefs.getNormalTextSize();
         else
-            textSize = params.getBigTextSize();
+            textSize = prefs.getBigTextSize();
 
         RowSong.textSize = textSize;
-        RowGroup.textSize = (int) (textSize * params.getTextSizeRatio());
+        RowGroup.textSize = (int) (textSize * prefs.getTextSizeRatio());
         if (songAdt != null)
             songAdt.notifyDataSetChanged();
     }
 
     private void restore() {
-        followSong = params.getFollowSong();
+        followSong = prefs.getFollowSong();
         applyTextSize();
     }
 
     private void vibrate() {
-        if (params.getVibrate())
+        if (prefs.getVibrate())
             vibrator.vibrate(20);
     }
 

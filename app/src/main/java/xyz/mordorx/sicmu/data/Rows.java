@@ -677,6 +677,10 @@ public class Rows {
             return;
         }
 
+        /* Note 2026-05-05: The whole auto-unfold algorithm does not seem to work.
+         * But I don't want to touch the code at this time.
+         */
+
         // add every missing rows
         Row row;
         final int autoUnfoldThreshold = preferences.getUnfoldSubGroupThreshold();

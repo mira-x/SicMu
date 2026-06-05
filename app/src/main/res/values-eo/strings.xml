@@ -259,5 +259,7 @@
     <string name="settings_thanks_jaudiotagger_summary">Kompilita de la originalo de JThink Ltd kaj la branĉoj de Kaned1as kaj Shabinder Singh, eldonita sub la LGPL 2.1</string>
     <string name="settings_thanks_material_icons_summary">Farita de Google, eldonita sub la permesilo Apache 2.0</string>
     <string name="settings_media_sources">Aŭdvidaĵaj fontoj</string>
+    <string name="exit">Fermi</string>
+    <string name="exit_button">Fermi la tutan aplikajon</string>
 
 </resources>

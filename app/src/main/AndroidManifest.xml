@@ -119,6 +119,13 @@
                 android:value="xyz.mordorx.sicmu.Main" />
         </activity>
 
+        <activity
+            android:name=".ui.ExitActivity"
+            android:autoRemoveFromRecents="true"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+
     </application>
 
 </manifest>

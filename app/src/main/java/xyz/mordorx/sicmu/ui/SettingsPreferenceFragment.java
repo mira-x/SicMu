@@ -63,6 +63,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     private final String CHANGELOGS_KEY = "CHANGELOGS";
     private final String GITHUB_SOURCE_URL_KEY = "GITHUB_SOURCE_URL";
+    private final String EXIT_APP_FORCEFULLY_KEY = "EXIT_APP_FORCEFULLY";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
 
@@ -106,8 +107,14 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         CheckBoxPreference prefEnableRating = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_RATING.name());
         prefEnableRating.setChecked(preferences.getEnableRating());
 
-        Preference fontSize = findPreference(TEXT_SIZE_TOGGLE_KEY);
-        fontSize.setOnPreferenceClickListener(this);
+        findPreference(TEXT_SIZE_TOGGLE_KEY).setOnPreferenceClickListener(this);
+        findPreference(RESCAN_KEY).setOnPreferenceClickListener(this);
+        findPreference(DONATE_SOUCHAUD_KEY).setOnPreferenceClickListener(this);
+        findPreference(CHANGELOGS_KEY).setOnPreferenceClickListener(this);
+        findPreference(GITHUB_SOURCE_URL_KEY).setOnPreferenceClickListener(this);
+        findPreference(EXIT_APP_FORCEFULLY_KEY).setOnPreferenceClickListener(this);
+        findPreference(START_SLEEP_TIMER_KEY).setOnPreferenceClickListener(this);
+        findPreference("SEMANTIC_VERSION").setSummary(BuildConfig.VERSION_NAME);
         setFontSizeIcon();
 
         findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(preferences.getNormalTextSize()));
@@ -116,26 +123,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         var disablePitchCompensation = (CheckBoxPreference)findPreference(PrefKeys.DISABLE_PITCH_COMPENSATION.name());
         disablePitchCompensation.setChecked(preferences.getDisablePitchCompensation());
-
-        Preference rescan = findPreference(RESCAN_KEY);
-        rescan.setOnPreferenceClickListener(this);
-
-        Preference donateSouchaud = findPreference(DONATE_SOUCHAUD_KEY);
-        donateSouchaud.setOnPreferenceClickListener(this);
-
-        Preference changelogs = findPreference(CHANGELOGS_KEY);
-        changelogs.setOnPreferenceClickListener(this);
-
-        Preference sourceUrl = findPreference(GITHUB_SOURCE_URL_KEY);
-        sourceUrl.setOnPreferenceClickListener(this);
-
-        ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
-
-        Preference sleepTimer = findPreference(START_SLEEP_TIMER_KEY);
-        sleepTimer.setOnPreferenceClickListener(this);
-
-        String SEMANTIC_VERSION_KEY = "SEMANTIC_VERSION";
-        findPreference(SEMANTIC_VERSION_KEY).setSummary(BuildConfig.VERSION_NAME);
 
         setUnfoldSubgroup();
         setUnfoldThresholdSummary();
@@ -349,6 +336,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             setFontSizeIcon();
         } else if (preference.getKey().equals(GITHUB_SOURCE_URL_KEY)) {
             startActivity(GetGithubSourceWebsiteIntent());
+        } else if (preference.getKey().equals(EXIT_APP_FORCEFULLY_KEY)) {
+            ExitActivity.exit(getContext());
         }
         return false;
     }

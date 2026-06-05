@@ -260,4 +260,6 @@
     <string name="settings_thanks_material_icons_summary">Аутор Google, објављено под Apache 2.0 лиценцом</string>
     <string name="settings_media_sources">Извори медија</string>
 
+    <string name="exit">Izlaz</string>
+    <string name="exit_button">Potpuno zatvorite aplikaciju</string>
 </resources>

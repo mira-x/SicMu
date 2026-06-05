@@ -260,4 +260,6 @@
     <string name="settings_thanks_material_icons_summary">Créé par Google, publié sous la licence Apache 2.0</string>
     <string name="settings_media_sources">Sources de médias</string>
 
+    <string name="exit">Quitter</string>
+    <string name="exit_button">Fermer l\'application complètement</string>
 </resources>

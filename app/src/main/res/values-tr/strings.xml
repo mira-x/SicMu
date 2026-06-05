@@ -260,4 +260,6 @@
     <string name="settings_thanks_material_icons_summary">Google tarafından yapılmıştır, Apache 2.0 lisansı altında yayınlanmıştır</string>
     <string name="settings_media_sources">Medya kaynakları</string>
 
+    <string name="exit">Çıkış</string>
+    <string name="exit_button">Uygulamayı tamamen kapat</string>
 </resources>

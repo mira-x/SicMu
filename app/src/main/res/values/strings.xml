@@ -300,5 +300,7 @@
     <string name="settings_thanks_material_icons" translatable="false">Material Icons</string>
     <string name="settings_thanks_material_icons_summary">Made by Google, released under the Apache 2.0 license</string>
     <string name="settings_media_sources">Media sources</string>
+    <string name="exit">Exit</string>
+    <string name="exit_button">Close the app completely</string>
 
 </resources>
