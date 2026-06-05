@@ -269,11 +269,6 @@
             android:summary="@string/settings_scrobble"
             android:defaultValue="false"/>
 
-        <Preference
-            android:key="RATINGS_NOT_WRITTEN_KEY"
-            android:title="@string/settings_ratings_not_written_title"
-            android:summary="@string/settings_ratings_not_written"/>
-
         <ListPreference
             android:key="UNINITIALIZED_DEFAULT_RATING"
             android:title="@string/uninitialized_default_rating"

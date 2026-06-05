@@ -140,10 +140,6 @@
     <string name="settings_text_size_ratio">Group/song ratio text size</string>
     <string name="settings_text_size_ratio_default" translatable="false">1.1</string>
 
-    <string name="settings_ratings_not_written_title">Show ratings</string>
-    <string name="settings_ratings_not_written">Show ratings not written to file</string>
-    <string name="settings_ratings_are_in_sync">All song ratings have been written</string>
-
     <string name="settings_rescan_title">Rescan</string>
     <string name="settings_rescan">Rescan media files.</string>
     <string name="settings_rescan_triggered">Media scanner triggered…</string>

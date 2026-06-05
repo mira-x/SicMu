@@ -106,10 +106,6 @@
     <string name="settings_text_size_big">Granda tipargrandeco</string>
     <string name="settings_text_size_ratio">Proporcio grupo/kanto</string>
 
-    <string name="settings_ratings_not_written_title">Montri taksojn</string>
-    <string name="settings_ratings_not_written">Montri nekonservitajn taksojn</string>
-    <string name="settings_ratings_are_in_sync">Ĉiuj taksoj estas konservitaj.</string>
-
     <string name="settings_rescan_title">Reskani</string>
     <string name="settings_rescan">Reskani aŭdvidajn dosierojn.</string>
     <string name="settings_rescan_triggered">Skanas aŭdvidajn dosierojn…</string>

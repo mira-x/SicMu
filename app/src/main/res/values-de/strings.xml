@@ -49,7 +49,6 @@
     <string name="settings_text_size_ratio">Schriftgrößenverhältnis Gruppe/Lied</string>
     <string name="settings_text_size_regular">Größe für kleine Schrift</string>
 
-    <string name="settings_ratings_are_in_sync">Alle Bewertungen wurden gespeichert.</string>
     <string name="settings_rescan_title">Neu einlesen</string>
     <string name="settings_rescan">Mediendateien neu einlesen.</string>
     <string name="settings_rescan_triggered">Mediendateien einlesen gestartet…</string>
@@ -183,8 +182,6 @@
     <string name="settings_sleep_timer_stop">Beenden</string>
     <string name="settings_sleep_timer_delay">Dauer (min)</string>
     <string name="settings_sleep_timer_remaining">Wiedergabe stoppt um %s Uhr</string>
-    <string name="settings_ratings_not_written_title">Bewertungen anzeigen</string>
-    <string name="settings_ratings_not_written">Ungespeicherte Bewertungen anzeigen</string>
     <string name="help_context_menu">Kontextmenü</string>
     <string name="donate_souchaud_summary">Falls dir die App gefällt, kannst du hier an Mathieu Souchaud spenden</string>
     <string name="close">Schließen</string>

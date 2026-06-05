@@ -106,10 +106,6 @@
     <string name="settings_text_size_big">Величина великог фонта</string>
     <string name="settings_text_size_ratio">Однос величине група/песма</string>
 
-    <string name="settings_ratings_not_written_title">Прикажи оцене</string>
-    <string name="settings_ratings_not_written">Прикажи несачуване оцене</string>
-    <string name="settings_ratings_are_in_sync">Све оцене су сачуване.</string>
-
     <string name="settings_rescan_title">Поново скенирај</string>
     <string name="settings_rescan">Поново скенирај мултимедијалне датотеке.</string>
     <string name="settings_rescan_triggered">Скенирање мултимедијалних датотека…</string>

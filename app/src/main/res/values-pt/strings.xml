@@ -106,10 +106,6 @@
     <string name="settings_text_size_big">Tamanho de fonte grande</string>
     <string name="settings_text_size_ratio">Proporção de tamanho grupo/música</string>
 
-    <string name="settings_ratings_not_written_title">Mostrar avaliações</string>
-    <string name="settings_ratings_not_written">Mostrar avaliações não guardadas</string>
-    <string name="settings_ratings_are_in_sync">Todas as avaliações foram guardadas.</string>
-
     <string name="settings_rescan_title">Reescanear</string>
     <string name="settings_rescan">Reescanear ficheiros multimédia.</string>
     <string name="settings_rescan_triggered">Escaneando ficheiros multimédia…</string>

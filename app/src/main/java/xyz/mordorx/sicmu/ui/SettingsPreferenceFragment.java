@@ -54,7 +54,7 @@ import xyz.mordorx.sicmu.R;
 public class SettingsPreferenceFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceClickListener {
-    private Preferences params;
+    private Preferences preferences;
     private MusicService musicSrv;
     private boolean serviceBound = false;
     private final String RESCAN_KEY = "RESCAN";
@@ -62,7 +62,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     private final String TEXT_SIZE_TOGGLE_KEY = "TEXT_SIZE_TOGGLE";
     private final String START_SLEEP_TIMER_KEY = "START_SLEEP_TIMER";
     private final String CHANGELOGS_KEY = "CHANGELOGS";
-    private final String RATINGS_NOT_WRITTEN_KEY = "RATINGS_NOT_WRITTEN_KEY";
     private final String GITHUB_SOURCE_URL_KEY = "GITHUB_SOURCE_URL";
     static public final int CHANGE_TEXT_SIZE = 1;
     static public final int CHANGE_THEME = 2;
@@ -73,8 +72,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        params = new Preferences(getActivity().getApplicationContext());
-        switch (params.getTheme()) {
+        preferences = new Preferences(getActivity().getApplicationContext());
+        switch (preferences.getTheme()) {
             case 0:
                 getActivity().setTheme(R.style.AppTheme);
                 break;
@@ -95,8 +94,8 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         EditTextPreference prefShakeThreshold = (EditTextPreference) findPreference(thresholdKeys);
         CheckBoxPreference prefEnableShake = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_SHAKE.name());
         if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)) {
-            prefShakeThreshold.setSummary(String.valueOf(params.getShakeThreshold()));
-            prefEnableShake.setChecked(params.getEnableShake());
+            prefShakeThreshold.setSummary(String.valueOf(preferences.getShakeThreshold()));
+            prefEnableShake.setChecked(preferences.getEnableShake());
         } else {
             prefShakeThreshold.setEnabled(false);
             prefEnableShake.setEnabled(false);
@@ -105,18 +104,18 @@ public class SettingsPreferenceFragment extends PreferenceFragment
                     Toast.LENGTH_LONG).show();
         }
         CheckBoxPreference prefEnableRating = (CheckBoxPreference) findPreference(PrefKeys.ENABLE_RATING.name());
-        prefEnableRating.setChecked(params.getEnableRating());
+        prefEnableRating.setChecked(preferences.getEnableRating());
 
         Preference fontSize = findPreference(TEXT_SIZE_TOGGLE_KEY);
         fontSize.setOnPreferenceClickListener(this);
         setFontSizeIcon();
 
-        findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(params.getNormalTextSize()));
-        findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(params.getBigTextSize()));
-        findPreference(PrefKeys.TEXT_SIZE_RATIO.name()).setSummary(String.valueOf(params.getTextSizeRatio()));
+        findPreference(PrefKeys.TEXT_SIZE_NORMAL.name()).setSummary(String.valueOf(preferences.getNormalTextSize()));
+        findPreference(PrefKeys.TEXT_SIZE_BIG.name()).setSummary(String.valueOf(preferences.getBigTextSize()));
+        findPreference(PrefKeys.TEXT_SIZE_RATIO.name()).setSummary(String.valueOf(preferences.getTextSizeRatio()));
 
         var disablePitchCompensation = (CheckBoxPreference)findPreference(PrefKeys.DISABLE_PITCH_COMPENSATION.name());
-        disablePitchCompensation.setChecked(params.getDisablePitchCompensation());
+        disablePitchCompensation.setChecked(preferences.getDisablePitchCompensation());
 
         Preference rescan = findPreference(RESCAN_KEY);
         rescan.setOnPreferenceClickListener(this);
@@ -129,9 +128,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         Preference sourceUrl = findPreference(GITHUB_SOURCE_URL_KEY);
         sourceUrl.setOnPreferenceClickListener(this);
-
-        Preference ratings_not_written = findPreference(RATINGS_NOT_WRITTEN_KEY);
-        ratings_not_written.setOnPreferenceClickListener(this);
 
         ListPreference theme = (ListPreference) findPreference(PrefKeys.THEME.name());
 
@@ -146,11 +142,11 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
         String rootFoldersKey = PrefKeys.ROOT_FOLDERS.name();
         EditTextPreference prefRootFolders = (EditTextPreference) findPreference(rootFoldersKey);
-        prefRootFolders.setSummary(params.getRootFolders());
+        prefRootFolders.setSummary(preferences.getRootFolders());
         if (!sharedPreferences.contains(rootFoldersKey))
             prefRootFolders.setText(MediaScanner.getMusicStoragesStr(getActivity().getBaseContext()));
 
-        findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(params.getSleepDelayM()));
+        findPreference(PrefKeys.SLEEP_DELAY_M.name()).setSummary(String.valueOf(preferences.getSleepDelayM()));
 
         setFoldSummary();
         setThemeSummary();
@@ -169,16 +165,16 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         if (key.equals(PrefKeys.DEFAULT_FOLD.name())) {
             setFoldSummary();
         } else if (key.equals(PrefKeys.TEXT_SIZE_NORMAL.name())) {
-            findPreference(key).setSummary(String.valueOf(params.getNormalTextSize()));
+            findPreference(key).setSummary(String.valueOf(preferences.getNormalTextSize()));
             getActivity().setResult(CHANGE_TEXT_SIZE);
         } else if (key.equals(PrefKeys.TEXT_SIZE_BIG.name())) {
-            findPreference(key).setSummary(String.valueOf(params.getBigTextSize()));
+            findPreference(key).setSummary(String.valueOf(preferences.getBigTextSize()));
             getActivity().setResult(CHANGE_TEXT_SIZE);
         } else if (key.equals(PrefKeys.TEXT_SIZE_RATIO.name())) {
-            findPreference(key).setSummary(String.valueOf(params.getTextSizeRatio()));
+            findPreference(key).setSummary(String.valueOf(preferences.getTextSizeRatio()));
             getActivity().setResult(CHANGE_TEXT_SIZE);
         } else if (key.equals(PrefKeys.ENABLE_SHAKE.name())) {
-            musicSrv.setEnableShake(params.getEnableShake());
+            musicSrv.setEnableShake(preferences.getEnableShake());
         } else if (key.equals(PrefKeys.THEME.name())) {
             setThemeSummary();
             getActivity().setResult(CHANGE_THEME);
@@ -186,9 +182,9 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             getActivity().finish();
             startActivity(getActivity().getIntent());
         } else if (key.equals(PrefKeys.ENABLE_RATING.name())) {
-            musicSrv.setEnableRating(params.getEnableRating());
+            musicSrv.setEnableRating(preferences.getEnableRating());
         } else if (key.equals(PrefKeys.SHAKE_THRESHOLD.name())) {
-            final float threshold = params.getShakeThreshold();
+            final float threshold = preferences.getShakeThreshold();
             musicSrv.setShakeThreshold(threshold);
             findPreference(key).setSummary(String.valueOf(threshold));
         } else if (key.equals(PrefKeys.UNFOLD_SUBGROUP.name())) {
@@ -196,7 +192,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
         } else if (key.equals(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name())) {
             setUnfoldThresholdSummary();
         } else if (key.equals(PrefKeys.ROOT_FOLDERS.name())) {
-            final String rootFolder = params.getRootFolders();
+            final String rootFolder = preferences.getRootFolders();
             findPreference(key).setSummary(rootFolder);
             if (!(new File(rootFolder)).exists()) {
                 Formatter formatter = new Formatter();
@@ -210,7 +206,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             if (reinited)
                 musicSrv.setChanged();
         } else if (key.equals(PrefKeys.SLEEP_DELAY_M.name())) {
-            final int sleepDelayMinutes = params.getSleepDelayM();
+            final int sleepDelayMinutes = preferences.getSleepDelayM();
             if (sleepDelayMinutes > 0) {
                 findPreference(key).setSummary(String.valueOf(sleepDelayMinutes));
             } else {
@@ -229,18 +225,18 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
 
     private void setUnfoldSubgroup() {
-        findPreference(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name()).setEnabled(!params.getUnfoldSubGroup());
+        findPreference(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name()).setEnabled(!preferences.getUnfoldSubGroup());
     }
 
     private void setUnfoldThresholdSummary() {
         Formatter formatter = new Formatter();
         formatter.format(getResources().getString(R.string.settings_unfold_subgroup_threshold_summary),
-                params.getUnfoldSubGroupThreshold());
+                preferences.getUnfoldSubGroupThreshold());
         findPreference(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name()).setSummary(formatter.toString());
     }
 
     private void setFoldSummary() {
-        int idx = params.getDefaultFold();
+        int idx = preferences.getDefaultFold();
         ListPreference prefFold = (ListPreference) findPreference(PrefKeys.DEFAULT_FOLD.name());
         String[] foldEntries = getResources().getStringArray(R.array.settings_fold_entries);
         if (idx >= foldEntries.length)
@@ -250,7 +246,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
 
     private void setUninitializedDefaultRatingSummary() {
-        int idx = params.getUninitializedDefaultRating();
+        int idx = preferences.getUninitializedDefaultRating();
         ListPreference prefFold = (ListPreference) findPreference(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name());
         String[] foldEntries = getResources().getStringArray(R.array.uninitialized_default_rating_entries);
         idx--;
@@ -261,7 +257,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
     }
 
     private void setThemeSummary() {
-        int idx = params.getTheme();
+        int idx = preferences.getTheme();
         ListPreference pref = (ListPreference) findPreference(PrefKeys.THEME.name());
         String[] entries = getResources().getStringArray(R.array.settings_theme_entries);
         if (idx >= entries.length)
@@ -342,14 +338,14 @@ public class SettingsPreferenceFragment extends PreferenceFragment
             if (musicSrv.getSleepTimerScheduleMs() > 0) {
                 musicSrv.stopSleepTimer();
             } else {
-                musicSrv.startSleepTimer(params.getSleepDelayM());
+                musicSrv.startSleepTimer(preferences.getSleepDelayM());
             }
             setSleepTimerTitle();
         } else if (preference.getKey().equals(CHANGELOGS_KEY)) {
             showChangelogs();
         } else if (preference.getKey().equals(TEXT_SIZE_TOGGLE_KEY)) {
-            var size = !params.getChoosedTextSize();
-            params.setChooseTextSize(size);
+            var size = !preferences.getChoosedTextSize();
+            preferences.setChooseTextSize(size);
             setFontSizeIcon();
         } else if (preference.getKey().equals(GITHUB_SOURCE_URL_KEY)) {
             startActivity(GetGithubSourceWebsiteIntent());
@@ -363,7 +359,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment
 
     void setFontSizeIcon() {
         int icon;
-        if (params.getChoosedTextSize())
+        if (preferences.getChoosedTextSize())
             icon = R.drawable.ic_menu_text_big;
         else
             icon = R.drawable.ic_menu_text_regular;

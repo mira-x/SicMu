@@ -106,10 +106,6 @@
     <string name="settings_text_size_big">Büyük yazı tipi boyutu</string>
     <string name="settings_text_size_ratio">Grup/şarkı boyut oranı</string>
 
-    <string name="settings_ratings_not_written_title">Puanları göster</string>
-    <string name="settings_ratings_not_written">Kaydedilmemiş puanları göster</string>
-    <string name="settings_ratings_are_in_sync">Tüm puanlar kaydedildi.</string>
-
     <string name="settings_rescan_title">Yeniden tara</string>
     <string name="settings_rescan">Medya dosyalarını yeniden tara.</string>
     <string name="settings_rescan_triggered">Medya dosyaları taranıyor…</string>

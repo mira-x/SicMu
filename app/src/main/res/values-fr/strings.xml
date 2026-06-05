@@ -106,10 +106,6 @@
     <string name="settings_text_size_big">Taille de police grande</string>
     <string name="settings_text_size_ratio">Ratio de taille groupe/chanson</string>
 
-    <string name="settings_ratings_not_written_title">Afficher les notes</string>
-    <string name="settings_ratings_not_written">Afficher les notes non sauvegardées</string>
-    <string name="settings_ratings_are_in_sync">Toutes les notes ont été sauvegardées.</string>
-
     <string name="settings_rescan_title">Rescanner</string>
     <string name="settings_rescan">Rescanner les fichiers multimédia.</string>
     <string name="settings_rescan_triggered">Scan des fichiers en cours…</string>
