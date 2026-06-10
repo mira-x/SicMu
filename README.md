@@ -21,13 +21,9 @@ This fork retains the spirit of the original app and adds these features:
 
 The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 8.0.
 
-<!--
 ### Installation
 
-These are links for the original SicMu Player:
-
-[<img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png">](https://f-droid.org/repository/browse/?fdid=souch.smp)
--->
+[<img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png">](https://f-droid.org/en/packages/xyz.mordorx.sicmu/)
 
 ### License and Credits
 
