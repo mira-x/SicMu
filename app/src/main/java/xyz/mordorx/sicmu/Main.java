@@ -257,7 +257,6 @@ public class Main extends AppCompatActivity {
         audioManager.registerAudioDeviceCallback(audioDeviceStereoConfigCallback, null);
 
         // set the color statically for speed (don't know another prettier method)
-        Row.levelOffset = 14; // todo what?
         Row.backgroundColor = getColorFromAttr(R.attr.colorRowGroup);
 
         RowSong.backgroundSongColor = getColorFromAttr(R.attr.colorRowSong);

@@ -39,9 +39,10 @@ public class Row {
     // null if no parent
     protected Row parent;
 
-    // must be set outside before calling setText
+    /// Must be set outside before calling setText
     public static int backgroundColor;
-    public static int levelOffset;
+    /// How many dp units a level difference is wide
+    public static final int levelOffset = 14;
 
     public Row(int position, int theLevel, int theTypeface) {
         genuinePos = position;
