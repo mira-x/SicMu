@@ -774,7 +774,6 @@ public class Rows {
                 MediaStore.Audio.Media.YEAR,
                 MediaStore.Audio.Media.MIME_TYPE
         };
-        String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
 
         String sortOrder = null;
         switch(filter) {
@@ -797,7 +796,7 @@ public class Rows {
             default:
                 return;
         }
-        try (var musicCursor = musicResolver.query(musicUri, projection, where, null, sortOrder)) {
+        try (var musicCursor = musicResolver.query(musicUri, projection, null, null, sortOrder)) {
             switch(filter) {
                 case ARTIST:
                     initByArtist(musicCursor);
