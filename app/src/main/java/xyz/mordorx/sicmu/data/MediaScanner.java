@@ -113,19 +113,6 @@ public class MediaScanner {
         return folders;
     }
 
-    /*
-     up "toto/tata" down "toto"  -> tata
-     up "toto/tata" down ""      -> toto/tata
-     up "toto/tata" toto/down "" -> ''
-     */
-    static public String cutFolder(String up, String down) {
-        int i = 0;
-        while (i < down.length() && i < up.length() && up.charAt(i) == down.charAt(i))
-            i++;
-        return up.substring(i);
-    }
-
-
     /**
      * From Android String.java
      * <p>
