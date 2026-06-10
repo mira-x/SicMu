@@ -69,7 +69,7 @@
     <string name="settings_vibrate_title">Vibrieren bei Berührung</string>
     <string name="settings_vibrate">Kurz vibrieren, wenn Buttons oder die Liederliste berührt werden.</string>
 
-    <string name="settings_root_folder">Wurzelverzeichnisse</string>
+    <string name="settings_root_folder">Wurzelverzeichnisse (CSV)</string>
     <string name="settings_root_folder_summary">Der Dateipfad %s ist auf dem Gerät nicht vorhanden !</string>
 
     <string name="settings_accelerometer">Schütteln</string>

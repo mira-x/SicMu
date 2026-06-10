@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Вибрирај на додир</string>
     <string name="settings_vibrate">Кратко вибрирај при додиру дугмади или списка песама.</string>
 
-    <string name="settings_root_folder">Коренске фасцикле</string>
+    <string name="settings_root_folder">Коренске фасцикле (CSV)</string>
     <string name="settings_root_folder_summary">Путања %s не постоји на уређају!</string>
 
     <string name="settings_accelerometer">Протресање</string>

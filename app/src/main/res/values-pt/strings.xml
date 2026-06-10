@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Vibrar ao tocar</string>
     <string name="settings_vibrate">Vibrar brevemente ao tocar botões ou a lista de músicas.</string>
 
-    <string name="settings_root_folder">Pastas raiz</string>
+    <string name="settings_root_folder">Pastas raiz (CSV)</string>
     <string name="settings_root_folder_summary">O caminho %s não existe no dispositivo!</string>
 
     <string name="settings_accelerometer">Agitar</string>

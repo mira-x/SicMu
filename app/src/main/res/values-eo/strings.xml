@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Vibri ĉe tuŝo</string>
     <string name="settings_vibrate">Mallonge vibri kiam oni tuŝas butonojn aŭ la kantliston.</string>
 
-    <string name="settings_root_folder">Radikaj dosierujoj</string>
+    <string name="settings_root_folder">Radikaj dosierujoj (CSV)</string>
     <string name="settings_root_folder_summary">La vojo %s ne ekzistas sur la aparato!</string>
 
     <string name="settings_accelerometer">Skui</string>

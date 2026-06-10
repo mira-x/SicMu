@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Dokunmada titret</string>
     <string name="settings_vibrate">Düğmelere veya şarkı listesine dokunulduğunda kısaca titret.</string>
 
-    <string name="settings_root_folder">Kök dizinler</string>
+    <string name="settings_root_folder">Kök dizinler (CSV)</string>
     <string name="settings_root_folder_summary">%s yolu cihazda mevcut değil!</string>
 
     <string name="settings_accelerometer">Sallama</string>

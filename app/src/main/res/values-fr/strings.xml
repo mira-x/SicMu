@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Vibrer au toucher</string>
     <string name="settings_vibrate">Vibrer brièvement en touchant les boutons ou la liste des chansons.</string>
 
-    <string name="settings_root_folder">Dossiers racine</string>
+    <string name="settings_root_folder">Dossiers racine (CSV)</string>
     <string name="settings_root_folder_summary">Le chemin %s n\'existe pas sur l\'appareil !</string>
 
     <string name="settings_accelerometer">Secouer</string>

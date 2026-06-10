@@ -131,7 +131,7 @@
     <string name="settings_vibrate_title">Vibrar al tocar</string>
     <string name="settings_vibrate">Vibrar brevemente al tocar botones o la lista de canciones.</string>
 
-    <string name="settings_root_folder">Carpetas raíz</string>
+    <string name="settings_root_folder">Carpetas raíz (CSV)</string>
     <string name="settings_root_folder_summary">¡La ruta %s no existe en el dispositivo!</string>
 
     <string name="settings_accelerometer">Agitar</string>
