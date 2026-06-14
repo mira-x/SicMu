@@ -101,7 +101,7 @@ import xyz.mordorx.sicmu.media.MusicService;
 import xyz.mordorx.sicmu.media.PlayerState;
 import xyz.mordorx.sicmu.media.RepeatMode;
 import xyz.mordorx.sicmu.ui.ChangelogsActivity;
-import xyz.mordorx.sicmu.ui.RepeatingImageButton;
+import xyz.mordorx.sicmu.ui.CombinedClickableImage;
 import xyz.mordorx.sicmu.ui.RowsAdapter;
 import xyz.mordorx.sicmu.ui.SettingsActivity;
 import xyz.mordorx.sicmu.ui.SettingsFragment;
@@ -212,7 +212,7 @@ public class Main extends AppCompatActivity {
         nextButton.setOnLongClickListener(nextGroupLongListener);
         nextButton.setOnTouchListener(touchListener);
 
-        RepeatingImageButton seekButton;
+        CombinedClickableImage seekButton;
         seekButton = findViewById(R.id.m20_button);
         seekButton.setRepeatListener(rewindListener, repeatDelta);
         seekButton.setOnTouchListener(touchListener);
@@ -1836,8 +1836,8 @@ public class Main extends AppCompatActivity {
         }
     };
 
-    private final RepeatingImageButton.RepeatListener rewindListener =
-            new RepeatingImageButton.RepeatListener() {
+    private final CombinedClickableImage.RepeatListener rewindListener =
+            new CombinedClickableImage.RepeatListener() {
                 /**
                  * This method will be called repeatedly at roughly the interval
                  * specified in setRepeatListener(), for as long as the button
@@ -1878,8 +1878,8 @@ public class Main extends AppCompatActivity {
         return offsetMs;
     }
 
-    private final RepeatingImageButton.RepeatListener forwardListener =
-            new RepeatingImageButton.RepeatListener() {
+    private final CombinedClickableImage.RepeatListener forwardListener =
+            new CombinedClickableImage.RepeatListener() {
                 public void onRepeat(View view, long duration, int repeatcount) {
                     Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration);
 

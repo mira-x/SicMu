@@ -27,23 +27,25 @@ import android.view.View;
 /**
  * A button that will repeatedly call a 'listener' method
  * as long as the button is pressed.
+ * <p>
+ * The name is inspired by Jetpack Compose's Modifier.combinedClickable.
  */
-public class RepeatingImageButton extends androidx.appcompat.widget.AppCompatImageButton {
+public class CombinedClickableImage extends androidx.appcompat.widget.AppCompatImageButton {
 
     private long mStartTime;
     private int mRepeatCount;
     private RepeatListener mListener;
     private long mInterval = 500;
     
-    public RepeatingImageButton(Context context) {
+    public CombinedClickableImage(Context context) {
         this(context, null);
     }
 
-    public RepeatingImageButton(Context context, AttributeSet attrs) {
+    public CombinedClickableImage(Context context, AttributeSet attrs) {
         this(context, attrs, android.R.attr.imageButtonStyle);
     }
 
-    public RepeatingImageButton(Context context, AttributeSet attrs, int defStyle) {
+    public CombinedClickableImage(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setFocusable(true);
         setLongClickable(true);
