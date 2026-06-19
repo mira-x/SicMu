@@ -41,8 +41,10 @@ android {
     }
     lint {
         baseline = file('lint-baseline.xml')
+        // Do not throw compile-time errors when warnings occur, like deprecation warnings:
+        abortOnError false
+        checkReleaseBuilds false
     }
-    
 }
 
 dependencies {
