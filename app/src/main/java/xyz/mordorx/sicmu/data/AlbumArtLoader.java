@@ -1,5 +1,6 @@
 package xyz.mordorx.sicmu.data;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.google.common.cache.CacheBuilderSpec;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -41,6 +43,8 @@ public class AlbumArtLoader {
     private final static DeduplicationCache<Long, Optional<Bitmap>> cache =
             new DeduplicationCache<>(CacheBuilderSpec.parse("maximumSize=10, expireAfterAccess=6h"), AlbumArtLoader::bitmapsAreSame);
 
+    private final Size thumbSize = new Size(getScreenWidth(), getScreenWidth());
+
     private final Context ctx;
     private final RowSong song;
     private static volatile boolean terminated = false;
@@ -56,6 +60,7 @@ public class AlbumArtLoader {
     public static boolean isTerminated() {
         return terminated;
     }
+    private static Bitmap fallback = null;
 
     public AlbumArtLoader(Context ctx, RowSong song) {
         this.ctx = ctx.getApplicationContext();
@@ -65,7 +70,6 @@ public class AlbumArtLoader {
             fallback = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_default_coverart);
         }
     }
-    private static Bitmap fallback = null;
 
     /// This spins up a thread to load an album image, if it's not cached currently. If it is,
     /// the callback is called instantly, in sync.
@@ -89,6 +93,7 @@ public class AlbumArtLoader {
 
     @Nullable
     public Bitmap load() {
+        // Cache lookup
         var cachedBmp = cache.getIfPresent(song.getID());
         //noinspection OptionalAssignedToNull We compare the optional against null on purpose.
         if (cachedBmp != null) {
@@ -97,79 +102,18 @@ public class AlbumArtLoader {
         }
 
         var file = new File(song.getPath());
-        Bitmap bmp = null;
+        Bitmap bmp;
 
-        // Search in the file metadata for an image
-        try {
-            final int thumb_size = getScreenWidth();
-            // Android 10 "Quince Tart"
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // try with loadThumbnail
-                var size = new Size(thumb_size, thumb_size);
-                bmp = ctx.getContentResolver().loadThumbnail(song.getExternalContentUri(), size, null);
-
-                // try with createAudioThumbnail
-                bmp = ThumbnailUtils.createAudioThumbnail(
-                        file, new Size(thumb_size, thumb_size), null);
-            }
-        } catch (Exception ignored) { }
-
-        // try with MediaMetadataRetriever
-        if (bmp == null) {
-            try (MediaMetadataRetriever mmr = new MediaMetadataRetriever()){
-                mmr.setDataSource(song.getPath());
-                var img_bytes = mmr.getEmbeddedPicture();
-                if (img_bytes != null)
-                    bmp = BitmapFactory.decodeByteArray(img_bytes, 0, img_bytes.length,
-                            new BitmapFactory.Options());
-            } catch (Exception ignored) { }
-        }
-
-        // try with media store ?
-        if (bmp == null) {
-            try (Cursor cursor = ctx.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                    new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                    MediaStore.Audio.Albums._ID + "=?",
-                    new String[]{String.valueOf(song.getAlbumId())},
-                    null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
-                    String path = cursor.getString(Math.max(colIdx, 0));
-                    bmp = BitmapFactory.decodeFile(path);
-                }
-            } catch (Exception ignored) { }
-        }
-
-        /* Fallback: Search for image files in the same directory.
-         * The algorithm uses a longest prefix match algorithm that looks for the closest image file name
-         * in relation to song file name and  album/folder name. It also looks for
-         * files like "album.jpg" and "playlist.jpg"
-         **/
-        if (song.getPath() != null && bmp == null) {
-            File dir = file.getParentFile();
-            if (dir != null && dir.exists() && dir.isDirectory() && dir.listFiles() != null) {
-                var songAlbum = song.getAlbum();
-
-                var sorter = Comparator
-                        .comparing(AlbumImageCandidate::getSignificantFilenamePrefixMatch)
-                        .thenComparing(AlbumImageCandidate::getSignificantAlbumPrefixMatch)
-                        .thenComparing(AlbumImageCandidate::isGenericAlbumArtName)
-                        .thenComparing(AlbumImageCandidate::getInsignificantFilenamePrefixMatch)
-                        .thenComparing(AlbumImageCandidate::getInsignificantAlbumPrefixMatch);
-
-                //noinspection DataFlowIssue (listFiles() will not be null)
-                var albumArt = Arrays.stream(dir.listFiles())
-                        .map(imgFile -> new AlbumImageCandidate(imgFile, file, songAlbum))
-                        .filter(AlbumImageCandidate::isInSameFolder)
-                        .filter(AlbumImageCandidate::isValidImageFile)
-                        .sorted(sorter)
-                        .collect(new LastElementCollector<>());
-
-                if (albumArt.isPresent()) {
-                    bmp = BitmapFactory.decodeFile(albumArt.get().getImageFile().getAbsolutePath());
-                }
-            }
-        }
+        // Try to load art from different sources, starting at embedded art and falling back to image files near the song file.
+        bmp = loadViaLoadThumbnail();
+        if (bmp == null)
+            bmp = loadViaCreateAudioThumbnail(file);
+        if (bmp == null)
+            bmp = loadViaMediaMetadataRetriever();
+        if (bmp == null)
+            bmp = loadViaMediaStore();
+        if (bmp == null)
+            bmp = loadViaLocalImages();
 
         Log.d("AlbumArtLoader", "Cache Miss. RowSongID=" + song.getID() + " SongPath=" + song.getPath() + " Bitmap=" + bmp);
         cache.put(song.getID(), Optional.ofNullable(bmp));
@@ -182,10 +126,138 @@ public class AlbumArtLoader {
         }
     }
 
+    private Bitmap loadViaLoadThumbnail() {
+        // Android 10 "Quince Tart"
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return null;
+        }
+        try {
+            return ctx.getContentResolver().loadThumbnail(song.getExternalContentUri(), thumbSize, null);
+        } catch (Exception ignored) {return null; }
+    }
+
+    private Bitmap loadViaCreateAudioThumbnail(File audioFile) {
+        // Android 10 "Quince Tart"
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return null;
+        }
+        try {
+            return ThumbnailUtils.createAudioThumbnail(audioFile, thumbSize, null);
+        } catch (Exception ignored) { return null; }
+    }
+
+    private Bitmap loadViaMediaMetadataRetriever() {
+        try (MediaMetadataRetriever mmr = new MediaMetadataRetriever()){
+            mmr.setDataSource(song.getPath());
+            var img_bytes = mmr.getEmbeddedPicture();
+            if (img_bytes != null)
+                return BitmapFactory.decodeByteArray(img_bytes, 0, img_bytes.length, new BitmapFactory.Options());
+        } catch (Exception ignored) { }
+
+        return null;
+    }
+
+    private Bitmap loadViaMediaStore() {
+        try (Cursor cursor = ctx.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                MediaStore.Audio.Albums._ID + "=?",
+                new String[]{String.valueOf(song.getAlbumId())},
+                null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int colIdx = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
+                String path = cursor.getString(Math.max(colIdx, 0));
+                return BitmapFactory.decodeFile(path);
+            }
+        } catch (Exception ignored) { }
+
+        return null;
+    }
+
+    private Bitmap loadViaLocalImages() {
+        /* Fallback: Search for image files in the same directory.
+         *
+         * The algorithm looks for the longest prefix match and similarity between image file name
+         * and song file name and album/folder name. It also looks for
+         * files like "album.jpg" and "playlist.jpg"
+         **/
+        var songFile = new File(song.getPath());
+        var songAlbum = song.getAlbum();
+        var songFolder = song.getFolder();
+
+        var res = ctx.getContentResolver();
+        var proj = new ArrayList<String>();
+        /*
+         * Real world example data for these three column:
+         * ID = 28353
+         * RelativePath = Music/_/East Los FM/
+         * DisplayName = Fandango.jpg
+         */
+        proj.add(MediaStore.Images.Media._ID);
+        proj.add(MediaStore.Images.Media.RELATIVE_PATH);
+        proj.add(MediaStore.Images.Media.DISPLAY_NAME);
+
+        var sel = MediaStore.Images.Media.RELATIVE_PATH + " LIKE ?";
+        var selParams = new String[]{ "%" + song.getFolder() + "/" };
+
+        var candidates = new ArrayList<AlbumImageCandidate>();
+
+        try (var cursor = res.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, proj.toArray(new String[]{}), sel, selParams, null)) {
+            var idxID = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+            var idxRelativePath = cursor.getColumnIndex(MediaStore.Images.Media.RELATIVE_PATH);
+            var idxDisplayName = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+
+            while(cursor.moveToNext()) {
+                var ID = cursor.getLong(idxID);
+                var relativePath = cursor.getString(idxRelativePath);
+                var displayName = cursor.getString(idxDisplayName);
+                var imgFile = new File(relativePath, displayName);
+
+                candidates.add(new AlbumImageCandidate(imgFile, songFile, songAlbum, ID));
+
+                Log.d("AlbumArtLoader", "Found local image: id=" + ID + ", path=" + relativePath + " \t image name=" + displayName + " \t path query=" + songFolder);
+            }
+            
+            Log.d("AlbumArtLoader", "Searching local images done.");
+        }
+
+        final var sorter = Comparator
+                .comparing(AlbumImageCandidate::getSignificantFilenamePrefixMatch)
+                .thenComparing(AlbumImageCandidate::getSignificantAlbumPrefixMatch)
+                .thenComparing(AlbumImageCandidate::isGenericAlbumArtName)
+                .thenComparing(AlbumImageCandidate::getInsignificantFilenamePrefixMatch)
+                .thenComparing(AlbumImageCandidate::getInsignificantAlbumPrefixMatch);
+
+        final var albumArt = candidates
+                .stream()
+                .sorted(sorter)
+                .collect(new LastElementCollector<>());
+
+        if (albumArt.isEmpty()) {
+            return null;
+        }
+
+        final var imgId = albumArt.get().getImageID();
+        final var imgUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                return ctx.getContentResolver().loadThumbnail(imgUri, thumbSize, null);
+            } catch (Exception ignored) { }
+        }
+
+        try (var bmpStream = ctx.getContentResolver().openInputStream(imgUri)) {
+            return BitmapFactory.decodeStream(bmpStream);
+        } catch (Exception e) {
+            Log.i("AlbumArtLoader", "Exception while trying to read bitmap stream for MediaStore image No." + imgId, e);
+        }
+
+        return null;
+    }
+
     private int getScreenWidth() {
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;//displayMetrics.widthPixels;
-        if (width < 512)
-            width = 512;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        if (width < 128)
+            width = 128;
         return width;
     }
 
@@ -211,25 +283,30 @@ public class AlbumArtLoader {
         private final String albumName;
         private final File imgPath;
         private final File songPath;
+        private final long imageID;
 
         /// This handles relative and absolute paths.
-        public AlbumImageCandidate(File img, File song, String albumName) {
+        public AlbumImageCandidate(File img, File song, String albumName, long imageID) {
             this.imgPath = img;
             this.songPath = song;
             this.albumName = (albumName.equals("<unknown>") ? "" : albumName);
+            this.imageID = imageID;
         }
 
         public File getImageFile() {
             return imgPath;
         }
+        public long getImageID() { return imageID; }
 
-        /// Returns whether the image file contains a valid image file extension like PNG or JPEG
+        /// Returns whether the image file contains a valid image file extension like PNG or JPEG.
+        /// This is also only useful when using standard File/IO, where you deal with unknown data.
         public boolean isValidImageFile() {
             var f = imgPath.getName().trim().toLowerCase();
             final var extensions = new String[]{"jpg", "jpeg", "png", "webp", "gif", "bmp", "avif", "heif", "jxl", "bmp"};
             return Arrays.stream(extensions).anyMatch(f::endsWith);
         }
 
+        /// This only really works when using standard File/IO, does not work that well with relative paths provided by the MediaStore API
         public boolean isInSameFolder() {
             var imgParent = imgPath.getParent();
             var songParent = songPath.getParent();
@@ -289,7 +366,7 @@ public class AlbumArtLoader {
 
              - This rules out coincidental common prefix matches
              - It prevents matches with similarly beginning bands, as 5 is longer
-               than "the " (English) or "die " (German) which are common prefixes for non-solo artists.
+               than "the " (English) or "die " (German) which are common prefixes for bands.
              - Bands with similar names after the article might collide, for instance:
                "The Cords - Sh-Boom.mp3" might get matched to "The Chordettes - Mr Sandman.png"
              - Short artist names are problematic. For instance "C418.png" won't get matched to

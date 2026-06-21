@@ -194,12 +194,6 @@ public class MediaScanner {
                     Toast.LENGTH_LONG).show();
         }
 
-        // add Music folder in first to speedup music folder discovery
-        for (File dir : dirsToScan) {
-            File musicDir = new File(dir, "Music");
-            rescanDir(context, musicDir);
-        }
-
         // add whole storage at the end
         for (File dir : dirsToScan) {
             rescanDir(context, dir);
