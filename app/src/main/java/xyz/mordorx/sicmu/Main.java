@@ -1046,65 +1046,19 @@ public class Main extends AppCompatActivity {
     }
 
     public void ratingClick(View view) {
+        if (!serviceBound || rows == null)
+            return;
+
         for (int i = 0; i < ratingButtons.size(); i++) {
             if (view == ratingButtons.get(i)) {
                 // we cannot unclick the first star, so 0 star means not initialized.
-                rateCurrSong(i + 1);
+                rows.rateCurrSong(i + 1);
+                setRatingDetails();
+                songAdt.notifyDataSetChanged();
             }
         }
 
     }
-
-    private void rateCurrSong(int rating) {
-        if (!serviceBound || rows == null)
-            return;
-        rows.rateCurrSong(rating);
-        setRatingDetails();
-        songAdt.notifyDataSetChanged();
-    }
-
-//    public void openSongFolder(View view) {
-//        final RowSong song = rows.getCurrSong();
-//        if (song == null)
-//            return;
-//
-//        Uri uri = Uri.fromFile(new File(song.getPath()));
-//        Toast.makeText(getApplicationContext(),
-//                "Opening file " + uri, Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(uri, "resource/folder");
-//
-//        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-//            startActivity(intent);
-//        }
-//        else {
-//            intent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intent.addCategory(Intent.CATEGORY_OPENABLE);
-//            intent.setDataAndType(uri, "*/*");
-//            try {
-//                startActivity(intent);
-//            }
-//            catch (android.content.ActivityNotFoundException ex) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Please install a File Manager.", Toast.LENGTH_LONG).show();
-//            }
-//        }
-    ////        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
-    ////            found = true;
-    ////        if (!found) {
-    ////            intent = new Intent(Intent.ACTION_GET_CONTENT);
-    ////            intent.setDataAndType(selectedUri, "*/*");
-    ////            List<ResolveInfo> apps =
-    ////                    getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-    ////            if (apps.size() > 0)
-    ////                found = true;
-    ////        }
-    ////
-    ////        if (found) {
-    ////            startActivity(Intent.createChooser(intent, "Open folder"));
-    ////            //startActivity(intent);
-    ////        }
-//    }
 
     private void openEditGroupMenu(int position, @NonNull RowGroup row) {
         AlertDialog.Builder altBld = new AlertDialog.Builder(this);
@@ -1212,8 +1166,8 @@ public class Main extends AppCompatActivity {
         // - http variants
         String pattern = "(?:https?://)?(?:www\\.|m\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{11})(?:[&?][^\\s]*)?";
 
-        java.util.regex.Pattern regexPattern = java.util.regex.Pattern.compile(pattern);
-        java.util.regex.Matcher matcher = regexPattern.matcher(text);
+        final var regexPattern = java.util.regex.Pattern.compile(pattern);
+        final var matcher = regexPattern.matcher(text);
 
         if (matcher.find()) {
             // Returns the complete found URL

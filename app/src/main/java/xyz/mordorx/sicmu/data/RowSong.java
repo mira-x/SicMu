@@ -49,7 +49,9 @@ import xyz.mordorx.sicmu.ui.RowViewHolder;
  * This subclass of <code>Row</code> represents a single media file.
  */
 public class RowSong extends Row {
+    /// The ID of this song provided by the MediaStore API
     private final long id;
+    /// The Album ID of this song provided by the MediaStore API
     private final long albumId;
     private final String title;
     private final String artist;
