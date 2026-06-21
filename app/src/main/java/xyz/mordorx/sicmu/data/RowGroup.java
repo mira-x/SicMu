@@ -88,7 +88,7 @@ public class RowGroup extends Row {
 
     /// get number of songs (excluding RowGroup) inside this group
     public int getSongCount() { return nbRowSong; }
-    public void increaseSongCount() { nbRowSong++; }
+    public void increaseSongCount(int n) { nbRowSong += n; }
 
     public void incTotalDuration(long totalDurationMs) { this.totalDurationMs += totalDurationMs; }
     public long getTotalDuration() { return totalDurationMs; }

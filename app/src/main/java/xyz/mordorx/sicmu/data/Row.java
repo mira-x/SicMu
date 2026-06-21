@@ -31,9 +31,9 @@ import xyz.mordorx.sicmu.ui.RowViewHolder;
  * This is a base class for rows in a hierarchical order.
  */
 public class Row {
-    // level from the left
+    /// level from the left
     protected int level;
-    // position of the row within the unfolded rows array
+    /// position of the row within the unfolded rows array
     protected int genuinePos;
     protected final int typeface;
     // null if no parent

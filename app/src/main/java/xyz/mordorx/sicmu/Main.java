@@ -155,7 +155,6 @@ public class Main extends AppCompatActivity {
     final ArrayList<ImageButton> ratingButtons = new ArrayList<>();
     private LinearLayout details_rating_layout;
     private boolean detailsBigCoverArt;
-    private int coverArtNum = 0;
     private final int EXTERNAL_STORAGE_REQUEST_CODE = 3;
 
     @Override
@@ -464,7 +463,6 @@ public class Main extends AppCompatActivity {
     };
 
     private void clickOnRow(int position) {
-        coverArtNum = 0;
         Row row = rows.get(position);
         if (row != null) {
             if (row.getClass() == RowGroup.class) {
@@ -490,7 +488,6 @@ public class Main extends AppCompatActivity {
     private void startGroupPlayback(@NonNull RowGroup row, int position) {
         vibrate();
 
-        coverArtNum = 0;
         var offset = 0;
         if (prefs.getShuffle().randomSongOrder()) {
             offset = (int)Math.floor((row.getSongCount() - 1 /* We already are playing the first song in this group */) * Math.random());
@@ -520,7 +517,7 @@ public class Main extends AppCompatActivity {
         musicSrv.playSong();
         updatePlayButton();
         disableTrackLooper();
-        unfoldAndscrollToCurrSong();
+        unfoldAndScrollToCurrSong();
     }
 
     private void updateRatings() {
@@ -546,7 +543,7 @@ public class Main extends AppCompatActivity {
                     rows.reinit();
                 if (songAdt != null)
                     songAdt.notifyDataSetChanged();
-                unfoldAndscrollToCurrSong();
+                unfoldAndScrollToCurrSong();
                 hideWarning();
 
             } else {
@@ -761,7 +758,7 @@ public class Main extends AppCompatActivity {
                 vibrate();
                 updatePlayButton();
                 if (followSong)
-                    unfoldAndscrollToCurrSong();
+                    unfoldAndScrollToCurrSong();
             } else {
                 if (musicSrv.playingStopped()) {
                     stopPlayButton();
@@ -778,7 +775,7 @@ public class Main extends AppCompatActivity {
     final Runnable firstScroll = () -> {
         if (songAdt == null) return;
         updatePlayButton();
-        unfoldAndscrollToCurrSong();
+        unfoldAndScrollToCurrSong();
     };
 
 
@@ -1037,6 +1034,7 @@ public class Main extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.action_delete_song_ok, songTitle),
                                 LENGTH_LONG).show();
+                        scrollToCurrSong();
                     }
                     else {
                         Toast.makeText(getApplicationContext(),
@@ -1365,7 +1363,7 @@ public class Main extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.rescanned) + path, LENGTH_LONG).show();
                     if (rows != null)
                         rows.reinit();
-                    unfoldAndscrollToCurrSong();
+                    unfoldAndScrollToCurrSong();
                 })
         );
     }
@@ -1404,7 +1402,7 @@ public class Main extends AppCompatActivity {
                 }
                 if (oldFilter != rows.getFilter()) {
                     songAdt.notifyDataSetChanged();
-                    unfoldAndscrollToCurrSong();
+                    unfoldAndScrollToCurrSong();
                     setSortButton();
                 }
                 dialog.dismiss(); // dismiss the alertbox after chose option
@@ -1666,7 +1664,7 @@ public class Main extends AppCompatActivity {
         if(musicSrv != null) {
             rows.fold();
             songAdt.notifyDataSetChanged();
-            unfoldAndscrollToCurrSong();
+            unfoldAndScrollToCurrSong();
         }
     }
 
@@ -1704,24 +1702,22 @@ public class Main extends AppCompatActivity {
         if(!serviceBound)
             return;
 
-        coverArtNum = 0;
         musicSrv.playNext();
         updatePlayButton();
         disableTrackLooper();
         if(followSong)
-            unfoldAndscrollToCurrSong();
+            unfoldAndScrollToCurrSong();
     }
 
     public void playPrev(View view){
         if(!serviceBound)
             return;
 
-        coverArtNum = 0;
         musicSrv.playPrev();
         updatePlayButton();
         disableTrackLooper();
         if(followSong)
-            unfoldAndscrollToCurrSong();
+            unfoldAndScrollToCurrSong();
     }
 
     public void seek(View view){
@@ -1808,12 +1804,11 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
-            coverArtNum = 0;
             musicSrv.playNextGroup();
             updatePlayButton();
             disableTrackLooper();
             if(followSong)
-                unfoldAndscrollToCurrSong();
+                unfoldAndScrollToCurrSong();
 
             return true;
         }
@@ -1825,12 +1820,11 @@ public class Main extends AppCompatActivity {
             if(!serviceBound)
                 return false;
 
-            coverArtNum = 0;
             musicSrv.playPrevGroup();
             updatePlayButton();
             disableTrackLooper();
             if(followSong)
-                unfoldAndscrollToCurrSong();
+                unfoldAndScrollToCurrSong();
 
             return true;
         }
@@ -1896,7 +1890,7 @@ public class Main extends AppCompatActivity {
             };
 
     public void gotoCurrSong(View view) {
-        unfoldAndscrollToCurrSong();
+        unfoldAndScrollToCurrSong();
     }
 
     public void toggleMoreButtons(View view) {
@@ -1986,17 +1980,17 @@ public class Main extends AppCompatActivity {
         startCloseMoreButtonsTimer();
     }
 
-    public void unfoldAndscrollToCurrSong() {
+    public void unfoldAndScrollToCurrSong() {
         if (rows == null || songAdt == null)
             return;
         if(rows.unfoldCurrPos())
             songAdt.notifyDataSetChanged();
-        scrollToSong(rows.getCurrPos());
+        scrollToSong(rows.getCurrPosFolded());
         updateRatings();
     }
 
     public void scrollToCurrSong() {
-        scrollToSong(rows.getCurrPos());
+        scrollToSong(rows.getCurrPosFolded());
     }
 
     // this method could be improved, code is a bit obscure :-)

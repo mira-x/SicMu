@@ -29,11 +29,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -68,7 +66,7 @@ public class Rows {
     private final ArrayList<Row> rowsUnfolded;
     /// Current selected position within rowsUnfolded.
     /// Never assign this directly, instead use setCurrPos
-    private int currPos;
+    private int currPosUnfolded;
 
     private final SongDAO db;
     private final AtomicBoolean ratingsMustBeSynchronized;
@@ -85,7 +83,7 @@ public class Rows {
         this.preferences = preferences;
         this.db = database;
         musicResolver = resolver;
-        currPos = -1;
+        currPosUnfolded = -1;
 
         random = new Random();
         shuffleSavedPos = new ArrayList<>();
@@ -105,22 +103,22 @@ public class Rows {
         AlbumArtLoader.terminate();
     }
 
-    // size of the foldable array
+    /// size of the foldable array
     public int size() {
         return rows.size();
     }
 
     // the user choose a row
 
-    // select first song encountered from pos
+    /// select first song encountered from pos
     public void selectNearestSong(int pos) {
         Row row = rows.get(pos);
         while (row.getClass() != RowSong.class)
             row = rowsUnfolded.get(row.getGenuinePos() + 1);
-        setCurrPos(row.getGenuinePos());
+        setCurrPosUnfolded(row.getGenuinePos());
     }
 
-    // get row from the foldable array
+    /// get row from the foldable array
     public Row get(int pos) {
         Row row = null;
         if (pos >= 0 && pos < rows.size())
@@ -134,7 +132,6 @@ public class Rows {
         return isFileToOpenFound;
     }
 
-    public static String intentExtraFileScanComplete = "SicMuFileScanned";
     private final MediaScannerConnection.OnScanCompletedListener scanFileCompletedCallback = new MediaScannerConnection.OnScanCompletedListener () {
         @Override
         public void onScanCompleted(String path, Uri uri){
@@ -145,7 +142,7 @@ public class Rows {
                 reinit();
                 pos = getGenuinePosFromPath(path);
                 if (pos != -1) {
-                    setCurrPos(pos);
+                    setCurrPosUnfolded(pos);
                     Log.d("Rows", "onScanCompleted file " + path + " pos setted");
                     fileToOpenFound = true;
                 }
@@ -166,7 +163,7 @@ public class Rows {
             Log.d("MusicService", "getFilePathFromUri -> " + path);
             int pos = getGenuinePosFromPath(path);
             if (pos != -1) {
-                setCurrPos(pos);
+                setCurrPosUnfolded(pos);
                 found = true;
                 // rescan path so that it can see deleted file at next SicMu restart
                 MediaScanner.scanMediaFolder(context, path, null);
@@ -202,19 +199,19 @@ public class Rows {
         return pos;
     }
 
-    // get the song currently selected (playing or paused) from the unfoldable array
+    /// get the song currently selected (playing or paused) from the unfoldable array
     public RowSong getCurrSong() {
         Row row = null;
-        if (currPos >= 0 && currPos < rowsUnfolded.size()) {
-            row = rowsUnfolded.get(currPos);
+        if (currPosUnfolded >= 0 && currPosUnfolded < rowsUnfolded.size()) {
+            row = rowsUnfolded.get(currPosUnfolded);
             if (row.getClass() != RowSong.class)
                 row = null;
         }
         return (RowSong) row;
     }
 
-    // get the currently selected row (group or song) from the foldable array
-    public int getCurrPos() {
+    /// get the currently selected row (group or song) from the foldable array
+    public int getCurrPosFolded() {
         int pos = -1;
         Row song = getCurrSong();
         int i;
@@ -230,11 +227,15 @@ public class Rows {
             pos = i;
         return pos;
     }
+    
+    private int getCurrPosUnfolded() {
+        return currPosUnfolded;
+    }
 
-    private void setCurrPos(int pos) {
-        setGroupSelectedState(currPos, false);
-        currPos = pos;
-        setGroupSelectedState(currPos, true);
+    private void setCurrPosUnfolded(int pos) {
+        setGroupSelectedState(currPosUnfolded, false);
+        currPosUnfolded = pos;
+        setGroupSelectedState(currPosUnfolded, true);
     }
 
     private void setGroupSelectedState(int pos, boolean selected) {
@@ -252,8 +253,8 @@ public class Rows {
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
-            int firstSongPos = getFirstSongPosInGroup(currPos);
-            int lastSongPos = getLastSongPosInGroup(currPos);
+            int firstSongPos = getFirstSongPosInGroup(currPosUnfolded);
+            int lastSongPos = getLastSongPosInGroup(currPosUnfolded);
             if (lastSongPos <= firstSongPos)
                 return;
             int nbSongInCurGroup = (lastSongPos - firstSongPos) + 1;
@@ -262,39 +263,39 @@ public class Rows {
             shuffleSavedPos.removeIf(pos -> pos < firstSongPos || pos > lastSongPos);
 
             // save the previously song chosen
-            shuffleSavedPos.add(currPos);
+            shuffleSavedPos.add(currPosUnfolded);
             Collections.sort(shuffleSavedPos);
 
             // reset shuffleSavedPos if we filled it entirely, add only curr pos
             if (shuffleSavedPos.size() >= nbSongInCurGroup ) {
                 shuffleSavedPos.clear();
-                shuffleSavedPos.add(currPos);
+                shuffleSavedPos.add(currPosUnfolded);
                 Log.d("Rows", "shuffleSavedPos.clear");
             }
 
             // random on remaining part
             int randNum = random.nextInt(nbSongInCurGroup - shuffleSavedPos.size());
-            currPos = randNum + firstSongPos;
+            currPosUnfolded = randNum + firstSongPos;
             // shift song already done
             for (int pos : shuffleSavedPos) {
-                if (pos <= currPos)
-                    currPos++;
+                if (pos <= currPosUnfolded)
+                    currPosUnfolded++;
             }
         }
         else {
             // save the random song chosen
-            shuffleSavedPos.add(currPos);
+            shuffleSavedPos.add(currPosUnfolded);
 
             int pos;
             do {
                 pos = random.nextInt(rowsUnfolded.size());
-            } while (pos == currPos || rowsUnfolded.get(pos).getClass() != RowSong.class);
+            } while (pos == currPosUnfolded || rowsUnfolded.get(pos).getClass() != RowSong.class);
 
-            setGroupSelectedState(currPos, false);
+            setGroupSelectedState(currPosUnfolded, false);
 
-            currPos = pos;
+            currPosUnfolded = pos;
 
-            setGroupSelectedState(currPos, true);
+            setGroupSelectedState(currPosUnfolded, true);
         }
     }
 
@@ -338,9 +339,9 @@ public class Rows {
             // check
             if (pos < rowsUnfolded.size() && rowsUnfolded.get(pos).getClass() == RowSong.class) {
                 backOk = true;
-                setGroupSelectedState(currPos, false);
-                currPos = pos;
-                setGroupSelectedState(currPos, true);
+                setGroupSelectedState(currPosUnfolded, false);
+                currPosUnfolded = pos;
+                setGroupSelectedState(currPosUnfolded, true);
             }
         }
         // if no saved pos, fallback to prevsong
@@ -361,57 +362,57 @@ public class Rows {
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
-            int lastSongPos = getLastSongPosInGroup(currPos);
-            int firstSongPos = getFirstSongPosInGroup(currPos);
+            int lastSongPos = getLastSongPosInGroup(currPosUnfolded);
+            int firstSongPos = getFirstSongPosInGroup(currPosUnfolded);
             if (lastSongPos == firstSongPos)
                 return;
 
-            int lastCurrPos = currPos;
+            int lastCurrPos = currPosUnfolded;
             RowSong rowSong;
             // rowSong must have load the rating because we are in repeat group and the group
             // should have been loaded
             do {
-                if (currPos == lastSongPos)
-                    currPos = firstSongPos;
+                if (currPosUnfolded == lastSongPos)
+                    currPosUnfolded = firstSongPos;
                 else
-                    currPos++;
+                    currPosUnfolded++;
                 // next song with suitable rating not found => return next song regardless of rating
-                if (currPos == lastCurrPos) {
-                    if (currPos == lastSongPos)
-                        currPos = firstSongPos;
+                if (currPosUnfolded == lastCurrPos) {
+                    if (currPosUnfolded == lastSongPos)
+                        currPosUnfolded = firstSongPos;
                     else
-                        currPos++;
+                        currPosUnfolded++;
                     Log.d("Rows", "move to next in REPEAT_GROUP with suitable " +
                             "rating not found => return next song regardless of rating");
                     break;
                 }
-                rowSong = (RowSong) rowsUnfolded.get(currPos);
+                rowSong = (RowSong) rowsUnfolded.get(currPosUnfolded);
             } while (rowSong.isRatingInsufficient());
         }
         else {
-            int lastCurrPos = currPos;
+            int lastCurrPos = currPosUnfolded;
 
             RowSong rowSong;
             do {
-                currPos++;
-                if (currPos >= rowsUnfolded.size())
-                    currPos = 0;
+                currPosUnfolded++;
+                if (currPosUnfolded >= rowsUnfolded.size())
+                    currPosUnfolded = 0;
                 // skip RowGroup
-                while (currPos < rowsUnfolded.size() &&
-                        rowsUnfolded.get(currPos).getClass() != RowSong.class)
-                    currPos++;
+                while (currPosUnfolded < rowsUnfolded.size() &&
+                        rowsUnfolded.get(currPosUnfolded).getClass() != RowSong.class)
+                    currPosUnfolded++;
                 // next song with suitable rating not found
-                if (currPos == lastCurrPos) {
+                if (currPosUnfolded == lastCurrPos) {
                     Log.d("Rows", "move to next song with suitable rating not " +
                             "found => return next song regardless of rating");
                     moveToNextSongNoRating();
                     return;
                 }
-                rowSong = (RowSong) rowsUnfolded.get(currPos);
+                rowSong = (RowSong) rowsUnfolded.get(currPosUnfolded);
             } while (rowSong.isRatingInsufficient());
 
             setGroupSelectedState(lastCurrPos, false);
-            setGroupSelectedState(currPos, true);
+            setGroupSelectedState(currPosUnfolded, true);
         }
     }
 
@@ -420,27 +421,27 @@ public class Rows {
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
-            int lastSongPos = getLastSongPosInGroup(currPos);
-            if (currPos == lastSongPos)
-                currPos = getFirstSongPosInGroup(currPos);
+            int lastSongPos = getLastSongPosInGroup(currPosUnfolded);
+            if (currPosUnfolded == lastSongPos)
+                currPosUnfolded = getFirstSongPosInGroup(currPosUnfolded);
             else
-                currPos++;
+                currPosUnfolded++;
         }
         else {
-            setGroupSelectedState(currPos, false);
+            setGroupSelectedState(currPosUnfolded, false);
 
-            currPos++;
-            if (currPos >= rowsUnfolded.size())
-                currPos = 0;
+            currPosUnfolded++;
+            if (currPosUnfolded >= rowsUnfolded.size())
+                currPosUnfolded = 0;
 
-            while (currPos < rowsUnfolded.size() &&
-                    rowsUnfolded.get(currPos).getClass() != RowSong.class)
-                currPos++;
+            while (currPosUnfolded < rowsUnfolded.size() &&
+                    rowsUnfolded.get(currPosUnfolded).getClass() != RowSong.class)
+                currPosUnfolded++;
 
-            if (currPos == rowsUnfolded.size())
-                currPos = -1;
+            if (currPosUnfolded == rowsUnfolded.size())
+                currPosUnfolded = -1;
 
-            setGroupSelectedState(currPos, true);
+            setGroupSelectedState(currPosUnfolded, true);
         }
     }
 
@@ -462,7 +463,7 @@ public class Rows {
         if (rowsUnfolded.isEmpty())
             return null;
 
-        int currPos = FoldedToUnfoldedIndex(getCurrPos());
+        int currPos = FoldedToUnfoldedIndex(getCurrPosFolded());
 
         // Iterate from (currently selected song + 1) -> end of playlist
         for(int i = currPos+1; i < rowsUnfolded.size(); i++) {
@@ -488,7 +489,7 @@ public class Rows {
         if(row == null)
             return -1;
 
-        for (int i = 0; i < rows.size(); i++) {
+        for (int i = 0; i <= row.genuinePos; i++) {
             if(rows.get(i) == row)
                 return i;
         }
@@ -501,22 +502,22 @@ public class Rows {
             return;
 
         if (repeatMode == RepeatMode.REPEAT_GROUP) {
-            int firstSongPos = getFirstSongPosInGroup(currPos);
-            if (currPos == firstSongPos)
-                currPos = getLastSongPosInGroup(currPos);
+            int firstSongPos = getFirstSongPosInGroup(currPosUnfolded);
+            if (currPosUnfolded == firstSongPos)
+                currPosUnfolded = getLastSongPosInGroup(currPosUnfolded);
             else
-                currPos--;
+                currPosUnfolded--;
         }
         else {
-            setGroupSelectedState(currPos, false);
+            setGroupSelectedState(currPosUnfolded, false);
 
             do {
-                currPos--;
-                if (currPos < 0)
-                    currPos = rowsUnfolded.size() - 1;
-            } while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class);
+                currPosUnfolded--;
+                if (currPosUnfolded < 0)
+                    currPosUnfolded = rowsUnfolded.size() - 1;
+            } while (currPosUnfolded >= 0 && rowsUnfolded.get(currPosUnfolded).getClass() != RowSong.class);
 
-            setGroupSelectedState(currPos, true);
+            setGroupSelectedState(currPosUnfolded, true);
         }
     }
 
@@ -524,48 +525,48 @@ public class Rows {
         if (rowsUnfolded.isEmpty())
             return;
 
-        setGroupSelectedState(currPos, false);
+        setGroupSelectedState(currPosUnfolded, false);
 
-        currPos = getFirstSongPosInGroup(currPos);
+        currPosUnfolded = getFirstSongPosInGroup(currPosUnfolded);
 
         do {
-            currPos--;
-            if (currPos < 0)
-                currPos = rowsUnfolded.size() - 1;
-        } while (currPos >= 0 && rowsUnfolded.get(currPos).getClass() != RowSong.class);
+            currPosUnfolded--;
+            if (currPosUnfolded < 0)
+                currPosUnfolded = rowsUnfolded.size() - 1;
+        } while (currPosUnfolded >= 0 && rowsUnfolded.get(currPosUnfolded).getClass() != RowSong.class);
 
-        if (currPos < 0)
-            currPos = rowsUnfolded.size() - 1;
+        if (currPosUnfolded < 0)
+            currPosUnfolded = rowsUnfolded.size() - 1;
 
-        currPos = getFirstSongPosInGroup(currPos);
+        currPosUnfolded = getFirstSongPosInGroup(currPosUnfolded);
 
-        setGroupSelectedState(currPos, true);
+        setGroupSelectedState(currPosUnfolded, true);
     }
 
     public void moveToNextGroup() {
         if (rowsUnfolded.isEmpty())
             return;
 
-        setGroupSelectedState(currPos, false);
+        setGroupSelectedState(currPosUnfolded, false);
 
-        currPos = getLastSongPosInGroup(currPos);
-        currPos++;
+        currPosUnfolded = getLastSongPosInGroup(currPosUnfolded);
+        currPosUnfolded++;
 
         // if last song go to beginning
-        if (currPos == rowsUnfolded.size()) {
-            currPos = 0;
+        if (currPosUnfolded == rowsUnfolded.size()) {
+            currPosUnfolded = 0;
         }
 
         // skip RowGroups
-        while (currPos < rowsUnfolded.size() &&
-                rowsUnfolded.get(currPos).getClass() != RowSong.class)
-            currPos++;
+        while (currPosUnfolded < rowsUnfolded.size() &&
+                rowsUnfolded.get(currPosUnfolded).getClass() != RowSong.class)
+            currPosUnfolded++;
 
-        if (currPos == rowsUnfolded.size()) {
-            currPos = -1;
+        if (currPosUnfolded == rowsUnfolded.size()) {
+            currPosUnfolded = -1;
         }
 
-        setGroupSelectedState(currPos, true);
+        setGroupSelectedState(currPosUnfolded, true);
     }
 
     // fold everything
@@ -633,7 +634,7 @@ public class Rows {
             return false;
 
         boolean changed = false;
-        int pos = getCurrPos();
+        int pos = getCurrPosFolded();
         if (pos < 0 || pos >= rows.size())
             return false;
 
@@ -821,11 +822,11 @@ public class Rows {
         }
 
         // if no songPos saved : search the first song
-        if(currPos == -1) {
+        if(currPosUnfolded == -1) {
             int idx;
             for(idx = 0; idx < rowsUnfolded.size(); idx++) {
                 if (rowsUnfolded.get(idx).getClass() == RowSong.class) {
-                    setCurrPos(idx);
+                    setCurrPosUnfolded(idx);
                     break;
                 }
             }
@@ -842,7 +843,7 @@ public class Rows {
 
         // to comment in release mode:
         Log.d("Rows", "======> songItems initialized in " + (System.currentTimeMillis() - startTime) + "ms");
-        Log.d("Rows", "songPos: " + currPos);
+        Log.d("Rows", "songPos: " + currPosUnfolded);
 
         //preloadDBSongsAsync();
         if (preferences.getEnableRating())
@@ -910,7 +911,7 @@ public class Rows {
         Date beg = new Date();
         int nbLoaded = 0;
         // preload from the currpos so that next songs are loaded earlier
-        int startPos = Math.max(currPos, 0);
+        int startPos = Math.max(currPosUnfolded, 0);
         for (int i = startPos; i < rowsUnfolded.size(); i++) {
             if (terminated) return;
             Row row = rowsUnfolded.get(i);
@@ -990,16 +991,16 @@ public class Rows {
                 rowSong.setParent(prevAlbumGroup);
 
                 if(id == savedID)
-                    currPos = rowsUnfolded.size();
+                    currPosUnfolded = rowsUnfolded.size();
 
                 rowsUnfolded.add(rowSong);
-                prevArtistGroup.increaseSongCount();
+                prevArtistGroup.increaseSongCount(1);
                 prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
-                prevAlbumGroup.increaseSongCount();
+                prevAlbumGroup.increaseSongCount(1);
                 prevAlbumGroup.incTotalDuration(rowSong.getDurationMs());
             }
             while (musicCursor.moveToNext());
-            setGroupSelectedState(currPos, true);
+            setGroupSelectedState(currPosUnfolded, true);
         }
     }
 
@@ -1068,17 +1069,17 @@ public class Rows {
             }
 
             if (rowSong.getID() == savedID)
-                currPos = idx;
+                currPosUnfolded = idx;
 
             rowSong.setGenuinePos(idx);
             rowSong.setParent(prevArtistGroup);
 
-            prevFolderGroup.increaseSongCount();
+            prevFolderGroup.increaseSongCount(1);
             prevFolderGroup.incTotalDuration(rowSong.getDurationMs());
-            prevArtistGroup.increaseSongCount();
+            prevArtistGroup.increaseSongCount(1);
             prevArtistGroup.incTotalDuration(rowSong.getDurationMs());
         }
-        setGroupSelectedState(currPos, true);
+        setGroupSelectedState(currPosUnfolded, true);
     }
 
     private void initByTree(Cursor musicCursor) {
@@ -1173,7 +1174,7 @@ public class Rows {
             RowGroup groupIdx = parentGroup;
             while (groupIdx != null) {
                 // update group
-                groupIdx.increaseSongCount();
+                groupIdx.increaseSongCount(1);
                 groupIdx.incTotalDuration(rowSong.getDurationMs());
 
                 prevGroups.add(0, groupIdx);
@@ -1185,10 +1186,10 @@ public class Rows {
             rowSong.setGenuinePos(idx);
             rowSong.setParent(parentGroup);
             if (rowSong.getID() == savedID)
-                currPos = idx;
+                currPosUnfolded = idx;
         }
 
-        setGroupSelectedState(currPos, true);
+        setGroupSelectedState(currPosUnfolded, true);
     }
 
 
@@ -1389,20 +1390,30 @@ public class Rows {
         }
     }
 
-    private void deleteSongFromList(@NonNull RowSong song) {
-        for (int i = 0; i < rowsUnfolded.size(); i++) {
-            Row row = rowsUnfolded.get(i);
-            if (row == song) {
-                rowsUnfolded.remove(i);
-                break;
-            }
+    /**
+     * Deletes a song from the list, but does not remove it form the filesystem.
+     */
+    private void deleteSongFromList(@NonNull RowSong songToDelete) {
+        int foldedIndex = rows.indexOf(songToDelete);
+        int unfoldedIndex = rowsUnfolded.indexOf(songToDelete);
+
+        // Adjust rows' position index
+        rowsUnfolded.stream().skip(unfoldedIndex).forEach(row -> row.genuinePos--);
+
+        // Adjust parents' song count and total duration
+        for (Row parent = songToDelete.getParent(); parent != null; parent = parent.getParent()) {
+            RowGroup g = (RowGroup)parent;
+            g.increaseSongCount(-1);
+            g.incTotalDuration(songToDelete.getDurationMs());
         }
-        for (int i = 0; i < rows.size(); i++) {
-            Row row = rows.get(i);
-            if (row == song) {
-                rows.remove(i);
-                break;
-            }
+
+        // Remove it!
+        rows.remove(foldedIndex);
+        rowsUnfolded.remove(unfoldedIndex);
+
+        // Adjust current selection index
+        if (unfoldedIndex < currPosUnfolded) {
+            currPosUnfolded--;
         }
     }
 
@@ -1414,10 +1425,4 @@ public class Rows {
         return succeed;
     }
 
-    public ArrayList<Row> getRowsFolded() {
-        return rows;
-    }
-    public ArrayList<Row> getRowsUnfolded() {
-        return rowsUnfolded;
-    }
 }
