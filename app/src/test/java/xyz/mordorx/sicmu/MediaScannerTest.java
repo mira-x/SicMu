@@ -39,37 +39,37 @@ public class MediaScannerTest {
 
     @Test
     public void testGetFolderUsual() {
-        MediaScanner.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard"};
         tryGetFolder("/mnt/sdcard/toto/tata.mp3", "toto");
     }
 
     @Test
     public void testGetFolderUsual2() {
-        MediaScanner.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard"};
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
     @Test
     public void testGetFolderUsualSlashRootFolder() {
-        MediaScanner.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard/"};
         tryGetFolder("/mnt/sdcard/toto/titi/tata.mp3", "toto/titi");
     }
 
     @Test
     public void testGetFolderAllRootFolder() {
-        MediaScanner.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard"};
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
 
-        MediaScanner.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard/"};
         tryGetFolder("/mnt/sdcard/tata.mp3", ".");
     }
 
     @Test
     public void testGetFolderMangleRootFolder() {
-        MediaScanner.rootFolders = "/mnt/sdcard";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard"};
         tryGetFolder("/mnt/sdcard.mp3", ".");
 
-        MediaScanner.rootFolders = "/mnt/sdcard/";
+        MediaScanner.rootFolders = new String[] {"/mnt/sdcard/"};
         tryGetFolder("/mnt/sdcard.mp3", "/mnt");
     }
 

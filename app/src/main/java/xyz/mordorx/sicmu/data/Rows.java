@@ -29,9 +29,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -1211,7 +1213,7 @@ public class Rows {
         savedID = preferences.getSongID();
         filter = preferences.getFilter();
         repeatMode = preferences.getRepeatMode();
-        MediaScanner.rootFolders = preferences.getRootFolders();
+        MediaScanner.rootFolders = preferences.getRootFolders().split("[,;]");
     }
 
     public void save() {
@@ -1249,20 +1251,30 @@ public class Rows {
         preferences.setRepeatMode(repeatMode);
     }
 
+    /**
+     * @param rootFolders CSV list of root folders (either semicolon or comma separated)
+     * @return Whether the rows view was re-initialized
+     */
     public boolean setRootFolders(String rootFolders) {
         boolean reinited = false;
+        // We re-construct the new roots with a semicolon, because both semicolons and commas are
+        // interchangable and valid delimiters. This way, we can make a fair comparison
+        var currentRoots = String.join(";", MediaScanner.rootFolders);
+        var newRoots = String.join(";", rootFolders.split("[,;]"));
 
-        if (!MediaScanner.rootFolders.equals(rootFolders)) {
-            MediaScanner.rootFolders = rootFolders;
-            if (filter == Filter.FOLDER || filter == Filter.TREE) {
-                // reinit everything is a bit heavy: nevermind, rootFolders will not be changed often
-                updateSavedId();
-                init();
-                reinited = true;
-            }
+        if(currentRoots.equals(newRoots)) {
+            return false;
         }
 
-        return  reinited;
+        MediaScanner.rootFolders = rootFolders.split("[,;]");
+        if (filter == Filter.FOLDER || filter == Filter.TREE) {
+            // reinit everything is a bit heavy: nevermind, rootFolders will not be changed often
+            updateSavedId();
+            init();
+            return true;
+        }
+
+        return false;
     }
 
     private void updateSavedId() {
