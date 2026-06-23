@@ -53,11 +53,11 @@ public class TreeRowComparatorTest {
     void checkSortedPath(String[] expectedSongsPath, ArrayList<Row> rows) {
         assertEquals(rows.size(), expectedSongsPath.length);
         for(int i = 0; i < expectedSongsPath.length; i++)
-            assertEquals(expectedSongsPath[i], ((RowSong) rows.get(i)).getPath());
+            assertEquals(expectedSongsPath[i], ((RowSong) rows.get(i)).path);
     }
     void checkSortedTrack(ArrayList<Row> rows) {
         for(int i = 0; i < rows.size(); i++)
-            assertEquals(i, ((RowSong) rows.get(i)).getTrack());
+            assertEquals(i, ((RowSong) rows.get(i)).track);
     }
 
     @Test
