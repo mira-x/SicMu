@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
-import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
@@ -18,7 +17,6 @@ import java.io.File
 import java.util.Arrays
 import java.util.Locale
 import java.util.Optional
-import java.util.function.BiFunction
 import kotlin.concurrent.Volatile
 import kotlin.math.max
 
@@ -33,16 +31,8 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
 
     private val thumbSize = Size(this.screenWidth, this.screenWidth)
 
-    private val ctx: Context
-
-    init {
-        this.ctx = ctx.getApplicationContext()
-
-        if (fallback == null) {
-            fallback =
-                BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_default_coverart)
-        }
-    }
+    private val ctx: Context = ctx.applicationContext
+    private var fallback: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.ic_default_coverart)
 
     /** This spins up a thread to load an album image, if it's not cached currently. If it is,
      * the callback is called instantly, in sync. */
@@ -90,33 +80,24 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
             "AlbumArtLoader",
             "Cache Miss. RowSongID=" + song.iD + " SongPath=" + song.path + " Bitmap=" + bmp
         )
-        cache.put(song.iD, bmp!!)
+        cache.put(song.iD, bmp)
 
         return bmp
     }
 
     private fun loadViaLoadThumbnail(): Bitmap? {
-        // Android 10 "Quince Tart"
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return null
-        }
-        try {
-            return ctx.getContentResolver()
-                .loadThumbnail(song.externalContentUri, thumbSize, null)
+        return try {
+            ctx.contentResolver.loadThumbnail(song.externalContentUri, thumbSize, null)
         } catch (ignored: Exception) {
-            return null
+            null
         }
     }
 
     private fun loadViaCreateAudioThumbnail(audioFile: File): Bitmap? {
-        // Android 10 "Quince Tart"
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return null
-        }
-        try {
-            return ThumbnailUtils.createAudioThumbnail(audioFile, thumbSize, null)
+        return try {
+            ThumbnailUtils.createAudioThumbnail(audioFile, thumbSize, null)
         } catch (ignored: Exception) {
-            return null
+            null
         }
     }
 
@@ -124,11 +105,11 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         try {
             MediaMetadataRetriever().use { mmr ->
                 mmr.setDataSource(song.path)
-                val img_bytes = mmr.getEmbeddedPicture()
-                if (img_bytes != null) return BitmapFactory.decodeByteArray(
-                    img_bytes,
+                val imgBytes = mmr.embeddedPicture
+                if (imgBytes != null) return BitmapFactory.decodeByteArray(
+                    imgBytes,
                     0,
-                    img_bytes.size,
+                    imgBytes.size,
                     BitmapFactory.Options()
                 )
             }
@@ -140,7 +121,7 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
 
     private fun loadViaMediaStore(): Bitmap? {
         try {
-            ctx.getContentResolver().query(
+            ctx.contentResolver.query(
                 MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 arrayOf<String>(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                 MediaStore.Audio.Albums._ID + "=?",
@@ -170,7 +151,7 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         val songAlbum = song.album!!
         val songFolder = song.folder
 
-        val res = ctx.getContentResolver()
+        val res = ctx.contentResolver
         val proj = ArrayList<String?>()
         /*
          * Real world example data for these three column:
@@ -201,14 +182,14 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
             while (cursor.moveToNext()) {
                 val ID = cursor.getLong(idxID)
                 val relativePath = cursor.getString(idxRelativePath)
-                val displayName = cursor.getString(idxDisplayName)
+                val displayName = cursor.getString(idxDisplayName).sanitizedAsFileName
                 val imgFile = File(relativePath, displayName)
 
                 candidates.add(AlbumImageCandidate(imgFile, songFile, songAlbum, ID))
 
                 Log.d(
                     "AlbumArtLoader",
-                    "Found local image: id=" + ID + ", path=" + relativePath + " \t image name=" + displayName + " \t path query=" + songFolder
+                    "Found local image: id=$ID, path=$relativePath \t image name=$displayName \t path query=$songFolder"
                 )
             }
             Log.d("AlbumArtLoader", "Searching local images done.")
@@ -233,13 +214,6 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         val imgId = albumArt.get().imageID
         val imgUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgId)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            try {
-                return ctx.getContentResolver().loadThumbnail(imgUri, thumbSize, null)
-            } catch (_: Exception) {
-            }
-        }
-
         try {
             ctx.contentResolver.openInputStream(imgUri).use { bmpStream ->
                 return BitmapFactory.decodeStream(bmpStream)
@@ -258,7 +232,7 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
     private val screenWidth: Int
         get() {
             var width =
-                Resources.getSystem().getDisplayMetrics().widthPixels
+                Resources.getSystem().displayMetrics.widthPixels
             if (width < 128) width = 128
             return width
         }
@@ -274,12 +248,7 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         albumName: String,
         val imageID: Long
     ) {
-        private val albumName: String
-
-        /** This handles relative and absolute paths. */
-        init {
-            this.albumName = (if (albumName == "<unknown>") "" else albumName)
-        }
+        private val albumName: String = (if (albumName == "<unknown>") "" else albumName)
 
         val isValidImageFile: Boolean
             /** Returns whether the image file contains a valid image file extension like PNG or JPEG.
@@ -354,12 +323,9 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         val significantAlbumPrefixMatch: Int
             /** If no album is specified, the folder name is used instead. */
             get() {
-                val song =
-                    songPath.getName().trim { it <= ' ' }.lowercase(Locale.getDefault())
+                val song = songPath.getName().trim { it <= ' ' }.lowercase(Locale.getDefault())
                 if (albumName.isBlank() || albumName == "<unknown>") {
-                    val folder =
-                        Optional.ofNullable<String?>(imageFile.getParent())
-                            .orElse("").trim { it <= ' ' }.lowercase(Locale.getDefault())
+                    val folder = Optional.ofNullable<String?>(imageFile.getParent()).orElse("").trim { it <= ' ' }.lowercase(Locale.getDefault())
                     return getSignificantCommonPrefix(folder, song)
                 } else {
                     return getSignificantCommonPrefix(albumName, song)
@@ -368,12 +334,9 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
 
         val insignificantAlbumPrefixMatch: Int
             get() {
-                val song =
-                    songPath.getName().trim { it <= ' ' }.lowercase(Locale.getDefault())
+                val song = songPath.getName().trim { it <= ' ' }.lowercase(Locale.getDefault())
                 if (albumName.isBlank() || albumName == "<unknown>") {
-                    val folder =
-                        Optional.ofNullable<String?>(imageFile.getParent())
-                            .orElse("").trim { it <= ' ' }.lowercase(Locale.getDefault())
+                    val folder = Optional.ofNullable<String?>(imageFile.getParent()).orElse("").trim { it <= ' ' }.lowercase(Locale.getDefault())
                     return getCommonPrefix(folder, song)
                 } else {
                     return getCommonPrefix(albumName, song)
@@ -417,13 +380,10 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
     }
 
     companion object {
-        /**  Maps a RowSongID to an Optional<Bitmap>. It can have three states:
-         * 1. Key not in cache / null: We have not yet looked for this image
-         * 2. Optional.isEmpty(): We looked for an image, but there is none
-         * 3. Optional.isPresent(): We looked for an image and found one</Bitmap> */
         private val cache = DeduplicationCache<Long, Bitmap>(
-            CacheBuilderSpec.parse("maximumSize=10, expireAfterAccess=6h"),
-            { b1, b2 -> bitmapsAreSame(b1, b2) })
+            CacheBuilderSpec.parse("maximumSize=10, expireAfterAccess=3h"),
+            Companion::bitmapsAreSame
+        )
 
         @Volatile
         var isTerminated: Boolean = false
@@ -437,7 +397,6 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
             isTerminated = false
         }
 
-        private var fallback: Bitmap? = null
 
         private fun bitmapsAreSame(b1: Bitmap?, b2: Bitmap?): Boolean {
             // If they are the same reference or both null, they are the same
@@ -449,5 +408,21 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
             // Compare by value
             return b1.sameAs(b2)
         }
+
+        /**
+         * This sanitizes file names provided by ContentResolver's displayName column.
+         */
+        val String.sanitizedAsFileName: String
+            get() {
+                if (this.isEmpty()) {
+                    return "default_file_" + System.currentTimeMillis()
+                }
+
+                // Only take characters after the final slash
+                val fileName = File(this).name
+
+                // Replace illegal symbols with underscores
+                return fileName.replace("[\\\\/:*?\"<>|]".toRegex(), "_")
+            }
     }
 }
