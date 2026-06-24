@@ -29,7 +29,6 @@ import android.widget.Toast
 import xyz.mordorx.sicmu.R
 import xyz.mordorx.sicmu.collections.PathRowComparator
 import xyz.mordorx.sicmu.collections.TreeRowComparator
-import xyz.mordorx.sicmu.media.Filter
 import xyz.mordorx.sicmu.media.RepeatMode
 import java.io.File
 import java.util.Collections
@@ -46,7 +45,6 @@ import kotlin.NumberFormatException
 import kotlin.also
 import kotlin.arrayOf
 import kotlin.concurrent.Volatile
-import kotlin.div
 import kotlin.math.max
 import kotlin.text.compareTo
 import kotlin.text.contains
@@ -70,9 +68,7 @@ class Rows(
     private val random: Random
     private val shuffleSavedPos: ArrayList<Int>
 
-    private var filter: Filter? = null
-
-    // id of the song at last exiting
+    /// ID of the song at last exiting
     private var savedID: Long = 0
 
     // todo: see if another Collection than ArrayList would give better perf and code simplicity
@@ -574,7 +570,9 @@ class Rows(
         }
     }
 
-    // group and pos must correspond in the foldable rows
+    /**
+     * group and pos must correspond in the foldable rows
+      */
     private fun fold(group: RowGroup, pos: Int) {
         var pos = pos
         pos++
@@ -586,10 +584,11 @@ class Rows(
         group.isFolded = (true)
     }
 
-
-    // @desc unfold only the group(s) that contains pos.
-    //
-    // @return true if at least one group has been unfold
+    /**
+     * Unfold only the groups that contain pos.
+     *
+     * @return true if at least one group has been unfolded
+     */
     fun unfoldCurrPos(): Boolean {
         if (rowsUnfolded.isEmpty()) return false
 
@@ -597,8 +596,8 @@ class Rows(
         val pos = this.currPosFolded
         if (pos < 0 || pos >= rows.size) return false
 
-        val row = rows.get(pos)
-        if (row != null && row.javaClass == RowGroup::class.java) {
+        val row = rows[pos]
+        if (row is RowGroup) {
             val group = row as RowGroup
             if (group.isFolded) {
                 unfold(group, pos)
@@ -629,57 +628,9 @@ class Rows(
         return true
     }
 
-    // @desc unfold a group following settings
-    //
-    // group and pos must correspond in the foldable rows
-    // group must be folded
+    /// group and pos must correspond in the foldable rows
+    /// group must be folded
     private fun unfold(group: RowGroup, pos: Int) {
-        if (filter == Filter.TREE) {
-            unfoldTree(group, pos)
-            return
-        }
-
-        /* Note 2026-05-05: The whole auto-unfold algorithm does not seem to work.
-         * But I don't want to touch the code at this time.
-         */
-
-        // add every missing rows
-        var row: Row? = null
-        val autoUnfoldThreshold = preferences.unfoldSubGroupThreshold
-        if (preferences.unfoldSubGroup || group.level != 0 || group.songCount < autoUnfoldThreshold ||
-            hasOneSubGroup(group, pos)
-        ) {
-            // unfold everything
-            var i = 1
-            while (group.genuinePos + i < rowsUnfolded.size &&
-                (rowsUnfolded.get(group.genuinePos + i)
-                    .also { row = it }).level > group.level
-            ) {
-                // unfold if previously folded
-                if (row!!.javaClass == RowGroup::class.java) (row as RowGroup).isFolded = (false)
-
-                rows.add(pos + i, row)
-                i++
-            }
-        } else {
-            // unfold only first subgroup
-            var i = 1
-            var j = 1
-            while (group.genuinePos + i < rowsUnfolded.size &&
-                (rowsUnfolded.get(group.genuinePos + i)
-                    .also { row = it }).level > group.level
-            ) {
-                if (row!!.javaClass == RowGroup::class.java) {
-                    (row as RowGroup).isFolded = (true)
-                    rows.add(pos + j++, row)
-                }
-                i++
-            }
-        }
-        group.isFolded = (false)
-    }
-
-    private fun unfoldTree(group: RowGroup, pos: Int) {
         var row: Row? = null
         var nbRowGroupUnfold = 0
         var nbRowSongUnfold = 0
@@ -687,7 +638,7 @@ class Rows(
         var i = 1
         var j = 1
         while (group.genuinePos + i < rowsUnfolded.size &&
-            (rowsUnfolded.get(group.genuinePos + i)
+            (rowsUnfolded[group.genuinePos + i]
                 .also { row = it }).level > group.level
         ) {
             if (row!!.level == group.level + 1) {
@@ -701,20 +652,19 @@ class Rows(
             }
             i++
         }
-        group.isFolded = (false)
+        group.isFolded = false
 
         // unfold subgroup if group contains only one subgroup
         if (nbRowGroupUnfold == 1 && nbRowSongUnfold == 0) {
             if (group.genuinePos + 1 < rowsUnfolded.size) {
                 val subGroupSingle = rowsUnfolded.get(group.genuinePos + 1) as RowGroup?
-                if (subGroupSingle != null && subGroupSingle.level == group.level + 1) unfoldTree(
+                if (subGroupSingle != null && subGroupSingle.level == group.level + 1) unfold(
                     subGroupSingle,
                     pos + 1
                 )
             }
         }
     }
-
 
     fun isLastRow(pos: Int): Boolean {
         return pos == rows.size - 1
@@ -723,7 +673,7 @@ class Rows(
 
     fun init() {
         terminated = false
-        AlbumArtLoader.Companion.resetTermination()
+        AlbumArtLoader.resetTermination()
         rowsUnfolded.clear()
         rows.clear()
 
@@ -742,30 +692,14 @@ class Rows(
             MediaStore.Audio.Media.MIME_TYPE
         )
 
-        lateinit var sortOrder: String
-        when (filter) {
-            Filter.ARTIST -> sortOrder = MediaStore.Audio.Media.ARTIST +
-                    ", " + MediaStore.Audio.Media.ALBUM +
-                    ", " + MediaStore.Audio.Media.TRACK +
-                    ", " + MediaStore.Audio.Media.TITLE
-
-            Filter.TREE, Filter.FOLDER ->                 // presort it even if it will be restorted by tree and folder, in order to have a
-                // title sort if there is no ID3 track
-                sortOrder = MediaStore.Audio.Media.ARTIST +
-                        ", " + MediaStore.Audio.Media.ALBUM +
-                        ", " + MediaStore.Audio.Media.TRACK +
-                        ", " + MediaStore.Audio.Media.TITLE
-
-            else -> return
-        }
+        val sortOrder: String =
+                       MediaStore.Audio.Media.ARTIST +
+                ", " + MediaStore.Audio.Media.ALBUM +
+                ", " + MediaStore.Audio.Media.TRACK +
+                ", " + MediaStore.Audio.Media.TITLE
         try {
             musicResolver.query(musicUri, projection, null, null, sortOrder).use { musicCursor ->
-                when (filter) {
-                    Filter.ARTIST -> initByArtist(musicCursor)
-                    Filter.FOLDER -> initByPath(musicCursor)
-                    Filter.TREE -> initByTree(musicCursor)
-                    else -> return
-                }
+                initByTree(musicCursor)
             }
         } catch (e: Exception) {
             val msg = "No songItems found!"
@@ -776,14 +710,9 @@ class Rows(
 
         // if no songPos saved : search the first song
         if (currPosUnfolded == -1) {
-            var idx: Int
-            idx = 0
-            while (idx < rowsUnfolded.size) {
-                if (rowsUnfolded.get(idx).javaClass == RowSong::class.java) {
-                    setCurrPosUnfolded(idx)
-                    break
-                }
-                idx++
+            val song = rowsUnfolded.withIndex().firstOrNull { it is RowSong }
+            if (song != null) {
+                setCurrPosUnfolded(song.index)
             }
         }
 
@@ -801,7 +730,7 @@ class Rows(
             "Rows",
             "======> songItems initialized in " + (System.currentTimeMillis() - startTime) + "ms"
         )
-        Log.d("Rows", "songPos: " + currPosUnfolded)
+        Log.d("Rows", "songPos: $currPosUnfolded")
 
         //preloadDBSongsAsync();
         if (preferences.enableRating) preloadSongRatingAsync()
@@ -910,174 +839,7 @@ class Rows(
         }
     }
 
-    private fun initByArtist(musicCursor: Cursor?) {
-        RowGroup.Companion.rowType = Filter.ARTIST
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            val titleCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            val idCol = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID)
-            val artistCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
-            val albumCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-            val durationCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            val pathCol = musicCursor.getColumnIndex(MediaStore.MediaColumns.DATA)
-            val trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK)
-            val albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
-            val yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR)
-            val mimeCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE)
-
-            var prevArtistGroup: RowGroup? = null
-            var prevAlbumGroup: RowGroup? = null
-            do {
-                val id = musicCursor.getLong(idCol)
-                val title = getDefaultStrIfNull(musicCursor.getString(titleCol))
-                val artist = getDefaultStrIfNull(musicCursor.getString(artistCol))
-                val album = getDefaultStrIfNull(musicCursor.getString(albumCol))
-                val durationMs = musicCursor.getLong(durationCol)
-                val track = musicCursor.getInt(trackCol)
-                val albumId = musicCursor.getLong(albumIdCol)
-                val year = musicCursor.getInt(yearCol)
-                val mime = musicCursor.getString(mimeCol)
-                val path = getDefaultStrIfNull(musicCursor.getString(pathCol))
-
-                if (prevArtistGroup == null || artist.compareTo(
-                        prevArtistGroup.name!!,
-                        ignoreCase = true
-                    ) != 0
-                ) {
-                    val artistGroup = RowGroup(
-                        rowsUnfolded.size, 0, artist,
-                        path, Typeface.BOLD, false, preferences
-                    )
-                    rowsUnfolded.add(artistGroup)
-                    prevArtistGroup = artistGroup
-                    prevAlbumGroup = null
-                }
-
-                if (prevAlbumGroup == null || album.compareTo(
-                        prevAlbumGroup.name!!,
-                        ignoreCase = true
-                    ) != 0
-                ) {
-                    val albumGroup = RowGroup(
-                        rowsUnfolded.size, 1, album,
-                        path, Typeface.ITALIC, true, preferences
-                    )
-                    albumGroup.parent = (prevArtistGroup)
-                    rowsUnfolded.add(albumGroup)
-                    prevAlbumGroup = albumGroup
-                }
-
-                val rowSong = RowSong(
-                    db, rowsUnfolded.size, 2, id, title, artist, album,
-                    durationMs, track, path, albumId, year, mime, preferences
-                )
-                rowSong.parent = (prevAlbumGroup)
-
-                if (id == savedID) currPosUnfolded = rowsUnfolded.size
-
-                rowsUnfolded.add(rowSong)
-                prevArtistGroup.increaseSongCount(1)
-                prevArtistGroup.incTotalDuration(rowSong.durationMs)
-                prevAlbumGroup.increaseSongCount(1)
-                prevAlbumGroup.incTotalDuration(rowSong.durationMs)
-            } while (musicCursor.moveToNext())
-            setGroupSelectedState(currPosUnfolded, true)
-        }
-    }
-
-
-    private fun initByPath(musicCursor: Cursor?) {
-        RowGroup.Companion.rowType = Filter.FOLDER
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            val titleCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            val idCol = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID)
-            val artistCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
-            val albumCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-            val durationCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            val pathCol = musicCursor.getColumnIndex(MediaStore.MediaColumns.DATA)
-            val trackCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TRACK)
-            val albumIdCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
-            val yearCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.YEAR)
-            val mimeCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE)
-
-            do {
-                val id = musicCursor.getLong(idCol)
-                val title = getDefaultStrIfNull(musicCursor.getString(titleCol))
-                val artist = getDefaultStrIfNull(musicCursor.getString(artistCol))
-                val album = getDefaultStrIfNull(musicCursor.getString(albumCol))
-                val durationMs = musicCursor.getLong(durationCol)
-                val track = musicCursor.getInt(trackCol)
-                val path = getDefaultStrIfNull(musicCursor.getString(pathCol))
-                val albumId = musicCursor.getLong(albumIdCol)
-                val year = musicCursor.getInt(yearCol)
-                val mime = musicCursor.getString(mimeCol)
-
-                val rowSong = RowSong(
-                    db, -1, 2, id, title, artist, album,
-                    durationMs, track, path, albumId, year, mime, preferences
-                )
-                rowsUnfolded.add(rowSong)
-                //Log.d("Rows", "song added: " + rowSong.toString());
-            } while (musicCursor.moveToNext())
-        }
-
-        rowsUnfolded.sortWith(PathRowComparator(preferences.showFilename))
-
-        // add group
-        var prevFolderGroup: RowGroup? = null
-        var prevArtistGroup: RowGroup? = null
-
-        var idx = 0
-        while (idx < rowsUnfolded.size) {
-            val rowSong = rowsUnfolded.get(idx) as RowSong
-
-            val curFolder = rowSong.folder
-            if (prevFolderGroup == null || curFolder.compareTo(
-                    prevFolderGroup.name!!,
-                    ignoreCase = true
-                ) != 0
-            ) {
-                val folderGroup = RowGroup(
-                    idx, 0, curFolder,
-                    rowSong.path, Typeface.BOLD, false, preferences
-                )
-                rowsUnfolded.add(idx, folderGroup)
-                idx++
-                prevFolderGroup = folderGroup
-                prevArtistGroup = null
-            }
-
-            val curArtist = rowSong.artist!!
-            if (prevArtistGroup == null || curArtist.compareTo(
-                    prevArtistGroup.name!!,
-                    ignoreCase = true
-                ) != 0
-            ) {
-                val artistGroup = RowGroup(
-                    idx, 1, curArtist,
-                    rowSong.path, Typeface.BOLD, true, preferences
-                )
-                artistGroup.parent = (prevFolderGroup)
-                rowsUnfolded.add(idx, artistGroup)
-                idx++
-                prevArtistGroup = artistGroup
-            }
-
-            if (rowSong.iD == savedID) currPosUnfolded = idx
-
-            rowSong.genuinePos = (idx)
-            rowSong.parent = (prevArtistGroup)
-
-            prevFolderGroup.increaseSongCount(1)
-            prevFolderGroup.incTotalDuration(rowSong.durationMs)
-            prevArtistGroup.increaseSongCount(1)
-            prevArtistGroup.incTotalDuration(rowSong.durationMs)
-            idx++
-        }
-        setGroupSelectedState(currPosUnfolded, true)
-    }
-
     private fun initByTree(musicCursor: Cursor?) {
-        RowGroup.Companion.rowType = Filter.TREE
         if (musicCursor != null && musicCursor.moveToFirst()) {
             val titleCol = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
             val idCol = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID)
@@ -1191,11 +953,7 @@ class Rows(
 
 
     private fun getDefaultStrIfNull(str: String?): String {
-        return if (str != null) str else defaultStr
-    }
-
-    private fun isDigit(c: Char): Boolean {
-        return c >= '0' && c <= '9'
+        return str ?: "<null>"
     }
 
     private fun getTrackNumber(strTrack: String?, path: String?): Int {
@@ -1211,7 +969,6 @@ class Rows(
 
     private fun restore() {
         savedID = preferences.songID
-        filter = preferences.filter
         repeatMode = preferences.repeatMode
         MediaScanner.rootFolders =
             preferences.rootFolders.split("[,;]".toRegex()).dropLastWhile { it.isEmpty() }
@@ -1221,22 +978,7 @@ class Rows(
     fun save() {
         updateSavedId()
         preferences.songID = (savedID)
-        preferences.filter = filter!!
         preferences.repeatMode = repeatMode!!
-    }
-
-
-    fun getFilter(): Filter {
-        return filter!!
-    }
-
-    fun setFilter(filter: Filter) {
-        if (this.filter != filter) {
-            this.filter = filter
-            // todo: handle the current playing song finish during reinitSongs()...
-            reinit()
-            preferences.filter = (filter)
-        }
     }
 
     fun reinit() {
@@ -1268,16 +1010,11 @@ class Rows(
             return false
         }
 
-        MediaScanner.rootFolders =
-            rootFolders.split("[,;]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        if (filter == Filter.FOLDER || filter == Filter.TREE) {
-            // reinit everything is a bit heavy: nevermind, rootFolders will not be changed often
-            updateSavedId()
-            init()
-            return true
-        }
-
-        return false
+        MediaScanner.rootFolders = rootFolders.split("[,;]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        // reinit everything is a bit heavy: nevermind, rootFolders will not be changed often
+        updateSavedId()
+        init()
+        return true
     }
 
     private fun updateSavedId() {
@@ -1449,9 +1186,5 @@ class Rows(
         if (succeed && song !== this.currSong) deleteSongFromList(song)
 
         return succeed
-    }
-
-    companion object {
-        const val defaultStr: kotlin.String = "<null>"
     }
 }

@@ -85,7 +85,6 @@ import xyz.mordorx.sicmu.data.RowSong.LoadRatingCallbackInterface
 import xyz.mordorx.sicmu.data.Rows
 import xyz.mordorx.sicmu.data.Rows.RateGroupCallbackInterface
 import xyz.mordorx.sicmu.data.Rows.RatingCallbackInterface
-import xyz.mordorx.sicmu.media.Filter
 import xyz.mordorx.sicmu.media.MusicService
 import xyz.mordorx.sicmu.media.MusicService.MusicBinder
 import xyz.mordorx.sicmu.media.PlayerState
@@ -465,7 +464,6 @@ class Main : AppCompatActivity() {
             }, 100)
 
             setRepeatButton()
-            setSortButton()
             setMinRatingButton()
 
             // Associate app to music files (start music from a file browser)
@@ -496,7 +494,7 @@ class Main : AppCompatActivity() {
         if (row != null) {
             if (row.javaClass == RowGroup::class.java) {
                 // vibrate when big font choosed
-                if (prefs!!.choosedTextSize) vibrate()
+                if (prefs!!.enlargeText) vibrate()
 
                 rows!!.invertFold(position)
                 songAdt!!.notifyDataSetChanged()
@@ -1362,44 +1360,6 @@ class Main : AppCompatActivity() {
         )
     }
 
-    private fun openSortMenu() {
-        val altBld = AlertDialog.Builder(this)
-        altBld.setIcon(this.sortResId)
-        altBld.setTitle(getString(xyz.mordorx.sicmu.R.string.action_sort))
-        val items = arrayOf<CharSequence?>(
-            getString(xyz.mordorx.sicmu.R.string.action_sort_tree),
-            getString(xyz.mordorx.sicmu.R.string.action_sort_folder),
-            getString(xyz.mordorx.sicmu.R.string.action_sort_artist)
-        )
-
-        val checkedItem: Int
-        if (rows!!.getFilter() == Filter.TREE) checkedItem = 0
-        else if (rows!!.getFilter() == Filter.FOLDER) checkedItem = 1
-        else checkedItem = 2
-
-        altBld.setSingleChoiceItems(
-            items,
-            checkedItem,
-            DialogInterface.OnClickListener { dialog: DialogInterface?, item: Int ->
-                if (musicSrv != null) {
-                    val oldFilter = rows!!.getFilter()
-                    when (item) {
-                        0 -> rows!!.setFilter(Filter.TREE)
-                        1 -> rows!!.setFilter(Filter.FOLDER)
-                        2 -> rows!!.setFilter(Filter.ARTIST)
-                    }
-                    if (oldFilter != rows!!.getFilter()) {
-                        songAdt!!.notifyDataSetChanged()
-                        unfoldAndScrollToCurrSong()
-                        setSortButton()
-                    }
-                    dialog!!.dismiss() // dismiss the alertbox after chose option
-                }
-            })
-        val alert = altBld.create()
-        alert.show()
-    }
-
 
     private fun openRepeatMenu() {
         val altBld = AlertDialog.Builder(this)
@@ -1578,27 +1538,6 @@ class Main : AppCompatActivity() {
             return res
         }
 
-    private val textSizeResId: Int
-        get() {
-            if (prefs!!.choosedTextSize) return xyz.mordorx.sicmu.R.drawable.ic_menu_text_big
-            else return xyz.mordorx.sicmu.R.drawable.ic_menu_text_regular
-        }
-
-    private val sortResId: Int
-        get() {
-            val res: Int
-            when (rows!!.getFilter()) {
-                Filter.ARTIST -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_artist
-
-                Filter.FOLDER -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_folder
-
-                else -> res = xyz.mordorx.sicmu.R.drawable.ic_menu_tree
-            }
-            return res
-        }
-
     private val minRatingResId: Int
         get() {
             val res: Int
@@ -1615,9 +1554,9 @@ class Main : AppCompatActivity() {
     private val shuffleResId: Int
         get() {
             when (prefs!!.shuffle) {
-                ShuffleMode.SEQUENTIAL -> return xyz.mordorx.sicmu.R.drawable.ic_menu_no_shuffle
-                ShuffleMode.RANDOM -> return xyz.mordorx.sicmu.R.drawable.ic_menu_shuffle
-                ShuffleMode.RADIO -> return xyz.mordorx.sicmu.R.drawable.ic_menu_shuffle_radio
+                ShuffleMode.SEQUENTIAL -> return R.drawable.ic_menu_no_shuffle
+                ShuffleMode.RANDOM -> return R.drawable.ic_menu_shuffle
+                ShuffleMode.RADIO -> return R.drawable.ic_menu_shuffle_radio
             }
             throw IllegalStateException("Shuffle mode is invalid")
         }
@@ -1627,10 +1566,6 @@ class Main : AppCompatActivity() {
         img.setImageResource(this.repeatResId)
     }
 
-    private fun setSortButton() {
-        val img = findViewById<ImageView>(xyz.mordorx.sicmu.R.id.sort_button)
-        img.setImageResource(this.sortResId)
-    }
 
     /**  Sets the stereo button image to reflect the Mono/Stereo setting */
     private fun setStereoButton() {
@@ -1919,12 +1854,6 @@ class Main : AppCompatActivity() {
         startCloseMoreButtonsTimer()
     }
 
-
-    fun openSort(view: View?) {
-        openSortMenu()
-        startCloseMoreButtonsTimer()
-    }
-
     fun openRepeat(view: View?) {
         openRepeatMenu()
         startCloseMoreButtonsTimer()
@@ -2033,7 +1962,7 @@ class Main : AppCompatActivity() {
 
     fun applyTextSize() {
         val textSize: Int
-        if (!prefs!!.choosedTextSize) textSize = prefs!!.normalTextSize
+        if (!prefs!!.enlargeText) textSize = prefs!!.normalTextSize
         else textSize = prefs!!.bigTextSize
 
         RowSong.Companion.textSize = textSize

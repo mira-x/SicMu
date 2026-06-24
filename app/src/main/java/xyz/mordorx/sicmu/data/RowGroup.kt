@@ -17,6 +17,7 @@
  */
 package xyz.mordorx.sicmu.data
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.support.v4.media.MediaMetadataCompat
 import android.util.TypedValue
@@ -24,7 +25,6 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import xyz.mordorx.sicmu.Main
-import xyz.mordorx.sicmu.media.Filter
 import xyz.mordorx.sicmu.ui.RowViewHolder
 import java.io.File
 
@@ -91,25 +91,22 @@ class RowGroup(
         setDuration(holder.duration!!)
         holder.image!!.setImageDrawable(null)
 
-        holder.ratingStar!!.setVisibility(View.INVISIBLE)
-        val params = holder.duration.getLayoutParams() as RelativeLayout.LayoutParams
+        holder.ratingStar!!.visibility = View.INVISIBLE
+        val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-        holder.duration.setLayoutParams(params)
+        holder.duration.layoutParams = params
 
         if (overrideBackgroundColor && backgroundOverrideColor != 0) {
             setBackgroundColor(holder, backgroundOverrideColor)
         } else {
-            setBackgroundColor(holder, Row.Companion.backgroundColor)
+            setBackgroundColor(holder, backgroundColor)
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setText(text: TextView) {
-        var prefix = ""
-        if (rowType == Filter.TREE) {
-            if (this.isFolded) prefix = "| "
-            else prefix = "\\ "
-        }
-        text.setText(prefix + name)
+        val prefix = if (this.isFolded) "| " else "\\ "
+        text.text = prefix + name
 
         if (this.isFolded && this.isSelected) text.setTextColor(playingTextColor)
         else text.setTextColor(normalTextColor)
@@ -117,20 +114,17 @@ class RowGroup(
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDuration(duration: TextView) {
         val rightSpace = stringOffset
         //super.setText(text);
         if (this.isFolded) {
             if (this.isSelected) duration.setTextColor(playingTextColor)
             else duration.setTextColor(normalTextColor)
-            if (preferences.showGroupTotalTime) duration.setText(
-                msToTime(
-                    this.totalDuration
-                ) + " |" + rightSpace
-            )
-            else duration.setText(songCount.toString() + " |" + rightSpace)
+            if (preferences.showGroupTotalTime) duration.text = msToTime(this.totalDuration) + " |" + rightSpace
+            else duration.text = "$songCount |$rightSpace"
         } else {
-            duration.setText("/" + rightSpace)
+            duration.text = "/$rightSpace"
             duration.setTextColor(normalTextColor)
         }
 
@@ -138,9 +132,8 @@ class RowGroup(
         duration.setTypeface(null, if (typeface == Typeface.ITALIC) Typeface.NORMAL else typeface)
     }
 
-
     override fun toString(): String {
-        return "Group pos: " + genuinePos + " level: " + level + " name: " + name
+        return "Group pos: $genuinePos level: $level name: $name"
     }
 
     val mediaMetadata: MediaMetadataCompat?
@@ -155,7 +148,6 @@ class RowGroup(
         }
 
     companion object {
-        var rowType: Filter? = null
         var textSize: Int = 18
 
         // must be set outside before calling setText

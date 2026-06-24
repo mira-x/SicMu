@@ -320,7 +320,7 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         } else if (preference.getKey() == CHANGELOGS_KEY) {
             showChangelogs()
         } else if (preference.getKey() == TEXT_SIZE_TOGGLE_KEY) {
-            val size = !preferences!!.choosedTextSize
+            val size = !preferences!!.enlargeText
             preferences!!.setChooseTextSize(size)
             setFontSizeIcon()
         } else if (preference.getKey() == GITHUB_SOURCE_URL_KEY) {
@@ -337,7 +337,7 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
 
     fun setFontSizeIcon() {
         val icon: Int
-        if (preferences!!.choosedTextSize) icon = R.drawable.ic_menu_text_big
+        if (preferences!!.enlargeText) icon = R.drawable.ic_menu_text_big
         else icon = R.drawable.ic_menu_text_regular
         findPreference(TEXT_SIZE_TOGGLE_KEY).setIcon(icon)
     }

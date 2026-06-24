@@ -432,26 +432,13 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_button"
         android:orientation="horizontal"
-        android:weightSum="350">
+        android:weightSum="300">
 
         <!--
         icon ic_action_prev, ic_action_play, ic_action_pause, ic_action_next
         done by Daniele De Santis (Creative Commons (Attribution 3.0 Unported)),
         found on iconfinder.com. Color and dimension has been changed.
         -->
-
-        <ImageButton
-            android:id="@+id/sort_button"
-            style="@style/BottomButton"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:longClickable="true"
-            android:onClick="openSort"
-            android:padding="12dp"
-            android:contentDescription="@string/a11y_sort_button"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_menu_tree" />
 
         <!--
         <ImageButton
@@ -472,8 +459,8 @@
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:layout_weight="50"
-            android:onClick="toggleStereo"
             android:contentDescription="@string/a11y_stereo_button"
+            android:onClick="toggleStereo"
             android:scaleType="center"
             android:src="@drawable/ic_stereo" />
 
@@ -495,8 +482,8 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:longClickable="true"
             android:contentDescription="@string/a11y_shuffle_button"
+            android:longClickable="true"
             android:onClick="changeShuffle"
             android:padding="14dp"
             android:scaleType="fitCenter"
@@ -508,9 +495,9 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
+            android:contentDescription="@string/a11y_rating_filter_button"
             android:longClickable="true"
             android:onClick="openMinRating"
-            android:contentDescription="@string/a11y_rating_filter_button"
             android:padding="14dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_star_5_highlight" />
@@ -520,11 +507,11 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
+            android:contentDescription="@string/a11y_search_button"
             android:longClickable="true"
             android:onClick="openSearchDialog"
             android:padding="14dp"
             android:scaleType="centerInside"
-            android:contentDescription="@string/a11y_search_button"
             app:srcCompat="@drawable/ic_action_search" />
 
         <ImageButton
@@ -532,8 +519,8 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:onClick="openSettings"
             android:contentDescription="@string/a11y_settings_button"
+            android:onClick="openSettings"
             android:src="@drawable/ic_menu_settings" />
 
     </LinearLayout>
@@ -551,18 +538,20 @@
         done by Daniele De Santis (Creative Commons (Attribution 3.0 Unported)),
         found on iconfinder.com. Color and dimension has been changed.
         -->
+
         <ImageButton
-            android:id="@+id/play_button"
+            android:id="@+id/goto_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_weight="48"
-            android:onClick="playOrPause"
-            android:contentDescription="@string/a11y_play_button"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:contentDescription="@string/a11y_goto_button"
+            android:longClickable="true"
+            android:onClick="gotoCurrSong"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/action_play" />
+            android:src="@drawable/action_goto_play" />
 
         <ImageButton
             android:id="@+id/prev_button"
@@ -577,6 +566,19 @@
             android:src="@drawable/action_prev" />
 
         <ImageButton
+            android:id="@+id/play_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_weight="48"
+            android:contentDescription="@string/a11y_play_button"
+            android:onClick="playOrPause"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/action_play" />
+
+        <ImageButton
             android:id="@+id/next_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
@@ -587,20 +589,6 @@
             android:onClick="playNext"
             android:scaleType="fitCenter"
             android:src="@drawable/action_next" />
-
-        <ImageButton
-            android:id="@+id/goto_button"
-            style="@style/BottomButton"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:longClickable="true"
-            android:onClick="gotoCurrSong"
-            android:paddingTop="15dp"
-            android:contentDescription="@string/a11y_goto_button"
-            android:paddingBottom="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/action_goto_play" />
 
         <ImageButton
             style="@style/BottomButton"

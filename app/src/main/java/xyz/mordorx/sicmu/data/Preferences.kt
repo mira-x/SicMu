@@ -27,31 +27,24 @@ import android.preference.PreferenceManager
 import androidx.core.util.Pair
 import xyz.mordorx.sicmu.BuildConfig
 import xyz.mordorx.sicmu.R
-import xyz.mordorx.sicmu.media.Filter
 import xyz.mordorx.sicmu.media.RepeatMode
 import xyz.mordorx.sicmu.media.ShuffleMode
 import java.util.Arrays
-import java.util.function.Function
 
 class Preferences(private val context: Context) {
-    private val read: SharedPreferences
-    private val write: SharedPreferences.Editor
-
-    init {
-        this.read = PreferenceManager.getDefaultSharedPreferences(context)
-        this.write = read.edit()
-    }
+    private val read: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val write: SharedPreferences.Editor = read.edit()
 
     val followSong: Boolean
         get() = read.getBoolean(PrefKeys.FOLLOW_SONG.name, true)
 
     fun setChooseTextSize(big: Boolean) {
-        write.putBoolean(PrefKeys.TEXT_SIZE_CHOOSED.name, big).apply()
+        write.putBoolean(PrefKeys.ENLARGE_TEXT.name, big).apply()
     }
 
-    val choosedTextSize: Boolean
+    val enlargeText: Boolean
         get() = read.getBoolean(
-            PrefKeys.TEXT_SIZE_CHOOSED.name,
+            PrefKeys.ENLARGE_TEXT.name,
             context.getString(R.string.settings_text_size_choosed_default)
                 .toBoolean()
         )
@@ -92,17 +85,6 @@ class Preferences(private val context: Context) {
         get() = read.getLong(PrefKeys.SONG_POS_ID.name, -1)
         set(songPos) {
             write.putLong(PrefKeys.SONG_POS_ID.name, songPos).apply()
-        }
-
-    var filter: Filter
-        get() = Filter.valueOf(
-            read.getString(
-                PrefKeys.FILTER.name,
-                xyz.mordorx.sicmu.media.Filter.TREE.name
-            )!!
-        )
-        set(filter) {
-            write.putString(PrefKeys.FILTER.name, filter.name).apply()
         }
 
     var repeatMode: RepeatMode
