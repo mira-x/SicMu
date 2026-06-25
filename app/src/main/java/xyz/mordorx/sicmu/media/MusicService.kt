@@ -64,6 +64,7 @@ import xyz.mordorx.sicmu.data.RowSong.Companion.msToMinutes
 import xyz.mordorx.sicmu.data.Rows
 import xyz.mordorx.sicmu.data.Scrobble
 import xyz.mordorx.sicmu.data.SongDatabase
+import xyz.mordorx.sicmu.data.XRows
 import kotlin.math.sqrt
 
 @UnstableApi
@@ -264,6 +265,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         Log.d("MusicService", "onCreate()")
         super.onCreate()
         createNotificationChannel()
+        XRows.appContext = applicationContext
+        XRows.initRowsFromMediaStore()
 
         state = PlayerState()
 
