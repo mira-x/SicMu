@@ -18,6 +18,7 @@
 package xyz.mordorx.sicmu
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
@@ -62,29 +63,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.jsibbold.zoomage.ZoomageView
+import kotlinx.coroutines.runBlocking
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
 import org.jaudiotagger.tag.TagField
 import org.woheller69.freeDroidWarn.FreeDroidWarn
 import xyz.mordorx.sicmu.data.AlbumArtLoader
 import xyz.mordorx.sicmu.data.MediaScanner
-import xyz.mordorx.sicmu.data.Preferences
 import xyz.mordorx.sicmu.data.Row
 import xyz.mordorx.sicmu.data.RowGroup
 import xyz.mordorx.sicmu.data.RowSong
 import xyz.mordorx.sicmu.data.RowSong.Companion.msToMinutes
 import xyz.mordorx.sicmu.data.RowSong.LoadMetadataCallbackInterface
-import xyz.mordorx.sicmu.data.RowSong.LoadRatingCallbackInterface
 import xyz.mordorx.sicmu.data.Rows
 import xyz.mordorx.sicmu.data.Rows.RateGroupCallbackInterface
-import xyz.mordorx.sicmu.data.Rows.RatingCallbackInterface
+import xyz.mordorx.sicmu.data.XPreferences
 import xyz.mordorx.sicmu.media.MusicService
 import xyz.mordorx.sicmu.media.MusicService.MusicBinder
 import xyz.mordorx.sicmu.media.PlayerState
@@ -105,6 +102,12 @@ import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 import kotlin.math.floor
 import kotlin.math.max
+import androidx.core.view.isVisible
+import androidx.media3.common.C
+import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.update
+import xyz.mordorx.sicmu.data.AudioHardwareID
+import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 
 @UnstableApi
 class Main : AppCompatActivity() {
@@ -132,15 +135,13 @@ class Main : AppCompatActivity() {
     private var posButton: ImageButton? = null
     private var toggleDetailsButton: ImageButton? = null
 
-    // true if you want to keep the current song played visible
-    private var followSong = false
+    private var scrollToSongUponStart = false
 
     private var seekButtonsOpened = false
     private var detailsOpened = false
     private var detailsToggledFollowAuto = false
     private var hasCoverArt = false
 
-    private var prefs: Preferences? = null
 
     private var vibrator: Vibrator? = null
 
@@ -160,7 +161,7 @@ class Main : AppCompatActivity() {
     private var songArtist: TextView? = null
     private var songMime: TextView? = null
     private var warningText: TextView? = null
-    val ratingButtons: ArrayList<ImageButton?> = ArrayList<ImageButton?>()
+    val ratingButtons: ArrayList<ImageButton?> = ArrayList()
     private var details_rating_layout: LinearLayout? = null
     private var detailsBigCoverArt = false
     private val EXTERNAL_STORAGE_REQUEST_CODE = 3
@@ -169,16 +170,13 @@ class Main : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("Main", "onCreate")
 
+        runBlocking {
+            XPreferences.load(applicationContext)
+        }
+
         FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE)
 
-        prefs = Preferences(this)
-
-        hideSystemBars()
-
-        when (prefs!!.theme) {
-            1 -> setTheme(R.style.AppThemeDark)
-            2 -> setTheme(R.style.AppThemeWhite)
-        }
+        setTheme(R.style.AppTheme)
 
         setContentView(R.layout.activity_main)
         finishing = false
@@ -248,7 +246,7 @@ class Main : AppCompatActivity() {
         seekbar = findViewById<SeekBar?>(R.id.seek_bar)
         seekbar!!.setOnSeekBarChangeListener(seekBarChangeListener)
 
-        followSong = false
+        scrollToSongUponStart = false
 
         vibrator = this.getSystemService(VIBRATOR_SERVICE) as Vibrator
 
@@ -304,10 +302,10 @@ class Main : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             playbackSpeedText!!.setTextColor(getResources().getColor(R.color.Blood, getTheme()))
         }
-        playbackSpeedText!!.setOnValueChangedListener(NumberPicker.OnValueChangeListener { picker: NumberPicker?, ignored: Int, Ignored: Int ->
-            val factor = picker!!.getValue() / 100.0f
+        playbackSpeedText!!.setOnValueChangedListener({ picker: NumberPicker?, _: Int, _: Int ->
+            val factor = picker!!.value / 100.0f
             setPlaybackSpeed(factor)
-            prefs!!.playbackSpeedFactor = factor
+            P.getAndUpdate { p -> p.copy(playbackSpeedFactor = factor) }
         })
 
         try {
@@ -319,9 +317,14 @@ class Main : AppCompatActivity() {
                 "changeValueByOne",
                 Boolean::class.javaPrimitiveType
             )
-            method.setAccessible(true)
+            method.isAccessible = true
             method.invoke(playbackSpeedText, true)
         } catch (ignored: Exception) {
+        }
+
+        if (P.value.lastSeenChangelogVersion != BuildConfig.VERSION_CODE) {
+            showChangelogs()
+            P.update { p -> p.copy(lastSeenChangelogVersion = BuildConfig.VERSION_CODE) }
         }
     }
 
@@ -397,25 +400,9 @@ class Main : AppCompatActivity() {
         }
     }
 
-    private fun hideSystemBars() {
-        if (prefs!!.hideNavigationBar) {
-            val windowInsetsController =
-                ViewCompat.getWindowInsetsController(getWindow().getDecorView())
-            if (windowInsetsController == null) {
-                return
-            }
-            // Configure the behavior of the hidden system bars
-            windowInsetsController.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            )
-            // Hide the navigation bar
-            windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
-        }
-    }
-
     fun getColorFromAttr(attr: Int): Int {
         val typedValue = TypedValue()
-        getTheme().resolveAttribute(attr, typedValue, true)
+        theme.resolveAttribute(attr, typedValue, true)
         return ContextCompat.getColor(this, typedValue.resourceId)
     }
 
@@ -428,28 +415,20 @@ class Main : AppCompatActivity() {
             val binder = service as MusicBinder
             musicSrv = binder.service
 
-            val prefs = Preferences(applicationContext)
-            if (prefs.isLastSeenChangelogVersionOutdated) {
-                runOnUiThread(Runnable {
-                    showChangelogs()
-                })
-            }
-            prefs.setLastSeenChangelogVersionToCurrent()
-
             rows = musicSrv!!.getRows()
             songAdt = RowsAdapter(this@Main, rows!!, this@Main)
-            songView!!.setAdapter(songAdt)
-            songView!!.setOnItemClickListener(
+            songView!!.adapter = songAdt
+            songView!!.onItemClickListener =
                 AdapterView.OnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                     if (!serviceBound) return@OnItemClickListener
                     clickOnRow(position)
-                })
-            songView!!.setOnItemLongClickListener(
+                }
+            songView!!.onItemLongClickListener =
                 AdapterView.OnItemLongClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                     if (!serviceBound) return@OnItemLongClickListener false
                     longClickOnRowEditMode(position)
                     true
-                })
+                }
             serviceBound = true
 
             musicSrv!!.stopNotification()
@@ -468,18 +447,17 @@ class Main : AppCompatActivity() {
 
             // Associate app to music files (start music from a file browser)
             val intent = getIntent()
-            val uri = intent.getData()
-            val mimeType = intent.getType()
+            val uri = intent.data
+            val mimeType = intent.type
             if (uri != null && !uri.toString().isEmpty()) {
-                Log.d("Main", "Receiving intent with uri: " + uri + ", mime: " + mimeType)
+                Log.d("Main", "Receiving intent with uri: $uri, mime: $mimeType")
                 rows = musicSrv!!.getRows()
-                if (rows!!.setCurrPosFromUri(getApplicationContext(), uri)) {
+                if (rows!!.setCurrPosFromUri(applicationContext, uri)) {
                     playAlreadySelectedSong()
                 }
             }
 
-            val speed = this@Main.prefs!!.playbackSpeedFactor
-            setPlaybackSpeed(speed)
+            setPlaybackSpeed(P.value.playbackSpeedFactor)
             setPlaybackSpeedText()
         }
 
@@ -493,8 +471,8 @@ class Main : AppCompatActivity() {
         val row = rows!!.get(position)
         if (row != null) {
             if (row.javaClass == RowGroup::class.java) {
-                // vibrate when big font choosed
-                if (prefs!!.enlargeText) vibrate()
+                // vibrate when big font chosen
+                if (P.value.enlargeText) vibrate()
 
                 rows!!.invertFold(position)
                 songAdt!!.notifyDataSetChanged()
@@ -515,7 +493,7 @@ class Main : AppCompatActivity() {
         vibrate()
 
         var offset = 0
-        if (prefs!!.shuffle.randomSongOrder()) {
+        if (P.value.shuffle.randomSongOrder()) {
             offset =
                 floor((row.songCount - 1 /* We already are playing the first song in this group */) * Math.random()).toInt()
         }
@@ -548,13 +526,13 @@ class Main : AppCompatActivity() {
     }
 
     private fun updateRatings() {
-        if (serviceBound && MusicService.Companion.enableRating) {
-            rows!!.loadRatingsAsync(RatingCallbackInterface { newRatingLoaded: Boolean ->
+        if (serviceBound && MusicService.enableRating) {
+            rows!!.loadRatingsAsync { newRatingLoaded: Boolean ->
                 if (newRatingLoaded) {
                     Log.d("Main", "newRatingLoaded")
                     runOnUiThread(Runnable { songAdt!!.notifyDataSetChanged() })
                 }
-            })
+            }
         }
     }
 
@@ -599,8 +577,8 @@ class Main : AppCompatActivity() {
                 }
             }
         } else if (requestCode == SETTINGS_ACTION) {
-            if (resultCode == SettingsFragment.Companion.CHANGE_TEXT_SIZE) applyTextSize()
-            else if (resultCode == SettingsFragment.Companion.CHANGE_THEME) {
+            if (resultCode == SettingsFragment.CHANGE_TEXT_SIZE) applyTextSize()
+            else if (resultCode == SettingsFragment.CHANGE_THEME) {
                 // restart main activity
                 finish()
                 startActivity(getIntent())
@@ -610,11 +588,11 @@ class Main : AppCompatActivity() {
 
     private fun showWarning() {
         warningText!!.setText(R.string.permission_needed)
-        warningLayout!!.setVisibility(View.VISIBLE)
+        warningLayout!!.visibility = View.VISIBLE
     }
 
     private fun hideWarning() {
-        warningLayout!!.setVisibility(View.GONE)
+        warningLayout!!.visibility = View.GONE
     }
 
     private fun showChangelogs() {
@@ -625,8 +603,8 @@ class Main : AppCompatActivity() {
     private val seekBarChangeListener
             : SeekBar.OnSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            if (seekbar != null && seekbar!!.getVisibility() == TextView.VISIBLE) {
-                setCurrDuration(seekBar.getProgress().toLong())
+            if (seekbar != null && seekbar!!.isVisible) {
+                setCurrDuration(seekBar.progress.toLong())
             }
         }
 
@@ -635,14 +613,14 @@ class Main : AppCompatActivity() {
         }
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
-            val states: Int = PlayerState.Companion.Prepared or
-                    PlayerState.Companion.Started or
-                    PlayerState.Companion.Paused or
-                    PlayerState.Companion.PlaybackCompleted
+            val states: Int = PlayerState.Prepared or
+                    PlayerState.Started or
+                    PlayerState.Paused or
+                    PlayerState.PlaybackCompleted
             if (serviceBound && musicSrv!!.isInState(states)) {
                 Log.d(
                     "Main",
-                    "onStopTrackingTouch setProgress" + msToMinutes(seekBar.getProgress().toLong())
+                    "onStopTrackingTouch setProgress" + msToMinutes(seekBar.progress.toLong())
                 )
                 seekBar.progress = seekBar.progress
                 // valid state : {Prepared, Started, Paused, PlaybackCompleted}
@@ -678,15 +656,11 @@ class Main : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d("Main", "onResume")
-
-        hideSystemBars()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         Log.d("Main", "onWindowFocusChanged")
-
-        hideSystemBars()
     }
 
     override fun onStop() {
@@ -701,6 +675,10 @@ class Main : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        runBlocking { XPreferences.save(applicationContext) }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -725,34 +703,6 @@ class Main : AppCompatActivity() {
             musicSrv = null
         }
 
-        // Clear view references and listeners to help GC
-        if (songView != null) {
-            songView!!.setAdapter(null)
-            songView!!.setOnItemClickListener(null)
-            songView!!.setOnItemLongClickListener(null)
-        }
-        if (seekbar != null) {
-            seekbar!!.setOnSeekBarChangeListener(null)
-        }
-        if (albumImage != null) {
-            albumImage!!.setOnSingleTapListener(null)
-        }
-        if (playButton != null) {
-            playButton!!.setOnTouchListener(null)
-        }
-        if (appAnimation != null) {
-            appAnimation!!.stop()
-            appAnimation = null
-        }
-
-        songView = null
-        songAdt = null
-        playButton = null
-        albumImage = null
-        duration = null
-        currDuration = null
-        seekbar = null
-        ratingButtons.clear()
     }
 
 
@@ -771,7 +721,7 @@ class Main : AppCompatActivity() {
                 Log.d("Main", "updateInfo changed")
                 vibrate()
                 updatePlayButton()
-                if (followSong) unfoldAndScrollToCurrSong()
+                if (scrollToSongUponStart) unfoldAndScrollToCurrSong()
             } else {
                 if (musicSrv!!.playingStopped()) {
                     stopPlayButton()
@@ -779,7 +729,7 @@ class Main : AppCompatActivity() {
                     val currPosMs = musicSrv!!.currentPositionMs
                     //Log.v("Main", "updateInfo setProgress" + RowSong.msToMinutes(currPosMs));
                     // getCurrentPosition {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}
-                    seekbar!!.setProgress(currPosMs.toInt())
+                    seekbar!!.progress = currPosMs.toInt()
                 }
             }
         }
@@ -825,27 +775,26 @@ class Main : AppCompatActivity() {
         songAdt!!.notifyDataSetChanged()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setCurrDuration(currDurationMs: Long) {
         if (currDuration == null) return
-        if (prefs!!.showRemainingTime) {
+        if (P.value.showRemainingTime) {
             val rowSong = rows!!.currSong
             if (rowSong != null) {
-                currDuration!!.setText(
-                    "- " +
-                            msToMinutes(rowSong.durationMs - currDurationMs)
-                )
+                currDuration!!.text = "- " +
+                        msToMinutes(rowSong.durationMs - currDurationMs)
             }
         } else {
-            currDuration?.setText(msToMinutes(currDurationMs))
+            currDuration?.text = msToMinutes(currDurationMs)
         }
     }
 
     private fun stopPlayButton() {
-        duration!!.setVisibility(TextView.INVISIBLE)
-        seekbar!!.setVisibility(TextView.INVISIBLE)
+        duration!!.visibility = TextView.INVISIBLE
+        seekbar!!.visibility = TextView.INVISIBLE
         currDuration!!.setText(R.string.app_name)
         playButton!!.setImageResource(R.drawable.ic_action_play)
-        playButton!!.setTag(R.drawable.ic_action_play)
+        playButton!!.tag = R.drawable.ic_action_play
         if (!seekButtonsOpened) posButton!!.setImageDrawable(null)
         appAnimation!!.stop()
     }
@@ -896,10 +845,7 @@ class Main : AppCompatActivity() {
     }
 
     fun setDetails() {
-        val rowSong = rows!!.currSong
-        if (rowSong == null) {
-            return
-        }
+        val rowSong = rows!!.currSong ?: return
         var title = rowSong.title
         val trackNum = rowSong.track
         if (trackNum > 0) title = "$trackNum. $title"
@@ -911,12 +857,12 @@ class Main : AppCompatActivity() {
         if (rowSong.year > 1000) album = rowSong.year.toString() + " - " + album
         songAlbum!!.text = album
 
-        songMime!!.setText(rowSong.mime)
+        songMime!!.text = rowSong.mime
 
         AlbumArtLoader(
-            getApplicationContext(),
+            applicationContext,
             rowSong
-        ).loadAsync(AlbumArtLoader.Callback { rowSongId: Long, bitmap: Bitmap? ->
+        ).loadAsync({ rowSongId: Long, bitmap: Bitmap? ->
             this.setCoverArt(
                 rowSongId,
                 bitmap
@@ -926,7 +872,7 @@ class Main : AppCompatActivity() {
         setRatingDetails()
 
         clearMetadataTable()
-        rowSong.loadMetadataAsync(LoadMetadataCallbackInterface { tags: Tag? ->
+        rowSong.loadMetadataAsync({ tags: Tag? ->
             this.showMetadataTable(
                 tags!!
             )
@@ -935,7 +881,7 @@ class Main : AppCompatActivity() {
 
     private fun clearMetadataTable() {
         val c = (findViewById<View?>(R.id.metadata_comment) as TextView)
-        c.setText("")
+        c.text = ""
     }
 
     private fun showMetadataTable(tags: Tag) {
@@ -951,20 +897,17 @@ class Main : AppCompatActivity() {
             }
 
             val c = findViewById<View?>(R.id.metadata_comment) as TextView
-            c.setText(comments.get())
-            c.setMovementMethod(LinkMovementMethod.getInstance())
+            c.text = comments.get()
+            c.movementMethod = LinkMovementMethod.getInstance()
         })
     }
 
     private fun setRatingDetails() {
         if (!serviceBound) return
-        if (MusicService.Companion.enableRating) {
+        if (MusicService.enableRating) {
             val rowSong = rows!!.currSong
-            if (rowSong != null) {
-                rowSong.loadRatingAsync(LoadRatingCallbackInterface { rating: Int, ratingChanged: Boolean ->
-                    runOnUiThread(
-                        Runnable { setRatingButtonsDrawable(rating, rating > 0) })
-                })
+            rowSong?.loadRatingAsync{ rating: Int, ratingChanged: Boolean ->
+                runOnUiThread { setRatingButtonsDrawable(rating, rating > 0) }
             }
         } else {
             setRatingButtonsDrawable(0, false)
@@ -990,11 +933,8 @@ class Main : AppCompatActivity() {
         if (!serviceBound) {
             return
         }
-        val rowSong = rows!!.currSong
-        if (rowSong == null) {
-            return
-        }
-        AlbumArtLoader(getApplicationContext(), rowSong).loadAsync(
+        val rowSong = rows!!.currSong ?: return
+        AlbumArtLoader(applicationContext, rowSong).loadAsync(
             AlbumArtLoader.Callback { rowSongId: Long, bitmap: Bitmap? ->
                 hasCoverArt = bitmap != null
                 // the concept of detailsToggledFollowAuto (this is a bit not useful && fishy):
@@ -1036,15 +976,13 @@ class Main : AppCompatActivity() {
             )
         } else {
             // decrease cover art size
-            params.height = params.height / 2
-            detailsLayout!!.setLayoutParams(params)
+            params.height /= 2
+            detailsLayout!!.layoutParams = params
 
             // show text details
-            albumImage!!.setLayoutParams(
-                LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT, 1f
-                )
+            albumImage!!.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1f
             )
         }
         albumImage!!.setScaleType(ImageView.ScaleType.FIT_CENTER)
@@ -1063,15 +1001,15 @@ class Main : AppCompatActivity() {
                     if (rows!!.deleteSongFile(song)) {
                         songAdt!!.notifyDataSetChanged()
                         Toast.makeText(
-                            getApplicationContext(),
-                            getString(xyz.mordorx.sicmu.R.string.action_delete_song_ok, songTitle),
+                            applicationContext,
+                            getString(R.string.action_delete_song_ok, songTitle),
                             Toast.LENGTH_LONG
                         ).show()
                         scrollToCurrSong()
                     } else {
                         Toast.makeText(
-                            getApplicationContext(),
-                            getString(xyz.mordorx.sicmu.R.string.action_delete_song_nok, songTitle),
+                            applicationContext,
+                            getString(R.string.action_delete_song_nok, songTitle),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -1102,10 +1040,10 @@ class Main : AppCompatActivity() {
             )
         )
         val items = arrayOf<CharSequence?>(
-            getString(xyz.mordorx.sicmu.R.string.action_play),
-            getString(xyz.mordorx.sicmu.R.string.action_rate_group),
-            getString(xyz.mordorx.sicmu.R.string.action_rate_group_overwrite),
-            getString(xyz.mordorx.sicmu.R.string.action_rescan),
+            getString(R.string.action_play),
+            getString(R.string.action_rate_group),
+            getString(R.string.action_rate_group_overwrite),
+            getString(R.string.action_rescan),
         )
 
         altBld.setItems(
@@ -1140,10 +1078,10 @@ class Main : AppCompatActivity() {
         val isRowGroup = row.javaClass == RowGroup::class.java
 
         val altBld = AlertDialog.Builder(this)
-        altBld.setIcon(xyz.mordorx.sicmu.R.drawable.ic_star_5_highlight)
+        altBld.setIcon(R.drawable.ic_star_5_highlight)
         altBld.setTitle(
             getString(
-                if (isRowGroup) xyz.mordorx.sicmu.R.string.action_set_rating_folder else xyz.mordorx.sicmu.R.string.action_set_rating_song,
+                if (isRowGroup) R.string.action_set_rating_folder else R.string.action_set_rating_song,
                 cutLongStringAndDots(rowName)
             )
         )
@@ -1154,7 +1092,7 @@ class Main : AppCompatActivity() {
         if (!isRowGroup) {
             val rate = (row as RowSong).rating
             val idx = rate - 1
-            if (idx >= 0 && idx < items.size) items[idx] = items[idx]!!.toString() + " <- " + getString(xyz.mordorx.sicmu.R.string.current_rating_idx)
+            if (idx >= 0 && idx < items.size) items[idx] = items[idx]!!.toString() + " <- " + getString(R.string.current_rating_idx)
         }
         altBld.setItems(
             items,
@@ -1172,7 +1110,7 @@ class Main : AppCompatActivity() {
                                 if (isRowGroup) Toast.makeText(
                                     getApplicationContext(),
                                     getString(
-                                        xyz.mordorx.sicmu.R.string.songs_have_been_rated,
+                                        R.string.songs_have_been_rated,
                                         nbChanged
                                     ),
                                     Toast.LENGTH_SHORT
@@ -1190,10 +1128,10 @@ class Main : AppCompatActivity() {
 
     private fun openEditSongMenu(position: Int, row: RowSong) {
         val altBld = AlertDialog.Builder(this)
-        altBld.setIcon(xyz.mordorx.sicmu.R.drawable.ic_action_edit)
+        altBld.setIcon(R.drawable.ic_action_edit)
         altBld.setTitle(
             getString(
-                xyz.mordorx.sicmu.R.string.ic_action_edit_song,
+                R.string.ic_action_edit_song,
                 cutLongStringAndDots(row.title)
             )
         )
@@ -1204,18 +1142,18 @@ class Main : AppCompatActivity() {
         val updateAndShowItems = Runnable {
             val youtubeVideoURL: String? = extractYouTubeUrl(comment.get())
             list.clear()
-            list.add(getString(xyz.mordorx.sicmu.R.string.action_play))
-            list.add(getString(xyz.mordorx.sicmu.R.string.action_rate_song))
-            list.add(getString(xyz.mordorx.sicmu.R.string.show_song_details))
-            list.add(getString(xyz.mordorx.sicmu.R.string.action_genius_lyrics))
+            list.add(getString(R.string.action_play))
+            list.add(getString(R.string.action_rate_song))
+            list.add(getString(R.string.show_song_details))
+            list.add(getString(R.string.action_genius_lyrics))
             if (youtubeVideoURL!!.isEmpty()) {
-                list.add(getString(xyz.mordorx.sicmu.R.string.action_youtube_search))
+                list.add(getString(R.string.action_youtube_search))
             } else {
-                list.add(getString(xyz.mordorx.sicmu.R.string.action_youtube_open))
+                list.add(getString(R.string.action_youtube_open))
             }
 
             //getString(R.string.add_to_playlist),
-            if (row !== rows!!.currSong) list.add(getString(xyz.mordorx.sicmu.R.string.action_delete_song))
+            if (row !== rows!!.currSong) list.add(getString(R.string.action_delete_song))
 
             altBld.setItems(
                 list.toTypedArray<CharSequence?>(),
@@ -1293,7 +1231,7 @@ class Main : AppCompatActivity() {
 
     private fun showPopupSongInfo(rowSong: RowSong) {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(xyz.mordorx.sicmu.R.layout.popup_song_details, null)
+        val popupView = inflater.inflate(R.layout.popup_song_details, null)
 
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
@@ -1301,34 +1239,34 @@ class Main : AppCompatActivity() {
         val popupWindow = PopupWindow(popupView, width, height, focusable)
 
         popupWindow.showAtLocation(
-            findViewById<View?>(xyz.mordorx.sicmu.R.id.main_layout),
+            findViewById<View?>(R.id.main_layout),
             Gravity.CENTER,
             0,
             0
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_artist) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_artist, rowSong.artist)
+        (popupView.findViewById<View?>(R.id.detail_artist) as TextView).setText(
+            getString(R.string.popup_song_artist, rowSong.artist)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_album) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_album, rowSong.album)
+        (popupView.findViewById<View?>(R.id.detail_album) as TextView).setText(
+            getString(R.string.popup_song_album, rowSong.album)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_title) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_title, rowSong.title)
+        (popupView.findViewById<View?>(R.id.detail_title) as TextView).setText(
+            getString(R.string.popup_song_title, rowSong.title)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_track) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_track, rowSong.track)
+        (popupView.findViewById<View?>(R.id.detail_track) as TextView).setText(
+            getString(R.string.popup_song_track, rowSong.track)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_year) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_year, rowSong.year)
+        (popupView.findViewById<View?>(R.id.detail_year) as TextView).setText(
+            getString(R.string.popup_song_year, rowSong.year)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_rating) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_rating, rowSong.rating)
+        (popupView.findViewById<View?>(R.id.detail_rating) as TextView).setText(
+            getString(R.string.popup_song_rating, rowSong.rating)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_mime) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_mime, rowSong.mime)
+        (popupView.findViewById<View?>(R.id.detail_mime) as TextView).setText(
+            getString(R.string.popup_song_mime, rowSong.mime)
         )
-        (popupView.findViewById<View?>(xyz.mordorx.sicmu.R.id.detail_path) as TextView).setText(
-            getString(xyz.mordorx.sicmu.R.string.popup_song_path, rowSong.path)
+        (popupView.findViewById<View?>(R.id.detail_path) as TextView).setText(
+            getString(R.string.popup_song_path, rowSong.path)
         )
         popupView.setOnTouchListener(View.OnTouchListener { view: View?, event: MotionEvent? ->
             popupWindow.dismiss()
@@ -1339,7 +1277,7 @@ class Main : AppCompatActivity() {
     private fun rescan(rowGroup: RowGroup) {
         Toast.makeText(
             getApplicationContext(),
-            getString(xyz.mordorx.sicmu.R.string.start_rescan) + rowGroup.path,
+            getString(R.string.start_rescan) + rowGroup.path,
             Toast.LENGTH_SHORT
         ).show()
         MediaScanner.scanMediaFolder(
@@ -1350,7 +1288,7 @@ class Main : AppCompatActivity() {
                     Runnable {
                         Toast.makeText(
                             getApplicationContext(),
-                            getString(xyz.mordorx.sicmu.R.string.rescanned) + path,
+                            getString(R.string.rescanned) + path,
                             Toast.LENGTH_LONG
                         ).show()
                         if (rows != null) rows!!.reinit()
@@ -1364,34 +1302,34 @@ class Main : AppCompatActivity() {
     private fun openRepeatMenu() {
         val altBld = AlertDialog.Builder(this)
         altBld.setIcon(this.repeatResId)
-        altBld.setTitle(getString(xyz.mordorx.sicmu.R.string.action_repeat_title))
+        altBld.setTitle(getString(R.string.action_repeat_title))
         val items = arrayOf<CharSequence?>(
-            getString(xyz.mordorx.sicmu.R.string.action_repeat_all),
-            getString(xyz.mordorx.sicmu.R.string.action_repeat_group),
-            getString(xyz.mordorx.sicmu.R.string.action_repeat_one),
-            getString(xyz.mordorx.sicmu.R.string.action_repeat_not),
-            getString(xyz.mordorx.sicmu.R.string.action_stop_at_end_of_track),
+            getString(R.string.action_repeat_all),
+            getString(R.string.action_repeat_group),
+            getString(R.string.action_repeat_one),
+            getString(R.string.action_repeat_not),
+            getString(R.string.action_stop_at_end_of_track),
         )
-
-        val checkedItem: Int
-        if (rows!!.getRepeatMode() == RepeatMode.REPEAT_ALL) checkedItem = 0
-        else if (rows!!.getRepeatMode() == RepeatMode.REPEAT_GROUP) checkedItem = 1
-        else if (rows!!.getRepeatMode() == RepeatMode.REPEAT_ONE) checkedItem = 2
-        else if (rows!!.getRepeatMode() == RepeatMode.REPEAT_NOT) checkedItem = 3
-        else checkedItem = 4
+        val checkedItem: Int = if (P.value.repeatMode == RepeatMode.REPEAT_ALL) 0
+        else if (P.value.repeatMode == RepeatMode.REPEAT_GROUP) 1
+        else if (P.value.repeatMode == RepeatMode.REPEAT_ONE) 2
+        else if (P.value.repeatMode == RepeatMode.STOP_AT_END_OF_FOLDER) 3
+        else 4
 
         altBld.setSingleChoiceItems(
             items,
             checkedItem,
-            DialogInterface.OnClickListener { dialog: DialogInterface?, item: Int ->
+            { dialog: DialogInterface?, item: Int ->
                 if (musicSrv != null) {
-                    when (item) {
-                        0 -> rows!!.setRepeatMode(RepeatMode.REPEAT_ALL)
-                        1 -> rows!!.setRepeatMode(RepeatMode.REPEAT_GROUP)
-                        2 -> rows!!.setRepeatMode(RepeatMode.REPEAT_ONE)
-                        3 -> rows!!.setRepeatMode(RepeatMode.REPEAT_NOT)
-                        4 -> rows!!.setRepeatMode(RepeatMode.STOP_AT_END_OF_TRACK)
+                    val newMode = when (item) {
+                        0 -> (RepeatMode.REPEAT_ALL)
+                        1 -> (RepeatMode.REPEAT_GROUP)
+                        2 -> (RepeatMode.REPEAT_ONE)
+                        3 -> (RepeatMode.STOP_AT_END_OF_FOLDER)
+                        4 -> (RepeatMode.STOP_AT_END_OF_TRACK)
+                        else -> return@setSingleChoiceItems
                     }
+                    P.update { p -> p.copy(repeatMode = newMode) }
                     dialog!!.dismiss() // dismiss the alertbox after chose option
                     setRepeatButton()
                 }
@@ -1405,7 +1343,7 @@ class Main : AppCompatActivity() {
 
         val altBld = AlertDialog.Builder(this)
         altBld.setIcon(this.minRatingResId)
-        altBld.setTitle(getString(xyz.mordorx.sicmu.R.string.action_min_rating))
+        altBld.setTitle(getString(R.string.action_min_rating))
         val items = arrayOf<CharSequence?>(
             "1", "2", "3", "4", "5"
         )
@@ -1428,8 +1366,8 @@ class Main : AppCompatActivity() {
 
         // Init dialog
         val altBld = AlertDialog.Builder(this)
-        altBld.setIcon(xyz.mordorx.sicmu.R.drawable.ic_action_search)
-        altBld.setTitle(getString(xyz.mordorx.sicmu.R.string.action_search))
+        altBld.setIcon(R.drawable.ic_action_search)
+        altBld.setTitle(getString(R.string.action_search))
 
         val prefs = getPreferences(MODE_PRIVATE)
 
@@ -1446,7 +1384,7 @@ class Main : AppCompatActivity() {
         input.setCompoundDrawablesWithIntrinsicBounds(
             0,
             0,
-            xyz.mordorx.sicmu.R.drawable.ic_close,
+            R.drawable.ic_close,
             0
         )
         input.setOnTouchListener(View.OnTouchListener { v: View?, event: MotionEvent? ->
@@ -1478,7 +1416,7 @@ class Main : AppCompatActivity() {
                 if (row == null) {
                     Snackbar.make(
                         view,
-                        xyz.mordorx.sicmu.R.string.search_unsuccessful,
+                        R.string.search_unsuccessful,
                         BaseTransientBottomBar.LENGTH_LONG
                     ).show()
                     return@OnClickListener
@@ -1509,31 +1447,29 @@ class Main : AppCompatActivity() {
             })
 
         val dialog = altBld.create()
-        val win = dialog.getWindow()
-        if (win != null) {
-            win.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        }
-        dialog.setOnShowListener(DialogInterface.OnShowListener { e: DialogInterface? -> showKeyboard.run() })
+        val win = dialog.window
+        win?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.setOnShowListener { e: DialogInterface? -> showKeyboard.run() }
         dialog.show()
     }
 
     private val repeatResId: Int
         get() {
             val res: Int
-            when (rows!!.getRepeatMode()) {
+            when (P.value.repeatMode) {
                 RepeatMode.REPEAT_ONE -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_repeat_one
+                    R.drawable.ic_menu_repeat_one
 
                 RepeatMode.REPEAT_GROUP -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_repeat_group
+                    R.drawable.ic_menu_repeat_group
 
                 RepeatMode.REPEAT_ALL -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_repeat_all
+                    R.drawable.ic_menu_repeat_all
 
-                RepeatMode.REPEAT_NOT -> res =
-                    xyz.mordorx.sicmu.R.drawable.ic_menu_repeat_not
+                RepeatMode.STOP_AT_END_OF_FOLDER -> res =
+                    R.drawable.ic_menu_repeat_not
 
-                else -> res = xyz.mordorx.sicmu.R.drawable.ic_menu_stop_at_end_of_track
+                else -> res = R.drawable.ic_menu_stop_at_end_of_track
             }
             return res
         }
@@ -1542,18 +1478,18 @@ class Main : AppCompatActivity() {
         get() {
             val res: Int
             when (musicSrv!!.getMinRating()) {
-                5 -> res = xyz.mordorx.sicmu.R.drawable.ic_star_5_highlight
-                4 -> res = xyz.mordorx.sicmu.R.drawable.ic_star_4_highlight
-                3 -> res = xyz.mordorx.sicmu.R.drawable.ic_star_3_highlight
-                2 -> res = xyz.mordorx.sicmu.R.drawable.ic_star_2_highlight
-                else -> res = xyz.mordorx.sicmu.R.drawable.ic_star_1_highlight
+                5 -> res = R.drawable.ic_star_5_highlight
+                4 -> res = R.drawable.ic_star_4_highlight
+                3 -> res = R.drawable.ic_star_3_highlight
+                2 -> res = R.drawable.ic_star_2_highlight
+                else -> res = R.drawable.ic_star_1_highlight
             }
             return res
         }
 
     private val shuffleResId: Int
         get() {
-            when (prefs!!.shuffle) {
+            when (P.value.shuffle) {
                 ShuffleMode.SEQUENTIAL -> return R.drawable.ic_menu_no_shuffle
                 ShuffleMode.RANDOM -> return R.drawable.ic_menu_shuffle
                 ShuffleMode.RADIO -> return R.drawable.ic_menu_shuffle_radio
@@ -1562,19 +1498,19 @@ class Main : AppCompatActivity() {
         }
 
     private fun setRepeatButton() {
-        val img = findViewById<ImageView>(xyz.mordorx.sicmu.R.id.repeat_button)
+        val img = findViewById<ImageView>(R.id.repeat_button)
         img.setImageResource(this.repeatResId)
     }
 
 
     /**  Sets the stereo button image to reflect the Mono/Stereo setting */
     private fun setStereoButton() {
-        val stereo = prefs!!.stereo
-        val btn = findViewById<ImageButton>(xyz.mordorx.sicmu.R.id.stereo_button)
+        val stereo = P.value.stereo.getOrDefault(AudioHardwareID.get(this), true)
+        val btn = findViewById<ImageButton>(R.id.stereo_button)
         if (stereo) {
-            btn.setImageResource(xyz.mordorx.sicmu.R.drawable.ic_stereo)
+            btn.setImageResource(R.drawable.ic_stereo)
         } else {
-            btn.setImageResource(xyz.mordorx.sicmu.R.drawable.ic_mono)
+            btn.setImageResource(R.drawable.ic_mono)
         }
     }
 
@@ -1583,16 +1519,16 @@ class Main : AppCompatActivity() {
         if (musicSrv == null) {
             return
         }
-        musicSrv!!.applyStereo(prefs!!.stereo)
+        musicSrv!!.applyStereo(P.value.stereo.getOrDefault(AudioHardwareID.get(this), true))
     }
 
     private fun setShuffleButton() {
-        val shuffleButton = findViewById<ImageButton>(xyz.mordorx.sicmu.R.id.shuffle_button)
+        val shuffleButton = findViewById<ImageButton>(R.id.shuffle_button)
         shuffleButton.setImageResource(this.shuffleResId)
     }
 
     private fun setMinRatingButton() {
-        val img = findViewById<ImageView>(xyz.mordorx.sicmu.R.id.rating_button)
+        val img = findViewById<ImageView>(R.id.rating_button)
         img.setImageResource(this.minRatingResId)
     }
 
@@ -1637,7 +1573,7 @@ class Main : AppCompatActivity() {
         musicSrv!!.playNext()
         updatePlayButton()
         disableTrackLooper()
-        if (followSong) unfoldAndScrollToCurrSong()
+        if (scrollToSongUponStart) unfoldAndScrollToCurrSong()
     }
 
     fun playPrev(view: View?) {
@@ -1646,20 +1582,20 @@ class Main : AppCompatActivity() {
         musicSrv!!.playPrev()
         updatePlayButton()
         disableTrackLooper()
-        if (followSong) unfoldAndScrollToCurrSong()
+        if (scrollToSongUponStart) unfoldAndScrollToCurrSong()
     }
 
     fun seek(view: View) {
         if (!serviceBound) return
         var newPosMs = musicSrv!!.currentPositionMs
         val id = view.getId()
-        if (id == xyz.mordorx.sicmu.R.id.m5_button) {
+        if (id == R.id.m5_button) {
             newPosMs -= (5 * 1000).toLong()
-        } else if (id == xyz.mordorx.sicmu.R.id.p5_button) {
+        } else if (id == R.id.p5_button) {
             newPosMs += (5 * 1000).toLong()
-        } else if (id == xyz.mordorx.sicmu.R.id.m20_button || id == xyz.mordorx.sicmu.R.id.m20_text) {
+        } else if (id == R.id.m20_button || id == R.id.m20_text) {
             newPosMs -= (20 * 1000).toLong()
-        } else if (id == xyz.mordorx.sicmu.R.id.p20_button || id == xyz.mordorx.sicmu.R.id.p20_text) {
+        } else if (id == R.id.p20_button || id == R.id.p20_text) {
             newPosMs += (20 * 1000).toLong()
         }
 
@@ -1674,14 +1610,14 @@ class Main : AppCompatActivity() {
     private var trackLooperBPosMs = trackLooperDisabledVal
     fun trackLooperClick(view: View?) {
         if (!serviceBound) return
-        val trackLooperBtn = findViewById<ImageButton>(xyz.mordorx.sicmu.R.id.track_looper_button)
+        val trackLooperBtn = findViewById<ImageButton>(R.id.track_looper_button)
         if (trackLooperAPosMs == trackLooperDisabledVal) {
             trackLooperAPosMs = musicSrv!!.currentPositionMs
-            trackLooperBtn.setImageResource(xyz.mordorx.sicmu.R.drawable.ic_track_looper_a)
+            trackLooperBtn.setImageResource(R.drawable.ic_track_looper_a)
         } else if (trackLooperBPosMs == trackLooperDisabledVal) {
             trackLooperBPosMs = musicSrv!!.currentPositionMs
             musicSrv!!.enableTrackLooper(trackLooperAPosMs, trackLooperBPosMs)
-            trackLooperBtn.setImageResource(xyz.mordorx.sicmu.R.drawable.ic_track_looper_ab)
+            trackLooperBtn.setImageResource(R.drawable.ic_track_looper_ab)
         } else {
             disableTrackLooper()
         }
@@ -1691,8 +1627,8 @@ class Main : AppCompatActivity() {
         trackLooperAPosMs = trackLooperDisabledVal
         trackLooperBPosMs = trackLooperDisabledVal
         if (serviceBound) musicSrv!!.disableTrackLooper()
-        val trackLooperBtn = findViewById<ImageButton>(xyz.mordorx.sicmu.R.id.track_looper_button)
-        trackLooperBtn.setImageResource(xyz.mordorx.sicmu.R.drawable.ic_track_looper)
+        val trackLooperBtn = findViewById<ImageButton>(R.id.track_looper_button)
+        trackLooperBtn.setImageResource(R.drawable.ic_track_looper)
     }
 
     private fun setPlaybackSpeed(v: Float) {
@@ -1727,7 +1663,7 @@ class Main : AppCompatActivity() {
                 musicSrv!!.playNextGroup()
                 updatePlayButton()
                 disableTrackLooper()
-                if (followSong) unfoldAndScrollToCurrSong()
+                if (scrollToSongUponStart) unfoldAndScrollToCurrSong()
 
                 return true
             }
@@ -1741,7 +1677,7 @@ class Main : AppCompatActivity() {
                 musicSrv!!.playPrevGroup()
                 updatePlayButton()
                 disableTrackLooper()
-                if (followSong) unfoldAndScrollToCurrSong()
+                if (scrollToSongUponStart) unfoldAndScrollToCurrSong()
 
                 return true
             }
@@ -1760,7 +1696,7 @@ class Main : AppCompatActivity() {
          * just stopped pressing the button), the value will be -1.
          */
         override fun onRepeat(view: View?, duration: Long, repeatcount: Int) {
-            Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration)
+            Log.d("Main", "-- repeatcount: $repeatcount duration: $duration")
             if (view == null || repeatcount <= 0) return
 
             var newPosMs = musicSrv!!.currentPositionMs - getSeekOffsetSec(view, duration)
@@ -1776,9 +1712,9 @@ class Main : AppCompatActivity() {
     private fun getSeekOffsetSec(view: View, duration: Long): Long {
         var offsetMs: Long = 0
         val id = view.getId()
-        if (id == xyz.mordorx.sicmu.R.id.m5_button || id == xyz.mordorx.sicmu.R.id.p5_button) {
+        if (id == R.id.m5_button || id == R.id.p5_button) {
             offsetMs = 5000
-        } else if (id == xyz.mordorx.sicmu.R.id.m20_button || id == xyz.mordorx.sicmu.R.id.m20_text || id == xyz.mordorx.sicmu.R.id.p20_button || id == xyz.mordorx.sicmu.R.id.p20_text) {
+        } else if (id == R.id.m20_button || id == R.id.m20_text || id == R.id.p20_button || id == R.id.p20_text) {
             if (duration < 5000) {
                 // seek at 10x speed for the first 5 seconds
                 offsetMs = duration * 10
@@ -1792,7 +1728,7 @@ class Main : AppCompatActivity() {
 
     private val forwardListener: RepeatListener = object : RepeatListener {
         override fun onRepeat(view: View?, duration: Long, repeatcount: Int) {
-            Log.d("Main", "-- repeatcount: " + repeatcount + " duration: " + duration)
+            Log.d("Main", "-- repeatcount: $repeatcount duration: $duration")
 
             if (view == null || repeatcount <= 0) return
 
@@ -1815,10 +1751,10 @@ class Main : AppCompatActivity() {
         if (this.isEditModeEnabled) {
             stopCloseMoreButtonsTimer()
 
-            moreButtonsLayout!!.setVisibility(View.GONE)
+            moreButtonsLayout!!.visibility = View.GONE
             //more_button.setImageResource(R.drawable.ic_action_note);
         } else {
-            moreButtonsLayout!!.setVisibility(View.VISIBLE)
+            moreButtonsLayout!!.visibility = View.VISIBLE
 
             startCloseMoreButtonsTimer()
             //more_button.setImageResource(R.drawable.ic_action_edit);
@@ -1826,7 +1762,7 @@ class Main : AppCompatActivity() {
     }
 
     private val isEditModeEnabled: Boolean
-        get() = moreButtonsLayout!!.getVisibility() == View.VISIBLE
+        get() = moreButtonsLayout!!.isVisible
 
     private fun startCloseMoreButtonsTimer() {
         stopCloseMoreButtonsTimer()
@@ -1860,30 +1796,36 @@ class Main : AppCompatActivity() {
     }
 
     fun changeShuffle(view: View) {
-        val mode = prefs!!.shuffle.next()
-        prefs!!.shuffle = mode
+        lateinit var appliedShuffle: ShuffleMode
+        P.update { p ->
+            val newShuffle = p.shuffle.next()
+            appliedShuffle = newShuffle
+            p.copy(shuffle = newShuffle)
+        }
         setShuffleButton()
-        mode.showExplainSnackbar(view)
+        appliedShuffle.showExplainSnackbar(view)
         startCloseMoreButtonsTimer()
     }
 
     fun toggleStereo(view: View) {
-        val stereo = !prefs!!.stereo
-        prefs!!.stereo = stereo
-        setStereoButton()
-        showStereoSnackbar(view)
-        applyStereo()
-    }
-
-    /** Shows a Snackbar showing "Stereo" or "Mono" */
-    fun showStereoSnackbar(v: View) {
-        val toastText: Int
-        if (prefs!!.stereo) {
-            toastText = xyz.mordorx.sicmu.R.string.settings_stereo_on
-        } else {
-            toastText = xyz.mordorx.sicmu.R.string.settings_stereo_off
+        val hid = AudioHardwareID.get(this)
+        var appliedMode = true
+        P.update { p ->
+            val newMode = !p.stereo.getOrDefault(hid, true)
+            val newMap = p.stereo.put(hid, newMode)
+            appliedMode = newMode
+            p.copy(stereo = newMap)
         }
-        Snackbar.make(v, toastText, BaseTransientBottomBar.LENGTH_SHORT).show()
+
+        setStereoButton()
+        applyStereo()
+
+        val toastText = if (appliedMode) {
+            R.string.settings_stereo_on
+        } else {
+            R.string.settings_stereo_off
+        }
+        Snackbar.make(view, toastText, BaseTransientBottomBar.LENGTH_SHORT).show()
     }
 
     fun openMinRating(view: View?) {
@@ -1906,19 +1848,19 @@ class Main : AppCompatActivity() {
     fun scrollToSong(gotoSong: Int) {
         var gotoSong = gotoSong
         if (songView == null) return
-        Log.d("Main", "scrollToSong getCurrPos:" + gotoSong)
+        Log.d("Main", "scrollToSong getCurrPos:$gotoSong")
 
         if (rows!!.size() == 0 || gotoSong < 0 || gotoSong >= rows!!.size()) return
 
-        val first = songView!!.getFirstVisiblePosition()
-        var last = songView!!.getLastVisiblePosition()
+        val first = songView!!.firstVisiblePosition
+        var last = songView!!.lastVisiblePosition
         var nbRow = last - first
         // on ListView startup getVisiblePosition gives strange result
         if (nbRow < 0) {
             nbRow = 1
             last = first + 1
         }
-        Log.d("Main", "scrollToSong first: " + first + " last: " + last + " nbRow: " + nbRow)
+        Log.d("Main", "scrollToSong first: $first last: $last nbRow: $nbRow")
 
         // to show a bit of songItems before or after the cur song
         var showAroundTop = nbRow / 5
@@ -1956,27 +1898,24 @@ class Main : AppCompatActivity() {
             songView!!.smoothScrollToPosition(gotoSong)
         }
 
-        Log.d("Main", "scrollToSong position:" + gotoSong)
+        Log.d("Main", "scrollToSong position: $gotoSong")
     }
 
-
     fun applyTextSize() {
-        val textSize: Int
-        if (!prefs!!.enlargeText) textSize = prefs!!.normalTextSize
-        else textSize = prefs!!.bigTextSize
+        val textSize = if (P.value.enlargeText) P.value.textSizeBig else P.value.textSizeNormal
 
-        RowSong.Companion.textSize = textSize
-        RowGroup.Companion.textSize = (textSize * prefs!!.textSizeRatio).toInt()
+        RowSong.textSize = textSize
+        RowGroup.textSize = (textSize * P.value.rowGroupTextSizeRatio).toInt()
         if (songAdt != null) songAdt!!.notifyDataSetChanged()
     }
 
     private fun restore() {
-        followSong = prefs!!.followSong
+        scrollToSongUponStart = P.value.scrollToSongUponStart
         applyTextSize()
     }
 
     private fun vibrate() {
-        if (prefs!!.vibrate) vibrator!!.vibrate(20)
+        if (P.value.vibrate) vibrator!!.vibrate(20)
     }
 
     /** This callback is used for audio channel config. Each different set of audio output
@@ -2005,7 +1944,7 @@ class Main : AppCompatActivity() {
          * @author Claude Sonnet 4.5
          */
         private fun extractYouTubeUrl(text: String?): String? {
-            if (text == null || text.isEmpty()) {
+            if (text.isNullOrEmpty()) {
                 return ""
             }
 

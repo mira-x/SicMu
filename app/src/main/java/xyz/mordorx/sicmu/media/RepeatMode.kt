@@ -18,7 +18,9 @@
 package xyz.mordorx.sicmu.media
 
 enum class RepeatMode {
-    REPEAT_ALL, REPEAT_ONE, REPEAT_GROUP,
-    REPEAT_NOT,  // should be named STOP_AT_END_OF_FOLDER
+    REPEAT_ALL,
+    REPEAT_ONE,
+    REPEAT_GROUP,
+    STOP_AT_END_OF_FOLDER,
     STOP_AT_END_OF_TRACK
 }

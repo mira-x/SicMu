@@ -55,21 +55,23 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.subscribe
+import kotlinx.coroutines.flow.update
 import xyz.mordorx.sicmu.Main
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver
 import xyz.mordorx.sicmu.R
 import xyz.mordorx.sicmu.data.AlbumArtLoader
-import xyz.mordorx.sicmu.data.Preferences
+import xyz.mordorx.sicmu.data.AudioHardwareID
 import xyz.mordorx.sicmu.data.RowSong.Companion.msToMinutes
 import xyz.mordorx.sicmu.data.Rows
-import xyz.mordorx.sicmu.data.Scrobble
 import xyz.mordorx.sicmu.data.SongDatabase
+import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 import xyz.mordorx.sicmu.data.XRows
 import kotlin.math.sqrt
 
 @UnstableApi
 class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorEventListener {
-    private var preferences: Preferences? = null
     private var player: ExoPlayer? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var mergeAudioProcessor: MergeAudioProcessor? = null
@@ -140,8 +142,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
     private var accelLast = 0.0
     private var accelCurrent = 0.0
     private var accel = 0.0
-
-    private var scrobble: Scrobble? = null
 
     /** used for handling playback state when media session actions occur. */
     private val mMediaSessionCallback: MediaSessionCompat.Callback =
@@ -279,12 +279,11 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         remoteControlResponder = null
         audioManager = null
 
-        preferences = Preferences(this)
-        db = SongDatabase.Companion.init(getApplicationContext())
+        db = SongDatabase.Companion.init(applicationContext)
         // try sync if sth failed in the previous SicMu session
         db!!.synchronizeRatingsAsync()
 
-        rows = Rows(getApplicationContext(), getContentResolver(), preferences!!, db!!.songDAO!!)
+        rows = Rows(applicationContext, contentResolver, db!!.songDAO!!)
 
         val pm = getSystemService(POWER_SERVICE) as PowerManager
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "xyz.mordorx.sicmu:MusicService")
@@ -292,15 +291,13 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         restore()
 
         remoteControlResponder =
-            ComponentName(getPackageName(), MediaButtonIntentReceiver::class.java.getName())
+            ComponentName(packageName, MediaButtonIntentReceiver::class.java.name)
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager?
         audioManager!!.registerMediaButtonEventReceiver(remoteControlResponder)
         foreground = false
         mainIsVisible = false
         mergeAudioProcessor = MergeAudioProcessor()
-        mergeAudioProcessor!!.isStereo = preferences!!.stereo
-
-        scrobble = Scrobble(rows!!, preferences!!, getApplicationContext())
+        mergeAudioProcessor!!.isStereo = P.value.stereo.getOrDefault(AudioHardwareID.get(this), true)
     }
 
     val database: SongDatabase
@@ -318,7 +315,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
 
     override fun onDestroy() {
         Log.d("MusicService", "onDestroy")
-        save()
         rows!!.terminate()
         rows!!.save()
         stopSleepTimer()
@@ -329,7 +325,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         releaseAudio()
         db!!.close()
 
-        if (!preferences!!.mediaButtonStartAppShake) audioManager!!.unregisterMediaButtonEventReceiver(
+        audioManager!!.unregisterMediaButtonEventReceiver(
             remoteControlResponder
         )
     }
@@ -408,25 +404,20 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
     private fun releaseAudio() {
         Log.d("MusicService", "releaseAudio")
 
-        if (preferences!!.saveSongPos && player != null && state!!.state != PlayerState.Nope && state!!.state != PlayerState.Idle && state!!.state != PlayerState.Companion.Error) {
-            preferences!!.songPos = (player!!.currentPosition)
-            preferences!!.songPosId = (player!!.duration)
-        }
-
         state!!.state = (PlayerState.Nope)
         seekFinished = true
         setChanged()
         wasPlaying = false
 
-        scrobble!!.send(Scrobble.SCROBBLE_COMPLETE)
+        P.update { p -> p.copy(lastPlayedSongID = rows?.currSong?.iD) }
 
         if (player != null) {
-            if (player!!.isPlaying()) {
+            if (player!!.isPlaying) {
                 player!!.stop()
             }
             player!!.release()
             player = null
-            if (wakeLock!!.isHeld()) wakeLock!!.release()
+            if (wakeLock!!.isHeld) wakeLock!!.release()
         }
 
         stopSensor()
@@ -553,13 +544,12 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         state!!.state = (PlayerState.Idle)
 
         try {
-            state!!.state = (PlayerState.Companion.Preparing)
+            state!!.state = (PlayerState.Preparing)
             val audio = MediaItem.fromUri(rowSong.externalContentUri)
             val dur = getRows().currSong!!.durationMs
             var startTime = 0L
 
-            if (preferences!!.shuffle
-                    .startMidSong() && oldState != PlayerState.Companion.PlaybackCompleted
+            if (P.value.shuffle.startMidSong() && oldState != PlayerState.PlaybackCompleted
             ) {
                 // If a song is started for the first time, i.e. this is not the automatic follow up
                 // to a previously played song, and we are in radio FM mode, we want to start playback at a
@@ -587,12 +577,12 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         setChanged()
 
         // loop only to same track if not asked to change track (i.e. loop only on completion)
-        if (rows!!.getRepeatMode() == RepeatMode.REPEAT_ONE) playSame()
+        if (P.value.repeatMode == RepeatMode.REPEAT_ONE) playSong()
         else {
-            if (rows!!.getRepeatMode() == RepeatMode.STOP_AT_END_OF_TRACK ||
-                (rows!!.getRepeatMode() == RepeatMode.REPEAT_NOT && rows!!.currPosIsLastSongInGroup())
+            if (P.value.repeatMode == RepeatMode.STOP_AT_END_OF_TRACK ||
+                (P.value.repeatMode == RepeatMode.STOP_AT_END_OF_FOLDER && rows!!.currPosIsLastSongInGroup())
             ) {
-                state!!.state = (PlayerState.Companion.Stopped)
+                state!!.state = (PlayerState.Stopped)
                 setChanged()
             } else {
                 playNext()
@@ -614,20 +604,14 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
             mp.seekTo(savedSongPos)
         }
 
-        savedSongPos = mp.getCurrentPosition()
+        savedSongPos = mp.currentPosition
         savedSongPosId = 0
-        preferences!!.songPos = (savedSongPos)
-        preferences!!.songPosId = (savedSongPosId)
-
 
         applyPlaybackSpeed(playbackSpeed)
 
         // start playback
         mp.play()
         state!!.state = (PlayerState.Companion.Started)
-
-        scrobble!!.send(Scrobble.Companion.SCROBBLE_COMPLETE)
-        scrobble!!.send(Scrobble.Companion.SCROBBLE_START)
     }
 
     /** This re-loads the currently selected playback speed. This is used for real time reload of the
@@ -640,12 +624,12 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
 
     private fun applyPlaybackSpeed(speed: Float) {
         try {
-            var playback = getPlayer()!!.getPlaybackParameters().withSpeed(speed).withPitch(1f)
-            if (preferences!!.disablePitchCompensation) {
+            var playback = getPlayer()!!.playbackParameters.withSpeed(speed).withPitch(1f)
+            if (P.value.disablePitchCompensation) {
                 playback = playback.withPitch(speed)
             }
 
-            getPlayer()!!.setPlaybackParameters(playback)
+            getPlayer()!!.playbackParameters = playback
         } catch (e: Exception) {
             Log.e("MusicService", "setPlaySpeed: ", e)
         }
@@ -713,7 +697,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         getPlayer()!!.play()
         state!!.state = (PlayerState.Companion.Started)
         startSensor()
-        scrobble!!.send(Scrobble.Companion.SCROBBLE_RESUME)
         startTrackLooperRewinder()
 
         updateMediaPlaybackState()
@@ -725,15 +708,11 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         if (player == null) return
 
         player!!.pause()
-        state!!.state = (PlayerState.Companion.Paused)
+        state!!.state = (PlayerState.Paused)
         stopSensor()
-        scrobble!!.send(Scrobble.Companion.SCROBBLE_PAUSE)
         cancelTrackLooperRewinder()
 
-        if (preferences!!.saveSongPos) {
-            preferences!!.songPos = (player!!.getCurrentPosition())
-            preferences!!.songPosId = (player!!.getDuration())
-        }
+        P.update { p -> p.copy(lastPlayedSongID = rows?.currSong?.iD) }
 
         updateMediaPlaybackState()
         updateMediaSessionMetadata()
@@ -741,34 +720,30 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
     }
 
     fun playPrev() {
-        if (preferences!!.shuffle.randomSongOrder()) rows!!.moveToRandomSongBack()
+        if (P.value.shuffle.randomSongOrder()) rows!!.moveToRandomSongBack()
         else rows!!.moveToPrevSong()
 
         playSong()
     }
 
     fun playNext() {
-        if (preferences!!.shuffle.randomSongOrder()) rows!!.moveToRandomSong()
+        if (P.value.shuffle.randomSongOrder()) rows!!.moveToRandomSong()
         else rows!!.moveToNextSong()
 
         playSong()
     }
 
     fun playPrevGroup() {
-        if (preferences!!.shuffle.randomSongOrder()) rows!!.moveToRandomSongBack()
+        if (P.value.shuffle.randomSongOrder()) rows!!.moveToRandomSongBack()
         else rows!!.moveToPrevGroup()
 
         playSong()
     }
 
     fun playNextGroup() {
-        if (preferences!!.shuffle.randomSongOrder()) rows!!.moveToRandomSong()
+        if (P.value.shuffle.randomSongOrder()) rows!!.moveToRandomSong()
         else rows!!.moveToNextGroup()
 
-        playSong()
-    }
-
-    fun playSame() {
         playSong()
     }
 
@@ -806,11 +781,10 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
 
     /*** NOTIFICATION  */
     fun startNotification() {
-        val rowSong = rows!!.currSong
-        if (rowSong == null) return
+        val rowSong = rows!!.currSong ?: return
 
         val openApp = Intent(this, Main::class.java)
-        openApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        openApp.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         val builder: NotificationCompat.Builder? =
             NotificationCompat.Builder(applicationContext, channel_id)
         builder!!.setContentTitle(rowSong.title)
@@ -895,35 +869,21 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         val description = "SicMuNeo Channel"
         val importance = NotificationManager.IMPORTANCE_LOW
         val mChannel = NotificationChannel(channel_id, name, importance)
-        mChannel.setDescription(description)
+        mChannel.description = description
         mChannel.enableLights(true) // todo: useful ?
-        mChannel.setLightColor(Color.RED) // todo: useful ?
+        mChannel.lightColor = Color.RED // todo: useful ?
         NotificationManagerCompat.from(this@MusicService).createNotificationChannel(mChannel)
     }
 
     /*** PREFERENCES  */
     private fun restore() {
-        enableShake = preferences!!.enableShake
-        shakeThreshold = preferences!!.shakeThreshold / 10
-        if (preferences!!.saveSongPos) {
-            savedSongPos = preferences!!.songPos
-            savedSongPosId = preferences!!.songPosId
-        } else {
-            savedSongPos = -1
-            savedSongPosId = -1
-        }
-        enableRating = preferences!!.enableRating
-        minRating = preferences!!.minRating
+        enableShake = P.value.shakePlaysSongs
+        shakeThreshold = P.value.shakeThreshold / 10
     }
-
-    private fun save() {
-        preferences!!.enableShake = enableShake
-    }
-
 
     /*** SENSORS  */
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
             getAccelerometer(event)
         }
     }
@@ -971,28 +931,31 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         enableShake = shake
         if (enableShake) startSensor()
         else stopSensor()
-        preferences!!.enableShake = (enableShake)
-    }
-
-    fun getEnableShake(): Boolean {
-        return enableShake
+        P.update { p -> p.copy(shakePlaysSongs = enableShake) }
     }
 
     fun setEnableRating(rating: Boolean) {
+        // TODO: Stub
+        /*
         enableRating = rating
         setChanged()
         preferences!!.enableRating = (enableRating)
+         */
     }
 
     fun getMinRating(): Int {
-        return minRating
+        // TODO: Stub
+        //return minRating
+        return 1
     }
 
     fun setMinRating(rating: Int) {
+        // TODO: Stub
+/*
         Log.d("MusicService", "set min rating to " + rating)
         minRating = rating
         preferences!!.minRating = (minRating)
-        setChanged()
+        setChanged()*/
     }
 
     fun setShakeThreshold(threshold: Float) {

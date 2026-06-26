@@ -49,8 +49,7 @@ class RowSong(
     val durationMs: Long, @JvmField val track: Int,
     /** For Example: "/storage/emulated/0/Music/_/Unterhaltung/HintShot - Welcome to Team Fortress.opus" */
     // full filename
-    @JvmField val path: String, albumId: Long, year: Int, mime: String?, preferences: Preferences
-) : Row(pos, level, Typeface.NORMAL) {
+    @JvmField val path: String, albumId: Long, year: Int, mime: String?) : Row(pos, level, Typeface.NORMAL) {
     /** The Album ID of this song provided by the MediaStore API */
     val albumId: Long
     val year: Int
@@ -64,8 +63,6 @@ class RowSong(
     /** For Example: "_/Unterhaltung" */
     // folder of the path (i.e. last folder containing the file's song)
     val folder: String
-
-    private val preferences: Preferences
 
     private var metadata: Tag? = null
 
@@ -85,38 +82,36 @@ class RowSong(
         setDuration(holder.duration!!)
         setCurrIcon(holder.image!!, main)
         if (MusicService.enableRating) {
-            holder.ratingStar!!.setVisibility(View.VISIBLE)
+            holder.ratingStar!!.visibility = View.VISIBLE
             holder.ratingStar!!.setImageResource(this.drawableStarFromRating)
 
-            val params = holder.duration.getLayoutParams() as RelativeLayout.LayoutParams
+            val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
             // removeRule is not in sdk < 17
             params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-            holder.duration.setLayoutParams(params)
+            holder.duration.layoutParams = params
         } else {
-            holder.ratingStar!!.setVisibility(View.INVISIBLE)
+            holder.ratingStar!!.visibility = View.INVISIBLE
 
-            val params = holder.duration.getLayoutParams() as RelativeLayout.LayoutParams
+            val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-            holder.duration.setLayoutParams(params)
+            holder.duration.layoutParams = params
         }
         setBackgroundColor(holder, backgroundSongColor)
     }
 
     private fun setText(text: TextView) {
-        text.setText(this.text)
+        text.text = this.text
         text.setTextColor(normalSongTextColor)
         text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
     }
 
     val text: String
         get() {
-            return if (preferences.showFilename) filename
-            else if (track > 0) track.toString() + ". " + title
-            else title
+            return filename
         }
 
     private fun setDuration(duration: TextView) {
-        duration.setText(msToMinutesStripSecondIfLongDuration(this.durationMs) + stringOffset)
+        duration.text = msToMinutesStripSecondIfLongDuration(this.durationMs) + stringOffset
         duration.setTextColor(normalSongDurationTextColor)
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
         duration.setTypeface(null, typeface)
@@ -158,8 +153,8 @@ class RowSong(
         get() {
             val uninitialized =
                 rating == RATING_NOT_INITIALIZED || rating == RATING_UNKNOWN
-            val minRating = preferences.minRating
-            return (!uninitialized || preferences.uninitializedDefaultRating < minRating) &&
+            val minRating = 1 // preferences.minRating // TODO: Add proper logic
+            return (!uninitialized /* || preferences.uninitializedDefaultRating < minRating -- TODO: Add proper logic */) &&
                     rating < minRating
         }
 
@@ -319,7 +314,6 @@ class RowSong(
         this.year = year
         this.mime = mime
         folder = MediaScanner.getFolder(path)
-        this.preferences = preferences
     }
 
     /* rating can be from 0 to 255

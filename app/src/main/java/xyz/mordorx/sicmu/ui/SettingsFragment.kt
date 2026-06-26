@@ -28,26 +28,23 @@ import android.os.Bundle
 import android.os.IBinder
 import android.preference.CheckBoxPreference
 import android.preference.EditTextPreference
-import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.flow.update
 import xyz.mordorx.sicmu.BuildConfig
 import xyz.mordorx.sicmu.R
 import xyz.mordorx.sicmu.data.MediaScanner
 import xyz.mordorx.sicmu.data.PrefKeys
-import xyz.mordorx.sicmu.data.Preferences
+import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 import xyz.mordorx.sicmu.media.MusicService
 import xyz.mordorx.sicmu.media.MusicService.MusicBinder
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Formatter
 
 class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener,
     Preference.OnPreferenceClickListener {
-    private var preferences: Preferences? = null
     private var musicSrv: MusicService? = null
     private var serviceBound = false
     private val RESCAN_KEY = "RESCAN"
@@ -63,13 +60,6 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.preferences)
 
-        preferences = Preferences(getActivity().getApplicationContext())
-        when (preferences!!.theme) {
-            0 -> getActivity().setTheme(R.style.AppTheme)
-            1 -> getActivity().setTheme(R.style.AppThemeDark)
-            2 -> getActivity().setTheme(R.style.AppThemeWhite)
-        }
-
         val playIntent = Intent(getActivity(), MusicService::class.java)
         getActivity().bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE)
 
@@ -81,8 +71,8 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         if (getActivity().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)
         ) {
-            prefShakeThreshold.setSummary(preferences!!.shakeThreshold.toString())
-            prefEnableShake.setChecked(preferences!!.enableShake)
+            prefShakeThreshold.setSummary(P.value.shakeThreshold.toString())
+            prefEnableShake.setChecked(P.value.shakePlaysSongs)
         } else {
             prefShakeThreshold.setEnabled(false)
             prefEnableShake.setEnabled(false)
@@ -93,7 +83,7 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
             ).show()
         }
         val prefEnableRating = findPreference(PrefKeys.ENABLE_RATING.name) as CheckBoxPreference
-        prefEnableRating.setChecked(preferences!!.enableRating)
+        prefEnableRating.setChecked(true)
 
         findPreference(TEXT_SIZE_TOGGLE_KEY).setOnPreferenceClickListener(this)
         findPreference(RESCAN_KEY).setOnPreferenceClickListener(this)
@@ -106,25 +96,22 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         setFontSizeIcon()
 
         findPreference(PrefKeys.TEXT_SIZE_NORMAL.name).setSummary(
-            preferences!!.normalTextSize.toString()
+            P.value.textSizeNormal.toString()
         )
         findPreference(PrefKeys.TEXT_SIZE_BIG.name).setSummary(
-            preferences!!.bigTextSize.toString()
+            P.value.textSizeBig.toString()
         )
         findPreference(PrefKeys.TEXT_SIZE_RATIO.name).setSummary(
-            preferences!!.textSizeRatio.toString()
+            P.value.rowGroupTextSizeRatio.toString()
         )
 
         val disablePitchCompensation =
             findPreference(PrefKeys.DISABLE_PITCH_COMPENSATION.name) as CheckBoxPreference
-        disablePitchCompensation.setChecked(preferences!!.disablePitchCompensation)
-
-        setUnfoldSubgroup()
-        setUnfoldThresholdSummary()
+        disablePitchCompensation.setChecked(P.value.disablePitchCompensation)
 
         val rootFoldersKey = PrefKeys.ROOT_FOLDERS.name
         val prefRootFolders = findPreference(rootFoldersKey) as EditTextPreference
-        prefRootFolders.setSummary(preferences!!.rootFolders)
+        prefRootFolders.setSummary("deprecated")
         if (!sharedPreferences.contains(rootFoldersKey)) prefRootFolders.setText(
             MediaScanner.getMusicStoragesStr(
                 getActivity().getBaseContext()
@@ -132,12 +119,8 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         )
 
         findPreference(PrefKeys.SLEEP_DELAY_M.name).setSummary(
-            preferences!!.sleepDelayM.toString()
+            P.value.sleepDelayM.toString()
         )
-
-        setFoldSummary()
-        setThemeSummary()
-        setUninitializedDefaultRatingSummary()
 
         getActivity().onContentChanged()
     }
@@ -148,53 +131,31 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         Log.d("MusicService", "onSharedPreferenceChanged: " + key)
 
         if (key == PrefKeys.DEFAULT_FOLD.name) {
-            setFoldSummary()
         } else if (key == PrefKeys.TEXT_SIZE_NORMAL.name) {
-            findPreference(key).setSummary(preferences!!.normalTextSize.toString())
+            findPreference(key).setSummary(P.value.textSizeNormal.toString())
             getActivity().setResult(CHANGE_TEXT_SIZE)
         } else if (key == PrefKeys.TEXT_SIZE_BIG.name) {
-            findPreference(key).setSummary(preferences!!.bigTextSize.toString())
+            findPreference(key).setSummary(P.value.textSizeBig.toString())
             getActivity().setResult(CHANGE_TEXT_SIZE)
         } else if (key == PrefKeys.TEXT_SIZE_RATIO.name) {
-            findPreference(key).setSummary(preferences!!.textSizeRatio.toString())
+            findPreference(key).setSummary(P.value.rowGroupTextSizeRatio.toString())
             getActivity().setResult(CHANGE_TEXT_SIZE)
         } else if (key == PrefKeys.ENABLE_SHAKE.name) {
-            musicSrv!!.setEnableShake(preferences!!.enableShake)
+            musicSrv!!.setEnableShake(P.value.shakePlaysSongs)
         } else if (key == PrefKeys.THEME.name) {
-            setThemeSummary()
             getActivity().setResult(CHANGE_THEME)
             // restart activity to reload theme
             getActivity().finish()
             startActivity(getActivity().getIntent())
         } else if (key == PrefKeys.ENABLE_RATING.name) {
-            musicSrv!!.setEnableRating(preferences!!.enableRating)
+            musicSrv!!.setEnableRating(true)
         } else if (key == PrefKeys.SHAKE_THRESHOLD.name) {
-            val threshold = preferences!!.shakeThreshold
-            musicSrv!!.setShakeThreshold(threshold)
-            findPreference(key).setSummary(threshold.toString())
-        } else if (key == PrefKeys.UNFOLD_SUBGROUP.name) {
-            setUnfoldSubgroup()
-        } else if (key == PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name) {
-            setUnfoldThresholdSummary()
+            findPreference(key).setSummary(P.value.shakeThreshold.toString())
         } else if (key == PrefKeys.ROOT_FOLDERS.name) {
-            val rootFolder = preferences!!.rootFolders
+            val rootFolder = ""
             findPreference(key).setSummary(rootFolder)
-            if (!(File(rootFolder)).exists()) {
-                val formatter = Formatter()
-                formatter.format(
-                    getResources().getString(R.string.settings_root_folder_summary),
-                    rootFolder
-                )
-                Toast.makeText(
-                    getActivity().getApplicationContext(),
-                    formatter.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            val reinited = musicSrv!!.getRows().setRootFolders(rootFolder)
-            if (reinited) musicSrv!!.setChanged()
         } else if (key == PrefKeys.SLEEP_DELAY_M.name) {
-            val sleepDelayMinutes = preferences!!.sleepDelayM
+            val sleepDelayMinutes = P.value.sleepDelayM
             if (sleepDelayMinutes > 0) {
                 findPreference(key).setSummary(sleepDelayMinutes.toString())
             } else {
@@ -207,53 +168,13 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
         } else if (key == PrefKeys.SHOW_FILENAME.name) {
             musicSrv!!.getRows().reinit()
             musicSrv!!.setChanged()
-        } else if (key == PrefKeys.UNINITIALIZED_DEFAULT_RATING.name) {
-            setUninitializedDefaultRatingSummary()
         } else if (key == PrefKeys.DISABLE_PITCH_COMPENSATION.name) {
             musicSrv!!.applyPlaybackSpeed()
         }
     }
 
-    private fun setUnfoldSubgroup() {
-        findPreference(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name).setEnabled(!preferences!!.unfoldSubGroup)
-    }
 
-    private fun setUnfoldThresholdSummary() {
-        val formatter = Formatter()
-        formatter.format(
-            getResources().getString(R.string.settings_unfold_subgroup_threshold_summary),
-            preferences!!.unfoldSubGroupThreshold
-        )
-        findPreference(PrefKeys.UNFOLD_SUBGROUP_THRESHOLD.name).setSummary(formatter.toString())
-    }
-
-    private fun setFoldSummary() {
-        var idx = preferences!!.defaultFold
-        val prefFold = findPreference(PrefKeys.DEFAULT_FOLD.name) as ListPreference
-        val foldEntries = getResources().getStringArray(R.array.settings_fold_entries)
-        if (idx >= foldEntries.size) idx = foldEntries.size - 1
-        if (idx >= 0) prefFold.setSummary(foldEntries[idx])
-    }
-
-    private fun setUninitializedDefaultRatingSummary() {
-        var idx = preferences!!.uninitializedDefaultRating
-        val prefFold = findPreference(PrefKeys.UNINITIALIZED_DEFAULT_RATING.name) as ListPreference
-        val foldEntries =
-            getResources().getStringArray(R.array.uninitialized_default_rating_entries)
-        idx--
-        if (idx >= foldEntries.size) idx = foldEntries.size - 1
-        if (idx >= 0) prefFold.setSummary(foldEntries[idx])
-    }
-
-    private fun setThemeSummary() {
-        var idx = preferences!!.theme
-        val pref = findPreference(PrefKeys.THEME.name) as ListPreference
-        val entries = getResources().getStringArray(R.array.settings_theme_entries)
-        if (idx >= entries.size) idx = entries.size - 1
-        if (idx >= 0) pref.setSummary(entries[idx])
-    }
-
-    fun GetGithubSourceWebsiteIntent(): Intent {
+    fun getGithubSourceWebsiteIntent(): Intent {
         val url = findPreference(GITHUB_SOURCE_URL_KEY).getSummary().toString()
         val webIntent = Intent(Intent.ACTION_VIEW)
         webIntent.setData(Uri.parse(url))
@@ -314,17 +235,16 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
             if (musicSrv!!.sleepTimerScheduleMs > 0) {
                 musicSrv!!.stopSleepTimer()
             } else {
-                musicSrv!!.startSleepTimer(preferences!!.sleepDelayM)
+                musicSrv!!.startSleepTimer(P.value.sleepDelayM)
             }
             setSleepTimerTitle()
         } else if (preference.getKey() == CHANGELOGS_KEY) {
             showChangelogs()
         } else if (preference.getKey() == TEXT_SIZE_TOGGLE_KEY) {
-            val size = !preferences!!.enlargeText
-            preferences!!.setChooseTextSize(size)
+            P.update { p -> p.copy(enlargeText = !p.enlargeText) }
             setFontSizeIcon()
         } else if (preference.getKey() == GITHUB_SOURCE_URL_KEY) {
-            startActivity(GetGithubSourceWebsiteIntent())
+            startActivity(getGithubSourceWebsiteIntent())
         } else if (preference.getKey() == EXIT_APP_FORCEFULLY_KEY) {
             ExitActivity.Companion.exit(getContext())
         }
@@ -336,9 +256,7 @@ class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPrefere
     }
 
     fun setFontSizeIcon() {
-        val icon: Int
-        if (preferences!!.enlargeText) icon = R.drawable.ic_menu_text_big
-        else icon = R.drawable.ic_menu_text_regular
+        val icon: Int = if (P.value.enlargeText) R.drawable.ic_menu_text_big else R.drawable.ic_menu_text_regular
         findPreference(TEXT_SIZE_TOGGLE_KEY).setIcon(icon)
     }
 

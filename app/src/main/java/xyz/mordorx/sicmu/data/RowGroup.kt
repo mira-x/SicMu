@@ -25,6 +25,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import xyz.mordorx.sicmu.Main
+import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 import xyz.mordorx.sicmu.ui.RowViewHolder
 import java.io.File
 
@@ -34,7 +35,7 @@ import java.io.File
  */
 class RowGroup(
     pos: Int, level: Int, val name: String?, path: String?, typeface: Int,
-    overrideBackgroundColor: Boolean, preferences: Preferences
+    overrideBackgroundColor: Boolean
 ) : Row(pos, level, typeface) {
     var isFolded: Boolean
     var isSelected: Boolean
@@ -57,14 +58,12 @@ class RowGroup(
         }
     var totalDuration: Long = 0
         private set
-    private val preferences: Preferences
 
     init {
         this.path = path
         this.isFolded = false
         this.isSelected = false
         this.overrideBackgroundColor = overrideBackgroundColor
-        this.preferences = preferences
     }
 
     fun increaseSongCount(n: Int) {
@@ -121,7 +120,7 @@ class RowGroup(
         if (this.isFolded) {
             if (this.isSelected) duration.setTextColor(playingTextColor)
             else duration.setTextColor(normalTextColor)
-            if (preferences.showGroupTotalTime) duration.text = msToTime(this.totalDuration) + " |" + rightSpace
+            if (P.value.showGroupTotalTime) duration.text = msToTime(this.totalDuration) + " |" + rightSpace
             else duration.text = "$songCount |$rightSpace"
         } else {
             duration.text = "/$rightSpace"

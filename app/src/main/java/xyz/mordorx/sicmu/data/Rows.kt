@@ -29,6 +29,7 @@ import android.widget.Toast
 import xyz.mordorx.sicmu.R
 import xyz.mordorx.sicmu.collections.PathRowComparator
 import xyz.mordorx.sicmu.collections.TreeRowComparator
+import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 import xyz.mordorx.sicmu.media.RepeatMode
 import java.io.File
 import java.util.Collections
@@ -62,7 +63,6 @@ import kotlin.text.toRegex
 class Rows(
     val context: Context,
     private val musicResolver: ContentResolver,
-    private val preferences: Preferences,
     private val db: SongDAO
 ) {
     private val random: Random
@@ -85,13 +85,11 @@ class Rows(
     @Volatile
     private var terminated = false
 
-    private var repeatMode: RepeatMode? = null
-
     private var fileToOpenFound = false
 
     fun terminate() {
         terminated = true
-        AlbumArtLoader.Companion.terminate()
+        AlbumArtLoader.terminate()
     }
 
     /** size of the foldable array */
@@ -201,8 +199,7 @@ class Rows(
         get() {
             var pos = -1
             val song: Row? = this.currSong
-            var i: Int
-            i = 0
+            var i = 0
             while (i < rows.size) {
                 val row = rows.get(i)
                 if (row === song ||
@@ -215,10 +212,6 @@ class Rows(
             if (i < rows.size) pos = i
             return pos
         }
-
-    private fun getCurrPosUnfolded(): Int {
-        return currPosUnfolded
-    }
 
     private fun setCurrPosUnfolded(pos: Int) {
         setGroupSelectedState(currPosUnfolded, false)
@@ -239,7 +232,7 @@ class Rows(
     fun moveToRandomSong() {
         if (rowsUnfolded.isEmpty()) return
 
-        if (repeatMode == RepeatMode.REPEAT_GROUP) {
+        if (P.value.repeatMode == RepeatMode.REPEAT_GROUP) {
             val firstSongPos = getFirstSongPosInGroup(currPosUnfolded)
             val lastSongPos = getLastSongPosInGroup(currPosUnfolded)
             if (lastSongPos <= firstSongPos) return
@@ -303,7 +296,7 @@ class Rows(
         val currParent = rowsUnfolded.get(songPos).parent
         do {
             songPos--
-        } while (songPos > 0 && rowsUnfolded.get(songPos).javaClass == RowSong::class.java && rowsUnfolded.get(songPos).parent === currParent)
+        } while (songPos > 0 && rowsUnfolded.get(songPos).javaClass == RowSong::class.java && rowsUnfolded[songPos].parent === currParent)
         return songPos + 1
     }
 
@@ -320,7 +313,7 @@ class Rows(
         if (!shuffleSavedPos.isEmpty()) {
             val pos = shuffleSavedPos.removeAt(shuffleSavedPos.size - 1)!!
             // check
-            if (pos < rowsUnfolded.size && rowsUnfolded.get(pos).javaClass == RowSong::class.java) {
+            if (pos < rowsUnfolded.size && rowsUnfolded[pos].javaClass == RowSong::class.java) {
                 backOk = true
                 setGroupSelectedState(currPosUnfolded, false)
                 currPosUnfolded = pos
@@ -332,16 +325,9 @@ class Rows(
     }
 
     fun moveToNextSong() {
-        if (!preferences.enableRating || preferences.minRating <= 1) moveToNextSongNoRating()
-        else {
-            moveToNextSongRatingEnabled()
-        }
-    }
-
-    private fun moveToNextSongRatingEnabled() {
         if (rowsUnfolded.isEmpty()) return
 
-        if (repeatMode == RepeatMode.REPEAT_GROUP) {
+        if (P.value.repeatMode == RepeatMode.REPEAT_GROUP) {
             val lastSongPos = getLastSongPosInGroup(currPosUnfolded)
             val firstSongPos = getFirstSongPosInGroup(currPosUnfolded)
             if (lastSongPos == firstSongPos) return
@@ -396,7 +382,7 @@ class Rows(
     private fun moveToNextSongNoRating() {
         if (rowsUnfolded.isEmpty()) return
 
-        if (repeatMode == RepeatMode.REPEAT_GROUP) {
+        if (P.value.repeatMode == RepeatMode.REPEAT_GROUP) {
             val lastSongPos = getLastSongPosInGroup(currPosUnfolded)
             if (currPosUnfolded == lastSongPos) currPosUnfolded =
                 getFirstSongPosInGroup(currPosUnfolded)
@@ -419,7 +405,6 @@ class Rows(
 
     fun FoldedToUnfoldedIndex(index: Int): Int {
         val foldedRow = rows.get(index)
-        if (foldedRow == null) return -1
         for (i in rowsUnfolded.indices) {
             val unfoldedRow = rowsUnfolded.get(i)
             if (unfoldedRow === foldedRow) return i
@@ -429,7 +414,7 @@ class Rows(
 
     // Get the next song position, where a keyword is contained in the song metadata.
     // Returns -1 when not found
-    fun getNextSongByKeyword(keyword: kotlin.String): Row? {
+    fun getNextSongByKeyword(keyword: String): Row? {
         if (rowsUnfolded.isEmpty()) return null
 
         val currPos = FoldedToUnfoldedIndex(this.currPosFolded)
@@ -471,7 +456,7 @@ class Rows(
     fun moveToPrevSong() {
         if (rowsUnfolded.isEmpty()) return
 
-        if (repeatMode == RepeatMode.REPEAT_GROUP) {
+        if (P.value.repeatMode == RepeatMode.REPEAT_GROUP) {
             val firstSongPos = getFirstSongPosInGroup(currPosUnfolded)
             if (currPosUnfolded == firstSongPos) currPosUnfolded =
                 getLastSongPosInGroup(currPosUnfolded)
@@ -716,14 +701,8 @@ class Rows(
             }
         }
 
-        if (preferences.defaultFold == 0) {
-            // fold
-            initRowsFolded()
-        } else {
-            // unfolded
-            // shallow copy
-            rows = rowsUnfolded.clone() as ArrayList<Row>
-        }
+        // Fold all rows
+        initRowsFolded()
 
         // to comment in release mode:
         Log.d(
@@ -733,7 +712,17 @@ class Rows(
         Log.d("Rows", "songPos: $currPosUnfolded")
 
         //preloadDBSongsAsync();
-        if (preferences.enableRating) preloadSongRatingAsync()
+        preloadSongRatingAsync()
+
+
+        P.value.lastPlayedSongID?.also { lastSongId ->
+            rowsUnfolded
+                .withIndex()
+                .firstOrNull { r -> r.value is RowSong && (r.value as RowSong).iD == lastSongId }?.also { r ->
+                    setCurrPosUnfolded(r.index)
+                }
+
+        }
     }
 
     private fun preloadDBSongsAsync() {
@@ -868,7 +857,7 @@ class Rows(
                 val level = 2
                 val rowSong = RowSong(
                     db, pos, level, id, title, artist, album, durationMs,
-                    track, path, albumId, year, mime, preferences
+                    track, path, albumId, year, mime
                 )
                 rowsUnfolded.add(rowSong)
                 //Log.d("Rows", "song added: " + rowSong.toString());
@@ -876,7 +865,7 @@ class Rows(
         }
 
         //        long beforeMs = (new Date()).getTime();
-        val treeRowComparator = TreeRowComparator(preferences.showFilename)
+        val treeRowComparator = TreeRowComparator(true)
         rowsUnfolded.sortWith(treeRowComparator)
 
         //        Log.w("Rows==========", "Sort time: " + ((new Date()).getTime() - beforeMs) + " ms");
@@ -920,7 +909,7 @@ class Rows(
 
                 val aGroup = RowGroup(
                     idx, level, folders.get(level),
-                    path, Typeface.BOLD, false, preferences
+                    path, Typeface.BOLD, false
                 )
                 aGroup.parent = (parentGroup)
                 parentGroup = aGroup
@@ -967,32 +956,13 @@ class Rows(
         return track
     }
 
-    private fun restore() {
-        savedID = preferences.songID
-        repeatMode = preferences.repeatMode
-        MediaScanner.rootFolders =
-            preferences.rootFolders.split("[,;]".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-    }
-
     fun save() {
         updateSavedId()
-        preferences.songID = (savedID)
-        preferences.repeatMode = repeatMode!!
     }
 
     fun reinit() {
         updateSavedId()
         init()
-    }
-
-    fun getRepeatMode(): RepeatMode {
-        return repeatMode!!
-    }
-
-    fun setRepeatMode(repeatMode: RepeatMode) {
-        this.repeatMode = repeatMode
-        preferences.repeatMode = (repeatMode)
     }
 
     /**
@@ -1043,7 +1013,6 @@ class Rows(
         ratingsMustBeSynchronized = AtomicBoolean(false)
         ratingsSynchronizing = AtomicBoolean(false)
 
-        restore()
         init()
     }
 
