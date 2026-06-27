@@ -163,8 +163,16 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
         proj.add(MediaStore.Images.Media.RELATIVE_PATH)
         proj.add(MediaStore.Images.Media.DISPLAY_NAME)
 
+        // Sanitize path. This is only temporarily neccessary as we find our song files currently using absolute paths. But the absolute paths don't play well along MediaStore's relative image paths.
+        // TODO: Remove sanitization when possible
+        val relativeFolderPath = song.folder
+            .removePrefix("/") // If present
+            .replace(Regex("^storage\\/emulated\\/\\d+\\/?"), "")
+            .replace(Regex("^storage\\/[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}\\/?"), "")
+            .removePrefix("sdcard/")
         val sel = MediaStore.Images.Media.RELATIVE_PATH + " LIKE ?"
-        val selParams: Array<String> = arrayOf("%" + song.folder + "/")
+        val selParams: Array<String> = arrayOf("%$relativeFolderPath/")
+        Log.d("AlbumArtLoader", "Querying folder: $relativeFolderPath for song: ${song.title}")
 
         val candidates: ArrayList<AlbumImageCandidate?> = ArrayList()
 
@@ -180,17 +188,14 @@ class AlbumArtLoader(ctx: Context, private val song: RowSong) {
             val idxDisplayName = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
 
             while (cursor.moveToNext()) {
-                val ID = cursor.getLong(idxID)
+                val id = cursor.getLong(idxID)
                 val relativePath = cursor.getString(idxRelativePath)
                 val displayName = cursor.getString(idxDisplayName).sanitizedAsFileName
                 val imgFile = File(relativePath, displayName)
 
-                candidates.add(AlbumImageCandidate(imgFile, songFile, songAlbum, ID))
+                candidates.add(AlbumImageCandidate(imgFile, songFile, songAlbum, id))
 
-                Log.d(
-                    "AlbumArtLoader",
-                    "Found local image: id=$ID, path=$relativePath \t image name=$displayName \t path query=$songFolder"
-                )
+                Log.d("AlbumArtLoader", "Found local image: id=$id, path=$relativePath \t image name=$displayName \t path query=$songFolder")
             }
             Log.d("AlbumArtLoader", "Searching local images done.")
         }
