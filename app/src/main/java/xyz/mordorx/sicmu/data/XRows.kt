@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import android.provider.MediaStore.Audio.Media
 import android.util.Log
+import kotlinx.coroutines.flow.update
 import xyz.mordorx.sicmu.data.AlbumArtLoader.Companion.sanitizedAsFileName
 import kotlin.collections.buildList
 import kotlin.io.path.Path
@@ -17,10 +18,11 @@ import kotlin.io.path.pathString
 object XRows {
     lateinit var appContext: Context
 
-    var rowsFolded = MutableStateFlow<List<Row>>(emptyList())
+    // TODO: rowsFolded and rowsUnfolded are separate. That is not thread safe and we can only update() one of them at a time. We should move them to a special data class or sth.
+    var rowsFolded = MutableStateFlow<List<XRow>>(emptyList())
         private set
 
-    private var rowsUnfolded = MutableStateFlow<List<Row>>(emptyList())
+    private var rowsUnfolded = MutableStateFlow<List<XRow>>(emptyList())
 
     fun init(appContext: Context) {
 
@@ -200,8 +202,58 @@ object XRows {
              */
         }*/
 
+        rowsUnfolded.update { rows }
+        rowsFolded.update { rows.take(1) }
     }
+
+    /** Returns the direct parent from the unfolded list */ // TODO: Test!
+    fun getParent(r: XRow): XRow? {
+        return when (r) {
+            is XRowSong -> rowsUnfolded.value.filterIsInstance<XRowGroup>().first { r2 -> r2.path == r.containingFolder }
+            is XRowGroup -> rowsUnfolded.value.filterIsInstance<XRowGroup>().first { r2 -> r2.path == r.containingFolder }
+        }
+    }
+
+    /**
+     * Returns all parents from the unfolded list, starting at the least depth and going deeper (i.e. `Music` before `Music/Test`)
+     */ // TODO: Test!
+    fun getAllParents(r: XRow): List<XRow> {
+        return buildList {
+            var currRow = getParent(r)
+            while (currRow != null) {
+                add(currRow)
+                currRow = getParent(currRow)
+            }
+        }.reversed()
+    }
+
+    /**
+     * Unfolds the given row `r` in the folded list.
+     */
+    fun unfold(r: XRowGroup) {
+        rowsFolded.update { folded ->
+            val unfolded = rowsUnfolded.value
+            val idxFolded = folded.indexOf(r)
+            val idxUnfolded = unfolded.indexOf(r)
+            val idxUnfoldedEnd = idxUnfolded + unfolded.drop(idxUnfolded + 1).takeWhile { r2 -> r2 is XRowSong }.count()
+
+            folded.subList(0, idxFolded) + r.copy(isFolded = false) + unfolded.subList(idxUnfolded + 1, idxUnfoldedEnd) + folded.subList(idxFolded + 1, folded.size)
+        }
+    }
+
+    fun fold(r: XRowGroup) {
+        rowsFolded.update { folded ->
+            val idx = folded.indexOf(r)
+            folded.take(idx) + r.copy(isFolded = false) + folded.drop(idx+1).dropWhile { r2 -> r2.path.startsWith(r.path) }
+        }
+    }
+
+    // TODO: Add testing range for unfold() and fold() with test data!
 }
 
 val String.slashCount: Int
     get() { return this.count { it == '/' }}
+
+fun List<XRow>.foo() {
+
+}
