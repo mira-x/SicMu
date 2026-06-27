@@ -43,6 +43,8 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import androidx.media.session.MediaButtonReceiver
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
@@ -55,7 +57,10 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import xyz.mordorx.sicmu.Main
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver
 import xyz.mordorx.sicmu.R
@@ -69,7 +74,7 @@ import xyz.mordorx.sicmu.data.XRows
 import kotlin.math.sqrt
 
 @UnstableApi
-class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorEventListener {
+class MusicService : LifecycleService(), AudioManager.OnAudioFocusChangeListener, SensorEventListener {
     private var player: ExoPlayer? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var mergeAudioProcessor: MergeAudioProcessor? = null
@@ -288,6 +293,13 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
 
         restore()
 
+        lifecycleScope.launch {
+            merge(P, AudioHardwareID.currentId).collect {
+                val s = P.value.stereo.getOrDefault(AudioHardwareID.currentId.value, true)
+                mergeAudioProcessor?.isStereo = s
+            }
+        }
+
         remoteControlResponder =
             ComponentName(packageName, MediaButtonIntentReceiver::class.java.name)
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager?
@@ -295,24 +307,23 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         foreground = false
         mainIsVisible = false
         mergeAudioProcessor = MergeAudioProcessor()
-        mergeAudioProcessor!!.isStereo = P.value.stereo.getOrDefault(AudioHardwareID.get(this), true)
+        mergeAudioProcessor!!.isStereo = P.value.stereo.getOrDefault(AudioHardwareID.currentId.value, true)
     }
-
-    val database: SongDatabase
-        get() = db!!
 
     inner class MusicBinder : Binder() {
         val service: MusicService
             get() = this@MusicService
     }
 
-    override fun onBind(arg0: Intent?): IBinder {
+    override fun onBind(intent: Intent): IBinder {
+        super.onBind(intent)
         return musicBind
     }
 
 
     override fun onDestroy() {
         Log.d("MusicService", "onDestroy")
+        super.onDestroy()
         rows!!.terminate()
         rows!!.save()
         stopSleepTimer()

@@ -28,8 +28,6 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import android.media.AudioDeviceCallback
-import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -103,9 +101,12 @@ import java.util.regex.Pattern
 import kotlin.math.floor
 import kotlin.math.max
 import androidx.core.view.isVisible
-import androidx.media3.common.C
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import xyz.mordorx.sicmu.data.AudioHardwareID
 import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 
@@ -174,7 +175,13 @@ class Main : AppCompatActivity() {
             XPreferences.load(applicationContext)
         }
 
-        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE)
+        AudioHardwareID.registerListener(applicationContext)
+
+        lifecycleScope.launch {
+            merge(P, AudioHardwareID.currentId).collect {
+                setStereoButton()
+            }
+        }
 
         setTheme(R.style.AppTheme)
 
@@ -251,28 +258,25 @@ class Main : AppCompatActivity() {
         vibrator = this.getSystemService(VIBRATOR_SERVICE) as Vibrator
 
         // tells the OS that the volume buttons should affect the "media" volume when your application is visible
-        setVolumeControlStream(AudioManager.STREAM_MUSIC)
-
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.registerAudioDeviceCallback(audioDeviceStereoConfigCallback, null)
+        volumeControlStream = AudioManager.STREAM_MUSIC
 
         // set the color statically for speed (don't know another prettier method)
-        Row.Companion.backgroundColor = getColorFromAttr(R.attr.colorRowGroup)
+        Row.backgroundColor = getColorFromAttr(R.attr.colorRowGroup)
 
-        RowSong.Companion.backgroundSongColor = getColorFromAttr(R.attr.colorRowSong)
-        RowSong.Companion.normalSongTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
-        RowSong.Companion.normalSongDurationTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
+        RowSong.backgroundSongColor = getColorFromAttr(R.attr.colorRowSong)
+        RowSong.normalSongTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
+        RowSong.normalSongDurationTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
 
-        RowGroup.Companion.normalTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
-        RowGroup.Companion.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying)
-        RowGroup.Companion.backgroundOverrideColor = getColorFromAttr(R.attr.colorRowGroup2nd)
+        RowGroup.normalTextColor = getColorFromAttr(R.attr.colorTextNotPlaying)
+        RowGroup.playingTextColor = getColorFromAttr(R.attr.colorTextPlaying)
+        RowGroup.backgroundOverrideColor = getColorFromAttr(R.attr.colorRowGroup2nd)
 
         val appButton = findViewById<ImageView>(R.id.app_button)
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim)
-        appAnimation = appButton.getBackground() as AnimationDrawable?
+        appAnimation = appButton.background as AnimationDrawable?
 
-        albumImage = findViewById<ZoomageView?>(R.id.album_image)
-        albumImage!!.setVisibility(View.VISIBLE)
+        albumImage = findViewById(R.id.album_image)
+        albumImage!!.visibility = View.VISIBLE
         albumImage!!.setOnSingleTapListener(Runnable { this.toggleBiggerCoverArt() })
 
         detailsBigCoverArt = false
@@ -285,28 +289,21 @@ class Main : AppCompatActivity() {
         details_rating_layout = findViewById<LinearLayout>(R.id.details_rating)
 
         moreButtonsLayout = findViewById<LinearLayout>(R.id.more_buttons)
-        moreButtonsLayout!!.setVisibility(View.GONE)
+        moreButtonsLayout!!.visibility = View.GONE
         setShuffleButton()
         setStereoButton()
 
-        playbackSpeedText = findViewById<NumberPicker>(R.id.playBackSpeed)
-        playbackSpeedText!!.setMinValue(1)
-        playbackSpeedText!!.setFormatter(NumberPicker.Formatter { v: Int ->
-            String.format(
-                "%3d%%",
-                v
-            )
-        })
-        playbackSpeedText!!.setValue(100)
-        playbackSpeedText!!.setMaxValue(200)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            playbackSpeedText!!.setTextColor(getResources().getColor(R.color.Blood, getTheme()))
-        }
-        playbackSpeedText!!.setOnValueChangedListener({ picker: NumberPicker?, _: Int, _: Int ->
+        playbackSpeedText = findViewById(R.id.playBackSpeed)
+        playbackSpeedText!!.minValue = 1
+        playbackSpeedText!!.setFormatter { v: Int -> String.format("%3d%%", v) }
+        playbackSpeedText!!.value = 100
+        playbackSpeedText!!.maxValue = 200
+        playbackSpeedText!!.textColor = getResources().getColor(R.color.Blood, getTheme())
+        playbackSpeedText!!.setOnValueChangedListener { picker: NumberPicker?, _: Int, _: Int ->
             val factor = picker!!.value / 100.0f
             setPlaybackSpeed(factor)
             P.getAndUpdate { p -> p.copy(playbackSpeedFactor = factor) }
-        })
+        }
 
         try {
             /*
@@ -326,6 +323,8 @@ class Main : AppCompatActivity() {
             showChangelogs()
             P.update { p -> p.copy(lastSeenChangelogVersion = BuildConfig.VERSION_CODE) }
         }
+
+        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE)
     }
 
     private fun askPermission() {
@@ -343,18 +342,11 @@ class Main : AppCompatActivity() {
                 try {
                     val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                     intent.addCategory("android.intent.category.DEFAULT")
-                    intent.setData(
-                        Uri.parse(
-                            String.format(
-                                "package:%s",
-                                getApplicationContext().getPackageName()
-                            )
-                        )
-                    )
+                    intent.data = Uri.parse("package:${applicationContext.packageName}")
                     startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE)
                 } catch (e: Exception) {
                     val intent = Intent()
-                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
                     startActivityForResult(intent, EXTERNAL_STORAGE_REQUEST_CODE)
                 }
             }
@@ -363,11 +355,11 @@ class Main : AppCompatActivity() {
 
     fun askPermissionBelowAndroid11() {
         if (ContextCompat.checkSelfPermission(
-                getApplicationContext(),
+                applicationContext,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(
-                getApplicationContext(),
+                applicationContext,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -684,8 +676,7 @@ class Main : AppCompatActivity() {
         super.onDestroy()
         Log.d("Main", "onDestroy")
 
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.unregisterAudioDeviceCallback(audioDeviceStereoConfigCallback)
+        AudioHardwareID.unregisterListener(applicationContext)
         stopCloseMoreButtonsTimer()
         if (timer != null) {
             timer!!.cancel()
@@ -1505,21 +1496,13 @@ class Main : AppCompatActivity() {
 
     /**  Sets the stereo button image to reflect the Mono/Stereo setting */
     private fun setStereoButton() {
-        val stereo = P.value.stereo.getOrDefault(AudioHardwareID.get(this), true)
+        val stereo = P.value.stereo.getOrDefault(AudioHardwareID.currentId.value, true)
         val btn = findViewById<ImageButton>(R.id.stereo_button)
         if (stereo) {
-            btn.setImageResource(R.drawable.ic_stereo)
+            btn?.setImageResource(R.drawable.ic_stereo)
         } else {
-            btn.setImageResource(R.drawable.ic_mono)
+            btn?.setImageResource(R.drawable.ic_mono)
         }
-    }
-
-    /**  This contacts the music service to apply the stereo setting */
-    private fun applyStereo() {
-        if (musicSrv == null) {
-            return
-        }
-        musicSrv!!.applyStereo(P.value.stereo.getOrDefault(AudioHardwareID.get(this), true))
     }
 
     private fun setShuffleButton() {
@@ -1588,15 +1571,13 @@ class Main : AppCompatActivity() {
     fun seek(view: View) {
         if (!serviceBound) return
         var newPosMs = musicSrv!!.currentPositionMs
-        val id = view.getId()
-        if (id == R.id.m5_button) {
-            newPosMs -= (5 * 1000).toLong()
-        } else if (id == R.id.p5_button) {
-            newPosMs += (5 * 1000).toLong()
-        } else if (id == R.id.m20_button || id == R.id.m20_text) {
-            newPosMs -= (20 * 1000).toLong()
-        } else if (id == R.id.p20_button || id == R.id.p20_text) {
-            newPosMs += (20 * 1000).toLong()
+        val id = view.id
+        newPosMs += when (id) {
+            R.id.m5_button -> (-5 * 1000).toLong()
+            R.id.p5_button -> (5 * 1000).toLong()
+            R.id.m20_button, R.id.m20_text -> (-20 * 1000).toLong()
+            R.id.p20_button, R.id.p20_text -> (20 * 1000).toLong()
+            else -> 0 // Unreachable
         }
 
         newPosMs = if (newPosMs < 0) 0 else newPosMs
@@ -1700,10 +1681,7 @@ class Main : AppCompatActivity() {
             if (view == null || repeatcount <= 0) return
 
             var newPosMs = musicSrv!!.currentPositionMs - getSeekOffsetSec(view, duration)
-            Log.d(
-                "Main",
-                "<-- currpos: " + musicSrv!!.currentPositionMs + " seekto: " + newPosMs
-            )
+            Log.d("Main", "<-- currPos: ${musicSrv!!.currentPositionMs} seekto: $newPosMs")
             newPosMs = if (newPosMs < 0) 0 else newPosMs
             musicSrv!!.seekTo(newPosMs)
         }
@@ -1808,7 +1786,7 @@ class Main : AppCompatActivity() {
     }
 
     fun toggleStereo(view: View) {
-        val hid = AudioHardwareID.get(this)
+        val hid = AudioHardwareID.currentId.value
         var appliedMode = true
         P.update { p ->
             val newMode = !p.stereo.getOrDefault(hid, true)
@@ -1817,15 +1795,8 @@ class Main : AppCompatActivity() {
             p.copy(stereo = newMap)
         }
 
-        setStereoButton()
-        applyStereo()
-
-        val toastText = if (appliedMode) {
-            R.string.settings_stereo_on
-        } else {
-            R.string.settings_stereo_off
-        }
-        Snackbar.make(view, toastText, BaseTransientBottomBar.LENGTH_SHORT).show()
+        val snackText = if (appliedMode) R.string.settings_stereo_on else R.string.settings_stereo_off
+        Snackbar.make(view, snackText, BaseTransientBottomBar.LENGTH_SHORT).show()
     }
 
     fun openMinRating(view: View?) {
@@ -1870,7 +1841,7 @@ class Main : AppCompatActivity() {
         showAroundBottom = max(showAroundBottom, 1)
         Log.d(
             "Main",
-            "scrollToSong showAroundTop: " + showAroundTop + " showAroundBottom: " + showAroundBottom
+            "scrollToSong showAroundTop: $showAroundTop showAroundBottom: $showAroundBottom"
         )
 
 
@@ -1917,22 +1888,6 @@ class Main : AppCompatActivity() {
     private fun vibrate() {
         if (P.value.vibrate) vibrator!!.vibrate(20)
     }
-
-    /** This callback is used for audio channel config. Each different set of audio output
-     * devices generates a hardware ID, each having a stereo config. This allows us to
-     * have different configs, for instance, for our AirPods and our Phone speaker. */
-    private val audioDeviceStereoConfigCallback: AudioDeviceCallback =
-        object : AudioDeviceCallback() {
-            override fun onAudioDevicesAdded(addedDevices: Array<AudioDeviceInfo?>?) {
-                setStereoButton()
-                applyStereo()
-            }
-
-            override fun onAudioDevicesRemoved(removedDevices: Array<AudioDeviceInfo?>?) {
-                setStereoButton()
-                applyStereo()
-            }
-        }
 
     companion object {
         /**
