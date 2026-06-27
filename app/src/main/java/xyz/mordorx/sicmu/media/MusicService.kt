@@ -198,6 +198,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         if (mediaSession == null) return
 
         val isPlaying = playingLaunched()
+        rows?.isPlaying = isPlaying
         val currPosMs = this.currentPositionMs
         val stateBuilder =
             PlaybackStateCompat.Builder()

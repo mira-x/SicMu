@@ -70,29 +70,27 @@ class RowSong(
         super.setView(holder, main, position)
 
         if (main == null) return
+//
+//        var factor = 1.5f
+//        if (main.musicSrv!!.getRows().isLastRow(position)) factor = 2f
+//        holder.layout!!.getLayoutParams().height = convertDpToPixels(
+//            (textSize * factor).toInt(),
+//            holder.layout.getResources()
+//        )
 
-        var factor = 1.5f
-        if (main.musicSrv!!.getRows().isLastRow(position)) factor = 2f
-        holder.layout!!.getLayoutParams().height = convertDpToPixels(
-            (textSize * factor).toInt(),
-            holder.layout.getResources()
-        )
-
-        setText(holder.text!!)
-        setDuration(holder.duration!!)
         setCurrIcon(holder.image!!, main)
         if (MusicService.enableRating) {
             holder.ratingStar!!.visibility = View.VISIBLE
             holder.ratingStar!!.setImageResource(this.drawableStarFromRating)
 
-            val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
+            val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
             // removeRule is not in sdk < 17
             params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT)
             holder.duration.layoutParams = params
         } else {
             holder.ratingStar!!.visibility = View.INVISIBLE
 
-            val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
+            val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
             holder.duration.layoutParams = params
         }

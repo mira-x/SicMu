@@ -39,7 +39,7 @@ class RowGroup(
 ) : Row(pos, level, typeface) {
     var isFolded: Boolean
     var isSelected: Boolean
-    private val overrideBackgroundColor: Boolean
+    val overrideBackgroundColor: Boolean
 
     /** get number of songs (excluding RowGroup) inside this group */
     var songCount: Int = 0
@@ -79,19 +79,10 @@ class RowGroup(
 
         if (main == null) return
 
-        var factor = 1.5f
-        if (main.musicSrv!!.getRows().isLastRow(position)) factor = 3f
-        holder.layout!!.getLayoutParams().height = Row.Companion.convertDpToPixels(
-            (textSize * factor).toInt(),
-            holder.layout!!.getResources()
-        )
-
-        setText(holder.text!!)
-        setDuration(holder.duration!!)
         holder.image!!.setImageDrawable(null)
 
         holder.ratingStar!!.visibility = View.INVISIBLE
-        val params = holder.duration.layoutParams as RelativeLayout.LayoutParams
+        val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
         holder.duration.layoutParams = params
 

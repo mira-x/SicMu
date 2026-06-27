@@ -416,7 +416,7 @@ class Main : AppCompatActivity() {
             musicSrv = binder.service
 
             rows = musicSrv!!.getRows()
-            songAdt = RowsAdapter(this@Main, rows!!, this@Main)
+            songAdt = RowsAdapter(this@Main, rows!!)
             songView!!.adapter = songAdt
             songView!!.onItemClickListener =
                 AdapterView.OnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->

@@ -81,6 +81,7 @@ class Rows(
 
     private val ratingsMustBeSynchronized: AtomicBoolean
     private val ratingsSynchronizing: AtomicBoolean
+    var isPlaying: Boolean = false
 
     @Volatile
     private var terminated = false
@@ -651,8 +652,8 @@ class Rows(
         }
     }
 
-    fun isLastRow(pos: Int): Boolean {
-        return pos == rows.size - 1
+    fun isLastRow(r: Row): Boolean {
+        return r == rows.get(rows.size - 1)
     }
 
 

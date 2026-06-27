@@ -29,7 +29,7 @@ open class Row(
     /** position of the row within the unfolded rows array */
     var genuinePos: Int,
     /** level from the left */
-    var level: Int, protected val typeface: Int
+    var level: Int, val typeface: Int
 ) {
     // null if no parent
     var parent: Row? = null
@@ -37,7 +37,7 @@ open class Row(
     open fun setView(holder: RowViewHolder, main: Main?, position: Int) {
         holder.text?.setTypeface(null, typeface)
         holder.text?.setPadding(
-            convertDpToPixels(level * levelOffset, holder.layout!!.getResources()),
+            convertDpToPixels(level * levelOffset, holder.layout!!.resources),
             0,
             0,
             0
@@ -52,7 +52,7 @@ open class Row(
         holder.ratingStar?.setBackgroundColor(backgroundColor)
     }
 
-    protected val stringOffset: String
+    val stringOffset: String
         get() {
             val offset = StringBuilder()
             val s = " "
@@ -71,7 +71,7 @@ open class Row(
 
         // cache result
         private val converted: MutableMap<Int?, Int?> = HashMap<Int?, Int?>()
-        fun convertDpToPixels(dp: Int, resources: Resources): Int {
+        public fun convertDpToPixels(dp: Int, resources: Resources): Int {
             val px: Int
             if (converted.containsKey(dp)) {
                 px = converted.get(dp)!!
