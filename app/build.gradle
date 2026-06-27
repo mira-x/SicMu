@@ -75,7 +75,7 @@ dependencies {
 
     // Misc.
     implementation 'com.google.android.material:material:1.14.0'
-    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
+    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.0"
 
     // Misc. external
     implementation 'com.github.woheller69:FreeDroidWarn:V1.6'

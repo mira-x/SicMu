@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import xyz.mordorx.sicmu.BuildConfig
 import xyz.mordorx.sicmu.collections.autoSerializer
@@ -19,6 +20,7 @@ data class XPreferences(
     val vibrate: Boolean = true,
     val shuffle: ShuffleMode = ShuffleMode.SEQUENTIAL,
     val repeatMode: RepeatMode = RepeatMode.REPEAT_GROUP,
+    @Contextual
     val stereo: PersistentMap<AudioHardwareID, Boolean> = persistentMapOf(),
     val sleepDelayM: Int = 60,
     val showRemainingTime: Boolean = false,
