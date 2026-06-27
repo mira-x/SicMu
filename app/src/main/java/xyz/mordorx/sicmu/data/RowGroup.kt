@@ -17,16 +17,6 @@
  */
 package xyz.mordorx.sicmu.data
 
-import android.annotation.SuppressLint
-import android.graphics.Typeface
-import android.support.v4.media.MediaMetadataCompat
-import android.util.TypedValue
-import android.view.View
-import android.widget.RelativeLayout
-import android.widget.TextView
-import xyz.mordorx.sicmu.Main
-import xyz.mordorx.sicmu.data.XPreferences.Companion.P
-import xyz.mordorx.sicmu.ui.RowViewHolder
 import java.io.File
 
 /**
@@ -50,9 +40,9 @@ class RowGroup(
             if (path != null) {
                 val f = File(path)
                 if (f.exists()) {
-                    if (f.isDirectory()) field = f.getAbsolutePath()
+                    if (f.isDirectory) field = f.absolutePath
                     else  // if path points to a file get the folder of that path
-                        field = f.getParentFile().getAbsolutePath()
+                        field = f.parentFile?.absolutePath
                 }
             }
         }
@@ -74,68 +64,9 @@ class RowGroup(
         this.totalDuration += totalDurationMs
     }
 
-    override fun setView(holder: RowViewHolder, main: Main?, position: Int) {
-        super.setView(holder, main, position)
-
-        if (main == null) return
-
-        holder.image!!.setImageDrawable(null)
-
-        holder.ratingStar!!.visibility = View.INVISIBLE
-        val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-        holder.duration.layoutParams = params
-
-        if (overrideBackgroundColor && backgroundOverrideColor != 0) {
-            setBackgroundColor(holder, backgroundOverrideColor)
-        } else {
-            setBackgroundColor(holder, backgroundColor)
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setText(text: TextView) {
-        val prefix = if (this.isFolded) "| " else "\\ "
-        text.text = prefix + name
-
-        if (this.isFolded && this.isSelected) text.setTextColor(playingTextColor)
-        else text.setTextColor(normalTextColor)
-
-        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setDuration(duration: TextView) {
-        val rightSpace = stringOffset
-        //super.setText(text);
-        if (this.isFolded) {
-            if (this.isSelected) duration.setTextColor(playingTextColor)
-            else duration.setTextColor(normalTextColor)
-            if (P.value.showGroupTotalTime) duration.text = msToTime(this.totalDuration) + " |" + rightSpace
-            else duration.text = "$songCount |$rightSpace"
-        } else {
-            duration.text = "/$rightSpace"
-            duration.setTextColor(normalTextColor)
-        }
-
-        duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
-        duration.setTypeface(null, if (typeface == Typeface.ITALIC) Typeface.NORMAL else typeface)
-    }
-
     override fun toString(): String {
         return "Group pos: $genuinePos level: $level name: $name"
     }
-
-    val mediaMetadata: MediaMetadataCompat?
-        get() {
-            val builder =
-                MediaMetadataCompat.Builder()
-            builder.putString(
-                MediaMetadataCompat.METADATA_KEY_TITLE,
-                name
-            )
-            return builder.build()
-        }
 
     companion object {
         var textSize: Int = 18
@@ -144,22 +75,5 @@ class RowGroup(
         var normalTextColor: Int = 0
         var playingTextColor: Int = 0
         var backgroundOverrideColor: Int = 0
-
-        fun msToTime(durationMs: Long): String {
-            var seconds = durationMs / 1000
-            var minutes = seconds / 60
-            val hours = seconds / 3600
-            if (seconds < 60) {
-                return (if (seconds < 10) "0:0" else "0:") + seconds
-            } else if (minutes < 60) {
-                seconds %= 60
-                return minutes.toString() + (if (seconds < 10) ":0" else ":") + seconds
-            } else {
-                seconds %= 60
-                minutes %= 60
-                return hours.toString() + (if (minutes < 10) ":0" else ":") + minutes +
-                        (if (seconds < 10) ":0" else ":") + seconds
-            }
-        }
     }
 }

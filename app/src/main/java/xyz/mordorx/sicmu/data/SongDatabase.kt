@@ -52,7 +52,7 @@ abstract class SongDatabase : RoomDatabase() {
                 Log.d("Database", "Trying synchronize rating of path=" + songORM.path)
                 var msg =
                     "trySyncronizeRating: synchronize rating of " + songORM.path + " to " + songORM.rating
-                if (RowSong.Companion.WriteRatingToFile(songORM.path, songORM.rating)) {
+                if (RowSong.Companion.writeRatingToFile(songORM.path, songORM.rating)) {
                     msg += " succeed\n\n"
                     songORM.lastModifiedMs = (File(songORM.path)).lastModified()
                     songORM.ratingSynchronized = true

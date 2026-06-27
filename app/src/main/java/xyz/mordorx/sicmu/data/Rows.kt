@@ -27,7 +27,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import xyz.mordorx.sicmu.R
-import xyz.mordorx.sicmu.collections.PathRowComparator
 import xyz.mordorx.sicmu.collections.TreeRowComparator
 import xyz.mordorx.sicmu.data.XPreferences.Companion.P
 import xyz.mordorx.sicmu.media.RepeatMode
@@ -38,7 +37,6 @@ import java.util.Locale
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.Boolean
-import kotlin.Char
 import kotlin.Exception
 import kotlin.Int
 import kotlin.Long

@@ -99,7 +99,7 @@ class AlphaNumComparator : Comparator<String?> {
 
             // If both chunks contain numeric characters, sort them numerically
             var result = 0
-            if (isDigit(thisChunk.get(0)) && isDigit(thatChunk.get(0))) {
+            if (isDigit(thisChunk[0]) && isDigit(thatChunk[0])) {
                 val thisLen = thisChunk.length
                 val thatLen = thatChunk.length
                 val bothLen = max(thisLen, thatLen)

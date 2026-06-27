@@ -19,38 +19,19 @@ package xyz.mordorx.sicmu.data
 
 import android.content.res.Resources
 import android.util.TypedValue
-import xyz.mordorx.sicmu.Main
-import xyz.mordorx.sicmu.ui.RowViewHolder
 
 /**
  * This is a base class for rows in a hierarchical order.
  */
-open class Row(
+sealed class Row(
     /** position of the row within the unfolded rows array */
     var genuinePos: Int,
     /** level from the left */
-    var level: Int, val typeface: Int
+    var level: Int,
+    val typeface: Int
 ) {
     // null if no parent
     var parent: Row? = null
-
-    open fun setView(holder: RowViewHolder, main: Main?, position: Int) {
-        holder.text?.setTypeface(null, typeface)
-        holder.text?.setPadding(
-            convertDpToPixels(level * levelOffset, holder.layout!!.resources),
-            0,
-            0,
-            0
-        )
-    }
-
-    fun setBackgroundColor(holder: RowViewHolder, backgroundColor: Int) {
-        holder.layout?.setBackgroundColor(backgroundColor)
-        holder.text?.setBackgroundColor(backgroundColor)
-        holder.image?.setBackgroundColor(backgroundColor)
-        holder.duration?.setBackgroundColor(backgroundColor)
-        holder.ratingStar?.setBackgroundColor(backgroundColor)
-    }
 
     val stringOffset: String
         get() {
@@ -66,21 +47,18 @@ open class Row(
         /** Must be set outside before calling setText */
         var backgroundColor: Int = 0
 
-        /** How many dp units a level difference is wide */
-        const val levelOffset: Int = 14
-
         // cache result
         private val converted: MutableMap<Int?, Int?> = HashMap<Int?, Int?>()
         public fun convertDpToPixels(dp: Int, resources: Resources): Int {
             val px: Int
             if (converted.containsKey(dp)) {
-                px = converted.get(dp)!!
+                px = converted[dp]!!
             } else {
                 px = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(),
-                    resources.getDisplayMetrics()
+                    resources.displayMetrics
                 ).toInt()
-                converted.put(dp, px)
+                converted[dp] = px
             }
             return px
         }

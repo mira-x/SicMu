@@ -55,8 +55,6 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.subscribe
 import kotlinx.coroutines.flow.update
 import xyz.mordorx.sicmu.Main
 import xyz.mordorx.sicmu.MediaButtonIntentReceiver
@@ -136,7 +134,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
     private var accelerometer: Sensor? = null
     private var lastUpdate: Long = 0
     private var enableShake = false
-    private var minRating = 1
     private var shakeThreshold = 0f
     private var playbackSpeed = 1.0f
     private var accelLast = 0.0
@@ -181,7 +178,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         val mediaButtonReceiver =
             ComponentName(getApplicationContext(), MediaButtonReceiver::class.java)
         mediaSession =
-            MediaSessionCompat(getApplicationContext(), MediaSessionTag, mediaButtonReceiver, null)
+            MediaSessionCompat(getApplicationContext(), MEDIA_SESSION_TAG, mediaButtonReceiver, null)
 
         mediaSession!!.setCallback(mMediaSessionCallback)
 
@@ -217,7 +214,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         val rowSong = rows!!.currSong
         if (rowSong != null) {
             AlbumArtLoader(applicationContext, rowSong).loadAsync(
-                AlbumArtLoader.Callback { rowSongId: Long, bitmap: Bitmap? ->
+                { rowSongId: Long, bitmap: Bitmap? ->
                     // albumbmp will be in cache, so don't bother to pass bitmap param to getMediaMetadata
                     mediaSession!!.setMetadata(rowSong.getMediaMetadata(applicationContext))
                 })
@@ -787,7 +784,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         val openApp = Intent(this, Main::class.java)
         openApp.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         val builder: NotificationCompat.Builder? =
-            NotificationCompat.Builder(applicationContext, channel_id)
+            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
         builder!!.setContentTitle(rowSong.title)
             .setContentText(rowSong.artist)
             .setSubText(rowSong.album)
@@ -801,12 +798,11 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
             )
             .setDeleteIntent(
                 MediaButtonReceiver.buildMediaButtonPendingIntent(
-                    getApplicationContext(),
+                    applicationContext,
                     PlaybackStateCompat.ACTION_STOP
                 )
             )
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        if (builder == null) return
         if (playingLaunched()) builder.addAction(
             NotificationCompat.Action(
                 R.drawable.ic_notif_pause,
@@ -851,7 +847,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         if (mediaSession != null) builder.setStyle(
             androidx.media.app.NotificationCompat.MediaStyle()
                 .setShowActionsInCompactView(0, 1, 2)
-                .setMediaSession(mediaSession!!.getSessionToken())
+                .setMediaSession(mediaSession!!.sessionToken)
         )
         //NotificationManagerCompat.from(MusicService.this).notify(NOTIFICATION_ID, builder.build());
         foreground = true
@@ -869,7 +865,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         val name: CharSequence = "SicMuNeo Channel"
         val description = "SicMuNeo Channel"
         val importance = NotificationManager.IMPORTANCE_LOW
-        val mChannel = NotificationChannel(channel_id, name, importance)
+        val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
         mChannel.description = description
         mChannel.enableLights(true) // todo: useful ?
         mChannel.lightColor = Color.RED // todo: useful ?
@@ -904,15 +900,15 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
 
         if (accel > shakeThreshold) {
             val actualTime = event.timestamp
-            val MIN_SHAKE_PERIOD = 1000 * 1000 * 1000
-            if (actualTime - lastUpdate < MIN_SHAKE_PERIOD) {
+            val minShakePeriod = 1000 * 1000 * 1000
+            if (actualTime - lastUpdate < minShakePeriod) {
                 return
             }
             lastUpdate = actualTime
 
             Log.d(
                 "MusicService",
-                "Device was shuffed. Acceleration: " + String.format("%.1f", accel) +
+                "Device was shaken. Acceleration: " + String.format("%.1f", accel) +
                         " x: " + String.format("%.1f", x * x) +
                         " y: " + String.format("%.1f", y * y) +
                         " z: " + String.format("%.1f", z * z)
@@ -957,17 +953,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         minRating = rating
         preferences!!.minRating = (minRating)
         setChanged()*/
-    }
-
-    fun setShakeThreshold(threshold: Float) {
-        shakeThreshold = threshold / 10
-    }
-
-    fun changePlaybackSpeed(step: Float) {
-        if (playbackSpeed + step <= 0) return
-        playbackSpeed += step
-        updateMediaPlaybackState()
-        if (player != null && playingLaunched()) applyPlaybackSpeed(playbackSpeed)
     }
 
     fun setPlaybackSpeed(v: Float) {
@@ -1040,7 +1025,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
         const val PREVIOUS_ACTION: String = "xyz.mordorx.sicmu.musicservicecommand.previous"
         const val NEXT_ACTION: String = "xyz.mordorx.sicmu.musicservicecommand.next"
 
-        const val MediaSessionTag: String = "SicMuNeo_MediaSessionTag"
+        const val MEDIA_SESSION_TAG: String = "SicMuNeo_MediaSessionTag"
 
         private const val NOTIFICATION_ID = 1
 
@@ -1053,6 +1038,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, SensorE
                 or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
                 or PlaybackStateCompat.ACTION_STOP
                 or PlaybackStateCompat.ACTION_SEEK_TO)
-        const val channel_id: String = "SicMuNeo_channelid"
+        const val CHANNEL_ID: String = "SicMuNeo_channelid"
     }
 }

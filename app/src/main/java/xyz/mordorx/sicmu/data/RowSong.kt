@@ -24,32 +24,33 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import android.util.Log
-import android.util.TypedValue
-import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
-import xyz.mordorx.sicmu.Main
-import xyz.mordorx.sicmu.media.MusicService
-import xyz.mordorx.sicmu.ui.RowViewHolder
 import java.io.File
 
 /**
  * This subclass of `Row` represents a single media file.
  */
 class RowSong(
-    private val songDAO: SongDAO, pos: Int, level: Int,
+    private val songDAO: SongDAO,
+    pos: Int,
+    level: Int,
     /** The ID of this song provided by the MediaStore API */
-    val iD: Long, val title: String, val artist: String?,
+    val iD: Long,
+    val title: String,
+    val artist: String?,
     /** If no album metadata is set, this will return the top level folder name of this song */
     val album: String?,
-    val durationMs: Long, @JvmField val track: Int,
+    val durationMs: Long,
+    @JvmField val track: Int,
     /** For Example: "/storage/emulated/0/Music/_/Unterhaltung/HintShot - Welcome to Team Fortress.opus" */
     // full filename
-    @JvmField val path: String, albumId: Long, year: Int, mime: String?) : Row(pos, level, Typeface.NORMAL) {
+    @JvmField val path: String,
+    albumId: Long,
+    year: Int,
+    mime: String?
+) : Row(pos, level, Typeface.NORMAL) {
     /** The Album ID of this song provided by the MediaStore API */
     val albumId: Long
     val year: Int
@@ -66,71 +67,15 @@ class RowSong(
 
     private var metadata: Tag? = null
 
-    override fun setView(holder: RowViewHolder, main: Main?, position: Int) {
-        super.setView(holder, main, position)
-
-        if (main == null) return
-//
-//        var factor = 1.5f
-//        if (main.musicSrv!!.getRows().isLastRow(position)) factor = 2f
-//        holder.layout!!.getLayoutParams().height = convertDpToPixels(
-//            (textSize * factor).toInt(),
-//            holder.layout.getResources()
-//        )
-
-        setCurrIcon(holder.image!!, main)
-        if (MusicService.enableRating) {
-            holder.ratingStar!!.visibility = View.VISIBLE
-            holder.ratingStar!!.setImageResource(this.drawableStarFromRating)
-
-            val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
-            // removeRule is not in sdk < 17
-            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-            holder.duration.layoutParams = params
-        } else {
-            holder.ratingStar!!.visibility = View.INVISIBLE
-
-            val params = holder.duration!!.layoutParams as RelativeLayout.LayoutParams
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-            holder.duration.layoutParams = params
-        }
-        setBackgroundColor(holder, backgroundSongColor)
-    }
-
-    private fun setText(text: TextView) {
-        text.text = this.text
-        text.setTextColor(normalSongTextColor)
-        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
-    }
-
     val text: String
         get() {
             return filename
         }
 
-    private fun setDuration(duration: TextView) {
-        duration.text = msToMinutesStripSecondIfLongDuration(this.durationMs) + stringOffset
-        duration.setTextColor(normalSongDurationTextColor)
-        duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize.toFloat())
-        duration.setTypeface(null, typeface)
-    }
-
-    private fun setCurrIcon(img: ImageView, main: Main) {
-        var currIcon = android.R.color.transparent
-        if (this === main.musicSrv!!.getRows().currSong) {
-            if (main.musicSrv!!.playingLaunched()) currIcon =
-                xyz.mordorx.sicmu.R.drawable.ic_curr_play
-            else currIcon = xyz.mordorx.sicmu.R.drawable.ic_curr_pause
-        }
-        img.setImageResource(currIcon)
-        // useful only for the tests
-        img.setTag(currIcon)
-    }
-
     override fun toString(): String {
         return "title: " + title + " album: " + album + " artist: " + artist +
                 " pos: " + genuinePos + " level: " + level + " ID: " + this.iD +
-                msToMinutes(durationMs) + " track:" + track + " path: " + path
+                " playtime: " + msToMinutes(durationMs) + " track:" + track + " path: " + path
     }
 
     fun deleteFile(context: Context): Boolean {
@@ -140,7 +85,7 @@ class RowSong(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 this.iD
             )
-            context.getContentResolver().delete(uri, null, null)
+            context.contentResolver.delete(uri, null, null)
 
             return true
         }
@@ -175,10 +120,10 @@ class RowSong(
         }
 
         Thread(Runnable {
-            if (AlbumArtLoader.Companion.isTerminated) return@Runnable
+            if (AlbumArtLoader.isTerminated) return@Runnable
             Log.d("RowSong", "loadRating")
             val someRatingChanged = (rating == RATING_NOT_INITIALIZED && loadRating() > 0)
-            if (AlbumArtLoader.Companion.isTerminated) return@Runnable
+            if (AlbumArtLoader.isTerminated) return@Runnable
             ratingCallbackInterface.ratingCallback(rating, someRatingChanged)
         }).start()
     }
@@ -284,7 +229,7 @@ class RowSong(
     @Synchronized
     fun setRating(rating: Int): Boolean {
         this.rating = rating
-        val ok: Boolean = WriteRatingToFile(path, rating)
+        val ok: Boolean = writeRatingToFile(path, rating)
         updateOrInsertSongOrm(songDAO.findByPath(path), ok)
 
         return ok
@@ -330,14 +275,13 @@ class RowSong(
 
     val drawableStarFromRating: Int
         get() {
-            val drawable: Int
-            when (this.rating) {
-                1 -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_1
-                2 -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_2
-                3 -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_3
-                4 -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_4
-                5 -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_5
-                else -> drawable = xyz.mordorx.sicmu.R.drawable.ic_star_0
+            val drawable = when (this.rating) {
+                1 -> xyz.mordorx.sicmu.R.drawable.ic_star_1
+                2 -> xyz.mordorx.sicmu.R.drawable.ic_star_2
+                3 -> xyz.mordorx.sicmu.R.drawable.ic_star_3
+                4 -> xyz.mordorx.sicmu.R.drawable.ic_star_4
+                5 -> xyz.mordorx.sicmu.R.drawable.ic_star_5
+                else -> xyz.mordorx.sicmu.R.drawable.ic_star_0
             }
             return drawable
         }
@@ -434,11 +378,7 @@ class RowSong(
             }
         }
 
-        fun msToMinutesStripSecondIfLongDuration(durationMs: Long): String {
-            return msToMinutes(durationMs, durationMs < 100 * 60 * 1000)
-        }
-
-        fun WriteRatingToFile(path: String, rating: Int): Boolean {
+        fun writeRatingToFile(path: String, rating: Int): Boolean {
             var ok = false
             try {
                 val audioFile = AudioFileIO.read(File(path))
@@ -450,7 +390,7 @@ class RowSong(
                 else tag.addField(FieldKey.RATING, convertToRating0to255(rating))
                 audioFile.commit()
                 ok = true
-                Log.i("RowSong", "set file rating : " + path + " to " + rating)
+                Log.i("RowSong", "set file rating : $path to $rating")
             } catch (e: Exception) {
                 val wrn = "Unable to set rating for song:" + path +
                         ". Exception msg: " + e.javaClass + " - " + e.message

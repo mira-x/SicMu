@@ -17,8 +17,6 @@
  */
 package xyz.mordorx.sicmu.data
 
-import xyz.mordorx.sicmu.ui.RowViewHolder
-
 /**
  * This is a base class for rows in a hierarchical order.
  */
