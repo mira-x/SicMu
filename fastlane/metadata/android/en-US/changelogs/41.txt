@@ -1,0 +1,4 @@
+Version 2.5.0
+* Recordings now show up in the list
+* Fix list glitching after deleting a file
+* Fix translation

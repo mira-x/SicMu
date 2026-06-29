@@ -10,14 +10,18 @@ SicMu Neo is a file-based music player with a very basic UI. You can use your fo
 
 ### Upstream Changes
 This fork retains the spirit of the original app and adds these features:
+
 - Search
-- Advanced album art loading (You have an Album.jpg file? It will be considered.) and zooming
-- Per-audio-device mono/stereo settings
+- Advanced album art loading (You have an Album.jpg file? It will be considered.)
+- Album art zooming
+- Individual mono/stereo settings per audio output
 - Radio shuffle mode (Random song order, starts first song selected at random point in the song)
 - More options in long press menu, e.g. search on Genius.com or YouTube.com
 - Changed the audio backend to the modern ExoPlayer, causing less RAM usage (220MB prior vs 135MB now)
 - Ability to read comment metadata fields
-- More translations (most notably Spanish), basic support for screen readers
+- More translations (most notably Spanish)
+- Basic accessibility support
+- bugfixes
 
 The original SicMu is better suited for old devices (Android 4.0+). This fork uses more modern features and requires at least Android 8.0.
 

@@ -17,10 +17,15 @@ Features:
 * Supports virtually all audio formats (mp3, ogg, flac, wav, ...)
 
 New in this fork:
-* Search function
-* Multiple sources for album art (metadata, fallback to longest filename prefix match for .jpg and .png files in the same folder)
-* Per-device mono/stereo settings
+* Search
+* Advanced album art loading (You have an Album.jpg file? It will be considered.)
+* Album art zooming
+* Individual mono/stereo settings per audio output
+* Radio shuffle mode (Random song order, starts first song selected at random point in the song)
 * More options in long press menu, e.g. search on Genius.com or YouTube.com
-* More translations (most notably Spanish), basic support for screen readers
-
+* Changed the audio backend to the modern ExoPlayer, causing less RAM usage (220MB prior vs 135MB now)
+* Ability to read comment metadata fields
+* More translations (most notably Spanish)
+* Basic accessibility support
+* bugfixes
 
