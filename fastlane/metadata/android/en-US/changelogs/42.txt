@@ -1,0 +1,4 @@
+Version 2.5.1
+* Move play button to center
+* Fix player reset on screen rotation
+* Backend cleanup
