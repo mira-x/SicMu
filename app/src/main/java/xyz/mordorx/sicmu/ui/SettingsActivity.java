@@ -22,12 +22,21 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 public class SettingsActivity extends PreferenceActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("Settings", "onCreate");
         super.onCreate(savedInstanceState);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
     }

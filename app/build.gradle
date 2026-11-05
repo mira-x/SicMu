@@ -12,8 +12,7 @@ android {
     defaultConfig {
         applicationId "xyz.mordorx.sicmu"
         minSdkVersion 26 // Android 8.0
-        //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28 // Android 9.0
+        targetSdkVersion 35 // Android 15
         versionCode 41
         versionName '2.5.0'
         vectorDrawables.useSupportLibrary = true

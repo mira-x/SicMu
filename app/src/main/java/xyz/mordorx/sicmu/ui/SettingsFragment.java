@@ -32,10 +32,13 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.OptIn;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.util.UnstableApi;
 
 import java.io.File;
@@ -313,6 +316,22 @@ public class SettingsFragment extends PreferenceFragment
         // Unregister the listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        boolean res = super.onPreferenceTreeClick(preferenceScreen, preference);
+        if (preference instanceof PreferenceScreen) {
+            var dialog = ((PreferenceScreen) preference).getDialog();
+            if (dialog != null && dialog.getWindow() != null) {
+                ViewCompat.setOnApplyWindowInsetsListener(dialog.getWindow().getDecorView().findViewById(android.R.id.content), (v, windowInsets) -> {
+                    var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                    v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+                    return WindowInsetsCompat.CONSUMED;
+                });
+            }
+        }
+        return res;
     }
 
     @Override

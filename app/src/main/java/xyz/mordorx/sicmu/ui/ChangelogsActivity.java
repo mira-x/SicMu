@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import xyz.mordorx.sicmu.R;
 
@@ -44,6 +46,11 @@ public class ChangelogsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.changelogs);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         ImageView appButton = findViewById(R.id.app_button);
         appButton.setBackgroundResource(R.drawable.ic_actionbar_launcher_anim);

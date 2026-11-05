@@ -27,6 +27,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -34,6 +35,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -45,6 +47,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.ServiceCompat;
+import androidx.core.content.ContextCompat;
 import androidx.media.session.MediaButtonReceiver;
 import androidx.media3.common.AudioAttributes;
 import androidx.media3.common.C;
@@ -257,7 +261,7 @@ public class MusicService extends Service implements
         if (noisyReceiverFilter == null) {
             noisyReceiverFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             // Handles headphones coming unplugged. cannot be done through a manifest receiver
-            registerReceiver(noisyReceiver, noisyReceiverFilter);
+            ContextCompat.registerReceiver(this, noisyReceiver, noisyReceiverFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
         }
     }
 
@@ -938,7 +942,10 @@ public class MusicService extends Service implements
                    .setShowActionsInCompactView(0, 1, 2).setMediaSession(mediaSession.getSessionToken()));
         //NotificationManagerCompat.from(MusicService.this).notify(NOTIFICATION_ID, builder.build());
         foreground = true;
-        startForeground(NOTIFICATION_ID, builder.build());
+        int fgsType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                : 0;
+        ServiceCompat.startForeground(this, NOTIFICATION_ID, builder.build(), fgsType);
     }
 
 

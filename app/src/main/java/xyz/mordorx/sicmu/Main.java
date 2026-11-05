@@ -178,6 +178,11 @@ public class Main extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, windowInsets) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
         finishing = false;
 
         songView = findViewById(R.id.song_list);
@@ -564,11 +569,16 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int SET_RATING_REQUEST_CODE = 1024;
-        if (requestCode == SET_RATING_REQUEST_CODE) {
+        if (requestCode == EXTERNAL_STORAGE_REQUEST_CODE) {
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
                     Log.i("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION granted");
+                    if (rows != null)
+                        rows.reinit();
+                    if (songAdt != null)
+                        songAdt.notifyDataSetChanged();
+                    unfoldAndScrollToCurrSong();
+                    hideWarning();
                 } else {
                     Log.w("Main","Permission MANAGE_ALL_FILES_ACCESS_PERMISSION refused!");
                     showWarning();
