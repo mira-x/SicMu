@@ -711,8 +711,8 @@ public class Main extends AppCompatActivity {
 
         if (serviceBound) {
             musicSrv.setMainIsVisible(false);
-            // stop the service if not playing music
-            if (!musicSrv.playingLaunched()) {
+            // stop the service if not playing music and not rotating screen
+            if (!isChangingConfigurations() && !musicSrv.playingLaunched()) {
                 musicSrv.stopService(playIntent);
             }
             unbindService(musicConnection);
