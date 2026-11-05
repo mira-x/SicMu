@@ -552,17 +552,18 @@
         found on iconfinder.com. Color and dimension has been changed.
         -->
         <ImageButton
-            android:id="@+id/play_button"
+            android:id="@+id/goto_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_weight="48"
-            android:onClick="playOrPause"
-            android:contentDescription="@string/a11y_play_button"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:longClickable="true"
+            android:onClick="gotoCurrSong"
+            android:paddingTop="15dp"
+            android:contentDescription="@string/a11y_goto_button"
+            android:paddingBottom="15dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/action_play" />
+            android:src="@drawable/action_goto_play" />
 
         <ImageButton
             android:id="@+id/prev_button"
@@ -577,6 +578,19 @@
             android:src="@drawable/action_prev" />
 
         <ImageButton
+            android:id="@+id/play_button"
+            style="@style/BottomButton"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_weight="48"
+            android:onClick="playOrPause"
+            android:contentDescription="@string/a11y_play_button"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/action_play" />
+
+        <ImageButton
             android:id="@+id/next_button"
             style="@style/BottomButton"
             android:layout_width="fill_parent"
@@ -587,20 +601,6 @@
             android:onClick="playNext"
             android:scaleType="fitCenter"
             android:src="@drawable/action_next" />
-
-        <ImageButton
-            android:id="@+id/goto_button"
-            style="@style/BottomButton"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:longClickable="true"
-            android:onClick="gotoCurrSong"
-            android:paddingTop="15dp"
-            android:contentDescription="@string/a11y_goto_button"
-            android:paddingBottom="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/action_goto_play" />
 
         <ImageButton
             style="@style/BottomButton"
