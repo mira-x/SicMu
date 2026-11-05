@@ -2,7 +2,7 @@
 
 [<img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png">](https://f-droid.org/en/packages/xyz.mordorx.sicmu/)
 
-This is a fork of [Mathieu Souchaud's SicMu alias SMP](https://gitlab.com/souch/SMP) with quality-of-life patches. A from-scratch reimplementation with new major features is being developed [here](https://github.com/mira-x/FLACblaster).
+This is a fork of [Mathieu Souchaud's SicMu alias SMP](https://gitlab.com/souch/SMP) with quality-of-life patches.
 
 SicMu Neo is a file-based music player with a very basic UI. You can use your folder hierarchy to group and organize music, or you can use the audio file metadata to group the music by artist and album. It supports a wide range of playback options, and includes support for Last.FM scrobbling via third-party apps.
 
